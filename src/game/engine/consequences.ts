@@ -44,8 +44,8 @@ export function deliver(
   roster: Record<string, Subject>,
   emails: Record<string, EmailTemplate>,
 ): DeliveryResult {
-  const due = pending.filter((c) => c.deliverAtDayEnd === dayEnd);
-  const remaining = pending.filter((c) => c.deliverAtDayEnd !== dayEnd);
+  const due = pending.filter((c) => c.deliverAtDayEnd <= dayEnd);
+  const remaining = pending.filter((c) => c.deliverAtDayEnd > dayEnd);
 
   const messages: InboxMessage[] = [];
   const rosterChanges: RosterChange[] = [];
@@ -55,9 +55,10 @@ export function deliver(
   for (const consequence of due) {
     if (consequence.kind === "email") {
       const template = emails[consequence.emailId];
-      if (template) {
-        messages.push({ ...template, arrivedDay: dayEnd });
+      if (!template) {
+        throw new Error(`No email template for id "${consequence.emailId}"`);
       }
+      messages.push({ ...template, arrivedDay: dayEnd });
       continue;
     }
 
@@ -74,7 +75,10 @@ export function deliver(
     }
 
     const subject = nextRoster[consequence.subjectId];
-    if (!subject || subject.status === consequence.status) continue;
+    if (!subject) {
+      throw new Error(`No roster subject for id "${consequence.subjectId}"`);
+    }
+    if (subject.status === consequence.status) continue;
 
     rosterChanges.push({
       subjectId: subject.id,

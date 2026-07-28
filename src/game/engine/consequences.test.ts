@@ -85,4 +85,46 @@ describe("deliver", () => {
     // It states the mismatch. It never says the player accepted it in error.
     expect(query?.body).not.toMatch(/you|your/i);
   });
+
+  it("delivers overdue consequences late rather than stranding them", () => {
+    const overduePending: Consequence[] = [
+      {
+        kind: "roster",
+        subjectId: "1047-001",
+        status: "Withdrawn (by subject)",
+        deliverAtDayEnd: 3,
+      },
+    ];
+
+    const result = deliver(4, overduePending, roster, emails);
+
+    expect(result.rosterChanges).toHaveLength(1);
+    expect(result.rosterChanges[0].to).toBe("Withdrawn (by subject)");
+    expect(result.remaining).toHaveLength(0);
+  });
+
+  it("throws when email template is missing", () => {
+    const badPending: Consequence[] = [
+      { kind: "email", emailId: "nonexistent-email", deliverAtDayEnd: 1 },
+    ];
+
+    expect(() => deliver(1, badPending, roster, emails)).toThrow(
+      'No email template for id "nonexistent-email"',
+    );
+  });
+
+  it("throws when roster subject is missing", () => {
+    const badPending: Consequence[] = [
+      {
+        kind: "roster",
+        subjectId: "nonexistent-subject",
+        status: "Randomized",
+        deliverAtDayEnd: 1,
+      },
+    ];
+
+    expect(() => deliver(1, badPending, roster, emails)).toThrow(
+      'No roster subject for id "nonexistent-subject"',
+    );
+  });
 });
