@@ -1,4 +1,5 @@
 import type { DayNumber } from "../types";
+import { ladderTaxBlocks } from "../content/ladders";
 
 export const BLOCKS_PER_DAY = 16;
 const DAY_START_MINUTES = 8 * 60;
@@ -27,3 +28,12 @@ export function formatRunDate(day: DayNumber): string {
 
 /** The morning after day 4. Randomization closes here and does not move. */
 export const RANDOMIZATION_CLOSES = "12-JAN-2024 08:00 PT";
+
+/**
+ * Blocks the player actually gets. Taxes are deducted before they touch the
+ * queue, so the day simply begins later. Never returns less than zero.
+ */
+export function availableBlocks(day: DayNumber, openQueries: number): number {
+  const taxes = ladderTaxBlocks(day) + openQueries;
+  return Math.max(0, BLOCKS_PER_DAY - taxes);
+}
