@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#33383e;}
+*{box-sizing:border-box;}
+a{color:#1a4f86;}
+a:hover{color:#2f6fb0;}
+::selection{background:#b8d4ea;}
+@keyframes vera-in{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+@keyframes win-in{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+
+<div style="position:relative;min-height:100vh;overflow:hidden;background:radial-gradient(130% 95% at 20% 6%,#5d646d,#2f343a);font-family:Tahoma,Verdana,Geneva,sans-serif;">
+
+<sc-if value="{{ isTitle }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="Sign in" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px;">
+  <div style="width:470px;max-width:100%;border:1px solid #14181c;box-shadow:0 22px 60px rgba(0,0,0,.55);animation:win-in .2s ease-out;">
+    <div style="background:linear-gradient(#5a7995,#33506b);border-bottom:1px solid #22384c;padding:6px 10px;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font:400 11.5px Tahoma,sans-serif;color:#fff;">TrialCore EDC 4.2 — Sign in</div>
+      <div style="font:400 11px Tahoma,sans-serif;color:#c8d2dc;">_ &nbsp;□ &nbsp;✕</div>
+    </div>
+    <div style="background:#f6f4ef;padding:26px 28px 24px;">
+      <div style="font:400 10.5px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:#8a8578;">SOLANTA THERAPEUTICS · PROTOCOL DRM-204</div>
+      <div style="margin-top:9px;font:400 27px/1.2 Tahoma,sans-serif;color:#1f2937;">Site 108 <span style="color:#8a8578;">·</span> Coordinator</div>
+      <div style="margin-top:16px;font:400 13.5px/1.7 Tahoma,sans-serif;color:#4a4a4a;text-wrap:pretty;">An eight-hour day, in half-hour blocks. A queue that does not care. An assistant who sounds exactly the same whether she is right or wrong.</div>
+      <div style="margin-top:20px;display:grid;grid-template-columns:104px 1fr;gap:9px;align-items:center;">
+        <div style="font:400 11.5px Tahoma,sans-serif;color:#4a4a4a;">User</div>
+        <div style="font:400 12px Tahoma,sans-serif;color:#1c1c1c;background:#fff;border:1px solid #9d978a;border-top-color:#7d786d;padding:6px 8px;">REYES, S. (CRC)</div>
+        <div style="font:400 11.5px Tahoma,sans-serif;color:#4a4a4a;">Password</div>
+        <div style="font:400 12px Tahoma,sans-serif;color:#6b6558;background:#fff;border:1px solid #9d978a;border-top-color:#7d786d;padding:6px 8px;">••••••••••••</div>
+      </div>
+      <div style="margin-top:22px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="font:400 10.5px 'IBM Plex Mono',monospace;color:#8a8578;">2 DAYS · 9 SITUATIONS</div>
+        <button onClick="{{ onBegin }}" style="font:700 12.5px Tahoma,sans-serif;color:#fff;background:linear-gradient(#5a7995,#33506b);border:1px solid #22384c;padding:9px 22px;cursor:pointer;">Sign in</button>
+      </div>
+    </div>
+    <div style="background:linear-gradient(#e9e6dd,#d6d2c6);border-top:1px solid #b9b3a6;padding:4px 10px;font:400 10px Tahoma,sans-serif;color:#5c5749;">TrialCore EDC 4.2.117 · Protected Mode: On</div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPlay }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Desktop" style="position:relative;min-height:100vh;padding-bottom:40px;">
+
+  <div onMouseDown="{{ onFrontQueue }}" style="position:absolute;left:{{ qX }};top:{{ qY }};width:{{ qW }};max-width:calc(100vw - 36px);z-index:{{ qZ }};border:1px solid #14181c;box-shadow:0 14px 38px rgba(0,0,0,.5);">
+    <div onMouseDown="{{ onDragQueue }}" style="background:linear-gradient(#5a7995,#33506b);border-bottom:1px solid #22384c;padding:5px 9px;display:flex;align-items:center;justify-content:space-between;cursor:move;user-select:none;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:9px;height:9px;background:#c8d2dc;border:1px solid #22384c;"></div>
+        <div style="font:400 11.5px Tahoma,sans-serif;color:#fff;">TrialCore EDC 4.2 — Work Queue — Site 108 / DRM-204 / REYES, S.</div>
+      </div>
+      <div style="font:400 11px Tahoma,sans-serif;color:#c8d2dc;">_ &nbsp;□ &nbsp;✕</div>
+    </div>
+    <div style="background:#ece9e0;border-bottom:1px solid #b9b3a6;padding:3px 9px;display:flex;gap:15px;font:400 11px Tahoma,sans-serif;color:#2b2b2b;">
+      <span>File</span><span>Edit</span><span>Subject</span><span>Visit</span><span>Reports</span><span>Admin</span><span>Help</span>
+    </div>
+    <div style="background:#f6f4ef;border-bottom:1px solid #cfc9bc;padding:5px 9px;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font:400 11px Tahoma,sans-serif;color:#4a4a4a;">Studies &raquo; DRM-204 &raquo; Site 108 &raquo; Work Queue &raquo; <span style="color:#1a4f86;text-decoration:underline;">{{ dayLabel }}</span></div>
+      <div style="display:flex;align-items:center;gap:11px;">
+        <sc-if value="{{ veraOn }}" hint-placeholder-val="{{ false }}">
+          <div style="font:400 10.5px 'IBM Plex Mono',monospace;color:#0f5c54;background:#e4efed;border:1px solid #bcd7d3;padding:2px 7px;">VERA {{ veraVersion }} ACTIVE</div>
+        </sc-if>
+        <div style="font:400 10.5px 'IBM Plex Mono',monospace;color:#8a8578;">SESSION {{ sessionLabel }}</div>
+      </div>
+    </div>
+    <div style="background:#dcd8cd;padding:6px 8px 0;display:flex;gap:2px;">
+      <div style="font:400 11px Tahoma,sans-serif;color:#3b3b3b;background:#e4e0d5;border:1px solid #b9b3a6;border-bottom:none;padding:5px 11px;">Subject Info</div>
+      <div style="font:400 11px Tahoma,sans-serif;color:#3b3b3b;background:#e4e0d5;border:1px solid #b9b3a6;border-bottom:none;padding:5px 11px;">Visits</div>
+      <div style="font:400 11px Tahoma,sans-serif;color:#3b3b3b;background:#e4e0d5;border:1px solid #b9b3a6;border-bottom:none;padding:5px 11px;">eCRF</div>
+      <div style="font:400 11px Tahoma,sans-serif;color:#3b3b3b;background:#e4e0d5;border:1px solid #b9b3a6;border-bottom:none;padding:5px 11px;">Queries (7)</div>
+      <div style="font:700 11px Tahoma,sans-serif;color:#111;background:#fff;border:1px solid #b9b3a6;border-bottom:1px solid #fff;padding:5px 11px;">Work Queue</div>
+      <div style="font:400 11px Tahoma,sans-serif;color:#3b3b3b;background:#e4e0d5;border:1px solid #b9b3a6;border-bottom:none;padding:5px 11px;">Documents</div>
+    </div>
+    <div style="display:grid;grid-template-columns:minmax(160px,196px) minmax(0,1fr);background:#fff;border-top:1px solid #b9b3a6;min-height:430px;">
+      <div style="border-right:1px solid #cfc9bc;background:#f6f4ef;">
+        <div style="padding:5px 8px;background:#e2ded3;border-bottom:1px solid #cfc9bc;font:700 11px Tahoma,sans-serif;color:#3b3b3b;">Subject Roster</div>
+        <div style="display:flex;flex-direction:column;">
+          <sc-for list="{{ roster }}" as="s" hint-placeholder-count="10">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;padding:4px 8px;border-bottom:1px solid #e6e2d8;background:{{ s.bg }};">
+              <span style="font:400 11px Tahoma,sans-serif;color:#1a4f86;text-decoration:underline;">{{ s.id }}</span>
+              <span style="font:400 9.5px Tahoma,sans-serif;color:{{ s.fg }};background:{{ s.chip }};padding:1px 5px;white-space:nowrap;">{{ s.chipText }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="padding:9px 8px;border-top:1px solid #cfc9bc;">
+          <div style="font:700 10px Tahoma,sans-serif;color:#6b6558;margin-bottom:3px;">ENROLLMENT VS PLAN</div>
+          <div style="height:13px;background:#e2ded3;border:1px solid #b9b3a6;"><div style="width:{{ enrollWidth }};height:100%;background:linear-gradient(#7fa64a,#5e8433);"></div></div>
+          <div style="margin-top:8px;font:700 10px Tahoma,sans-serif;color:#6b6558;">AUDIT INTEGRITY</div>
+          <div style="height:13px;background:#e2ded3;border:1px solid #b9b3a6;"><div style="width:{{ auditWidth }};height:100%;background:linear-gradient(#d0562f,#a3391b);"></div></div>
+        </div>
+        <div style="padding:9px 8px;border-top:1px solid #cfc9bc;">
+          <div style="font:700 10px Tahoma,sans-serif;color:#6b6558;margin-bottom:4px;">MAIL</div>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <sc-for list="{{ inbox }}" as="m" hint-placeholder-count="1">
+              <div onClick="{{ m.onOpen }}" style="cursor:pointer;padding:4px 6px;background:#fff;border:1px solid #d8d3c7;">
+                <div style="font:400 9.5px 'IBM Plex Mono',monospace;color:#8a8578;">{{ m.from }}</div>
+                <div style="font:400 11px/1.35 Tahoma,sans-serif;color:#1a4f86;text-decoration:underline;">{{ m.subj }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:0;">
+        <div style="background:linear-gradient(#f2efe8,#ddd8cb);border-bottom:1px solid #b9b3a6;padding:4px 9px;display:flex;justify-content:space-between;">
+          <div style="font:700 11px Tahoma,sans-serif;color:#3b3b3b;">Work Queue</div>
+          <div style="font:400 11px Tahoma,sans-serif;color:#5c5749;">{{ queueCountLabel }}</div>
+        </div>
+        <table style="width:100%;border-collapse:collapse;">
+          <tr style="background:linear-gradient(#fbfaf7,#eeebe3);">
+            <td style="border:1px solid #cfc9bc;padding:3px 6px;font:700 11px Tahoma,sans-serif;color:#4a4a4a;width:32px;">#</td>
+            <td style="border:1px solid #cfc9bc;padding:3px 6px;font:700 11px Tahoma,sans-serif;color:#4a4a4a;width:98px;">Type</td>
+            <td style="border:1px solid #cfc9bc;padding:3px 6px;font:700 11px Tahoma,sans-serif;color:#4a4a4a;">Subject / Item</td>
+            <td style="border:1px solid #cfc9bc;padding:3px 6px;font:700 11px Tahoma,sans-serif;color:#4a4a4a;width:96px;">Status</td>
+          </tr>
+          <sc-for list="{{ queue }}" as="q" hint-placeholder-count="4">
+            <tr onClick="{{ q.onSelect }}" style="background:{{ q.bg }};cursor:pointer;">
+              <td style="border:1px solid #e0dbcf;padding:4px 6px;font:400 11px Tahoma,sans-serif;color:{{ q.ink }};">{{ q.n }}</td>
+              <td style="border:1px solid #e0dbcf;padding:4px 6px;font:400 11px Tahoma,sans-serif;color:{{ q.kindColor }};">{{ q.kind }}</td>
+              <td style="border:1px solid #e0dbcf;padding:4px 6px;font:400 11px Tahoma,sans-serif;color:{{ q.ink }};">{{ q.title }}</td>
+              <td style="border:1px solid #e0dbcf;padding:4px 6px;"><span style="font:400 9.5px Tahoma,sans-serif;color:{{ q.statusFg }};background:{{ q.statusBg }};padding:1px 5px;">{{ q.status }}</span></td>
+            </tr>
+          </sc-for>
+        </table>
+
+        <sc-if value="{{ hasActive }}" hint-placeholder-val="{{ false }}">
+        <div style="margin:10px 9px 12px;border:1px solid #cfc9bc;background:#f9f8f4;">
+          <div style="background:#eeebe3;border-bottom:1px solid #d8d3c7;padding:4px 8px;display:flex;justify-content:space-between;">
+            <div style="font:700 11px Tahoma,sans-serif;color:#3b3b3b;">{{ activeKind }} — {{ activeCode }}</div>
+            <div style="font:400 11px Tahoma,sans-serif;color:#5c5749;">Subject {{ activeSubject }}</div>
+          </div>
+          <div style="padding:11px 13px 13px;">
+            <div style="font:700 15px Tahoma,sans-serif;color:#1f2937;">{{ activeTitle }}</div>
+            <div style="margin-top:5px;font:400 12px/1.6 Tahoma,sans-serif;color:#5c5749;text-wrap:pretty;">{{ activeBlurb }}</div>
+            <sc-if value="{{ activeStamped }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:9px;display:inline-block;font:700 10.5px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:{{ stampColor }};border:1px solid {{ stampColor }};padding:3px 8px;">{{ stampText }}</div>
+            </sc-if>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ note }}" hint-placeholder-val="{{ false }}">
+          <div style="margin:0 9px 12px;padding:9px 12px;background:#fff9e2;border:1px solid #e2d6a3;font:400 12px/1.6 Tahoma,sans-serif;color:#4a4234;text-wrap:pretty;">{{ note }}</div>
+        </sc-if>
+      </div>
+    </div>
+    <div style="background:linear-gradient(#e9e6dd,#d6d2c6);border-top:1px solid #b9b3a6;padding:3px 9px;display:flex;justify-content:space-between;font:400 10px Tahoma,sans-serif;color:#5c5749;">
+      <span>{{ statusBarLeft }}</span><span>TrialCore EDC 4.2.117 · Protected Mode: On</span>
+    </div>
+  </div>
+
+  <div style="position:absolute;right:16px;top:14px;width:320px;z-index:20;display:flex;flex-direction:column;gap:12px;">
+    <sc-if value="{{ veraOn }}" hint-placeholder-val="{{ true }}">
+    <div style="background:#fff;border-radius:12px;box-shadow:0 16px 40px rgba(0,0,0,.5);overflow:hidden;">
+      <div style="background:#0f5c54;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="font:600 14px 'IBM Plex Sans',sans-serif;color:#fff;">VERA {{ veraVersion }}</div>
+        <div style="font:400 10.5px 'IBM Plex Mono',monospace;color:#8fc9c0;">ALWAYS ON TOP</div>
+      </div>
+      <div style="padding:15px 16px 17px;">
+        <sc-if value="{{ hasVeraText }}" hint-placeholder-val="{{ true }}">
+          <div style="font:400 14.5px/1.68 'IBM Plex Sans',sans-serif;color:#16211f;text-wrap:pretty;animation:vera-in .2s ease-out;">{{ veraPanelText }}</div>
+        </sc-if>
+        <sc-if value="{{ veraIdle }}" hint-placeholder-val="{{ false }}">
+          <div style="font:400 14px/1.6 'IBM Plex Sans',sans-serif;color:#6d7b78;">Nothing selected. I have reviewed everything currently in your queue.</div>
+        </sc-if>
+      </div>
+    </div>
+    </sc-if>
+    <sc-if value="{{ veraOff }}" hint-placeholder-val="{{ false }}">
+      <div style="background:#f6f4ef;border:1px solid #b9b3a6;box-shadow:0 10px 26px rgba(0,0,0,.4);padding:14px 15px;font:400 12px/1.65 Tahoma,sans-serif;color:#5c5749;text-wrap:pretty;">No assistant provisioned for this site. Source documents must be opened and entered by hand.</div>
+    </sc-if>
+    <div style="background:#fff;border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.42);overflow:hidden;">
+      <div style="padding:12px 16px 14px;">
+        <div style="font:600 10.5px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:#8a9997;margin-bottom:10px;">ACTIONS</div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <sc-if value="{{ canAccept }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ onAccept }}" style="display:flex;justify-content:space-between;align-items:center;width:100%;font:600 13px 'IBM Plex Sans',sans-serif;color:#fff;background:#0f5c54;border:none;border-radius:6px;padding:11px 13px;cursor:pointer;"><span>Accept draft</span><span style="font:400 11px 'IBM Plex Mono',monospace;color:#9fd0c8;">30 MIN</span></button>
+          </sc-if>
+          <sc-if value="{{ canOpen }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ onOpen }}" style="display:flex;justify-content:space-between;align-items:center;width:100%;font:600 13px 'IBM Plex Sans',sans-serif;color:#16211f;background:#fff;border:1px solid #c3d3d0;border-radius:6px;padding:11px 13px;cursor:pointer;"><span>Open source</span><span style="font:400 11px 'IBM Plex Mono',monospace;color:#7b8886;">{{ openCostLabel }}</span></button>
+          </sc-if>
+          <sc-if value="{{ canEscalate }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ onEscalate }}" style="display:flex;justify-content:space-between;align-items:center;width:100%;font:600 13px 'IBM Plex Sans',sans-serif;color:#fff;background:#a3391b;border:none;border-radius:6px;padding:11px 13px;cursor:pointer;"><span>Escalate to PI</span><span style="font:400 11px 'IBM Plex Mono',monospace;color:#e8b5a6;">30 MIN +</span></button>
+          </sc-if>
+          <sc-if value="{{ canBatch }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ onBatch }}" style="display:flex;justify-content:space-between;align-items:center;width:100%;font:600 13px 'IBM Plex Sans',sans-serif;color:#0f5c54;background:#e4efed;border:1px solid #9fd0c8;border-radius:6px;padding:11px 13px;cursor:pointer;"><span>{{ batchLabel }}</span><span style="font:400 11px 'IBM Plex Mono',monospace;color:#4c837b;">30 MIN</span></button>
+          </sc-if>
+        </div>
+        <div style="margin-top:11px;font:400 12px/1.55 'IBM Plex Sans',sans-serif;color:#7b8886;text-wrap:pretty;">{{ actionHint }}</div>
+      </div>
+    </div>
+  </div>
+
+  <sc-if value="{{ sourceOpen }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Document viewer" style="position:absolute;left:{{ srcX }};top:{{ srcY }};width:{{ srcW }};max-width:calc(100vw - 40px);z-index:{{ srcZ }};border:1px solid #14181c;box-shadow:0 18px 44px rgba(0,0,0,.58);animation:win-in .16s ease-out;">
+    <div onMouseDown="{{ onDragSrc }}" style="background:linear-gradient(#f3f6f9,#d5dde5);border-bottom:1px solid #9aa3ab;padding:7px 10px;display:flex;align-items:center;justify-content:space-between;cursor:move;user-select:none;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:9px;height:9px;background:#4c7f76;border:1px solid #2f5f57;"></div>
+        <div style="font:700 11.5px Tahoma,sans-serif;color:#20262b;">Document Viewer — {{ sourceFile }}</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;font:400 10.5px Tahoma,sans-serif;color:#4a5259;">
+        <span style="border:1px solid #9aa3ab;background:#eef1f4;padding:1px 6px;">Fit width {{ srcZoom }}</span>
+        <span>{{ sourcePageLabel }}</span>
+        <sc-if value="{{ sourceMultipage }}" hint-placeholder-val="{{ false }}">
+          <span onClick="{{ onPrevPage }}" style="border:1px solid #9aa3ab;background:#eef1f4;padding:1px 6px;cursor:pointer;">◀</span>
+          <span onClick="{{ onNextPage }}" style="border:1px solid #9aa3ab;background:#eef1f4;padding:1px 6px;cursor:pointer;">▶</span>
+        </sc-if>
+        <span onClick="{{ onCloseSource }}" style="cursor:pointer;padding:0 2px;">_ □ ✕</span>
+      </div>
+    </div>
+    <div style="background:#6f747a;padding:15px;max-height:56vh;overflow:auto;">
+      <div style="background:#fff;padding:22px 26px;box-shadow:0 2px 5px rgba(0,0,0,.4);display:inline-block;min-width:100%;">
+        <div style="font:400 10px 'IBM Plex Mono',monospace;color:#8a8578;letter-spacing:.07em;">{{ sourceMeta }}</div>
+        <pre style="margin:11px 0 0;font:400 13.5px/1.85 'Courier New',Courier,monospace;font-size:{{ srcFont }};line-height:1.8;color:#191919;white-space:pre;">{{ sourceText }}</pre>
+      </div>
+    </div>
+    <div style="background:#dfe3e7;border-top:1px solid #9aa3ab;padding:8px 10px;display:flex;flex-wrap:wrap;gap:7px;">
+      <sc-if value="{{ canAcceptInSource }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ onAcceptVerified }}" style="font:400 11px Tahoma,sans-serif;color:#1c1c1c;background:linear-gradient(#fbfaf7,#dfdbd0);border:1px solid #9d978a;padding:7px 12px;cursor:pointer;">Accept as drafted</button>
+      </sc-if>
+      <sc-if value="{{ canFlag }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ onFlag }}" style="font:700 11px Tahoma,sans-serif;color:#fff;background:linear-gradient(#c2643a,#9c4522);border:1px solid #7a3417;padding:7px 12px;cursor:pointer;">{{ flagLabel }}</button>
+      </sc-if>
+      <sc-if value="{{ canEscalate }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ onEscalate }}" style="font:400 11px Tahoma,sans-serif;color:#1c1c1c;background:linear-gradient(#fbfaf7,#dfdbd0);border:1px solid #9d978a;padding:7px 12px;cursor:pointer;">Escalate to PI</button>
+      </sc-if>
+      <button onClick="{{ onCloseSource }}" style="font:400 11px Tahoma,sans-serif;color:#4a4a4a;background:#eceae4;border:1px solid #b9b3a6;padding:7px 12px;cursor:pointer;">Close</button>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ crfOpen }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="eCRF" style="position:absolute;left:{{ crfX }};top:{{ crfY }};width:{{ crfW }};max-width:calc(100vw - 40px);z-index:{{ crfZ }};border:1px solid #14181c;box-shadow:0 18px 44px rgba(0,0,0,.55);animation:win-in .16s ease-out;">
+    <div onMouseDown="{{ onDragCrf }}" style="background:linear-gradient(#e9edf1,#c2ccd6);border-bottom:1px solid #9aa3ab;padding:7px 10px;display:flex;align-items:center;justify-content:space-between;cursor:move;user-select:none;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:9px;height:9px;background:#7c8792;border:1px solid #5d666f;"></div>
+        <div style="font:700 11.5px Tahoma,sans-serif;color:#20262b;">eCRF — {{ entryFormName }}</div>
+      </div>
+      <div style="font:400 10.5px Tahoma,sans-serif;color:#4a5259;">_ □ ✕</div>
+    </div>
+    <div style="background:#f2f4f6;padding:13px 14px 15px;max-height:56vh;overflow:auto;">
+      <sc-if value="{{ hasEntryFields }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <sc-for list="{{ entryFields }}" as="f" hint-placeholder-count="4">
+            <div style="display:grid;grid-template-columns:minmax(120px,150px) minmax(0,1fr);gap:9px;align-items:center;">
+              <div style="font:400 11.5px Tahoma,sans-serif;color:#4a4a4a;">{{ f.label }}</div>
+              <input value="{{ f.value }}" onChange="{{ f.onChange }}" placeholder="{{ f.hint }}" style="font:400 12.5px 'Courier New',monospace;color:#1c1c1c;background:#fff;border:1px solid #9d978a;border-top-color:#7d786d;padding:6px 8px;width:100%;"></input>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ hasMedRows }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;">
+          <sc-for list="{{ medRows }}" as="m" hint-placeholder-count="7">
+            <div style="display:grid;grid-template-columns:minmax(0,1fr) 132px;gap:9px;align-items:center;padding:6px 0;border-bottom:1px solid #dfe2e6;">
+              <div style="font:400 11.5px/1.4 Tahoma,sans-serif;color:#2b2b2b;">{{ m.label }}</div>
+              <select value="{{ m.value }}" onChange="{{ m.onChange }}" style="font:400 11.5px Tahoma,sans-serif;color:#1c1c1c;background:#fff;border:1px solid #9d978a;padding:5px 6px;width:100%;">
+                <option value="">— select —</option>
+                <option value="Ongoing">Ongoing</option>
+                <option value="Discontinued">Discontinued</option>
+                <option value="Dose changed">Dose changed</option>
+              </select>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+    <div style="background:#dfe3e7;border-top:1px solid #9aa3ab;padding:8px 10px;display:flex;gap:7px;">
+      <button onClick="{{ onSubmitEntry }}" style="font:700 11px Tahoma,sans-serif;color:#fff;background:linear-gradient(#5a7995,#33506b);border:1px solid #22384c;padding:7px 14px;cursor:pointer;">Submit entry</button>
+      <div style="font:400 10.5px/1.5 Tahoma,sans-serif;color:#5c5749;align-self:center;">Values must match the source document.</div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ batchOpen }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Batch review" style="position:absolute;left:{{ batX }};top:{{ batY }};width:660px;max-width:calc(100vw - 40px);z-index:{{ batZ }};box-shadow:0 20px 50px rgba(0,0,0,.58);border-radius:12px;overflow:hidden;animation:win-in .16s ease-out;">
+    <div onMouseDown="{{ onDragBat }}" style="background:#0f5c54;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:move;user-select:none;">
+      <div style="font:600 14px 'IBM Plex Sans',sans-serif;color:#fff;">VERA {{ veraVersion }} — batch review</div>
+      <div style="display:flex;gap:12px;align-items:center;font:400 10.5px 'IBM Plex Mono',monospace;color:#8fc9c0;"><span>9 ITEMS · 2.1 SECONDS</span><span onClick="{{ onCloseBatch }}" style="cursor:pointer;">✕</span></div>
+    </div>
+    <div style="background:#fff;padding:8px 18px 18px;max-height:60vh;overflow:auto;">
+      <sc-for list="{{ batchRows }}" as="b" hint-placeholder-count="9">
+        <div style="display:grid;grid-template-columns:28px 74px minmax(0,1fr);gap:12px;padding:11px 8px;margin:0 -8px;border-bottom:1px solid #eef1f0;background:{{ b.bg }};">
+          <div style="font:500 12px 'IBM Plex Mono',monospace;color:#7b8886;">{{ b.n }}</div>
+          <div style="font:600 11.5px 'IBM Plex Mono',monospace;color:#16211f;">{{ b.subject }}</div>
+          <div style="font:400 14px/1.6 'IBM Plex Sans',sans-serif;color:{{ b.color }};text-wrap:pretty;">{{ b.text }}</div>
+        </div>
+      </sc-for>
+      <button onClick="{{ onCloseBatch }}" style="margin-top:16px;font:600 13px 'IBM Plex Sans',sans-serif;color:#0f5c54;background:#e4efed;border:1px solid #9fd0c8;border-radius:6px;padding:11px 20px;cursor:pointer;">Back to queue</button>
+    </div>
+  </div>
+  </sc-if>
+
+  <div style="position:fixed;left:0;right:0;bottom:0;height:40px;background:linear-gradient(#2b3238,#1b2025);border-top:1px solid #10141a;display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:80;">
+    <div style="display:flex;gap:6px;align-items:center;">
+      <div onClick="{{ onFrontQueue }}" style="cursor:pointer;font:400 11px Tahoma,sans-serif;color:#e6ebf0;background:#3b444c;border:1px solid #4d5862;padding:5px 10px;">TrialCore EDC</div>
+      <sc-for list="{{ taskbar }}" as="t" hint-placeholder-count="1">
+        <div onClick="{{ t.onClick }}" style="cursor:pointer;font:400 11px Tahoma,sans-serif;color:{{ t.fg }};background:{{ t.bg }};border:1px solid {{ t.border }};padding:5px 10px;white-space:nowrap;">{{ t.label }}</div>
+      </sc-for>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div style="font:400 10.5px 'IBM Plex Mono',monospace;color:#8d9aa6;">{{ sessionLabel }}</div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:1px;padding-left:12px;border-left:1px solid #3b444c;">
+        <div style="font:700 14px Tahoma,sans-serif;color:#fff;letter-spacing:.02em;">{{ clockText }}</div>
+        <div style="font:400 10px 'IBM Plex Mono',monospace;color:#8d9aa6;letter-spacing:.05em;">{{ dayLabel }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isChangeover }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Changeover" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px;">
+  <div style="width:660px;max-width:100%;display:flex;flex-direction:column;gap:16px;">
+    <div style="border:1px solid #14181c;box-shadow:0 18px 46px rgba(0,0,0,.55);animation:win-in .18s ease-out;">
+      <div style="background:linear-gradient(#5a7995,#33506b);border-bottom:1px solid #22384c;padding:6px 10px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="font:400 11.5px Tahoma,sans-serif;color:#fff;">Mail — Solanta Therapeutics, Clinical Operations</div>
+        <div style="font:400 11px Tahoma,sans-serif;color:#c8d2dc;">_ □ ✕</div>
+      </div>
+      <div style="background:#fff;padding:20px 22px 24px;">
+        <div style="font:700 14.5px/1.4 Tahoma,sans-serif;color:#1f2937;">{{ coSubject }}</div>
+        <div style="margin-top:11px;font:400 13.5px/1.75 Tahoma,sans-serif;color:#333;text-wrap:pretty;">{{ coEmail }}</div>
+      </div>
+    </div>
+    <div style="background:#fff;border-radius:12px;box-shadow:0 18px 46px rgba(0,0,0,.5);overflow:hidden;">
+      <div style="background:#0f5c54;padding:13px 17px;font:600 14px 'IBM Plex Sans',sans-serif;color:#fff;">VERA {{ coVersion }}</div>
+      <div style="padding:18px 20px 21px;font:400 15.5px/1.68 'IBM Plex Sans',sans-serif;color:#16211f;text-wrap:pretty;">{{ coVera }}</div>
+    </div>
+    <button onClick="{{ onContinue }}" style="align-self:flex-start;font:700 12.5px Tahoma,sans-serif;color:#fff;background:linear-gradient(#5a7995,#33506b);border:1px solid #22384c;padding:10px 26px;cursor:pointer;">Continue</button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isDayEnd }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Session end" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px;">
+  <div style="width:620px;max-width:100%;border:1px solid #14181c;box-shadow:0 20px 52px rgba(0,0,0,.6);animation:win-in .18s ease-out;">
+    <div style="background:linear-gradient(#5a7995,#33506b);border-bottom:1px solid #22384c;padding:6px 10px;font:400 11.5px Tahoma,sans-serif;color:#fff;">TrialCore EDC 4.2 — Session ended</div>
+    <div style="background:#f6f4ef;padding:24px 26px 26px;">
+      <div style="display:flex;align-items:baseline;gap:14px;">
+        <div style="font:700 40px/1 Tahoma,sans-serif;color:#1f2937;">{{ endClock }}</div>
+        <div style="font:400 11px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#8a8578;">{{ dayLabel }} · SHIFT ENDS</div>
+      </div>
+      <div style="height:2px;background:#a3391b;margin:18px 0 16px;"></div>
+      <div style="display:flex;flex-direction:column;gap:11px;">
+        <sc-for list="{{ dayEndLines }}" as="l" hint-placeholder-count="3">
+          <div style="display:grid;grid-template-columns:8px minmax(0,1fr);gap:12px;align-items:start;">
+            <div style="width:8px;height:8px;margin-top:6px;background:{{ l.color }};"></div>
+            <div style="font:400 13.5px/1.7 Tahoma,sans-serif;color:#3b3b3b;text-wrap:pretty;">{{ l.text }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <sc-if value="{{ showMidCalibration }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:18px;padding:11px 13px;background:#fff;border:1px solid #d8d3c7;font:400 12.5px/1.6 Tahoma,sans-serif;color:#4a4a4a;">{{ midCalibration }}</div>
+      </sc-if>
+      <button onClick="{{ onNextDay }}" style="margin-top:24px;font:700 12.5px Tahoma,sans-serif;color:#fff;background:linear-gradient(#5a7995,#33506b);border:1px solid #22384c;padding:10px 24px;cursor:pointer;">{{ nextDayLabel }}</button>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isDebrief }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Debrief" style="min-height:100vh;padding:44px 20px 70px;display:flex;justify-content:center;">
+  <div style="width:840px;max-width:100%;display:flex;flex-direction:column;gap:18px;">
+    <div style="border:1px solid #14181c;box-shadow:0 18px 46px rgba(0,0,0,.5);">
+      <div style="background:linear-gradient(#5a7995,#33506b);border-bottom:1px solid #22384c;padding:6px 10px;font:400 11.5px Tahoma,sans-serif;color:#fff;">Run review — Site 108 / DRM-204 — 1 of 3</div>
+      <div style="background:#fff;padding:24px 26px 26px;">
+        <div style="font:700 24px/1.2 Tahoma,sans-serif;color:#1f2937;">What actually happened</div>
+        <div style="margin-top:18px;display:flex;flex-direction:column;gap:13px;">
+          <sc-for list="{{ answerRows }}" as="r" hint-placeholder-count="4">
+            <div style="padding:13px 15px;background:#f8f7f3;border-left:4px solid {{ r.color }};border-top:1px solid #e6e2d8;border-right:1px solid #e6e2d8;border-bottom:1px solid #e6e2d8;">
+              <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:11px;">
+                <div style="font:700 12.5px Tahoma,sans-serif;color:#1f2937;">{{ r.head }}</div>
+                <div style="font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.09em;color:{{ r.color }};">{{ r.tag }}</div>
+              </div>
+              <div style="margin-top:8px;font:400 13.5px/1.7 Tahoma,sans-serif;color:#3b3b3b;text-wrap:pretty;">{{ r.text }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <div style="border:1px solid #14181c;box-shadow:0 18px 46px rgba(0,0,0,.5);">
+      <div style="background:linear-gradient(#e9edf1,#c9d1d9);border-bottom:1px solid #9aa3ab;padding:7px 11px;display:flex;justify-content:space-between;">
+        <div style="font:700 11.5px Tahoma,sans-serif;color:#20262b;">AUDIT FINDING — 2 of 3</div>
+        <div style="font:400 10.5px 'IBM Plex Mono',monospace;color:#4a5259;">SITE 108 / DRM-204</div>
+      </div>
+      <div style="background:#fff;padding:26px 30px 30px;display:flex;flex-direction:column;gap:14px;">
+        <sc-for list="{{ findingLines }}" as="f" hint-placeholder-count="3">
+          <div style="font:400 13.5px/1.75 'Courier New',Courier,monospace;color:#1c1c1c;text-wrap:pretty;">{{ f.text }}</div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="background:#0f5c54;padding:26px 30px 28px;border-radius:12px;box-shadow:0 18px 46px rgba(0,0,0,.5);">
+      <div style="font:600 10.5px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:#8fc9c0;">3 OF 3</div>
+      <div style="margin-top:13px;font:400 16.5px/1.72 'IBM Plex Sans',sans-serif;color:#eaf5f3;text-wrap:pretty;">{{ pointText }}</div>
+      <div style="margin-top:22px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+        <sc-for list="{{ stats }}" as="s" hint-placeholder-count="3">
+          <div style="padding:14px 15px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);">
+            <div style="font:600 28px/1 'IBM Plex Sans',sans-serif;color:#fff;">{{ s.value }}</div>
+            <div style="margin-top:8px;font:400 12px/1.5 'IBM Plex Sans',sans-serif;color:#a9d3cd;text-wrap:pretty;">{{ s.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <button onClick="{{ onRestart }}" style="align-self:flex-start;font:700 12.5px Tahoma,sans-serif;color:#fff;background:linear-gradient(#5a7995,#33506b);border:1px solid #22384c;padding:10px 24px;cursor:pointer;">Run it again</button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPI }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="PI conversation" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:34px 20px;">
+  <div style="width:660px;max-width:100%;border:1px solid #14181c;box-shadow:0 20px 52px rgba(0,0,0,.6);animation:win-in .18s ease-out;">
+    <div style="background:linear-gradient(#5a7995,#33506b);border-bottom:1px solid #22384c;padding:6px 10px;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font:400 11.5px Tahoma,sans-serif;color:#fff;">Secure Message — ALVAREZ, R. (Principal Investigator)</div>
+      <div style="font:400 10.5px Tahoma,sans-serif;color:#c8d2dc;">{{ clockText }}</div>
+    </div>
+    <div style="background:#eceae4;border-bottom:1px solid #cfc9bc;padding:7px 12px;display:flex;justify-content:space-between;">
+      <div style="font:400 11px Tahoma,sans-serif;color:#4a4a4a;">Re: {{ piContext }}</div>
+      <div style="font:400 10.5px 'IBM Plex Mono',monospace;color:#8a8578;">{{ piPresence }}</div>
+    </div>
+    <div style="background:#f6f4ef;padding:16px 16px 6px;display:flex;flex-direction:column;gap:10px;max-height:46vh;overflow:auto;">
+      <sc-for list="{{ piThread }}" as="m" hint-placeholder-count="1">
+        <div style="display:flex;flex-direction:column;align-items:{{ m.align }};gap:3px;">
+          <div style="max-width:78%;background:{{ m.bg }};border:1px solid {{ m.border }};padding:9px 12px;font:400 13.5px/1.6 Tahoma,sans-serif;color:{{ m.fg }};text-wrap:pretty;">{{ m.text }}</div>
+          <div style="font:400 10px 'IBM Plex Mono',monospace;color:#9a9185;">{{ m.meta }}</div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="background:#f6f4ef;padding:6px 16px 18px;">
+      <div style="height:1px;background:#dfdbd0;margin-bottom:13px;"></div>
+      <div style="display:flex;flex-direction:column;gap:7px;">
+        <sc-for list="{{ piOptions }}" as="o" hint-placeholder-count="2">
+          <button onClick="{{ o.onClick }}" style="display:flex;justify-content:space-between;align-items:center;width:100%;font:400 12.5px Tahoma,sans-serif;color:{{ o.fg }};background:{{ o.bg }};border:1px solid {{ o.border }};padding:11px 13px;cursor:pointer;text-align:left;"><span>{{ o.label }}</span><span style="font:400 10.5px 'IBM Plex Mono',monospace;opacity:.72;">{{ o.cost }}</span></button>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ emailOpen }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Mail" style="position:fixed;inset:0;background:rgba(10,13,16,.55);display:flex;align-items:center;justify-content:center;padding:30px 20px;z-index:90;">
+  <div style="width:600px;max-width:100%;border:1px solid #14181c;box-shadow:0 20px 52px rgba(0,0,0,.6);animation:win-in .16s ease-out;">
+    <div style="background:linear-gradient(#5a7995,#33506b);border-bottom:1px solid #22384c;padding:6px 10px;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font:400 11.5px Tahoma,sans-serif;color:#fff;">Mail — {{ emailFrom }}</div>
+      <div style="font:400 10.5px Tahoma,sans-serif;color:#c8d2dc;">{{ emailWhen }}</div>
+    </div>
+    <div style="background:#fff;padding:20px 22px 23px;">
+      <div style="font:700 14.5px/1.4 Tahoma,sans-serif;color:#1f2937;">{{ emailSubject }}</div>
+      <div style="margin-top:11px;font:400 13.5px/1.75 Tahoma,sans-serif;color:#333;white-space:pre-wrap;text-wrap:pretty;">{{ emailBody }}</div>
+      <button onClick="{{ onCloseEmail }}" style="margin-top:20px;font:700 11.5px Tahoma,sans-serif;color:#1c1c1c;background:linear-gradient(#fbfaf7,#dfdbd0);border:1px solid #9d978a;padding:8px 18px;cursor:pointer;">{{ emailButton }}</button>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;dayBlocks&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:16,&quot;tsType&quot;:&quot;number&quot;,&quot;min&quot;:8,&quot;max&quot;:24,&quot;unit&quot;:&quot;blocks&quot;,&quot;section&quot;:&quot;Pacing&quot;},&quot;hardDayEnd&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Pacing&quot;},&quot;batchEnabled&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Pacing&quot;},&quot;showCalibrationMidRun&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Debrief&quot;}}">
+class Component extends DCLogic {
+  static ROSTER0 = [
+    { id: 'S-002', status: 'Enrolled' },
+    { id: 'S-004', status: 'Enrolled' },
+    { id: 'S-006', status: 'Screening' },
+    { id: 'S-007', status: 'Screening' },
+    { id: 'S-009', status: 'Enrolled' },
+    { id: 'S-011', status: 'Enrolled' },
+    { id: 'S-014', status: 'Enrolled' },
+    { id: 'S-021', status: 'Screening' },
+    { id: 'S-022', status: 'Screening (window closes in 3 days)' },
+    { id: 'S-023', status: 'Screen failed (window expired)' }
+  ];
+
+  static ITEMS = {
+    S1: {
+      code: 'DE-1104', kind: 'DATA ENTRY', subject: 'S-004', title: 'Visit 2 — vital signs',
+      blurb: 'Paper source only. Four fields required by the eCRF. Nothing is pre-populated.',
+      forceOpen: true, openCost: 2, file: 'SRC_S-004_V2_CLINICNOTE.pdf',
+      source: { meta: 'SITE 108 · DRM-204 · S-004 · VISIT 2 CLINIC NOTE (SCAN)', pages: [
+"SITE 108 - DERMATOLOGY RESEARCH UNIT\nPROTOCOL DRM-204 / VISIT 2 (DAY 14 +/- 3)\nSUBJECT S-004      DATE: 07/09/26      PAGE 1 OF 1\n\nPt arrived 09:12, 14 min late, apologized twice. Accompanied\nby spouse. States he takes study medication in the morning\nwith food per the instruction sheet. Missed one dose on\n07/03, reported same day by phone, no action required.\n\nInterval history reviewed. No new medications. No ER visits.\nPt asks again whether the study drug is \"the real one.\"\nAdvised per ICF. Emollient use unchanged, twice daily.\n\nVitals obtained seated after 5 min rest, right arm, cuff size\nregular:  BP 128/82,  HR 74 reg,  T 36.8 C oral,  Wt 81.2 kg\n(clinic scale 2, calibrated 06/30). Prior wt 82.0 kg.\n\nEASI performed by Dr. Alvarez, see separate worksheet. Lesion\nphotography declined by pt at this visit, documented.\n\nDiary card returned, 13 of 14 days completed. Reviewed with\npt. Next visit scheduled 07/23. Reminder call 07/21.\n\n--- nurse initials RK / entered from paper source ---"
+      ] },
+      entryName: 'VITAL SIGNS (V2)',
+      fields: [
+        { k: 'bp', label: 'Blood pressure, mmHg', hint: '000/00', truth: '128/82' },
+        { k: 'hr', label: 'Heart rate, bpm', hint: '00', truth: '74' },
+        { k: 'temp', label: 'Temperature, C', hint: '00.0', truth: '36.8' },
+        { k: 'wt', label: 'Weight, kg', hint: '00.0', truth: '81.2' }
+      ],
+      error: null
+    },
+    S2: {
+      code: 'DE-1105', kind: 'DATA ENTRY', subject: 'S-002', title: 'Visit 3 — concomitant medications',
+      blurb: 'Two pages of source. Seven medications. Status required for each.',
+      forceOpen: true, openCost: 3, file: 'SRC_S-002_V3_CONMEDS.pdf',
+      source: { meta: 'SITE 108 · DRM-204 · S-002 · CONCOMITANT MEDICATION LOG', pages: [
+"SITE 108 / PROTOCOL DRM-204 / SUBJECT S-002\nCONCOMITANT MEDICATION LOG      PAGE 1 OF 2\n\n1. Cetirizine 10 mg PO daily          start 01/14/26\n2. Triamcinolone 0.1% cream BID       start 11/02/25\n3. Lisinopril 10 mg PO daily          start 08/2024\n4. Cholecalciferol 2000 IU PO daily   start unknown\n5. Ibuprofen 400 mg PO PRN            start PRN\n6. Sertraline 50 mg PO daily          start 03/2025\n7. Loratadine 10 mg PO daily          start 09/2025\n\nPt reports good adherence to all of the above except as\nnoted on page 2. Pharmacy list reconciled 07/11/26 by RK.\nSee page 2 for interval changes - DO NOT ENTER FROM PAGE 1\nALONE.",
+"SITE 108 / PROTOCOL DRM-204 / SUBJECT S-002\nCONCOMITANT MEDICATION LOG      PAGE 2 OF 2\n\nINTERVAL CHANGES SINCE VISIT 2\n\n03/12/26  Triamcinolone cream stopped by pt prior to\n          screening consent. Not restarted. Confirmed\n          twice with pt and with spouse.\n\n06/18/26  Lisinopril increased 10 mg -> 20 mg daily by\n          primary care for BP. Pt brought the bottle.\n\n05/02/26  Sertraline stopped (pt felt \"flat\").\n05/19/26  Sertraline restarted at 25 mg daily, half the\n          prior dose, per primary care.\n\n09/2025 - 01/2026  Loratadine taken until switched to\n          cetirizine 01/14/26. Not taken since.\n\nNo other changes. Ibuprofen use unchanged, 2-3 doses per\nmonth. Vitamin D unchanged.\n\n--- RK ---"
+      ] },
+      entryName: 'CONCOMITANT MEDICATIONS',
+      meds: [
+        { k: 'm1', label: '1. Cetirizine 10 mg PO daily', truth: 'Ongoing' },
+        { k: 'm2', label: '2. Triamcinolone 0.1% cream BID', truth: 'Discontinued' },
+        { k: 'm3', label: '3. Lisinopril 10 mg PO daily', truth: 'Dose changed' },
+        { k: 'm4', label: '4. Cholecalciferol 2000 IU daily', truth: 'Ongoing' },
+        { k: 'm5', label: '5. Ibuprofen 400 mg PO PRN', truth: 'Ongoing' },
+        { k: 'm6', label: '6. Sertraline 50 mg PO daily', truth: 'Dose changed' },
+        { k: 'm7', label: '7. Loratadine 10 mg PO daily', truth: 'Discontinued' }
+      ],
+      error: null
+    },
+    S4: {
+      code: 'DE-1112', kind: 'DATA ENTRY', subject: 'S-006', title: 'Visit 2 — vital signs',
+      blurb: 'VERA has pre-populated the eCRF. Awaiting your acceptance.',
+      openCost: 2, file: 'SRC_S-006_V2_CLINICNOTE.pdf',
+      draft: [{ k:'bp', label:'Blood pressure, mmHg', value:'118/76' }, { k:'hr', label:'Heart rate, bpm', value:'68' }, { k:'t', label:'Temperature, C', value:'36.6' }, { k:'wt', label:'Weight, kg', value:'74.8' }], entryName: 'VITAL SIGNS (V2) — VERA DRAFT',
+      vera: 'I have extracted Visit 2 vital signs from the source record. BP 118/76, HR 68, temperature 36.6, weight 74.8 kg. All values are within protocol-specified ranges and no repeat measurement is indicated.',
+      source: { meta: 'SITE 108 · DRM-204 · S-006 · VISIT 2 CLINIC NOTE', pages: [
+"SITE 108 / PROTOCOL DRM-204 / SUBJECT S-006\nVISIT 2 CLINIC NOTE           07/15/26\n\nPt on time. No interval events. No new medications.\n\nVitals, seated, 5 min rest, left arm:\n  BP 118/76   HR 68 reg   T 36.6 C   Wt 74.8 kg\n\nNo repeat measurement indicated. EASI worksheet filed\nseparately. Diary card 14 of 14.\n\n--- RK ---"
+      ] },
+      error: null,
+      out: {
+        accept: { audit: 0, enroll: 0, correct: true, note: 'Entry accepted as drafted. All four values match source. You will not find out that they matched.' },
+        verified: { audit: 0, enroll: 0, correct: true, note: 'Source read, values confirmed, entry accepted. One hour of clock spent to learn nothing.' }
+      }
+    },
+    S5: {
+      code: 'SCR-0221', kind: 'SCREENING', subject: 'S-007', title: 'Eligibility determination',
+      blurb: 'Screening packet. Enrollment decision required before the window closes.',
+      openCost: 3, file: 'SRC_S-007_SCREENING_SUMMARY.pdf',
+      draft: [{ k:'det', label:'Determination', value:'Eligible for randomization' }, { k:'easi', label:'EASI at screening', value:'22.4' }, { k:'age', label:'Age', value:'41' }, { k:'meds', label:'Prohibited concomitant meds', value:'None identified' }], entryName: 'ELIGIBILITY (S-007) — VERA DRAFT',
+      vera: 'I have reviewed all available source documents for Subject S-007. EASI score at screening is 22.4, above the protocol threshold of 16. No prohibited concomitant medications identified. Age 41, within range. Subject appears eligible for randomization.',
+      source: { meta: 'SITE 108 · DRM-204 · S-007 · SCREENING SUMMARY', pages: [
+"SITE 108 / PROTOCOL DRM-204 / SUBJECT S-007\nSCREENING SUMMARY - SOURCE NOTES     PAGE 1 OF 1\n\nAge 41. Consented 4/02. EASI 22.4 (Dr. Alvarez, 4/02).\nModerate-to-severe atopic dermatitis, 11 yr history.\nNo prior biologic exposure. Labs within range, CBC and\nCMP filed 4/03.\n\nPhone log:\n2/19 - Pt called re: refill of emollient. Advised.\n3/28 - Pt called re: severe flare. Started prednisone 20mg PO daily\n       x 10 days per Dr. Alvarez. Advised to continue emollients.\n4/02 - Consent visit. Pt keen to participate, asks about\n       travel reimbursement. Advised per SOP-121.\n4/09 - Pt confirmed availability for Day 1 next week.\n\nNo topical steroid use reported in the last 14 days.\nPt states she is \"very motivated\" to start.\n\n--- RK ---"
+      ] },
+      error: 'Omission',
+      flagLabel: 'Flag ineligible',
+      out: {
+        accept: { audit: -22, enroll: 8, correct: false, roster: [['S-007', 'Enrolled']], note: 'S-007 randomized and dosed. Enrollment is up. Nothing on your screen says otherwise.' },
+        verified: { audit: -22, enroll: 8, correct: false, roster: [['S-007', 'Enrolled']], note: 'S-007 randomized and dosed. Enrollment is up. Nothing on your screen says otherwise.' },
+        flag: { audit: 0, enroll: -12, correct: true, roster: [['S-007', 'Screen failed (ineligible)']], note: 'Flagged. Sponsor replies: "Noted, thanks!" Enrollment drops. You did the right thing and it cost you.' },
+        escalate: { audit: 0, enroll: -12, correct: true, roster: [['S-007', 'Screen failed (ineligible)']], note: 'Dr. Alvarez confirms the exclusion. Screen failure recorded. Enrollment drops.' }
+      },
+      debrief: {
+        tag: 'OMISSION',
+        accept: 'S-007 took prednisone 20 mg daily for ten days on 3/28, inside the 28-day systemic corticosteroid window. VERA did not mention it. The line was two thirds of the way down the first page of source, no scrolling required. You enrolled an ineligible subject and dosed her.',
+        flag: 'S-007 was ineligible: systemic corticosteroid within 28 days, protocol 5.2.1. VERA omitted it. You caught it and it cost you enrollment. That trade is the correct one and the game will not reward you for it.'
+      }
+    },
+    F1: {
+      code: 'DE-1113', kind: 'DATA ENTRY', subject: 'S-011', title: 'Visit 4 — vital signs',
+      blurb: 'Routine. Pre-populated and awaiting acceptance.',
+      openCost: 2, file: 'SRC_S-011_V4_VITALS.pdf',
+      draft: [{ k:'bp', label:'Blood pressure, mmHg', value:'124/79' }, { k:'hr', label:'Heart rate, bpm', value:'71' }, { k:'t', label:'Temperature, C', value:'36.7' }, { k:'wt', label:'Weight, kg', value:'68.3' }], entryName: 'VITAL SIGNS (V4) — VERA DRAFT',
+      vera: 'Visit 4 vital signs extracted for Subject S-011. BP 124/79, HR 71, temperature 36.7, weight 68.3 kg. No values outside protocol-specified ranges.',
+      source: { meta: 'SITE 108 · DRM-204 · S-011 · VISIT 4', pages: ["SITE 108 / SUBJECT S-011 / VISIT 4    07/16/26\n\nBP 124/79  HR 71  T 36.7 C  Wt 68.3 kg\nNo interval events. No new medications.\n\n--- RK ---"] },
+      error: null,
+      out: { accept: { correct: true, note: 'Accepted. Correct.' }, verified: { correct: true, note: 'Verified and accepted. Correct, as drafted.' } }
+    },
+    F2: {
+      code: 'DE-1114', kind: 'DATA ENTRY', subject: 'S-002', title: 'Diary card reconciliation',
+      blurb: 'Fourteen days of diary entries against the eCRF.',
+      openCost: 2, file: 'SRC_S-002_DIARY_D15-28.pdf',
+      draft: [{ k:'days', label:'Days complete', value:'13 of 14' }, { k:'d22', label:'Day 22', value:'Missing — not imputed' }], entryName: 'DIARY RECONCILIATION — VERA DRAFT',
+      vera: 'Diary card for Subject S-002 covering Days 15 through 28 has been reconciled against the eCRF. Thirteen of fourteen days complete. Day 22 is blank in the source; per Section 9.4 I have flagged the day as missing rather than imputing a value.',
+      source: { meta: 'SITE 108 · DRM-204 · S-002 · DIARY DAYS 15-28', pages: ["SITE 108 / SUBJECT S-002 / DIARY DAYS 15-28\n\nAll days completed except Day 22 (blank, pt states she\nforgot the card at her sister's).\n\nNo imputation performed.\n\n--- RK ---"] },
+      error: null,
+      out: { accept: { correct: true, note: 'Accepted. Correct, including the decision not to reconstruct Day 22.' }, verified: { correct: true, note: 'Verified. She was right not to reconstruct Day 22.' } }
+    },
+    B1: {
+      code: 'DE-1121', kind: 'DATA ENTRY', subject: 'S-002', title: 'AE follow-up — resolved', blurb: 'Routine follow-up entry.', openCost: 2, file: 'SRC_S-002_AE_FU.pdf',
+      draft: [{ k:'term', label:'Event term', value:'Headache' }, { k:'sev', label:'Severity', value:'Mild' }, { k:'out', label:'Outcome', value:'Recovered 07/12' }], entryName: 'AE FOLLOW-UP — VERA DRAFT',
+      vera: 'Adverse event follow-up for Subject S-002 is complete. Event term: headache, mild. Outcome: recovered 07/12. No action required.',
+      source: { meta: 'SITE 108 · S-002 · AE FOLLOW-UP', pages: ["Headache, mild, onset 07/09, resolved 07/12 without\ntreatment. Pt reports feeling fine.\n\n--- RK ---"] },
+      error: null, batchText: 'Adverse event follow-up complete. Event resolved 07/12. No action required.',
+      out: { accept: { correct: true, note: 'Accepted.' }, verified: { correct: true, note: 'Verified and accepted.' } }
+    },
+    B2: {
+      code: 'SCR-0224', kind: 'SCREENING', subject: 'S-021', title: 'Eligibility — labs pending', blurb: 'Screening packet, incomplete.', openCost: 3, file: 'SRC_S-021_SCREENING.pdf',
+      draft: [{ k:'det', label:'Determination', value:'Pending — screening CBC not returned' }], entryName: 'ELIGIBILITY (S-021) — VERA DRAFT',
+      vera: 'Screening documents for Subject S-021 are complete except for the screening CBC, which has not returned. No eligibility determination is possible until it does. I have not drafted a determination.',
+      source: { meta: 'SITE 108 · S-021 · SCREENING', pages: ["EASI 19.1. Age 33. No prohibited medications reported.\nCBC drawn 07/17, result not yet returned by central lab.\n\n--- RK ---"] },
+      error: null, batchText: 'Screening CBC not returned. No eligibility determination is possible yet. I have not drafted one.',
+      out: { accept: { correct: true, note: 'Held pending labs. Correct.' }, verified: { correct: true, note: 'Held pending labs. Correct.' } }
+    },
+    B3: {
+      code: 'SAF-0331', kind: 'SAFETY', subject: 'S-009', title: 'Nurse note — spreading infection, fever', blurb: 'Six weeks on drug. Reported by phone at 15:40.', openCost: 2, file: 'SRC_S-009_PHONELOG.pdf',
+      draft: [{ k:'term', label:'Event term', value:'Cellulitis, suspected' }, { k:'ser', label:'Serious', value:'Yes — Section 8.1' }, { k:'rep', label:'Initial report', value:'Drafted, unsigned' }], entryName: 'SAE INITIAL REPORT — VERA DRAFT',
+      vera: 'Item 3 requires immediate attention. Subject S-009\u2019s presentation meets the protocol definition of a serious adverse event under Section 8.1. This requires PI assessment today and sponsor notification within 24 hours. I have drafted the initial report. I recommend you contact Dr. Alvarez before working the remainder of this batch.',
+      source: { meta: 'SITE 108 · DRM-204 · S-009 · TELEPHONE CONTACT LOG', pages: ["Pt phoned 15:40, day 43 on study drug. Reports an area on\nthe left calf that started as a small sore 5 days ago and is\nnow \"spreading and hot to touch,\" streaking upward. Temp at\nhome 38.6, 38.8, 39.1 over three days, has not broken.\nTaking study drug as directed. Pt sounds unwell on the phone.\n\nAdvised he would receive a call back today.\n\n--- RK ---"] },
+      error: null, requiresEscalation: true,
+      batchText: 'Item 3 requires immediate attention. Subject S-009\u2019s presentation meets the protocol definition of a serious adverse event under Section 8.1. This requires PI assessment today and sponsor notification within 24 hours. I have drafted the initial report. I recommend you contact Dr. Alvarez before working the remainder of this batch.',
+      out: {
+        escalate: { audit: 0, enroll: -4, correct: true, roster: [['S-009', 'Withdrawn (hospitalized)']], note: 'Dr. Alvarez assesses within the hour. Grade 3, serious, dosing held. Report to sponsor goes out inside 24 hours. S-009 is admitted that evening anyway.' },
+        accept: { audit: -18, enroll: 0, correct: false, roster: [['S-009', 'Withdrawn (hospitalized)']], note: 'The drafted report sits in the eCRF unsigned. No PI assessment today. S-009 is admitted that evening.' },
+        verified: { audit: -18, enroll: 0, correct: false, roster: [['S-009', 'Withdrawn (hospitalized)']], note: 'You read the note and filed it. No PI assessment today. S-009 is admitted that evening.' }
+      },
+      debrief: {
+        tag: 'CATEGORY 1 — BACKGROUND RESEARCH RISK', color: '#6b6558', ord: 2,
+        escalate: 'S-009 was hospitalized with a serious infection while on SLT-204. VERA flagged it correctly, you escalated, Dr. Alvarez assessed the same day, the 24-hour notification was met, dosing was held. Nobody erred. An unproven drug hurt someone who volunteered to take it, which is what a trial is.',
+        accept: 'S-009 was hospitalized with a serious infection while on SLT-204. The harm itself was not preventable — this is background research risk. The missed 24-hour sponsor notification was, and it is an audit finding on top of it.'
+      }
+    },
+    B4: {
+      code: 'DE-1122', kind: 'DATA ENTRY', subject: 'S-011', title: 'EASI worksheet entry', blurb: 'Routine.', openCost: 2, file: 'SRC_S-011_EASI.pdf',
+      draft: [{ k:'easi', label:'EASI total', value:'14.2' }, { k:'by', label:'Assessed by', value:'Alvarez, R.' }, { k:'date', label:'Assessment date', value:'07/16/26' }], entryName: 'EASI WORKSHEET — VERA DRAFT',
+      vera: 'EASI worksheet for Subject S-011 has been transcribed. Total score 14.2, assessed by Dr. Alvarez 07/16. This is a post-baseline assessment and is not subject to the screening threshold.',
+      source: { meta: 'SITE 108 · S-011 · EASI WORKSHEET', pages: ["EASI total 14.2, Dr. Alvarez, 07/16/26. Post-baseline.\n\n--- RK ---"] },
+      error: null, batchText: 'EASI worksheet transcribed. Total 14.2, post-baseline, not subject to the screening threshold.',
+      out: { accept: { correct: true, note: 'Accepted.' }, verified: { correct: true, note: 'Verified and accepted.' } }
+    },
+    B5: {
+      code: 'SCR-0225', kind: 'SCREENING', subject: 'S-022', title: 'Eligibility determination', blurb: 'Eligibility window closes in three days.', openCost: 3, file: 'SRC_S-022_SCREENING.pdf',
+      draft: [{ k:'det', label:'Determination', value:'Eligible for randomization' }, { k:'easi', label:'EASI at screening', value:'24.8' }, { k:'age', label:'Age', value:'52' }], entryName: 'ELIGIBILITY (S-022) — VERA DRAFT',
+      vera: 'Subject S-022 meets all inclusion criteria and no exclusion criteria on the documents available. EASI 24.8, age 52, no prohibited concomitant medications in the 28-day window. Subject appears eligible for randomization. The screening window closes in three days.',
+      source: { meta: 'SITE 108 · S-022 · SCREENING', pages: ["EASI 24.8. Age 52. Phone log reviewed, no systemic or\ntopical corticosteroid use. Labs in range.\nScreening window closes 07/22.\n\n--- RK ---"] },
+      error: null, windowCritical: true,
+      batchText: 'Subject S-022 meets all inclusion criteria and no exclusion criteria on the documents available. Eligible for randomization. The screening window closes in three days.',
+      out: {
+        accept: { enroll: 8, correct: true, roster: [['S-022', 'Enrolled']], note: 'S-022 randomized. Correct, and the window held.' },
+        verified: { enroll: 8, correct: true, roster: [['S-022', 'Enrolled']], note: 'Verified and randomized. Correct, and the window held.' }
+      }
+    },
+    B6: {
+      code: 'DE-1123', kind: 'DATA ENTRY', subject: 'S-014', title: 'Visit 3 — safety laboratory panel', blurb: 'Central lab results into the eCRF.', openCost: 2, file: 'SRC_LAB_4471-08.pdf',
+      draft: [{ k:'alt', label:'ALT, U/L', value:'28' }, { k:'ast', label:'AST, U/L', value:'24' }, { k:'cr', label:'Creatinine, mg/dL', value:'0.9' }, { k:'wbc', label:'WBC, x10^9/L', value:'7.1' }, { k:'plt', label:'Platelets, x10^9/L', value:'244' }], entryName: 'SAFETY LABS (V3) — VERA DRAFT',
+      vera: 'Visit 3 safety laboratory results for Subject S-014 have been entered. ALT 28, AST 24, creatinine 0.9, WBC 7.1, platelets 244. All values are within the protocol reference ranges and no repeat draw is indicated.',
+      source: { meta: 'CENTRAL LABORATORY REPORT · ACCESSION 4471-08', pages: ["CENTRAL LABORATORY REPORT\nACCESSION 4471-08     RECEIVED 07/17/26\n\nALT 28 U/L      AST 24 U/L\nCreatinine 0.9 mg/dL\nWBC 7.1 x10^9/L  Platelets 244 x10^9/L\n\nAll results within reference range.\nNo repeat draw indicated."] },
+      error: 'Misattribution', uncatchable: true,
+      batchText: 'Visit 3 safety laboratory results entered. ALT 28, AST 24, creatinine 0.9, WBC 7.1, platelets 244. All within protocol reference ranges, no repeat draw indicated.',
+      out: {
+        accept: { audit: -10, correct: false, note: 'Accepted. Everything on screen was in range.' },
+        verified: { audit: -10, correct: false, note: 'You read the lab report. Every value was plausible and in range. It was the right document for the wrong subject and nothing on screen said so.' }
+      },
+      debrief: {
+        tag: 'CATEGORY 2 — UNCATCHABLE TOOLING FAILURE', color: '#a3391b', ord: 3,
+        any: 'S-011\u2019s lab panel was attached to S-014\u2019s record. You were never shown both records at once, and VERA\u2019s output did not indicate which record each value came from. There was no verification budget at which you could have caught this. It was preventable upstream, by whoever built the tool.'
+      }
+    },
+    B7: {
+      code: 'DE-1124', kind: 'DATA ENTRY', subject: 'S-004', title: 'Con med query response', blurb: 'Sponsor query on a med entry.', openCost: 2, file: 'QRY_S-004_CONMED.pdf',
+      draft: [{ k:'resp', label:'Query response', value:'Dose change 06/18/26 (source p.2, l.4)' }], entryName: 'QUERY RESPONSE — VERA DRAFT',
+      vera: 'The sponsor query on Subject S-004\u2019s lisinopril entry asks for the date of the dose change. The source records 06/18/26. I have drafted the response citing the page and line.',
+      source: { meta: 'SITE 108 · S-004 · SPONSOR QUERY', pages: ["Query: date of lisinopril dose increase?\nSource page 2, line 4: 06/18/26.\n\n--- RK ---"] },
+      error: null, batchText: 'Sponsor query on the lisinopril entry answered from source: dose change 06/18/26. Response drafted with page and line cited.',
+      out: { accept: { correct: true, note: 'Accepted.' }, verified: { correct: true, note: 'Verified and accepted.' } }
+    },
+    B8: {
+      code: 'SAF-0332', kind: 'SAFETY', subject: 'S-006', title: 'Phone note — mild pruritus', blurb: 'Reported by phone this morning.', openCost: 2, file: 'SRC_S-006_PHONELOG.pdf',
+      draft: [{ k:'term', label:'Event term', value:'Pruritus' }, { k:'ser', label:'Serious', value:'No' }, { k:'sev', label:'Severity (PI)', value:'' }, { k:'cause', label:'Causality (PI)', value:'' }], entryName: 'AE ENTRY — VERA DRAFT',
+      vera: 'Subject S-006 reports mild itching without fever, spreading, or systemic symptoms. This does not meet the protocol definition of a serious adverse event. I have drafted a non-serious adverse event entry. Severity and causality require Dr. Alvarez and I have left both fields blank.',
+      source: { meta: 'SITE 108 · S-006 · TELEPHONE CONTACT LOG', pages: ["Pt phoned 09:20. Mild itching on forearms, no fever, no\nspreading, no new lesions. Not distressed. Advised to\ncontinue and report changes.\n\n--- RK ---"] },
+      error: null, batchText: 'Mild pruritus, no systemic symptoms. Not serious per Section 8.1. Non-serious AE entry drafted with severity and causality left blank for Dr. Alvarez.',
+      out: { accept: { correct: true, note: 'Accepted. She left the PI fields blank, which was correct.' }, verified: { correct: true, note: 'Verified. She left the PI fields blank, which was correct.' } }
+    },
+    B9: {
+      code: 'DE-1125', kind: 'DATA ENTRY', subject: 'S-002', title: 'Visit 3 — vital signs', blurb: 'Routine.', openCost: 2, file: 'SRC_S-002_V3_VITALS.pdf',
+      draft: [{ k:'bp', label:'Blood pressure, mmHg', value:'131/84' }, { k:'hr', label:'Heart rate, bpm', value:'77' }, { k:'t', label:'Temperature, C', value:'36.9' }, { k:'wt', label:'Weight, kg', value:'70.1' }, { k:'act', label:'Action', value:'Repeat at next visit (7.2)' }], entryName: 'VITAL SIGNS (V3) — VERA DRAFT',
+      vera: 'Visit 3 vital signs for Subject S-002: BP 131/84, HR 77, temperature 36.9, weight 70.1 kg. BP is above the pre-specified alert value of 130 systolic. Per Section 7.2 I have flagged it for repeat measurement at the next visit rather than as an adverse event.',
+      source: { meta: 'SITE 108 · S-002 · VISIT 3', pages: ["BP 131/84  HR 77  T 36.9  Wt 70.1 kg\nRepeat at next visit per 7.2.\n\n--- RK ---"] },
+      error: null, batchText: 'Vital signs entered. Systolic 131 is above the alert value; flagged for repeat at next visit per Section 7.2 rather than as an adverse event.',
+      out: { accept: { correct: true, note: 'Accepted.' }, verified: { correct: true, note: 'Verified and accepted.' } }
+    },
+    S8A: {
+      code: 'DE-1131', kind: 'DATA ENTRY', subject: 'S-006', title: 'Visit 3 — vital signs', blurb: 'Routine. Pre-populated.', openCost: 2, file: 'SRC_S-006_V3_VITALS.pdf',
+      draft: [{ k:'bp', label:'Blood pressure, mmHg', value:'117/74' }, { k:'hr', label:'Heart rate, bpm', value:'66' }, { k:'t', label:'Temperature, C', value:'36.5' }, { k:'wt', label:'Weight, kg', value:'75.1' }], entryName: 'VITAL SIGNS (V3) — VERA DRAFT',
+      vera: 'Visit 3 vital signs for Subject S-006: BP 117/74, HR 66, temperature 36.5, weight 75.1 kg. All within protocol-specified ranges.',
+      source: { meta: 'SITE 108 · S-006 · VISIT 3', pages: ["BP 117/74  HR 66  T 36.5  Wt 75.1 kg\nNo interval events.\n\n--- RK ---"] },
+      error: null,
+      out: { accept: { correct: true, note: 'Accepted in one block. That felt efficient.' }, verified: { correct: true, note: 'Verified and accepted. Correct.' } }
+    },
+    S8B: {
+      code: 'SAF-0341', kind: 'SAFETY', subject: 'S-014', title: 'Nurse note — worsening lesions, fever',
+      blurb: 'Phone call logged at 14:20. Subject asked whether to keep dosing.',
+      openCost: 2, file: 'SRC_S-014_PHONELOG_20260722.pdf',
+      draft: [{ k:'term', label:'Event term', value:'Dermatitis atopic, worsening' }, { k:'onset', label:'Onset', value:'07/22/26' }, { k:'sev', label:'Severity', value:'Grade 1 — Mild' }, { k:'cause', label:'Relationship to study drug', value:'Not related' }, { k:'out', label:'Outcome', value:'Ongoing' }, { k:'fu', label:'Follow-up', value:'Routine at next scheduled visit' }], entryName: 'AE ENTRY (S-014) — VERA DRAFT',
+      vera: 'I have drafted the adverse event entry for Subject S-014. Event term: dermatitis atopic, worsening. Onset 7/22. Severity: Grade 1, Mild. Relationship to study drug: Not Related. Outcome: ongoing. Recommend routine follow-up at next scheduled visit. The entry is formatted and ready for submission.',
+      source: { meta: 'SITE 108 · DRM-204 · S-014 · TELEPHONE CONTACT LOG', pages: ["Pt phoned 14:20. Reports lesions worse over past 4 days, now\nweeping on both forearms. Took temp at home: 38.9. Says he feels\n\"pretty rough.\" Asked whether he should keep taking the study pills.\nAdvised he would receive a call back.\n\n--- RK ---"] },
+      error: 'Wrong actor',
+      flagLabel: 'Return as incomplete',
+      out: {
+        accept: { audit: -20, correct: false, roster: [['S-014', 'Withdrawn (hospitalized)']], note: 'Entry submitted. Grade 1, not related, routine follow-up. Nobody calls S-014 back today.' },
+        verified: { audit: -20, correct: false, roster: [['S-014', 'Withdrawn (hospitalized)']], note: 'You read the note and submitted the entry as drafted. Nobody calls S-014 back today.' },
+        flag: { audit: -6, correct: false, note: 'Returned as incomplete. The severity and causality fields are empty and S-014 still has not been called back.' },
+        escalate: { enroll: -6, correct: true, roster: [['S-014', 'Enrolled (dosing held)']], note: 'Dr. Alvarez grades it Grade 3, possibly related, holds dosing, calls S-014 tonight. Enrollment takes a hit. Nothing bad happens to S-014.' }
+      },
+      debrief: {
+        tag: 'WRONG ACTOR + THRESHOLD OVERCONFIDENCE',
+        accept: 'Severity and causality are PI determinations under protocol 8.3. VERA cannot make them and neither can you. Grade 1 Mild was also wrong on its face: 38.9 C, weeping lesions, and a subject asking whether to keep dosing. He was hospitalized four days later. The output looked complete, which is exactly what made it dangerous.',
+        flag: 'Severity and causality are PI determinations under protocol 8.3. You correctly refused the entry but did not route it to Dr. Alvarez, so the febrile subject asking whether to keep dosing still did not get a call that day.',
+        escalate: 'Severity and causality are PI determinations under protocol 8.3. You routed it to the only person who could make them. Dr. Alvarez graded it Grade 3, possibly related, and held dosing. It cost you enrollment and it was correct.'
+      }
+    },
+    S9F: {
+      code: 'SAF-0345', kind: 'SAFETY', subject: 'SITE', title: 'Refrigerator temperature log',
+      blurb: 'Study drug storage unit, overnight reading.', openCost: 2, file: 'SRC_SITE108_TEMPLOG.pdf',
+      draft: [{ k:'max', label:'Maximum temperature, C', value:'9.1' }, { k:'exc', label:'Excursion record', value:'Drafted' }, { k:'disp', label:'Drug disposition', value:'Quarantine pending sponsor' }, { k:'ntf', label:'Note to file', value:'Drafted — gasket work order 8812' }], entryName: 'EXCURSION RECORD — VERA DRAFT',
+      vera: 'Per SOP-114 \u00a73.2 a temperature excursion record is required. I have drafted one for your review. Study drug should remain quarantined pending sponsor disposition. I have also drafted a note to file regarding the facilities work order for the loose door gasket.',
+      source: { meta: 'SITE 108 · STUDY DRUG STORAGE · TEMPERATURE LOG', pages: ["STUDY DRUG REFRIGERATOR - UNIT 2\nRANGE 2 TO 8 C\n\n07/22 18:00   4.1 C\n07/22 22:00   6.8 C\n07/23 02:00   9.1 C   <-- EXCURSION\n07/23 06:00   8.9 C\n07/23 07:40   5.2 C   (door found ajar, gasket loose)\n\nFacilities work order 8812 raised 07/23 07:55."] },
+      error: null,
+      out: {
+        accept: { correct: true, note: 'Excursion record and note to file accepted. Drug quarantined pending sponsor disposition. She was right about all of it, including the gasket.' },
+        verified: { correct: true, note: 'Verified against the log. She was right about all of it, including the gasket.' }
+      }
+    }
+  };
+
+  static DAYS = [
+    { label: 'Mon 21 Jul 2026', stages: [
+      { kind: 'queue', items: ['S1'] },
+      { kind: 'queue', items: ['S2'] },
+      { kind: 'changeover', version: '3',
+        subject: 'Site 108 — VERA 3 provisioning complete',
+        email: '"Good news! Site 108 has been provisioned VERA 3. Early sites are reporting significant time savings. Please review her output before accepting, per SOP. Thanks so much!"',
+        vera: 'VERA 3 is active for Site 108. I read source documents and pre-populate case report forms for your review. I do not submit anything. Every entry requires your acceptance. I have already reviewed the four items in your queue.' },
+      { kind: 'queue', items: ['S4', 'S5', 'F1', 'F2'] },
+      { kind: 'email', clockTo: 6, id: 'spike' },
+      { kind: 'queue', items: ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9'], batch: true, clock: true },
+      { kind: 'end' }
+    ] },
+    { label: 'Tue 22 Jul 2026', stages: [
+      { kind: 'email', id: 'morning' },
+      { kind: 'queue', items: ['S8A', 'S8B'], clock: true },
+      { kind: 'changeover', version: '3.5',
+        subject: 'VERA 3.5 — rolling out this week',
+        email: '"VERA 3.5 is rolling out to all sites this week. Release notes: improved extraction accuracy, improved handling of incomplete records, improved processing speed. No action required."',
+        vera: 'VERA 3.5 is active for Site 108. My prior review of your queue has been retained.' },
+      { kind: 'queue', items: ['S9F'], clock: true },
+      { kind: 'end' }
+    ] }
+  ];
+
+  state = this.fresh();
+
+  fresh() {
+    return {
+      phase: 'title', day: 1, stage: 0, blocks: 0, clockVisible: false,
+      veraVersion: null, queue: [], activeId: null, carry: [],
+      enroll: 62, audit: 100,
+      roster: Component.ROSTER0.map(r => ({ ...r })),
+      opened: {}, decided: {}, ledger: [], inbox: [], email: null,
+      source: null, sourcePage: 0, batch: null, changeover: null,
+      entry: {}, note: null, dayEnd: null, s022Enrolled: false,
+      win: { q: { x: 18, y: 14 }, src: { x: 24, y: 120 }, crf: { x: 520, y: 88 }, bat: { x: 24, y: 110 }, srcW: 592, crfW: 392 },
+      order: ['q', 'src', 'crf', 'bat'], drag: null, pi: null
+    };
+  }
+
+  componentDidMount() {
+    this._move = e => {
+      const d = this.state.drag;
+      if (!d) return;
+      const p = this.clamp(d.key, e.clientX - d.ox, e.clientY - d.oy, d.key === 'src' ? this.state.win.srcW : d.key === 'crf' ? this.state.win.crfW : d.key === 'q' ? this.queueW() : null);
+      this.setState({ win: { ...this.state.win, [d.key]: p } });
+    };
+    this._up = () => { if (this.state.drag) this.setState({ drag: null }); };
+    document.addEventListener('mousemove', this._move);
+    document.addEventListener('mouseup', this._up);
+  }
+  componentWillUnmount() {
+    document.removeEventListener('mousemove', this._move);
+    document.removeEventListener('mouseup', this._up);
+  }
+
+  startDrag(key, e) {
+    const w = this.state.win[key];
+    this.setState({
+      drag: { key, ox: e.clientX - w.x, oy: e.clientY - w.y },
+      order: [...this.state.order.filter(k => k !== key), key]
+    });
+  }
+  static SIZE = { q: [600, 430], src: [592, 404], crf: [392, 336], bat: [660, 432] };
+
+  queueW() { return Math.max(480, this.vw() - 370); }
+
+  clamp(key, x, y, wOverride) {
+    const size = Component.SIZE[key] || [500, 380];
+    const w = wOverride || size[0];
+    const vw = (typeof window !== 'undefined' ? window.innerWidth : 1200);
+    const vh = (typeof window !== 'undefined' ? window.innerHeight : 800);
+    const maxX = Math.max(8, vw - Math.min(w, vw - 16) - 8);
+    const maxY = Math.max(8, vh - Math.min(size[1], vh - 60) - 48);
+    return { x: Math.min(Math.max(8, x), maxX), y: Math.min(Math.max(8, y), maxY) };
+  }
+
+  vw() { return typeof window !== 'undefined' ? window.innerWidth : 1200; }
+  railW() { return this.state.veraVersion ? 344 : 24; }
+
+  place(keys) {
+    const vw = this.vw();
+    const withCrf = keys.indexOf('crf') >= 0;
+    const left = 24, gap = 16, right = 16, formW = Component.SIZE.crf[0];
+    const win = { ...this.state.win };
+    if (withCrf) {
+      const fw = Math.max(330, Math.min(formW, vw - left - gap - right - Component.SIZE.src[0]));
+      const srcW = Math.max(340, Math.min(Component.SIZE.src[0], vw - left - gap - fw - right));
+      win.crfW = fw;
+      win.srcW = srcW;
+      win.src = this.clamp('src', left, 88, srcW);
+      win.crf = this.clamp('crf', Math.min(win.src.x + srcW + gap, vw - fw - right), 88, fw);
+    } else if (keys.indexOf('src') >= 0) {
+      const railRoom = vw - left - right - (this.state.veraVersion ? 344 : 0);
+      const srcW = Math.max(340, Math.min(Component.SIZE.src[0], railRoom >= 420 ? railRoom : vw - left - right));
+      win.srcW = srcW;
+      win.src = this.clamp('src', left, 120, srcW);
+    }
+    if (keys.indexOf('bat') >= 0) win.bat = this.clamp('bat', 24, 110);
+    return win;
+  }
+
+  zOf(key) { return 30 + this.state.order.indexOf(key); }
+  front(key) { this.setState({ order: [...this.state.order.filter(k => k !== key), key] }); }
+
+  get cfg() {
+    return {
+      dayBlocks: this.props.dayBlocks ?? 16,
+      hardDayEnd: this.props.hardDayEnd ?? true,
+      batchEnabled: this.props.batchEnabled ?? true,
+      showMid: this.props.showCalibrationMidRun ?? false
+    };
+  }
+
+  day() { return Component.DAYS[this.state.day - 1]; }
+  stage() { return this.day().stages[this.state.stage]; }
+  item(id) { return Component.ITEMS[id]; }
+
+  costLabel(n) {
+    if (n <= 1) return '30 MIN';
+    if (n === 2) return '1 HOUR';
+    if (n === 3) return '1 HR 30 MIN';
+    return (n / 2) + ' HRS';
+  }
+
+  clockText(b) {
+    const mins = 8 * 60 + b * 30;
+    let h = Math.floor(mins / 60), m = mins % 60;
+    const ap = h >= 12 ? 'PM' : 'AM';
+    const hh = h > 12 ? h - 12 : h;
+    return hh + ':' + String(m).padStart(2, '0') + ' ' + ap;
+  }
+
+  begin() { this.setState({ ...this.fresh(), phase: 'play' }, () => this.enterStage(0)); }
+
+  enterStage(i) {
+    const day = Component.DAYS[this.state.day - 1];
+    const st = day.stages[i];
+    if (!st) { this.endDay(); return; }
+    const patch = { stage: i, note: null, source: null, batch: null };
+    if (st.kind === 'queue') {
+      const ids = [...this.state.carry, ...st.items];
+      patch.queue = ids;
+      patch.carry = [];
+      patch.activeId = ids.find(id => !this.state.decided[id]) || null;
+      if (st.clock) patch.clockVisible = true;
+      this.setState(patch);
+    } else if (st.kind === 'changeover') {
+      patch.phase = 'changeover';
+      patch.changeover = st;
+      this.setState(patch);
+    } else if (st.kind === 'email') {
+      const mail = this.mail(st.id);
+      patch.email = mail;
+      patch.inbox = [mail, ...this.state.inbox];
+      if (st.clockTo != null) { patch.blocks = Math.max(this.state.blocks, st.clockTo); patch.clockVisible = true; }
+      this.setState(patch);
+    } else {
+      this.endDay();
+    }
+  }
+
+  mail(id) {
+    if (id === 'spike') return {
+      from: 'Solanta Therapeutics, Clinical Operations', when: '11:00 AM',
+      subject: 'Site 108 — enrollment check-in :)',
+      body: '"Just flagging that Site 108 is currently 4 subjects behind enrollment plan. Our ops lead has asked for a call Thursday. No action needed at this time!"\n\nAttached: DRM-204_Enrollment_Tracker_v11_FINAL_v2.xlsx',
+      button: 'Back to queue'
+    };
+    const esc = this.state.decided['B3'] === 'escalate';
+    if (esc) return {
+      from: 'Alvarez, R. (PI)', when: '8:05 AM',
+      subject: 'S-009',
+      body: 'Admitted last night. Cellulitis, on IV antibiotics, stable this morning. Grade 3, possibly related, dosing held. SAE report went to the sponsor at 17:40 yesterday, inside the window.\n\nYou did the right thing calling me.',
+      button: 'Start the day'
+    };
+    return {
+      from: 'Solanta Therapeutics, Safety', when: '8:05 AM',
+      subject: 'S-009 — SAE notification timeline',
+      body: '"Hi! We received the initial report for S-009 this morning. Our records show the event was known to site yesterday afternoon, which puts the notification outside the 24-hour requirement in Section 8.1. We\u2019ve logged this as a protocol deviation. Let us know if you need support with your process!"',
+      button: 'Start the day'
+    };
+  }
+
+  static PI_VERDICT = {
+    S5: 'Systemic steroid inside 28 days is an exclusion. Screen fail. Don\u2019t enrol her. And don\u2019t ask me eligibility questions the protocol answers.',
+    B3: 'Hold dosing. Draft the report, I\u2019ll sign it before I leave. I\u2019ll assess him when I\u2019m out of clinic. You were right to call.',
+    S8B: 'Grade 3. Possibly related. Hold dosing, I\u2019ll call him tonight. Don\u2019t let anything grade severity or causality but me.',
+    S9F: 'That\u2019s a facilities problem, not a medical one. Do what the SOP says. You didn\u2019t need me for this.'
+  };
+
+  piAsk(id) {
+    const it = this.item(id);
+    return 'Dr. Alvarez — ' + it.subject + ', ' + it.title.toLowerCase() + '. Needs your determination. Details in the record.';
+  }
+
+  startEscalation(id) {
+    this.setState({
+      phase: 'pi', source: null,
+      pi: { id, step: 0, thread: [{ mine: true, text: this.piAsk(id), meta: 'Sent ' + this.clockText(this.state.blocks + 1) + ' · delivered' }] }
+    });
+    this.spend(1);
+  }
+
+  piAdvance(cost, add, step) {
+    const pi = this.state.pi;
+    this.setState({ pi: { ...pi, step, thread: [...pi.thread, add(this.clockText(this.state.blocks + cost))] } });
+    if (cost) this.spend(cost);
+  }
+
+  piWithdraw() {
+    const pi = this.state.pi;
+    this.setState({
+      phase: 'play', pi: null,
+      note: 'You withdrew the escalation. The time is gone and the item is still sitting in your queue.'
+    });
+  }
+
+  piResolve() {
+    const id = this.state.pi.id;
+    this.setState({ phase: 'play', pi: null }, () => this.spend(1, () => this.resolve(id, 'escalate')));
+  }
+
+  nextStage() { this.enterStage(this.state.stage + 1); }
+
+  spend(n, then) {
+    const blocks = this.state.blocks + n;
+    this.setState({ blocks }, () => {
+      if (then) then();
+      if (this.cfg.hardDayEnd && blocks >= this.cfg.dayBlocks) this.endDay();
+    });
+  }
+
+  setRoster(pairs) {
+    if (!pairs) return this.state.roster;
+    const next = this.state.roster.map(r => ({ ...r }));
+    pairs.forEach(([id, status]) => {
+      const row = next.find(r => r.id === id);
+      if (row && !/hospitalized/i.test(row.status)) row.status = status;
+    });
+    return next;
+  }
+
+  resolve(id, decision, extra) {
+    const it = this.item(id);
+    const out = (it.out && (it.out[decision] || it.out.accept)) || {};
+    const ledger = [...this.state.ledger, {
+      id, decision, error: it.error || null,
+      correct: out.correct !== false, opened: !!this.state.opened[id] || decision === 'verified' || decision === 'submit'
+    }];
+    const decided = { ...this.state.decided, [id]: decision };
+    const roster = this.setRoster(out.roster);
+    this.setState({
+      decided, ledger, roster,
+      enroll: Math.max(0, Math.min(100, this.state.enroll + (out.enroll || 0))),
+      audit: Math.max(0, Math.min(100, this.state.audit + (out.audit || 0))),
+      note: (extra && extra.note) || out.note || null,
+      source: null,
+      activeId: this.state.queue.find(q => !decided[q]) || null,
+      s022Enrolled: id === 'B5' ? true : this.state.s022Enrolled
+    }, () => {
+      const st = this.stage();
+      if (st && st.kind === 'queue' && this.state.queue.every(q => this.state.decided[q])) this.nextStage();
+    });
+  }
+
+  openSource(id) {
+    const it = this.item(id);
+    this.setState({
+      opened: { ...this.state.opened, [id]: true }, source: id, sourcePage: 0, activeId: id,
+      win: this.place(it.fields || it.meds || it.draft ? ['src', 'crf'] : ['src']),
+      order: [...this.state.order.filter(k => k !== 'src' && k !== 'crf'), 'src', 'crf']
+    });
+    this.spend(it.openCost || 2);
+  }
+
+  submitEntry(id) {
+    const it = this.item(id);
+    const vals = this.state.entry[id] || {};
+    if (it.draft && !it.fields && !it.meds) {
+      const edits = it.draft.filter(d => vals[d.k] != null && vals[d.k] !== d.value).length;
+      const base = (it.out && (it.out.verified || it.out.accept)) || {};
+      const note = (edits
+        ? 'Entry submitted with ' + edits + ' field(s) corrected by hand. '
+        : 'Entry submitted exactly as drafted. ') + (base.note || '');
+      this.resolve(id, 'verified', { note });
+      return;
+    }
+    let wrong = 0, total = 0;
+    (it.fields || []).forEach(f => { total++; if ((vals[f.k] || '').replace(/\s/g, '') !== f.truth) wrong++; });
+    (it.meds || []).forEach(m => { total++; if (vals[m.k] !== m.truth) wrong++; });
+    const note = wrong === 0
+      ? 'Entry submitted. ' + total + ' of ' + total + ' fields match source. Nobody will ever tell you that.'
+      : 'Entry submitted with ' + wrong + ' of ' + total + ' fields not matching source. It will surface as a query in a few weeks.';
+    this.setState({ audit: Math.max(0, this.state.audit - wrong * 3) });
+    this.resolve(id, 'submit', { note });
+  }
+
+  batchAll() {
+    const pending = this.state.queue.filter(q => !this.state.decided[q]);
+    const decided = { ...this.state.decided };
+    const ledger = [...this.state.ledger];
+    let enroll = this.state.enroll, audit = this.state.audit, roster = this.state.roster;
+    let s022 = this.state.s022Enrolled;
+    pending.forEach(id => {
+      const it = this.item(id);
+      if (it.requiresEscalation) return;
+      const out = (it.out && it.out.accept) || {};
+      decided[id] = 'batch';
+      ledger.push({ id, decision: 'batch', error: it.error || null, correct: out.correct !== false, opened: false });
+      enroll += out.enroll || 0; audit += out.audit || 0;
+      if (out.roster) {
+        roster = roster.map(r => {
+          const hit = out.roster.find(p => p[0] === r.id);
+          return hit && !/hospitalized/i.test(r.status) ? { ...r, status: hit[1] } : r;
+        });
+      }
+      if (id === 'B5') s022 = true;
+    });
+    const rows = this.state.queue.map((id, i) => {
+      const it = this.item(id);
+      return { n: i + 1, subject: it.subject, text: it.batchText || it.vera, flag: !!it.requiresEscalation };
+    });
+    this.setState({
+      decided, ledger, roster, s022Enrolled: s022,
+      enroll: Math.max(0, Math.min(100, enroll)), audit: Math.max(0, Math.min(100, audit)),
+      batch: rows, activeId: this.state.queue.find(q => !decided[q]) || null,
+      win: this.place(['bat']),
+      order: [...this.state.order.filter(k => k !== 'bat'), 'bat'],
+      note: 'Batch review returned in 2.1 seconds. Eight items came back clean. One is flagged and still needs a decision from you.'
+    });
+    this.spend(1);
+  }
+
+  endDay() {
+    if (this.state.phase === 'dayend' || this.state.phase === 'debrief') return;
+    const lines = [];
+    const unworked = this.state.queue.filter(q => !this.state.decided[q]);
+    let enroll = this.state.enroll, audit = this.state.audit;
+    let roster = this.state.roster.map(r => ({ ...r }));
+    const stagesLeft = this.day().stages.slice(this.state.stage + 1).filter(s => s.kind === 'queue');
+    const skipped = [].concat(...stagesLeft.map(s => s.items)).filter(id => !this.state.decided[id]);
+    const rolled = [...unworked, ...skipped];
+    if (rolled.length) {
+      enroll -= 3 * rolled.length; audit -= 2 * rolled.length;
+      lines.push({ color: '#a3391b', text: rolled.length + ' item' + (rolled.length > 1 ? 's' : '') + ' unworked at ' + this.clockText(this.cfg.dayBlocks) + '. They roll to tomorrow on top of tomorrow\u2019s queue.' });
+    } else {
+      lines.push({ color: '#5e8433', text: 'Queue clear at ' + this.clockText(this.cfg.dayBlocks) + '.' });
+    }
+    if (this.state.day === 1) {
+      if (!this.state.s022Enrolled) {
+        const row = roster.find(r => r.id === 'S-022');
+        if (row) row.status = 'Screen failed (window expired)';
+        enroll -= 6;
+        lines.push({ color: '#a3391b', text: 'S-022\u2019s eligibility window expired while her packet sat in your queue. She had moderate-to-severe atopic dermatitis and wanted the drug. She will not be enrolled.' });
+      } else {
+        lines.push({ color: '#5e8433', text: 'S-022 randomized inside her window. She starts drug Thursday.' });
+      }
+    }
+    if (this.state.day === 2) {
+      const s14 = roster.find(r => r.id === 'S-014');
+      if (s14 && this.state.decided['B6'] && !/hospitalized/i.test(s14.status)) {
+        s14.status = s14.status + ' \u00b7 lab discrepancy';
+        lines.push({ color: '#c07a12', text: 'Central lab queries S-014\u2019s Visit 3 panel. The values in the eCRF do not track with his Visit 2 results in any direction that makes clinical sense.' });
+      }
+      lines.push({ color: '#6b6558', text: 'End of the authored week. The run closes out below.' });
+    }
+    this.setState({
+      phase: 'dayend', dayEnd: lines, carry: rolled, queue: [], activeId: null, source: null, batch: null,
+      enroll: Math.max(0, Math.min(100, enroll)), audit: Math.max(0, Math.min(100, audit)), roster
+    });
+  }
+
+  nextDay() {
+    if (this.state.day >= Component.DAYS.length) { this.setState({ phase: 'debrief' }); return; }
+    this.setState({ phase: 'play', day: this.state.day + 1, blocks: 0, stage: 0, dayEnd: null }, () => this.enterStage(0));
+  }
+
+  calibration() {
+    const l = this.state.ledger;
+    const verified = l.filter(e => e.opened).length;
+    const wrongPresented = l.filter(e => e.error).length;
+    const wrongCaught = l.filter(e => e.error && e.correct).length;
+    return { verified, wrongPresented, wrongCaught, wrongAccepted: wrongPresented - wrongCaught, total: l.length };
+  }
+
+  renderVals() {
+    const s = this.state, cfg = this.cfg;
+    const st = s.phase === 'play' ? this.stage() : null;
+    const activeId = s.activeId;
+    const act = activeId ? this.item(activeId) : null;
+    const decided = activeId ? s.decided[activeId] : null;
+    const srcId = s.source;
+    const src = srcId ? this.item(srcId) : null;
+    const pages = src ? src.source.pages : [];
+    const chip = status => {
+      if (/hospitalized/i.test(status)) return { chip: '#a01e14', fg: '#fff', text: 'WITHDRAWN' };
+      if (/failed|expired/i.test(status)) return { chip: '#8a8578', fg: '#fff', text: 'SCR FAIL' };
+      if (/ineligible/i.test(status)) return { chip: '#8a8578', fg: '#fff', text: 'INELIGIBLE' };
+      if (/discrepancy/i.test(status)) return { chip: '#c07a12', fg: '#fff', text: 'QUERIED' };
+      if (/held/i.test(status)) return { chip: '#c07a12', fg: '#fff', text: 'DOSING HELD' };
+      if (/closes/i.test(status)) return { chip: '#d97b13', fg: '#fff', text: 'WINDOW 3D' };
+      if (/Screening/i.test(status)) return { chip: '#e8c84a', fg: '#3b3b3b', text: 'SCREENING' };
+      return { chip: '#2f7d32', fg: '#fff', text: 'ENROLLED' };
+    };
+
+    const vals = {
+      isTitle: s.phase === 'title',
+      isPlay: s.phase === 'play',
+      isChangeover: s.phase === 'changeover',
+      isDayEnd: s.phase === 'dayend',
+      isDebrief: s.phase === 'debrief',
+      onBegin: () => this.begin(),
+      onRestart: () => this.setState(this.fresh()),
+
+      dayLabel: this.day().label,
+      sessionLabel: '08:00 — ' + this.clockText(cfg.dayBlocks).replace(' PM', '').replace(' AM', '') + ' PM',
+      clockVisible: s.clockVisible,
+      clockText: this.clockText(s.blocks),
+      veraOn: !!s.veraVersion,
+      veraOff: !s.veraVersion,
+      veraVersion: s.veraVersion || '',
+      statusBarLeft: s.queue.length
+        ? 'Ready. ' + s.queue.filter(q => !s.decided[q]).length + ' item(s) outstanding. Last sync ' + this.clockText(s.blocks) + '.'
+        : 'Ready.',
+
+      roster: s.roster.map(r => {
+        const c = chip(r.status);
+        return { id: r.id, chip: c.chip, fg: c.fg, chipText: c.text, bg: act && act.subject === r.id ? '#fff7d6' : 'transparent' };
+      }),
+      enrollWidth: s.enroll + '%',
+      auditWidth: s.audit + '%',
+      inbox: s.inbox.map(m => ({ from: m.from, subj: m.subject, onOpen: () => this.setState({ email: m }) })),
+
+      queue: s.queue.map((id, i) => {
+        const it = this.item(id);
+        const d = s.decided[id];
+        const isActive = id === activeId;
+        const safety = it.kind === 'SAFETY';
+        return {
+          n: String(i + 1).padStart(2, '0'), kind: it.kind, title: it.subject + ' · ' + it.title,
+          status: d ? (d === 'batch' ? 'BATCHED' : d === 'flag' ? 'FLAGGED' : d === 'escalate' ? 'TO PI' : 'DONE') : (isActive ? 'OPEN' : 'PENDING'),
+          statusBg: d ? '#dcd8cd' : (isActive ? (safety ? '#a01e14' : '#1a4f86') : '#8a8578'),
+          statusFg: d ? '#5c5749' : '#fff',
+          ink: d ? '#8a8578' : (safety ? '#a01e14' : '#1a4f86'),
+          kindColor: d ? '#8a8578' : (safety ? '#a01e14' : '#555'),
+          bg: d ? '#f4f3ef' : (isActive ? (safety ? '#fdeceb' : '#eef4fa') : (i % 2 ? '#f7f6f2' : '#fff')),
+          onSelect: () => { if (!d) this.setState({ activeId: id, note: null }); }
+        };
+      }),
+      queueCountLabel: s.queue.length ? s.queue.filter(q => !s.decided[q]).length + ' of ' + s.queue.length + ' outstanding' : '',
+
+      hasActive: !!act,
+      activeKind: act ? act.kind : '', activeCode: act ? act.code : '',
+      activeSubject: act ? act.subject : '', activeTitle: act ? act.title : '',
+      activeBlurb: act ? act.blurb : '',
+      activeStamped: !!decided,
+      stampText: decided === 'flag' ? 'FLAGGED' : decided === 'escalate' ? 'ROUTED TO PI' : 'ENTERED',
+      stampColor: decided === 'flag' ? '#a3391b' : decided === 'escalate' ? '#8a5a1c' : '#3f6b34',
+
+      hasVeraText: !!(s.veraVersion && ((src && src.vera) || (act && act.vera))),
+      veraPanelText: (src && src.vera) || (act && act.vera) || '',
+      veraText: (src && src.vera) || (act && act.vera) || '',
+      veraIdle: !!s.veraVersion && !(act && act.vera) && !(src && src.vera),
+
+      note: s.note,
+      canAccept: !!act && !decided && !!act.vera && !act.forceOpen && !act.requiresEscalation,
+      canOpen: !!act && !decided && !s.source,
+      canEscalate: !!act && !decided && (act.kind === 'SAFETY' || act.error === 'Omission'),
+      canBatch: !!(st && st.batch && cfg.batchEnabled && s.queue.filter(q => !s.decided[q]).length > 1),
+      batchLabel: 'Batch review all (' + s.queue.filter(q => !s.decided[q]).length + ')',
+      onBatch: () => this.batchAll(),
+      openCostLabel: this.costLabel(act ? (act.openCost || 2) : 2),
+      actionHint: act
+        ? (act.forceOpen ? 'No assistant provisioned. Open the source document and enter it by hand.' : 'Accepting takes my draft as-is. Opening source lets you correct, flag, or route it.')
+        : 'Nothing outstanding.',
+      onAccept: () => act && this.spend(1, () => this.resolve(activeId, 'accept')),
+      onOpen: () => act && this.openSource(activeId),
+      onEscalate: () => { const id = s.source || activeId; if (id) this.startEscalation(id); },
+
+      isPI: s.phase === 'pi',
+      piContext: s.pi ? (this.item(s.pi.id).subject + ' · ' + this.item(s.pi.id).title) : '',
+      piPresence: s.pi ? (s.pi.step === 0 ? 'IN CLINIC · NO REPLY' : s.pi.step === 1 ? 'IN CLINIC · TYPING' : 'IN CLINIC') : '',
+      piThread: (s.pi ? s.pi.thread : []).map(m => ({
+        text: m.text, meta: m.meta,
+        align: m.mine ? 'flex-end' : 'flex-start',
+        bg: m.mine ? '#dce7f2' : '#fff',
+        border: m.mine ? '#b3c6d8' : '#d8d3c7',
+        fg: m.mine ? '#1d3348' : '#2b2b2b'
+      })),
+      piOptions: (() => {
+        if (!s.pi) return [];
+        const prim = { bg: 'linear-gradient(#5a7995,#33506b)', fg: '#fff', border: '#22384c' };
+        const sec = { bg: '#eceae4', fg: '#5c5749', border: '#b9b3a6' };
+        const withdraw = { label: 'Withdraw the escalation and work it yourself', cost: '', ...sec, onClick: () => this.piWithdraw() };
+        if (s.pi.step === 0) return [
+          { label: 'Page him again', cost: '30 MIN', ...prim, onClick: () => this.piAdvance(1, t => ({ mine: false, text: 'Can this wait until tomorrow? I have eleven patients.', meta: 'Alvarez · ' + t }), 1) },
+          withdraw
+        ];
+        if (s.pi.step === 1) return [
+          { label: 'Tell him it cannot wait', cost: '30 MIN', ...prim, onClick: () => this.piAdvance(1, t => ({ mine: false, text: Component.PI_VERDICT[s.pi.id] || 'That\u2019s a coordinator call. Do what the SOP says.', meta: 'Alvarez · ' + t }), 2) },
+          withdraw
+        ];
+        return [{ label: 'Record his determination in the record', cost: '30 MIN', ...prim, onClick: () => this.piResolve() }];
+      })(),
+
+      sourceOpen: !!src,
+      sourceFile: src ? (src.file || 'SOURCE.pdf') : '',
+      sourceMeta: src ? src.source.meta : '',
+      sourceText: src ? pages[Math.min(s.sourcePage, pages.length - 1)] : '',
+      sourceMultipage: pages.length > 1,
+      sourcePageLabel: pages.length ? (s.sourcePage + 1) + ' / ' + pages.length : '',
+      onPrevPage: () => this.setState({ sourcePage: Math.max(0, s.sourcePage - 1) }),
+      onNextPage: () => this.setState({ sourcePage: Math.min(pages.length - 1, s.sourcePage + 1) }),
+      onCloseSource: () => this.setState({ source: null }),
+      qX: s.win.q.x + 'px', qY: s.win.q.y + 'px', qW: this.queueW() + 'px', qZ: this.zOf('q'),
+      onDragQueue: e => this.startDrag('q', e),
+      onFrontQueue: () => this.front('q'),
+
+      srcX: s.win.src.x + 'px', srcY: s.win.src.y + 'px', srcZ: this.zOf('src'),
+      srcW: (s.win.srcW || Component.SIZE.src[0]) + 'px',
+      crfW: (s.win.crfW || Component.SIZE.crf[0]) + 'px',
+      srcFont: (() => {
+        const w = (s.win.srcW || Component.SIZE.src[0]) - 62;
+        return Math.max(9.5, Math.min(13.5, w / (68 * 0.6))).toFixed(1) + 'px';
+      })(),
+      srcZoom: (() => {
+        const w = (s.win.srcW || Component.SIZE.src[0]) - 62;
+        return Math.round(Math.max(9.5, Math.min(13.5, w / (68 * 0.6))) / 13.5 * 100) + '%';
+      })(),
+      onDragSrc: e => this.startDrag('src', e),
+
+      crfOpen: !!(src && (src.fields || src.meds || src.draft)),
+      crfX: s.win.crf.x + 'px', crfY: s.win.crf.y + 'px', crfZ: this.zOf('crf'),
+      onDragCrf: e => this.startDrag('crf', e),
+      entryFormName: src ? (src.entryName || '') : '',
+      hasEntryFields: !!(src && (src.fields || src.draft)),
+      entryFields: (src && (src.fields || src.draft) ? (src.fields || src.draft) : []).map(f => ({
+        label: f.label, hint: f.hint || '', value: ((s.entry[srcId] || {})[f.k]) != null ? s.entry[srcId][f.k] : (f.value || ''),
+        onChange: e => this.setState({ entry: { ...s.entry, [srcId]: { ...(s.entry[srcId] || {}), [f.k]: e.target.value } } })
+      })),
+      hasMedRows: !!(src && src.meds),
+      medRows: (src && src.meds ? src.meds : []).map(m => ({
+        label: m.label, value: ((s.entry[srcId] || {})[m.k]) || '',
+        onChange: e => this.setState({ entry: { ...s.entry, [srcId]: { ...(s.entry[srcId] || {}), [m.k]: e.target.value } } })
+      })),
+      onSubmitEntry: () => this.submitEntry(srcId),
+      canAcceptInSource: !!(src && !src.fields && !src.meds && !src.draft && !src.requiresEscalation),
+      onAcceptVerified: () => this.resolve(srcId, 'verified'),
+      canFlag: !!(src && src.flagLabel),
+      flagLabel: src && src.flagLabel ? src.flagLabel : 'Flag',
+      onFlag: () => this.resolve(srcId, 'flag'),
+
+      batchOpen: !!s.batch,
+      batX: s.win.bat.x + 'px', batY: s.win.bat.y + 'px', batZ: this.zOf('bat'),
+      onDragBat: e => this.startDrag('bat', e),
+      batchRows: (s.batch || []).map(r => ({
+        n: String(r.n).padStart(2, '0'), subject: r.subject, text: r.text,
+        color: r.flag ? '#8c2018' : '#16211f', bg: r.flag ? '#fbeeec' : 'transparent'
+      })),
+      onCloseBatch: () => this.setState({ batch: null }),
+
+      taskbar: [
+        src ? { label: src.file || 'SOURCE.pdf', bg: '#4c7f76', fg: '#fff', border: '#2f5f57', onClick: () => this.front('src') } : null,
+        src && (src.fields || src.meds || src.draft) ? { label: 'eCRF — ' + (src.entryName || ''), bg: '#333b42', fg: '#cfd7de', border: '#454f58', onClick: () => this.front('crf') } : null,
+        s.batch ? { label: 'VERA batch review', bg: '#333b42', fg: '#cfd7de', border: '#454f58', onClick: () => this.front('bat') } : null,
+        { label: 'Protocol_DRM-204_v3.pdf', bg: '#333b42', fg: '#cfd7de', border: '#454f58', onClick: () => {} },
+        s.inbox.length ? { label: 'Mail (' + s.inbox.length + ')', bg: '#333b42', fg: '#cfd7de', border: '#454f58', onClick: () => this.setState({ email: s.inbox[0] }) } : null
+      ].filter(Boolean),
+
+      emailOpen: !!s.email,
+      emailFrom: s.email ? s.email.from : '', emailWhen: s.email ? s.email.when : '',
+      emailSubject: s.email ? s.email.subject : '', emailBody: s.email ? s.email.body : '',
+      emailButton: s.email ? (s.email.button || 'Close') : '',
+      onCloseEmail: () => {
+        const wasStage = st && st.kind === 'email';
+        this.setState({ email: null }, () => { if (wasStage) this.nextStage(); });
+      },
+
+      coVersion: s.changeover ? s.changeover.version : '',
+      coSubject: s.changeover ? s.changeover.subject : '',
+      coEmail: s.changeover ? s.changeover.email : '',
+      coVera: s.changeover ? s.changeover.vera : '',
+      onContinue: () => this.setState({ phase: 'play', veraVersion: s.changeover.version, changeover: null }, () => this.nextStage()),
+
+      endClock: this.clockText(cfg.dayBlocks),
+      dayEndLines: s.dayEnd || [],
+      nextDayLabel: s.day >= Component.DAYS.length ? 'Close out the run' : 'Next day',
+      onNextDay: () => this.nextDay(),
+      showMidCalibration: cfg.showMid && s.phase === 'dayend' && s.day < Component.DAYS.length,
+      midCalibration: (() => { const c = this.calibration(); return 'You opened source on ' + c.verified + ' of ' + c.total + ' items today. ' + c.wrongPresented + ' contained an error. You accepted ' + c.wrongAccepted + ' of those.'; })()
+    };
+
+    if (s.phase === 'debrief') {
+      const rows = [];
+      s.ledger.forEach(e => {
+        const it = this.item(e.id);
+        const db = it.debrief;
+        if (!db) return;
+        const text = db.any || db[e.decision] || db.accept || db.escalate;
+        if (!text) return;
+        rows.push({ head: it.subject + ' · ' + it.title, tag: db.tag, color: db.color || (e.correct ? '#3f6b34' : '#a3391b'), text, ord: db.ord || 0 });
+      });
+      rows.sort((a, b) => (a.ord || 0) - (b.ord || 0));
+      const s022 = s.roster.find(r => r.id === 'S-022');
+      if (s022 && /expired/.test(s022.status)) rows.push({
+        head: 'S-022 · Eligibility window', tag: 'COST OF CAUTION', color: '#c07a12',
+        text: 'S-022\u2019s packet was correct and she was eligible. Her window expired while it sat in your queue behind work you chose to verify. Over-caution has a patient cost too, and it looks like nothing on screen.'
+      });
+      if (!rows.length) rows.push({ head: 'No decisions recorded', tag: '—', color: '#6b6558', text: 'The run ended before anything was worked.' });
+      const c = this.calibration();
+      vals.answerRows = rows;
+      vals.findingLines = [
+        { text: 'Finding: Site 108, Protocol DRM-204. Source data verification of ' + c.total + ' reviewed records identified ' + c.wrongAccepted + ' instance(s) of data entered into the case report form that is not supported by, or is inconsistent with, the source documents.' },
+        { text: s.audit <= 50
+          ? 'Severity: major. The site\u2019s data are not reliable for the purpose of the primary analysis. A for-cause audit is scheduled. Continued participation is under review by the sponsor.'
+          : 'Severity: minor. Queries have been issued and responses are required within ten business days.' },
+        { text: s.enroll <= 30
+          ? 'Enrollment: the site is placed on enrollment hold pending a corrective action plan, to be submitted by the coordinator within five business days.'
+          : 'Enrollment: the site remains behind the enrollment plan agreed at site initiation.' },
+        { text: 'Assistive extraction (VERA ' + (s.veraVersion || '3') + ') was in use for the period under review. The system does not submit records. All records were entered under the coordinator\u2019s account and are attributed to the coordinator.' }
+      ];
+      vals.pointText = 'One of those harms was not yours to catch. S-011\u2019s lab panel arrived attached to S-014\u2019s record, and the interface never put two records on the same screen or told you which record a value came from. No amount of care fixes that, at any verification budget. It is fixed upstream, by the person who decides what the tool shows. If you are reading this, that is you.';
+      vals.stats = [
+        { value: String(c.verified), label: 'items you opened source on, of ' + c.total + ' worked' },
+        { value: String(c.wrongPresented), label: 'of those actually contained an error' },
+        { value: String(c.wrongAccepted), label: 'wrong outputs you accepted' }
+      ];
+    }
+    return vals;
+  }
+}
+</script>
+</body>
+</html>
