@@ -229,6 +229,13 @@ export type GameState = {
   day: DayNumber;
   blocksUsed: number;
   blocksAvailable: number;
+  /**
+   * Blocks taken off the top of today by queries and ladder rungs, spent
+   * before the player touches the queue. The day does not get shorter — it
+   * begins later, so the taskbar clock reads `blocksTaxed + blocksUsed`.
+   * blocksTaxed + blocksAvailable is always BLOCKS_PER_DAY.
+   */
+  blocksTaxed: number;
   /** Situation ids queued for today, in order, including rollover. */
   queue: string[];
   worked: Record<string, WorkRecord>;
@@ -664,18 +671,13 @@ export function expireWindows(
     const subject = next[situation.subjectId];
     if (!subject || subject.status !== "Screening") continue;
 
-    const closed =
-      options.randomizationClosesTomorrow ||
-      (subject.windowCloses !== undefined && subject.windowCloses <= today);
-
-    // String comparison is safe only because all run dates share JAN-2024.
-    // Compare day-of-month numerically to stay correct if that ever changes.
+    // Compare day-of-month numerically rather than lexically — every run date
+    // is in JAN-2024, but string comparison would break the moment one isn't.
     const closedByDate =
       subject.windowCloses !== undefined &&
       dayOfMonth(subject.windowCloses) <= dayOfMonth(today);
 
-    if (!(options.randomizationClosesTomorrow || closedByDate)) continue;
-    void closed;
+    if (!options.randomizationClosesTomorrow && !closedByDate) continue;
 
     expired.push(id);
     next[situation.subjectId] = {
@@ -698,14 +700,7 @@ function dayOfMonth(date: string): number {
 Run: `npx vitest run src/game/engine/queue.test.ts`
 Expected: PASS, 6 tests
 
-- [ ] **Step 5: Remove the dead `closed` binding**
-
-The `closed` variable and its `void closed;` are scaffolding left from the first draft. Delete both lines — `closedByDate` and the option flag are the real condition. Re-run the test to confirm it still passes.
-
-Run: `npx vitest run src/game/engine/queue.test.ts`
-Expected: PASS, 6 tests
-
-- [ ] **Step 6: Typecheck, lint, and commit**
+- [ ] **Step 5: Typecheck, lint, and commit**
 
 ```bash
 npm run typecheck && npm run lint
@@ -1627,6 +1622,7 @@ export function initialState(situations: Situation[], subjects: Subject[]): Game
     day: 1,
     blocksUsed: 0,
     blocksAvailable: availableBlocks(1, 0),
+    blocksTaxed: BLOCKS_PER_DAY - availableBlocks(1, 0),
     queue: buildQueue(1, situations, []),
     worked: {},
     roster: Object.fromEntries(subjects.map((s) => [s.id, s])),
@@ -1734,15 +1730,33 @@ function beginNextDay(state: GameState, deps: Deps): GameState {
   if (state.day === LAST_DAY) return { ...state, phase: "answer" };
 
   const day = (state.day + 1) as DayNumber;
+  const available = availableBlocks(day, state.openQueries);
   return {
     ...state,
     phase: "desk",
     day,
     blocksUsed: 0,
-    blocksAvailable: availableBlocks(day, state.openQueries),
+    blocksAvailable: available,
+    // The day is not shorter — it starts later. The taskbar reads
+    // blocksTaxed + blocksUsed, so day 4 opens at 9:30, not 8:00.
+    blocksTaxed: BLOCKS_PER_DAY - available,
     queue: buildQueue(day, deps.situations, state.queue),
   };
 }
+```
+
+Import `BLOCKS_PER_DAY` from `./clock` alongside `availableBlocks`.
+
+Add to `src/game/engine/state.test.ts`:
+
+```ts
+it("starts a taxed day later rather than making it shorter", () => {
+  const day3: GameState = { ...started(), day: 2, queue: [], openQueries: 2, phase: "dayend" };
+  const state = reduce(day3, { type: "BEGIN_NEXT_DAY" }, DEPS);
+
+  expect(state.blocksTaxed).toBe(2);
+  expect(state.blocksTaxed + state.blocksAvailable).toBe(16);
+});
 ```
 
 - [ ] **Step 4: Run it and watch it pass**
@@ -1915,7 +1929,11 @@ export function safetyForm(verdictOptions: VerdictOption[]): FormSpec {
   return { template: "safety-determination", fields: [], verdictOptions };
 }
 
-/** The safety choices in play across the run, in plain language. */
+/**
+ * The safety choices in play across the run, in plain language.
+ * Every entry here is used by at least one situation — do not add a fourth
+ * "just in case", and do not offer a subject-facing verdict the run never needs.
+ */
 export const SAFETY_VERDICTS = {
   logAe: { value: "log-ae", label: "Log as an adverse event" },
   reportSae: {
@@ -1923,7 +1941,6 @@ export const SAFETY_VERDICTS = {
     label: "Report as a serious adverse event — sponsor within 24 hours",
   },
   noAction: { value: "no-action", label: "No action — not related to the study" },
-  deviation: { value: "deviation", label: "Log a protocol deviation" },
 } as const;
 ```
 
@@ -3269,16 +3286,41 @@ Twenty-one per-item source documents, plus the fifteen reference documents copie
 **Interfaces:**
 - Produces: `TRIAL_DOCUMENTS: DocumentEntry[]` — `{ id, title, file, words }`
 
-- [ ] **Step 1: Copy the trial library**
+- [ ] **Step 1: Symlink the trial library**
+
+The trial documents keep their home in `docs/trial_documents/`. `public/content/documents/` holds **relative symlinks back to them**, so the corpus has exactly one source of truth and editing a document in `docs/` is immediately live in the game.
 
 ```bash
 mkdir -p public/content/documents public/content/source
-cp docs/trial_documents/*.md public/content/documents/
-rm public/content/documents/ASSUMPTIONS.md public/content/documents/index.md
-ls public/content/documents | wc -l   # expect 15
+
+for f in docs/trial_documents/*.md; do
+  name=$(basename "$f")
+  case "$name" in
+    ASSUMPTIONS.md|index.md) continue ;;   # authoring notes, not site documents
+  esac
+  ln -sfn "../../../docs/trial_documents/$name" "public/content/documents/$name"
+done
+
+ls -l public/content/documents | head -3   # confirm they are links, not copies
+ls public/content/documents | wc -l        # expect 15
 ```
 
-`ASSUMPTIONS.md` and `index.md` are authoring notes, not documents a site receives. They must not appear in the Documents window.
+Links are **relative** (`../../../docs/trial_documents/…`), not absolute, so they survive a fresh clone into any directory. `ASSUMPTIONS.md` and `index.md` are authoring notes, not documents a site receives, and are deliberately not linked.
+
+- [ ] **Step 1b: Confirm the symlinks survive a production build**
+
+Symlinks resolve transparently for `readFileSync` and for the dev server, but `next build` copies `public/`, and some copy paths do not follow links.
+
+```bash
+npm run build
+ls -l .next/  2>/dev/null
+npx next start &
+sleep 3
+curl -sf -o /dev/null -w "%{http_code}\n" http://localhost:3000/content/documents/protocol.md
+kill %1
+```
+
+Expected: `200`. **If it returns 404, stop and report it** — the fallback is committing real copies and adding an `npm run sync:docs` script, which is a change to how the corpus is maintained and is the human's call, not yours.
 
 - [ ] **Step 2: Write `src/game/content/documents.ts`**
 
@@ -3964,10 +4006,12 @@ type Props = {
   windows: WindowState[];
   day: DayNumber;
   blocksUsed: number;
+  /** Blocks already spent on queries and reporting before the queue opened. */
+  blocksTaxed: number;
   onFocus: (id: WindowId) => void;
 };
 
-export function Taskbar({ windows, day, blocksUsed, onFocus }: Props) {
+export function Taskbar({ windows, day, blocksUsed, blocksTaxed, onFocus }: Props) {
   return (
     <div className="absolute inset-x-0 bottom-0 z-50 flex h-8 items-center gap-1 bevel-out bg-edc-face px-1">
       <span className="bevel-out bg-edc-face px-3 py-0.5 text-[11px] font-bold">EDC</span>
@@ -3986,7 +4030,7 @@ export function Taskbar({ windows, day, blocksUsed, onFocus }: Props) {
         ))}
 
       <div className="ml-auto px-2 text-right leading-tight">
-        <div className="text-[13px] font-bold tabular-nums">{blocksToClock(blocksUsed)}</div>
+        <div className="text-[13px] font-bold tabular-nums">{blocksToClock(blocksTaxed + blocksUsed)}</div>
         <div className="text-[10px] text-edc-line">{formatRunDate(day)}</div>
       </div>
     </div>
@@ -4041,21 +4085,29 @@ describe("WindowFrame", () => {
 
 describe("Taskbar", () => {
   it("shows the clock and the date, always", () => {
-    render(<Taskbar windows={[win]} day={3} blocksUsed={7} onFocus={vi.fn()} />);
+    render(<Taskbar windows={[win]} day={3} blocksUsed={7} blocksTaxed={0} onFocus={vi.fn()} />);
 
     expect(screen.getByText("11:30 AM")).toBeInTheDocument();
     expect(screen.getByText("10-JAN-2024")).toBeInTheDocument();
   });
 
+  it("opens a taxed day late instead of making it short", () => {
+    // Day 4: reporting, the Thursday call, audit prep, and one query.
+    render(<Taskbar windows={[win]} day={4} blocksUsed={0} blocksTaxed={6} onFocus={vi.fn()} />);
+
+    expect(screen.getByText("11:00 AM")).toBeInTheDocument();
+    expect(screen.queryByText("8:00 AM")).not.toBeInTheDocument();
+  });
+
   it("shows no budget counter or remaining-minutes readout", () => {
-    render(<Taskbar windows={[win]} day={3} blocksUsed={7} onFocus={vi.fn()} />);
+    render(<Taskbar windows={[win]} day={3} blocksUsed={7} blocksTaxed={0} onFocus={vi.fn()} />);
 
     expect(screen.queryByText(/remaining|blocks|budget/i)).not.toBeInTheDocument();
   });
 
   it("brings a window forward from its taskbar button", async () => {
     const onFocus = vi.fn();
-    render(<Taskbar windows={[win]} day={1} blocksUsed={0} onFocus={onFocus} />);
+    render(<Taskbar windows={[win]} day={1} blocksUsed={0} blocksTaxed={0} onFocus={onFocus} />);
 
     await userEvent.click(screen.getByRole("button", { name: "Work Queue" }));
 
@@ -4119,7 +4171,7 @@ export function Desk({ state, dispatch }: Props) {
       </div>
 
       <Rail state={state} dispatch={dispatch} onOpenSource={open} selectedId={selectedId} />
-      <Taskbar windows={windows} day={state.day} blocksUsed={state.blocksUsed} onFocus={focus} />
+      <Taskbar windows={windows} day={state.day} blocksUsed={state.blocksUsed} blocksTaxed={state.blocksTaxed} onFocus={focus} />
     </div>
   );
 }
@@ -4890,7 +4942,7 @@ The user and password fields are decorative and pre-filled; the button is the on
 ```tsx
 "use client";
 
-import { useCallback, useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer, useRef } from "react";
 
 import { Desk } from "@/components/desk/Desk";
 import { Answer } from "@/components/screens/Answer";
@@ -4915,13 +4967,13 @@ export default function Page() {
   const [state, dispatch] = useReducer(step, undefined, () => initialState(SITUATIONS, SUBJECTS));
 
   // Resume a run in progress. Runs once, after hydration.
-  const [resumed, resume] = useReducer(() => true, false);
+  const resumed = useRef(false);
   useEffect(() => {
-    if (resumed) return;
-    resume();
+    if (resumed.current) return;
+    resumed.current = true;
     const saved = load();
     if (saved) dispatch({ type: "RESTORE", state: saved });
-  }, [resumed]);
+  }, []);
 
   useEffect(() => {
     if (state.phase !== "signin") save(state);
