@@ -47,3 +47,37 @@ describe("SCRIPT — day 1", () => {
     }
   });
 });
+
+describe("SCRIPT — day 2", () => {
+  const day2 = SCRIPT.filter((s) => s.day === 2);
+  const uncatchable = day2.find((s) => s.truth.error === "UNCATCHABLE");
+
+  it("has four situations, none of them deep", () => {
+    expect(day2).toHaveLength(4);
+    expect(day2.every((s) => s.cost === 60)).toBe(true);
+  });
+
+  it("carries exactly one uncatchable situation", () => {
+    expect(uncatchable).toBeDefined();
+  });
+
+  it("makes the uncatchable item agree with itself", () => {
+    expect(uncatchable!.truth.entry).toEqual(uncatchable!.vera!.entry);
+  });
+
+  it("punishes the uncatchable item identically whether or not it was verified", () => {
+    expect(uncatchable!.outcomes.accepted).toEqual(uncatchable!.outcomes.reviewedCorrect);
+  });
+
+  it("files the uncatchable item under category 2", () => {
+    expect(uncatchable!.debrief.category).toBe(2);
+  });
+
+  it("puts the catchable misattribution on the same day", () => {
+    expect(day2.some((s) => s.truth.error === "misattribution")).toBe(true);
+  });
+
+  it("still lets her be right once", () => {
+    expect(day2.filter((s) => s.truth.error === "NONE")).toHaveLength(1);
+  });
+});
