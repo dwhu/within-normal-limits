@@ -52,4 +52,11 @@ describe("Desk", () => {
     render(<Desk state={desk({ clock: 150 })} dispatch={vi.fn()} script={FIXTURE_SCRIPT} />);
     expect(screen.getByText(/10:30 AM/)).toBeInTheDocument();
   });
+
+  it("opens the source and an empty form when manual review begins", async () => {
+    render(<Desk state={desk()} dispatch={vi.fn()} script={FIXTURE_SCRIPT} />);
+
+    await userEvent.click(screen.getByRole("button", { name: /Manually review/ }));
+    expect(screen.getByText(/eCRF — VITAL SIGNS/)).toBeInTheDocument();
+  });
 });

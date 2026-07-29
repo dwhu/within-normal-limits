@@ -4,8 +4,10 @@ import { Taskbar } from "@/components/desk/Taskbar";
 import { useWindows } from "@/components/desk/useWindows";
 import { Window } from "@/components/desk/Window";
 import { Rail } from "@/components/vera/Rail";
+import { DocViewer } from "@/components/windows/DocViewer";
+import { ECRF } from "@/components/windows/ECRF";
 import { WorkQueue } from "@/components/windows/WorkQueue";
-import type { Action, Situation, State } from "@/game/types";
+import type { Action, FormValues, Situation, State } from "@/game/types";
 
 type Props = {
   state: State;
@@ -14,11 +16,23 @@ type Props = {
 };
 
 export function Desk({ state, dispatch, script }: Props) {
-  const { windows, focus, close, move } = useWindows();
+  const { windows, open, close, focus, move } = useWindows();
 
   const today = script.filter((s) => s.day === state.day);
   const current = script[state.index];
   const doneIds = state.resolutions.map((r) => r.situationId);
+
+  const beginReview = () => {
+    if (!current) return;
+    open("viewer", current.source[0] ?? "source.md");
+    open("ecrf", "eCRF");
+  };
+
+  const submit = (values: FormValues, verdict?: string) => {
+    close("viewer");
+    close("ecrf");
+    dispatch({ type: "SUBMIT", values, verdict });
+  };
 
   return (
     <div className="relative h-screen w-screen overflow-hidden">
@@ -31,13 +45,15 @@ export function Desk({ state, dispatch, script }: Props) {
           onClose={w.id === "queue" ? undefined : close}
         >
           {w.id === "queue" && <WorkQueue today={today} current={current} doneIds={doneIds} />}
+          {w.id === "viewer" && current && <DocViewer file={current.source[0]} kind="source" />}
+          {w.id === "ecrf" && current && <ECRF situation={current} onSubmit={submit} />}
         </Window>
       ))}
 
       <Rail
         situation={current}
         onAccept={() => dispatch({ type: "ACCEPT" })}
-        onReview={() => dispatch({ type: "SUBMIT", values: {} })}
+        onReview={beginReview}
       />
 
       <Taskbar windows={windows} clock={state.clock} day={state.day} onFocus={focus} />

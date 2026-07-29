@@ -10,7 +10,7 @@ export type ErrorType =
   | "normalization"
   | "threshold";
 
-export type FormId = "vitals" | "labs" | "eligibility";
+export type FormId = "vitals" | "labs" | "eligibility" | "safety";
 export type FormValues = Record<string, string>;
 export type Day = 1 | 2 | 3 | 4;
 
