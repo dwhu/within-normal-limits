@@ -39,21 +39,15 @@ export function useWindows() {
     });
   }, []);
 
-  const open = useCallback(
-    (id: WindowId, title: string) => {
-      setWindows((ws) => {
-        const top = Math.max(0, ...ws.map((w) => w.z));
-        if (ws.some((w) => w.id === id)) {
-          return ws.map((w) => (w.id === id ? { ...w, z: top + 1 } : w));
-        }
-        return [
-          ...ws,
-          { id, title, ...clampToViewport(PLACEMENT[id], viewport()), z: top + 1 },
-        ];
-      });
-    },
-    [],
-  );
+  const open = useCallback((id: WindowId, title: string) => {
+    setWindows((ws) => {
+      const top = Math.max(0, ...ws.map((w) => w.z));
+      if (ws.some((w) => w.id === id)) {
+        return ws.map((w) => (w.id === id ? { ...w, z: top + 1 } : w));
+      }
+      return [...ws, { id, title, ...clampToViewport(PLACEMENT[id], viewport()), z: top + 1 }];
+    });
+  }, []);
 
   const close = useCallback((id: WindowId) => {
     if (id === "queue") return; // the base window is never closable
@@ -62,16 +56,11 @@ export function useWindows() {
 
   const move = useCallback((id: WindowId, x: number, y: number) => {
     setWindows((ws) =>
-      ws.map((w) =>
-        w.id === id ? { ...w, ...clampToViewport({ ...w, x, y }, viewport()) } : w,
-      ),
+      ws.map((w) => (w.id === id ? { ...w, ...clampToViewport({ ...w, x, y }, viewport()) } : w)),
     );
   }, []);
 
-  const isOpen = useCallback(
-    (id: WindowId) => windows.some((w) => w.id === id),
-    [windows],
-  );
+  const isOpen = useCallback((id: WindowId) => windows.some((w) => w.id === id), [windows]);
 
   const topmost = useCallback((): WindowId | undefined => {
     return windows.reduce<WindowState | undefined>(
