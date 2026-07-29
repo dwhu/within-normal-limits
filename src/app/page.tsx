@@ -4,6 +4,7 @@ import { useCallback, useReducer } from "react";
 
 import { Desk } from "@/components/desk/Desk";
 import { DayEnd } from "@/components/screens/DayEnd";
+import { Ending } from "@/components/screens/Ending";
 import { SignIn } from "@/components/screens/SignIn";
 import { SCRIPT } from "@/game/script";
 import { initialState, reducer } from "@/game/state";
@@ -31,6 +32,8 @@ export default function Home() {
           }}
         />
       );
+    case "ending":
+      return <Ending state={state} script={SCRIPT} />;
     default:
       return <Desk state={state} dispatch={dispatch} script={SCRIPT} />;
   }
