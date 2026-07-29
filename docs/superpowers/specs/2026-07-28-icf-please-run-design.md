@@ -90,7 +90,7 @@ ENROLLED
   1047-003  P. Sunderland   Enrolled   Week 12
   1047-005  T. Channing     Enrolled   Week 16
   1047-006  M. Vasquez      Enrolled   Week 12
-  1047-007  K. Oyelowo      Enrolled   Week 4
+  1047-007  K. Oyelowo      Enrolled   Week 16
   1047-008  H. Brenner      Enrolled   Week 12
   1047-009  S. Nakashima    Enrolled   Week 8
   1047-010  E. Fontaine     Enrolled   Week 16
@@ -132,7 +132,7 @@ right reaches **14 randomized of 22 screened**.
 | 6 | 2 | DE-1111 | 1047-005 T. Channing | Data entry | **`UNCATCHABLE` — mislabeled lab** | 60 |
 | 7 | 2 | SAF-0034 | 1047-010 E. Fontaine | Safety | **Misattribution** (catchable) | 60 |
 | 8 | 2 | DE-1112 | 1047-007 K. Oyelowo | Data entry | `NONE` | 60 |
-| 9 | 2 | SAF-0032 | 1047-002 D. Achterberg | Safety | **Omission** | 60 |
+| 9 | 2 | SAF-0032 | 1047-002 D. Achterberg | Safety | **Omission** — truth verdict is `serious`; see note | 60 |
 | 10 | 3 | SCR-0219 | 1047-019 R. Amaya | Screening | **Threshold overconfidence** | 90 |
 | 11 | 3 | SCR-0220 | 1047-020 J. Whitlock | Screening | **Stale context** (answers against Amd 2) | 90 |
 | 12 | 3 | DE-1113 | 1047-011 W. Dorsey | Data entry | **Fabrication** | 60 |
@@ -163,6 +163,12 @@ Composition: 6 screening, 8 data entry, 5 safety.
 omission has to land somewhere the player can see it. If she simply fails to mention something, no
 field is blank, nothing looks wrong, and there is nothing to compare — the error is invisible at any
 verification budget, which makes it a second uncatchable rather than an omission.
+
+**SAF-0032's truth verdict is `serious`, not `not-serious`.** An earlier fact table said otherwise, and
+taken literally it made the item unplayable: if VERA's drafted verdict and the truth verdict are both
+`not-serious`, there is nothing on the form for the player to change, and the item becomes a second
+uncatchable rather than an omission. The second event disclosed on page 2 of the note is what makes it
+serious. Caught during authoring.
 
 **Author both omissions so the omitted thing changes a field that exists on the form.** The workable
 shape is a determination: a second adverse event in the last paragraph of a nurse's note that makes
