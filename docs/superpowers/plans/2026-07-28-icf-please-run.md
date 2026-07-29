@@ -810,7 +810,7 @@ git commit -m "feat(content): copy the trial corpus into public and add loaders"
   - `type Viewport = { w: number; h: number }`
   - `clampToViewport(rect: Rect, viewport: Viewport): Rect`
   - `type WindowId = "queue" | "viewer" | "ecrf" | "inbox" | "roster" | "documents"`
-  - `type WindowState = Rect & { id: WindowId; title: string; z: number; open: boolean }`
+  - `type WindowState = Rect & { id: WindowId; title: string; z: number }` — membership in the `windows` array is the only record of whether a window is open; there is no `open` field, because it could never be `false` while minimise is out of scope
   - `useWindows()` returning `{ windows, open, close, focus, move, isOpen, topmost }`
 
 - [ ] **Step 1: Write the failing geometry test**
