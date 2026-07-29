@@ -5,7 +5,7 @@ import { useState } from "react";
 import { buildAnswer, calibrate } from "@/game/ending";
 import type { Situation, State } from "@/game/types";
 
-export const UNCATCHABLE_WORDING =
+const UNCATCHABLE_WORDING =
   "The blood filed under 1047-005 was drawn from 1047-010, and the other way round. " +
   "Nothing on your desk disagreed with anything else on your desk. The requisition form " +
   "has a field for participant initials — field 5 — and it is pre-printed “not " +
