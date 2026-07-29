@@ -28,6 +28,12 @@ export function Desk({ state, dispatch, script }: Props) {
     open("ecrf", "eCRF");
   };
 
+  const accept = () => {
+    close("viewer");
+    close("ecrf");
+    dispatch({ type: "ACCEPT" });
+  };
+
   const submit = (values: FormValues, verdict?: string) => {
     close("viewer");
     close("ecrf");
@@ -45,16 +51,16 @@ export function Desk({ state, dispatch, script }: Props) {
           onClose={w.id === "queue" ? undefined : close}
         >
           {w.id === "queue" && <WorkQueue today={today} current={current} doneIds={doneIds} />}
-          {w.id === "viewer" && current && <DocViewer file={current.source[0]} kind="source" />}
-          {w.id === "ecrf" && current && <ECRF situation={current} onSubmit={submit} />}
+          {w.id === "viewer" && current && (
+            <DocViewer key={current.id} file={current.source[0]} kind="source" />
+          )}
+          {w.id === "ecrf" && current && (
+            <ECRF key={current.id} situation={current} onSubmit={submit} />
+          )}
         </Window>
       ))}
 
-      <Rail
-        situation={current}
-        onAccept={() => dispatch({ type: "ACCEPT" })}
-        onReview={beginReview}
-      />
+      <Rail situation={current} onAccept={accept} onReview={beginReview} />
 
       <Taskbar windows={windows} clock={state.clock} day={state.day} onFocus={focus} />
     </div>

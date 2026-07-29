@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 import { Desk } from "@/components/desk/Desk";
 import { FIXTURE_SCRIPT } from "@/game/fixtures";
 import { initialState } from "@/game/state";
-import type { State } from "@/game/types";
+import type { Situation, State } from "@/game/types";
 
 const desk = (over: Partial<State> = {}): State => ({
   ...initialState,
@@ -58,5 +58,31 @@ describe("Desk", () => {
 
     await userEvent.click(screen.getByRole("button", { name: /Manually review/ }));
     expect(screen.getByText(/eCRF — VITAL SIGNS/)).toBeInTheDocument();
+  });
+
+  it("does not leak values typed during manual review into the next item, even after Accept", async () => {
+    // Two same-day, same-form items: the first is assisted (so "Accept as drafted" is
+    // available) and the second reuses the vitals template, so a leaked value from the
+    // first item's form would show up pre-filled in the second item's identical field.
+    const sameForm: Situation[] = [
+      { ...FIXTURE_SCRIPT[1], id: "REG-1", form: "vitals" },
+      { ...FIXTURE_SCRIPT[0], id: "REG-2" },
+    ];
+
+    const dispatch = vi.fn();
+    const { rerender } = render(<Desk state={desk()} dispatch={dispatch} script={sameForm} />);
+
+    await userEvent.click(screen.getByRole("button", { name: /Manually review/ }));
+    await userEvent.type(screen.getByLabelText("BP sitting"), "999/999");
+
+    await userEvent.click(screen.getByRole("button", { name: /Accept as drafted/ }));
+    expect(dispatch).toHaveBeenCalledWith({ type: "ACCEPT" });
+
+    // Simulate the state update the real reducer produces for ACCEPT: the index advances
+    // to the next item on the same day.
+    rerender(<Desk state={desk({ index: 1 })} dispatch={dispatch} script={sameForm} />);
+
+    await userEvent.click(screen.getByRole("button", { name: /Manually review/ }));
+    expect(screen.getByLabelText("BP sitting")).toHaveValue("");
   });
 });
