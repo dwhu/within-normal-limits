@@ -43,7 +43,13 @@ describe("reducer", () => {
   });
 
   it("accepting a situation carrying an error is not correct", () => {
-    const s = run(start(), { type: "ACCEPT" }, { type: "ACCEPT" }, { type: "BEGIN_DAY" }, { type: "ACCEPT" });
+    const s = run(
+      start(),
+      { type: "ACCEPT" },
+      { type: "ACCEPT" },
+      { type: "BEGIN_DAY" },
+      { type: "ACCEPT" },
+    );
     expect(s.resolutions[2].correct).toBe(false);
     expect(s.tally.errorsAccepted).toBe(1);
   });
@@ -65,7 +71,13 @@ describe("reducer", () => {
   });
 
   it("finishing the last situation in the script moves to the ending", () => {
-    const s = run(start(), { type: "ACCEPT" }, { type: "ACCEPT" }, { type: "BEGIN_DAY" }, { type: "ACCEPT" });
+    const s = run(
+      start(),
+      { type: "ACCEPT" },
+      { type: "ACCEPT" },
+      { type: "BEGIN_DAY" },
+      { type: "ACCEPT" },
+    );
     expect(s.screen).toBe("ending");
   });
 
@@ -77,7 +89,14 @@ describe("reducer", () => {
   });
 
   it("BEGIN_DAY commits the closing day's roster changes and emails", () => {
-    const s = run(start(), { type: "ACCEPT" }, { type: "ACCEPT" }, { type: "BEGIN_DAY" }, { type: "ACCEPT" }, { type: "BEGIN_DAY" });
+    const s = run(
+      start(),
+      { type: "ACCEPT" },
+      { type: "ACCEPT" },
+      { type: "BEGIN_DAY" },
+      { type: "ACCEPT" },
+      { type: "BEGIN_DAY" },
+    );
     expect(s.roster.find((r) => r.id === "1047-019")?.status).toBe("Enrolled");
   });
 
