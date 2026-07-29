@@ -2,6 +2,7 @@
 
 import { useCallback, useReducer } from "react";
 
+import { Desk } from "@/components/desk/Desk";
 import { SignIn } from "@/components/screens/SignIn";
 import { SCRIPT } from "@/game/script";
 import { initialState, reducer } from "@/game/state";
@@ -18,10 +19,6 @@ export default function Home() {
     case "signin":
       return <SignIn onSignIn={() => dispatch({ type: "SIGN_IN" })} />;
     default:
-      return (
-        <main className="p-4">
-          <h1 className="text-lg">Desk — day {state.day}</h1>
-        </main>
-      );
+      return <Desk state={state} dispatch={dispatch} script={SCRIPT} />;
   }
 }

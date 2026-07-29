@@ -16,6 +16,6 @@ describe("Home", () => {
     render(<Home />);
     await userEvent.click(screen.getByRole("button", { name: "Sign in" }));
 
-    expect(screen.getByRole("heading", { name: /Desk — day 1/ })).toBeInTheDocument();
+    expect(screen.getByText("Week 8 vitals")).toBeInTheDocument();
   });
 });
