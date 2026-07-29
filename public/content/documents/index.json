@@ -2,76 +2,91 @@
   {
     "file": "budget.md",
     "title": "Budget — Exhibit B",
-    "words": 7864
+    "bytes": 47177,
+    "modified": "2022-10-03"
   },
   {
     "file": "cta.md",
     "title": "Clinical Trial Agreement",
-    "words": 18972
+    "bytes": 125641,
+    "modified": "2022-10-03"
   },
   {
     "file": "edc_manual.md",
     "title": "EDC Manual — Veriscribe v9.2",
-    "words": 15275
+    "bytes": 106168,
+    "modified": "2023-09-18"
   },
   {
     "file": "form_1572.md",
     "title": "FDA Form 1572",
-    "words": 3976
+    "bytes": 25795,
+    "modified": "2022-12-21"
   },
   {
     "file": "icf.md",
     "title": "Informed Consent Form v4.0.1",
-    "words": 10333
+    "bytes": 60249,
+    "modified": "2023-12-01"
   },
   {
     "file": "investigators_brochure.md",
     "title": "Investigator's Brochure ed. 6.0",
-    "words": 20206
+    "bytes": 136203,
+    "modified": "2023-08-15"
   },
   {
     "file": "ip_handling_manual.md",
     "title": "IP Handling Manual",
-    "words": 10399
+    "bytes": 73925,
+    "modified": "2023-01-10"
   },
   {
     "file": "irt_manual.md",
     "title": "IRT Manual — Axion",
-    "words": 12276
+    "bytes": 109627,
+    "modified": "2023-02-06"
   },
   {
     "file": "lab_manual.md",
     "title": "Laboratory Manual",
-    "words": 20659
+    "bytes": 125741,
+    "modified": "2023-03-15"
   },
   {
     "file": "monitoring_plan.md",
     "title": "Monitoring Plan",
-    "words": 17593
+    "bytes": 113956,
+    "modified": "2023-09-01"
   },
   {
     "file": "pharmacy_manual.md",
     "title": "Pharmacy Manual",
-    "words": 13353
+    "bytes": 84435,
+    "modified": "2022-12-15"
   },
   {
     "file": "protocol.md",
     "title": "Protocol 20210143, Amendment 3",
-    "words": 25076
+    "bytes": 166253,
+    "modified": "2023-11-29"
   },
   {
     "file": "safety_reporting_manual.md",
     "title": "Safety Reporting Manual",
-    "words": 21954
+    "bytes": 155051,
+    "modified": "2023-11-15"
   },
   {
     "file": "siv_slide_deck.md",
     "title": "SIV Slide Deck — 21-DEC-2022",
-    "words": 22021
+    "bytes": 124834,
+    "modified": "2022-12-21"
   },
   {
     "file": "study_reference_manual.md",
     "title": "Study Reference Manual",
-    "words": 26268
+    "bytes": 159074,
+    "modified": "2023-07-20"
   }
 ]

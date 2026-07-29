@@ -68,6 +68,11 @@ function resolve(
   const next = script[index];
   const screen: State["screen"] = !next ? "ending" : next.day !== situation.day ? "dayend" : "desk";
 
+  // A mid-day beat, not a day-end consequence: delivered the instant the next situation
+  // becomes current, so it's waiting in the inbox rather than announcing itself after the
+  // fact. Distinct from applyConsequences, which only ever fires at a day boundary.
+  const arrival = next?.arrivalEmail;
+
   const resolved: State = {
     ...state,
     screen,
@@ -75,6 +80,7 @@ function resolve(
     clock: state.clock + minutes,
     resolutions: [...state.resolutions, resolution],
     tally: addTally(state.tally, outcome.score),
+    inbox: arrival ? [arrival, ...state.inbox] : state.inbox,
   };
 
   return closeDay(resolved, script);

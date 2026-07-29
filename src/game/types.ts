@@ -57,6 +57,11 @@ export type Situation = {
   truth: { error: ErrorType; entry: FormValues; verdict?: string };
   outcomes: Record<OutcomeKey, Outcome>;
   debrief: { line: string; category?: 1 | 2 | 3 };
+  /**
+   * Delivered to the inbox the moment this situation becomes current — a mid-day narrative
+   * beat, unlike LADDER's day-end rungs. Used once, for VERA's arrival partway through day 1.
+   */
+  arrivalEmail?: Email;
 };
 
 export type Resolution = {

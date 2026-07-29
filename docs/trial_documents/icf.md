@@ -23,12 +23,14 @@
 | **Consent form version** | **Version 4.0.1, dated 29-NOV-2023** |
 | **IRB approval date for this version** | **19-DEC-2023** |
 
-> ┌────────────────────────────────────────────────────────────────┐
-> │  **KEYSTONE INDEPENDENT REVIEW BOARD — APPROVED**              │
-> │  Approved 19-DEC-2023  ·  Approval expires 19-DEC-2024         │
-> │  Protocol 20210143 · Site 1047 · ICF v4.0.1 (29-NOV-2023)      │
-> │  This stamp must appear on the copy you sign.                  │
-> └────────────────────────────────────────────────────────────────┘
+```
+┌────────────────────────────────────────────────────────────────┐
+│  KEYSTONE INDEPENDENT REVIEW BOARD — APPROVED                  │
+│  Approved 19-DEC-2023  ·  Approval expires 19-DEC-2024         │
+│  Protocol 20210143 · Site 1047 · ICF v4.0.1 (29-NOV-2023)      │
+│  This stamp must appear on the copy you sign.                  │
+└────────────────────────────────────────────────────────────────┘
+```
 
 **Take your time with this form.** You can take it home. You can talk it over with your family or your own doctor before you decide. Nobody will rush you. If anything is unclear, ask — there are no bad questions.
 

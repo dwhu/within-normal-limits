@@ -1,7 +1,22 @@
-export type DocEntry = { file: string; title: string; words: number };
+export type DocEntry = { file: string; title: string; bytes: number; modified: string };
 
 const DOCS = "/content/documents";
 const SOURCE = "/content/source";
+
+const MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+
+/** `164 KB`-style size, matching how a period file listing rounds. */
+export function formatFileSize(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  return `${Math.round(bytes / 1024)} KB`;
+}
+
+/** `29-NOV-2023`, matching the date format used throughout the rest of the trial's fiction. */
+export function formatFileDate(isoDate: string): string {
+  const [year, month, day] = isoDate.split("-");
+  const monthIndex = Number(month) - 1;
+  return `${day}-${MONTHS[monthIndex]}-${year}`;
+}
 
 const cache = new Map<string, string>();
 

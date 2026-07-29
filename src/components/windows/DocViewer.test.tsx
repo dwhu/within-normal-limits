@@ -83,3 +83,54 @@ describe("DocViewer", () => {
     await waitFor(() => expect(screen.getByText(/could not be opened/i)).toBeInTheDocument());
   });
 });
+
+// Search has to run over what the player actually sees, not the raw markdown source — a
+// regression suite of its own, since every case above uses plain unformatted text and would
+// pass even if search were matching raw "**bold**" syntax instead of rendered "bold" text.
+describe("DocViewer — search over rendered markdown", () => {
+  it("finds a phrase that crosses a **bold** boundary", async () => {
+    stub("This **Protocol** shall govern the conduct of the study.\n");
+    const { container } = render(<DocViewer file="bold-boundary.md" kind="document" />);
+    await waitFor(() => expect(screen.getByText("Protocol")).toBeInTheDocument());
+
+    // The raw markdown is "This **Protocol** shall govern…" — searching raw text would find
+    // nothing here, because "**" sits between "Protocol" and "shall". The rendered text is
+    // "This Protocol shall govern…", where the phrase is contiguous.
+    await userEvent.type(screen.getByLabelText("Find"), "Protocol shall govern");
+    expect(screen.getByText("1 of 1")).toBeInTheDocument();
+    expect(container.querySelectorAll("mark").length).toBeGreaterThan(0);
+  });
+
+  it("finds a match inside a GFM table cell", async () => {
+    stub("| Analyte | Result |\n| --- | --- |\n| ALT | 24 U/L |\n");
+    const { container } = render(<DocViewer file="table-cell.md" kind="document" />);
+    await waitFor(() => expect(screen.getByText("24 U/L")).toBeInTheDocument());
+
+    await userEvent.type(screen.getByLabelText("Find"), "24 U/L");
+    expect(screen.getByText("1 of 1")).toBeInTheDocument();
+    expect(container.querySelector("td mark, th mark")).not.toBeNull();
+  });
+
+  it("finds a phrase spanning a link boundary", async () => {
+    stub("See [the protocol](https://example.com/protocol) for details.\n");
+    const { container } = render(<DocViewer file="link-boundary.md" kind="document" />);
+    await waitFor(() => expect(screen.getByText("the protocol")).toBeInTheDocument());
+
+    // "the protocol" is the link's visible text; " for" is plain text right after it. The raw
+    // markdown has the link syntax (`](url)`) sitting in between.
+    await userEvent.type(screen.getByLabelText("Find"), "the protocol for");
+    expect(screen.getByText("1 of 1")).toBeInTheDocument();
+    expect(container.querySelector("a mark")).not.toBeNull();
+  });
+
+  it("does not let two different table cells read as one contiguous phrase", async () => {
+    stub("| Analyte | Result |\n| --- | --- |\n| ALT | 24 |\n");
+    render(<DocViewer file="table-no-bleed.md" kind="document" />);
+    await waitFor(() => expect(screen.getByText("ALT")).toBeInTheDocument());
+
+    // "ALT" and "24" are adjacent cells on the same row; nothing on screen reads "ALT24" or
+    // "ALT 24", so that shouldn't be a match.
+    await userEvent.type(screen.getByLabelText("Find"), "ALT24");
+    expect(screen.getByText("0 of 0")).toBeInTheDocument();
+  });
+});

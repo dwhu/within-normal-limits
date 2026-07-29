@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { type DocEntry, loadDocIndex } from "@/game/documents";
+import { type DocEntry, formatFileDate, formatFileSize, loadDocIndex } from "@/game/documents";
 
 type Props = { onOpen: (file: string, title: string) => void };
 
@@ -29,7 +29,10 @@ export function Documents({ onOpen }: Props) {
             onClick={() => onOpen(d.file, d.title)}
           >
             <span>{d.title}</span>
-            <span className="font-mono text-neutral-500">{d.words.toLocaleString()}</span>
+            <span className="flex gap-3 font-mono text-neutral-500">
+              <span>{formatFileDate(d.modified)}</span>
+              <span className="w-[60px] text-right">{formatFileSize(d.bytes)}</span>
+            </span>
           </button>
         </li>
       ))}

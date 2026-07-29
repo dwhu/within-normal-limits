@@ -17,7 +17,12 @@ export type Calibration = {
   errorsThroughUnverified: number;
 };
 
-const carriesError = (s: Situation) => s.truth.error !== "NONE";
+// UNCATCHABLE is deliberately excluded: it is real error taxonomy for the ending's own
+// "what you could not have caught" heading (category 2), but it must never be tallied
+// here as a miss, because every document on the desk agreed — there was nothing to
+// verify against. Counting it would collapse category 2 into category 3 ("what got past
+// you"), which the design forbids as strongly as it forbids the reverse.
+const carriesError = (s: Situation) => s.truth.error !== "NONE" && s.truth.error !== "UNCATCHABLE";
 
 export function buildAnswer(state: State, script: Situation[]): AnswerRow[] {
   return state.resolutions.map((r) => {

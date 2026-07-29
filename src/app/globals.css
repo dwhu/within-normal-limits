@@ -36,6 +36,11 @@ body {
   --edc-ink: #1a1a1a;
   --vera-teal: #0f7b7b;
   --vera-face: #fbfbfa;
+  /* A genuinely dark fill (paired with light text) for controls that need to read as "on" or
+     "open" against --edc-face, not just inset-bordered — --edc-paper is lighter than
+     --edc-face, so it can't do this job on its own. */
+  --edc-face-active: #38352e;
+  --edc-ink-active: var(--edc-paper);
 }
 
 body {
@@ -56,6 +61,17 @@ body {
 
 .bevel-in {
   background: var(--edc-paper);
+  border-top: 1px solid var(--edc-shadow);
+  border-left: 1px solid var(--edc-shadow);
+  border-right: 1px solid var(--edc-light);
+  border-bottom: 1px solid var(--edc-light);
+}
+
+/* Same inset bevel as .bevel-in, but genuinely dark with light text — for controls that need
+   to read as pressed *and* on, like an open window's taskbar button. */
+.bevel-in-active {
+  background: var(--edc-face-active);
+  color: var(--edc-ink-active);
   border-top: 1px solid var(--edc-shadow);
   border-left: 1px solid var(--edc-shadow);
   border-right: 1px solid var(--edc-light);
