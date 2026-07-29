@@ -6,8 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 *Within Normal Limits* is a browser game: a Papers, Please-style simulation of a clinical research
 coordinator working a queue of documents alongside an AI assistant (VERA) who is confident, helpful,
-and sometimes wrong. Built as a take-home for Anthropic; the audience is developers who know nothing
-about clinical research.
+and sometimes wrong. The audience is developers who know nothing about clinical research.
 
 **The game is named *Within Normal Limits*.** The repo directory, the npm package, the spec
 filename, and the SIMULATED DOCUMENT banner across the whole `docs/` corpus still say `icf-please`,
@@ -23,7 +22,10 @@ value is in `VISION.md` and `docs/`.
 ```sh
 npm run dev              # next dev
 npm run build            # next build
-npm run lint             # eslint (docs/** is ignored)
+npm run check            # biome check — lint, format, import order (docs/** is ignored)
+npm run check:fix        # the same, writing fixes
+npm run lint             # biome lint only
+npm run format           # biome format, writing
 npm run typecheck        # tsc --noEmit
 npm test                 # vitest run
 npm run test:watch       # vitest watch
@@ -31,6 +33,10 @@ npm run test:watch       # vitest watch
 npx vitest run src/app/page.test.tsx        # single file
 npx vitest run -t "renders the app heading"  # single test by name
 ```
+
+Biome replaced ESLint — one binary for lint, format, and import order, configured in `biome.json`.
+`.github/workflows/ci.yml` runs `check`, `typecheck`, `test`, and `build` as four parallel jobs on
+every pull request, on the Node version pinned in `.nvmrc`. `npm run check:fix` before pushing.
 
 Vitest runs in jsdom with Testing Library and `@testing-library/jest-dom` matchers loaded globally
 (`vitest.setup.ts`); `globals: true`, so `describe`/`it` need no import, though existing tests import
