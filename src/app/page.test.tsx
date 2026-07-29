@@ -7,8 +7,6 @@ describe("Home", () => {
   it("renders the app heading", () => {
     render(<Home />);
 
-    expect(
-      screen.getByRole("heading", { level: 1, name: "icf-please" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "icf-please" })).toBeInTheDocument();
   });
 });

@@ -1,9 +1,5 @@
 # ICF Please
 
-## Background
-
-This is part of a take home assessment for Anthropic that is judged on creativity, execution, and judgement. You can review the full description in [docs/swe-assignment.pdf](docs/swe-assignment.pdf).
-
 ## Project Vision
 
 This game explores the use of AI by clinical research coordinators in the context of a clinical trial. The patients, staff and site are fictitious; however the trial is based on [NCT05651711](https://clinicaltrials.gov/study/NCT05651711), the details of the trial are present locally in [docs/NCT05651711.json](docs/NCT05651711.json). Trial documents generated for this game are fictitious.
