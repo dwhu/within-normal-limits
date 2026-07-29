@@ -1,1 +1,0 @@
-../../../docs/trial_documents/edc_manual.md

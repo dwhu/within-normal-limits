@@ -26,6 +26,7 @@ Check `git log` and the open PRs before assuming what exists.
 ```sh
 npm run dev              # next dev
 npm run build            # next build
+npm run content          # copy the 15 trial docs docs/ → public/, rebuild index.json
 npm run check            # biome check — lint, format, import order (docs/** is ignored)
 npm run check:fix        # the same, writing fixes
 npm run lint             # biome lint only
@@ -108,6 +109,12 @@ src/components/   desk/ (geometry, useWindows, Window, Taskbar, Desk)
                   windows/ · vera/Rail.tsx · screens/
 public/content/   documents/ (the 15 trial docs + index.json) · source/ (per-situation)
 ```
+
+**`public/content/documents/` is generated and gitignored — never edit it.** `npm run content`
+(wired into `predev` and `prebuild`) copies the fifteen documents out of `docs/trial_documents/` and
+rewrites `index.json`; edit the canon in `docs/`. These were symlinks into `docs/` until they broke
+the Vercel build — `next dev`/`next build` resolve them, Vercel's static-asset packaging does not.
+`public/content/source/` is authored by hand and committed, so it is not affected.
 
 **There is no `src/game/engine/` and no `src/game/content/situations/`.** An earlier attempt built a
 simulation layer there — a block clock with a real time budget, cross-day rollover, a queue builder,

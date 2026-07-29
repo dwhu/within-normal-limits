@@ -317,8 +317,17 @@ describe("set pieces", () => {
 
 describe("content on disk", () => {
   // vitest runs from the repo root, which is also where `public/` is served from.
-  const DOCS_DIR = resolve(process.cwd(), "public/content/documents");
+  //
+  // The trial documents are read from the `docs/` canon rather than from the copies under
+  // `public/content/documents/`, which `npm run content` generates at build time: what this
+  // suite is checking is the authored corpus, and reading it directly keeps the tests runnable
+  // on a fresh clone that has never built.
+  const DOCS_DIR = resolve(process.cwd(), "docs/trial_documents");
   const SOURCE_DIR = resolve(process.cwd(), "public/content/source");
+
+  // `ASSUMPTIONS.md` and `index.md` sit alongside the corpus as authoring notes and are not
+  // documents the player can open. The count assertion below is what keeps this list honest.
+  const NOT_DOCUMENTS = new Set(["ASSUMPTIONS.md", "index.md"]);
 
   /**
    * `1047-009` but not the `1047-009` inside `SHP-1047-0091` or `TX-1047-00298`. The corpus
@@ -355,7 +364,7 @@ describe("content on disk", () => {
     },
   ];
 
-  const docFiles = readdirSync(DOCS_DIR).filter((f) => f.endsWith(".md"));
+  const docFiles = readdirSync(DOCS_DIR).filter((f) => f.endsWith(".md") && !NOT_DOCUMENTS.has(f));
   const subjects = new Set(SCRIPT.map((s) => s.subject));
 
   it("reads the fifteen trial documents off disk", () => {

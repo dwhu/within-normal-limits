@@ -18,6 +18,10 @@ docs/swe-assignment.pdf
 /.next/
 /out/
 
+# the trial documents the viewer serves, copied out of docs/ by `npm run content`.
+# docs/trial_documents/ is the source of truth; these are generated, never edited.
+/public/content/documents/
+
 # production
 /build
 
