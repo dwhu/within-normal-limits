@@ -12,17 +12,14 @@ import type { Situation, State } from "@/game/types";
 // component's copy and an import-based check still passes, because both sides of the
 // comparison move together.
 //
-// This string must stay byte-identical to the paragraph as it actually appears in
-// docs/superpowers/specs/2026-07-28-icf-please-run-design.md (the run-design spec, in its
-// "Uncatchable by design" quote block) and docs/superpowers/plans/2026-07-28-icf-please-run.md
-// (the plan's UNCATCHABLE_WORDING literal). Those two are the ones that currently match this
-// text character-for-character, including the curly quotes around "not collected for this
-// study." VISION.md's "Uncatchable by design" section (around line 296) tells the same story
-// but as an earlier illustrative example with different placeholder subject IDs (1047-013 /
-// 1047-015) and straight quotes — it has never been reconciled with the concrete script
-// (1047-005 / 1047-010) the spec, plan, and this component actually use, so it is not a
-// verbatim match today. If you're updating any of these documents, update all of them, and
-// resolve that VISION.md drift while you're in there.
+// This paragraph is duplicated in four places: VISION.md ("Uncatchable by design"),
+// docs/superpowers/specs/2026-07-28-icf-please-run-design.md (the run-design spec, same
+// section), docs/superpowers/plans/2026-07-28-icf-please-run.md (the plan's
+// UNCATCHABLE_WORDING literal), and this component. All four currently agree byte-for-byte,
+// including the curly quotes around "not collected for this study" and the subject IDs
+// 1047-005 / 1047-010. This literal exists so that if any one of those four drifts from the
+// others — including this component's own copy — the corresponding test below fails instead
+// of the divergence going unnoticed.
 const EXPECTED_UNCATCHABLE_PARAGRAPH =
   "The blood filed under 1047-005 was drawn from 1047-010, and the other way round. " +
   "Nothing on your desk disagreed with anything else on your desk. The requisition form " +

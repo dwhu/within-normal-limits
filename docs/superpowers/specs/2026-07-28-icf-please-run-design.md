@@ -255,7 +255,7 @@ between the two places it appears:
 
 > The blood filed under 1047-005 was drawn from 1047-010, and the other way round. Nothing on your desk
 > disagreed with anything else on your desk. The requisition form has a field for participant
-> initials — field 5 — and it is pre-printed "not collected for this study." Had it been filled in, the
+> initials — field 5 — and it is pre-printed “not collected for this study.” Had it been filled in, the
 > mismatch would have been caught before the results ever reached you. That was decided by whoever
 > designed the form, not by you.
 
