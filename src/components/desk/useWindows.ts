@@ -10,7 +10,6 @@ export type WindowState = Rect & {
   id: WindowId;
   title: string;
   z: number;
-  open: boolean;
 };
 
 /** Where each window lands the first time it is opened. */
@@ -30,7 +29,7 @@ function viewport() {
 
 export function useWindows() {
   const [windows, setWindows] = useState<WindowState[]>([
-    { id: "queue", title: "Work Queue", ...PLACEMENT.queue, z: 1, open: true },
+    { id: "queue", title: "Work Queue", ...PLACEMENT.queue, z: 1 },
   ]);
 
   const focus = useCallback((id: WindowId) => {
@@ -49,7 +48,7 @@ export function useWindows() {
         }
         return [
           ...ws,
-          { id, title, ...clampToViewport(PLACEMENT[id], viewport()), z: top + 1, open: true },
+          { id, title, ...clampToViewport(PLACEMENT[id], viewport()), z: top + 1 },
         ];
       });
     },
