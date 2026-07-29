@@ -13,6 +13,16 @@ const afterDay1 = (): State =>
     { ...initialState, screen: "desk" } as State,
   );
 
+// Day 2's only situation (FIX-003) changes a roster line, so this is the case that
+// exercises the true before → after transition rather than a no-op day.
+const afterDay2 = (): State =>
+  [
+    { type: "ACCEPT" } as const,
+    { type: "ACCEPT" } as const,
+    { type: "BEGIN_DAY" } as const,
+    { type: "ACCEPT" } as const,
+  ].reduce((s, a) => reducer(s, a, FIXTURE_SCRIPT), { ...initialState, screen: "desk" } as State);
+
 const noop = () => {};
 
 describe("DayEnd", () => {
@@ -52,5 +62,10 @@ describe("DayEnd", () => {
 
     await userEvent.click(screen.getByRole("button", { name: /Skip day/ }));
     expect(onSkip).toHaveBeenCalled();
+  });
+
+  it("shows the roster line's true prior status, not the post-change status", () => {
+    render(<DayEnd state={afterDay2()} script={FIXTURE_SCRIPT} onBegin={noop} onSkip={noop} />);
+    expect(screen.getByText(/Screening → Enrolled/)).toBeInTheDocument();
   });
 });

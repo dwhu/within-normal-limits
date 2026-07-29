@@ -23,6 +23,9 @@ export type Email = {
 
 export type RosterChange = { subject: string; status: string };
 
+/** A roster change as actually committed: the status the subject held immediately before. */
+export type RosterTransition = { subject: string; from: string; to: string };
+
 export type Tally = {
   verified: number;
   errorsCaught: number;
@@ -78,6 +81,8 @@ export type State = {
   resolutions: Resolution[];
   inbox: Email[];
   roster: Roster;
+  /** The roster transitions committed when the most recently closed day closed. Replaced, not appended, each time a day closes. */
+  dayRosterChanges: RosterTransition[];
   tally: Tally;
 };
 

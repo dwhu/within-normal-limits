@@ -8,6 +8,7 @@ import type {
   OutcomeKey,
   Resolution,
   RosterChange,
+  RosterTransition,
   Situation,
   State,
   Tally,
@@ -29,6 +30,7 @@ export const initialState: State = {
   resolutions: [],
   inbox: [],
   roster: SEED_ROSTER,
+  dayRosterChanges: [],
   tally: EMPTY_TALLY,
 };
 
@@ -118,13 +120,25 @@ export function summariseDay(state: State, script: Situation[]): DaySummary {
 function applyConsequences(state: State, script: Situation[]): State {
   const { emails, rosterChanges } = summariseDay(state, script);
 
-  const roster = rosterChanges.reduce(
-    (acc, change) =>
-      acc.map((s) => (s.id === change.subject ? { ...s, status: change.status } : s)),
-    state.roster,
+  // Recorded here, as each change is applied, because this is the only moment the roster's
+  // prior status is still in hand — reconstructing it later by diffing would be a guess.
+  const { roster, dayRosterChanges } = rosterChanges.reduce(
+    (acc, change) => {
+      const from = acc.roster.find((s) => s.id === change.subject)?.status ?? change.status;
+      return {
+        roster: acc.roster.map((s) =>
+          s.id === change.subject ? { ...s, status: change.status } : s,
+        ),
+        dayRosterChanges: [
+          ...acc.dayRosterChanges,
+          { subject: change.subject, from, to: change.status },
+        ],
+      };
+    },
+    { roster: state.roster, dayRosterChanges: [] as RosterTransition[] },
   );
 
-  return { ...state, roster, inbox: [...state.inbox, ...emails] };
+  return { ...state, roster, dayRosterChanges, inbox: [...state.inbox, ...emails] };
 }
 
 /**

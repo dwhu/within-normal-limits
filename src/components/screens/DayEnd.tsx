@@ -18,8 +18,7 @@ type Props = {
 };
 
 export function DayEnd({ state, script, onBegin, onSkip }: Props) {
-  const { worked, emails, rosterChanges } = summariseDay(state, script);
-  const changedIds = rosterChanges.map((c) => c.subject);
+  const { worked, emails } = summariseDay(state, script);
 
   return (
     <div className="flex h-screen items-center justify-center p-8">
@@ -51,19 +50,17 @@ export function DayEnd({ state, script, onBegin, onSkip }: Props) {
             </>
           )}
 
-          {rosterChanges.length > 0 && (
+          {state.dayRosterChanges.length > 0 && (
             <>
               <h2 className="mt-6 tracking-widest">ROSTER CHANGES</h2>
-              {state.roster
-                .filter((s) => changedIds.includes(s.id))
-                .map((s) => {
-                  const next = rosterChanges.find((c) => c.subject === s.id);
-                  return (
-                    <div key={s.id} className="ml-2">
-                      {s.id} &nbsp;{s.name} &nbsp;{s.status} → {next?.status}
-                    </div>
-                  );
-                })}
+              {state.dayRosterChanges.map((t) => {
+                const subject = state.roster.find((s) => s.id === t.subject);
+                return (
+                  <div key={`${t.subject}-${t.from}-${t.to}`} className="ml-2">
+                    {t.subject} &nbsp;{subject?.name} &nbsp;{t.from} → {t.to}
+                  </div>
+                );
+              })}
             </>
           )}
 

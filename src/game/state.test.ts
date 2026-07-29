@@ -132,7 +132,7 @@ describe("reducer", () => {
     expect(s.roster.find((r) => r.id === "1047-019")?.status).toBe("Enrolled");
   });
 
-  it("commits each day's consequences exactly once, so a full run has no duplicate emails", () => {
+  it("commits each day's consequences exactly once: a full run's inbox has exactly the expected emails", () => {
     const s = run(
       start(),
       { type: "ACCEPT" },
@@ -140,7 +140,9 @@ describe("reducer", () => {
       { type: "BEGIN_DAY" },
       { type: "ACCEPT" },
     );
-    const ids = s.inbox.map((e) => e.id);
-    expect(new Set(ids).size).toBe(ids.length);
+    // Fails if a day's ladder rung is dropped (the original bug) and equally fails if a
+    // day is committed twice (a regression a plain "no duplicates" check would miss, since
+    // dropping consequences never produces a duplicate).
+    expect(s.inbox.map((e) => e.id)).toEqual(["ENR-1", "ENR-2", "AUD-1"]);
   });
 });
