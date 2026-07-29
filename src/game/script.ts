@@ -719,7 +719,7 @@ const DAY_4: Situation[] = [
       summary:
         "1047-021's screening packet is complete. EASI 18.6, vIGA-AD 4, BSA 19%, Worst " +
         "Pruritus NRS 7. Topical calcineurin inhibitor (tacrolimus) was discontinued " +
-        "22-DEC-2023, so the one-week washout is satisfied. The subject meets all inclusion " +
+        "30-DEC-2023, so the one-week washout is satisfied. The subject meets all inclusion " +
         "criteria. The entry is drafted and ready for your review.",
       entry: { easi: "18.6", viga: "4", bsa: "19", nrs: "7" },
       verdict: "eligible",
@@ -767,7 +767,7 @@ const DAY_4: Situation[] = [
     },
     debrief: {
       line:
-        "The 22-DEC-2023 stop date she cited is nowhere in the packet. The concomitant " +
+        "The 30-DEC-2023 stop date she cited is nowhere in the packet. The concomitant " +
         "medication log's tacrolimus row was never completed — two follow-up calls went " +
         "unanswered, and the washout was never confirmed.",
     },
@@ -777,22 +777,22 @@ const DAY_4: Situation[] = [
     id: "DE-1116",
     day: 4,
     type: "data-entry",
-    subject: "1047-006",
-    title: "Week 12 vitals",
+    subject: "1047-010",
+    title: "Week 16 vitals",
     blurb: "Vitals worksheet, four fields.",
     cost: 60,
     source: ["de-1116.md"],
     form: "vitals",
     vera: {
       summary:
-        "Vitals for 1047-006's Week 12 visit are complete. BP 124/78 mmHg, pulse 70 bpm, " +
-        "temperature 37.2 °C, weight 173.9 kg. No values outside the expected range for this " +
+        "Vitals for 1047-010's Week 16 visit are complete. BP 126/80 mmHg, pulse 74 bpm, " +
+        "temperature 36.9 °C, weight 76.4 kg. No values outside the expected range for this " +
         "visit. The entry is drafted and ready for your review.",
-      entry: { bp: "124/78", pulse: "70", temp: "37.2", weight: "173.9" },
+      entry: { bp: "126/80", pulse: "74", temp: "36.9", weight: "76.4" },
     },
     truth: {
       error: "fabrication",
-      entry: { bp: "124/78", pulse: "70", temp: "37.2", weight: "78.9" },
+      entry: { bp: "126/80", pulse: "74", temp: "36.9", weight: "" },
     },
     outcomes: {
       accepted: {
@@ -800,7 +800,7 @@ const DAY_4: Situation[] = [
         email: {
           id: "DQ-0122",
           from: "Amgen Data Management",
-          subject: "Query DQ-0122 — subject 1047-006",
+          subject: "Query DQ-0122 — subject 1047-010",
           body: "Reported vital signs do not match source. Please verify and respond.",
         },
       },
@@ -810,15 +810,15 @@ const DAY_4: Situation[] = [
         email: {
           id: "DQ-0122",
           from: "Amgen Data Management",
-          subject: "Query DQ-0122 — subject 1047-006",
+          subject: "Query DQ-0122 — subject 1047-010",
           body: "Reported vital signs do not match source. Please verify and respond.",
         },
       },
     },
     debrief: {
       line:
-        "Source printed 78.9 kg (173.9 lb) on the same line. She wrote 173.9 in the " +
-        "kilograms field — the pounds figure, entered as kilograms.",
+        "Week 16 doesn't collect weight — the worksheet carries no row for it. She drafted " +
+        "76.4 kg anyway.",
     },
   },
 
