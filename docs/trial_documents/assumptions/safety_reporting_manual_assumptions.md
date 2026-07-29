@@ -156,14 +156,24 @@ additional invention layered on that list.
 | §22.1 | The safety database is the **"HCR Global Safety Database"** and does not interface with Veriscribe EDC | Invented name. The two-system architecture is universal. | Med |
 | §22.3–22.4 | The nine confirmation points and the eight discrepancy types | Invented; drawn from common reconciliation practice. | High |
 
-## 12. The worked example — participant 1047-006 (§12.3)
+## 12. The worked example — participant 1047-025 (§12.3)
 
 Everything in this subsection is invented except the site, personnel, contacts, visit schedule, and
 the fact that cellulitis occurred twice as a serious event in the rocatinlimab arm (canon).
 
+> **Corpus fix, 29-JUL-2026 (third pass).** This worked example originally used participant 1047-006,
+> randomized 20-FEB-2023 and hospitalized with cellulitis around its Week 12 visit in May 2023. The
+> game roster carries 1047-006 (M. Vasquez) enrolled and at Week 12 in January 2024, with a live
+> day-4 situation (DE-1116) built on that subject — a subject cannot be randomized twice. Following
+> the precedent set for edc_manual.md and irt_manual.md (both retargeted to 1047-023/1047-024),
+> retargeted every occurrence in this document to **1047-025**, an unused ID past the site's 22
+> issued screening numbers. No other detail of the example changed; the randomization number (205117),
+> kit numbers (441907/441908), and case reference (ROC-2023-000412) are unique to this document and
+> did not require changing.
+
 | Location in doc | Assumption | Rationale | Confidence |
 |---|---|---|---|
-| §12.3 | Participant **1047-006**, male, born 1976, age 47, 88.4 kg, 179 cm | 1047-006 is within the canon range of 14 randomized at Site 1047. Demographics invented. | High |
+| §12.3 | Participant **1047-025**, male, born 1976, age 47, 88.4 kg, 179 cm | 1047-025 is an unused placeholder ID past the site's 22 issued screening numbers, chosen to resolve a collision with the game roster's 1047-006. Demographics invented. | High |
 | §12.3 | Consent **06-FEB-2023**; randomized **20-FEB-2023**; randomization number **205117** | Consistent with canon site history (first randomized 24-JAN-2023). Randomization number is 6-digit per STUDY_FACTS §11. | High |
 | §12.3 | Week 12 dose on **15-MAY-2023** = Day 85; onset **22-MAY-2023** = Day 92 | Arithmetically derived from Day 1 = 20-FEB-2023 against the canon SoA. Verified. | High |
 | §12.3 | Kit numbers **441907 / 441908** | 6-digit, within the canon range 100001–999999. Two kits at one visit is a simplification — the canon states one carton of 2 PFS = one dose, so a single kit number would be more strictly correct. Flagged as a minor internal inconsistency. | **Low** |

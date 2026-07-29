@@ -137,6 +137,16 @@ right reaches **14 randomized of 22 screened**.
 > lab_manual.md, safety_reporting_manual.md) with a live day-4 situation (DE-1116) built on that.
 > budget.md's 1047-006 mention was the outlier; retargeted to 1047-004.
 
+> **Corpus fix, 29-JUL-2026 (third pass).** safety_reporting_manual.md §12.3's fully worked SAE
+> example used participant 1047-006, randomized 20-FEB-2023 and hospitalized with cellulitis around
+> its Week 12 visit in May 2023 — but the roster carries 1047-006 M. Vasquez enrolled and at Week 12
+> in January 2024, with DE-1116 (day 4) built on that subject, and a subject cannot be randomized
+> twice. As with the two fixes above, the roster was right and the corpus example was the outlier.
+> Retargeted every occurrence in §12.3 (and the two earlier references to the same worked example, in
+> §11.3's email-subject-line illustration and §12.2's redaction reminder) to **1047-025**, an unused
+> ID past the site's 22 issued screening numbers. 1047-023 and 1047-024 were already spent on the two
+> fixes above.
+
 ---
 
 ## 4. The script

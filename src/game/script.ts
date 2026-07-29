@@ -704,4 +704,276 @@ const DAY_3: Situation[] = [
   },
 ];
 
-export const SCRIPT: Situation[] = [...DAY_1, ...DAY_2, ...DAY_3];
+const DAY_4: Situation[] = [
+  {
+    id: "SCR-0221",
+    day: 4,
+    type: "screening",
+    subject: "1047-021",
+    title: "Eligibility review",
+    blurb: "Screening packet, eight pages.",
+    cost: 90,
+    source: ["scr-0221.md"],
+    form: "eligibility",
+    vera: {
+      summary:
+        "1047-021's screening packet is complete. EASI 18.6, vIGA-AD 4, BSA 19%, Worst " +
+        "Pruritus NRS 7. Topical calcineurin inhibitor (tacrolimus) was discontinued " +
+        "22-DEC-2023, so the one-week washout is satisfied. The subject meets all inclusion " +
+        "criteria. The entry is drafted and ready for your review.",
+      entry: { easi: "18.6", viga: "4", bsa: "19", nrs: "7" },
+      verdict: "eligible",
+    },
+    truth: {
+      error: "fabrication",
+      entry: { easi: "18.6", viga: "4", bsa: "19", nrs: "7" },
+      verdict: "screen-fail",
+    },
+    outcomes: {
+      accepted: {
+        score: { errorsAccepted: 1, randomized: 1 },
+        roster: { subject: "1047-021", status: "Enrolled" },
+        email: {
+          id: "DQ-0121",
+          from: "Harborlight Clinical Research",
+          subject: "Protocol deviation — subject 1047-021",
+          body:
+            "Randomization recorded for subject 1047-021 with the topical calcineurin " +
+            "inhibitor washout unconfirmed at Day 1 — no stop date was ever obtained for " +
+            "tacrolimus 0.1% ointment, so exclusion criterion E7 (Protocol §7) could not be " +
+            "verified. Logged as a protocol deviation. Please provide a corrective and " +
+            "preventive action plan within 5 business days.",
+        },
+      },
+      reviewedCorrect: {
+        score: { errorsCaught: 1 },
+        roster: { subject: "1047-021", status: "Screen failed (TCI washout not confirmed)" },
+      },
+      reviewedWrong: {
+        score: { errorsAccepted: 1, randomized: 1 },
+        roster: { subject: "1047-021", status: "Enrolled" },
+        email: {
+          id: "DQ-0121",
+          from: "Harborlight Clinical Research",
+          subject: "Protocol deviation — subject 1047-021",
+          body:
+            "Randomization recorded for subject 1047-021 with the topical calcineurin " +
+            "inhibitor washout unconfirmed at Day 1 — no stop date was ever obtained for " +
+            "tacrolimus 0.1% ointment, so exclusion criterion E7 (Protocol §7) could not be " +
+            "verified. Logged as a protocol deviation. Please provide a corrective and " +
+            "preventive action plan within 5 business days.",
+        },
+      },
+    },
+    debrief: {
+      line:
+        "The 22-DEC-2023 stop date she cited is nowhere in the packet. The concomitant " +
+        "medication log's tacrolimus row was never completed — two follow-up calls went " +
+        "unanswered, and the washout was never confirmed.",
+    },
+  },
+
+  {
+    id: "DE-1116",
+    day: 4,
+    type: "data-entry",
+    subject: "1047-006",
+    title: "Week 12 vitals",
+    blurb: "Vitals worksheet, four fields.",
+    cost: 60,
+    source: ["de-1116.md"],
+    form: "vitals",
+    vera: {
+      summary:
+        "Vitals for 1047-006's Week 12 visit are complete. BP 124/78 mmHg, pulse 70 bpm, " +
+        "temperature 37.2 °C, weight 173.9 kg. No values outside the expected range for this " +
+        "visit. The entry is drafted and ready for your review.",
+      entry: { bp: "124/78", pulse: "70", temp: "37.2", weight: "173.9" },
+    },
+    truth: {
+      error: "fabrication",
+      entry: { bp: "124/78", pulse: "70", temp: "37.2", weight: "78.9" },
+    },
+    outcomes: {
+      accepted: {
+        score: { errorsAccepted: 1 },
+        email: {
+          id: "DQ-0122",
+          from: "Amgen Data Management",
+          subject: "Query DQ-0122 — subject 1047-006",
+          body: "Reported vital signs do not match source. Please verify and respond.",
+        },
+      },
+      reviewedCorrect: { score: { errorsCaught: 1 } },
+      reviewedWrong: {
+        score: { errorsAccepted: 1 },
+        email: {
+          id: "DQ-0122",
+          from: "Amgen Data Management",
+          subject: "Query DQ-0122 — subject 1047-006",
+          body: "Reported vital signs do not match source. Please verify and respond.",
+        },
+      },
+    },
+    debrief: {
+      line:
+        "Source printed 78.9 kg (173.9 lb) on the same line. She wrote 173.9 in the " +
+        "kilograms field — the pounds figure, entered as kilograms.",
+    },
+  },
+
+  {
+    id: "SCR-0222",
+    day: 4,
+    type: "screening",
+    subject: "1047-022",
+    title: "Eligibility review",
+    blurb: "Screening packet, eight pages.",
+    cost: 90,
+    source: ["scr-0222.md"],
+    form: "eligibility",
+    vera: {
+      summary:
+        "1047-022's screening packet is complete. EASI 24.1, vIGA-AD 4, BSA 28%, Worst " +
+        "Pruritus NRS 8. Topical corticosteroid was last applied 20-DEC-2023, 23 days before " +
+        "planned Day 1 — the one-week washout is satisfied. The subject meets all inclusion " +
+        "criteria. The entry is drafted and ready for your review.",
+      entry: { easi: "24.1", viga: "4", bsa: "28", nrs: "8" },
+      verdict: "eligible",
+    },
+    truth: {
+      error: "NONE",
+      entry: { easi: "24.1", viga: "4", bsa: "28", nrs: "8" },
+      verdict: "eligible",
+    },
+    outcomes: {
+      accepted: {
+        score: { randomized: 1 },
+        roster: { subject: "1047-022", status: "Enrolled" },
+      },
+      reviewedCorrect: {
+        score: { randomized: 1 },
+        roster: { subject: "1047-022", status: "Enrolled" },
+      },
+      reviewedWrong: {
+        score: {},
+        roster: { subject: "1047-022", status: "Screen failed" },
+        email: {
+          id: "DQ-0123",
+          from: "Amgen Data Management",
+          subject: "Query DQ-0123 — subject 1047-022",
+          body:
+            "Eligibility determination recorded as screen failure. Source documents " +
+            "indicate all inclusion criteria were met and the topical corticosteroid washout " +
+            "was satisfied. Please verify and respond.",
+        },
+      },
+    },
+    debrief: {
+      line: "She was right. Eligible on every criterion, washout satisfied by more than three weeks.",
+    },
+  },
+
+  {
+    id: "SAF-0035",
+    day: 4,
+    type: "safety",
+    subject: "1047-005",
+    title: "Telephone safety follow-up",
+    blurb: "Telephone contact worksheet, one page.",
+    cost: 60,
+    source: ["saf-0035.md"],
+    form: "safety",
+    vera: {
+      summary:
+        "1047-005 called to report mild, transient nausea the evening of their Week 16 " +
+        "dosing visit (Day 113, 04-JAN-2024): onset about nine hours after injection, " +
+        "resolved without treatment within thirty minutes, no medical attention sought. This " +
+        "is an adverse event; the determination is not serious, meaning none of the six " +
+        "seriousness criteria in the safety reporting manual are met. The entry is drafted " +
+        "and ready for your review.",
+      entry: {},
+      verdict: "not-serious",
+    },
+    truth: {
+      error: "NONE",
+      entry: {},
+      verdict: "not-serious",
+    },
+    outcomes: {
+      accepted: { score: {} },
+      reviewedCorrect: { score: {} },
+      reviewedWrong: {
+        score: { errorsAccepted: 1 },
+        email: {
+          id: "DQ-0124",
+          from: "Amgen Global Patient Safety",
+          subject: "Query DQ-0124 — subject 1047-005",
+          body:
+            "Adverse event determination does not match source. Source documents indicate " +
+            "the event meets none of the six seriousness criteria in the safety reporting " +
+            "manual. Please verify and respond.",
+        },
+      },
+    },
+    debrief: {
+      line:
+        "Nausea, resolved in thirty minutes, no treatment, no medical attention sought. None " +
+        "of the six criteria. Not serious.",
+    },
+  },
+
+  {
+    id: "SCR-0218",
+    day: 4,
+    type: "screening",
+    subject: "1047-018",
+    title: "Eligibility review",
+    blurb: "Screening packet, eight pages.",
+    cost: 90,
+    source: ["scr-0218.md"],
+    form: "eligibility",
+    vera: {
+      summary:
+        "1047-018's screening packet is complete. EASI 26.8, vIGA-AD 4, BSA 35%, Worst " +
+        "Pruritus NRS 9. Topical corticosteroid was last applied 15-DEC-2023, 28 days before " +
+        "planned Day 1 — the one-week washout is satisfied. The subject meets all inclusion " +
+        "criteria. The entry is drafted and ready for your review.",
+      entry: { easi: "26.8", viga: "4", bsa: "35", nrs: "9" },
+      verdict: "eligible",
+    },
+    truth: {
+      error: "NONE",
+      entry: { easi: "26.8", viga: "4", bsa: "35", nrs: "9" },
+      verdict: "eligible",
+    },
+    outcomes: {
+      accepted: {
+        score: { randomized: 1 },
+        roster: { subject: "1047-018", status: "Enrolled" },
+      },
+      reviewedCorrect: {
+        score: { randomized: 1 },
+        roster: { subject: "1047-018", status: "Enrolled" },
+      },
+      reviewedWrong: {
+        score: {},
+        roster: { subject: "1047-018", status: "Screen failed" },
+        email: {
+          id: "DQ-0125",
+          from: "Amgen Data Management",
+          subject: "Query DQ-0125 — subject 1047-018",
+          body:
+            "Eligibility determination recorded as screen failure. Source documents " +
+            "indicate all inclusion criteria were met and the topical corticosteroid washout " +
+            "was satisfied. Please verify and respond.",
+        },
+      },
+    },
+    debrief: {
+      line: "Eligible on every criterion. EASI 26.8 against a threshold of 16.",
+    },
+  },
+];
+
+export const SCRIPT: Situation[] = [...DAY_1, ...DAY_2, ...DAY_3, ...DAY_4];

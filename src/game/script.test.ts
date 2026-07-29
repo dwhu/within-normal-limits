@@ -117,3 +117,21 @@ describe("SCRIPT — day 3", () => {
     expect(stated.some((v) => !real.includes(v))).toBe(true);
   });
 });
+
+describe("SCRIPT — day 4", () => {
+  const day4 = SCRIPT.filter((s) => s.day === 4);
+
+  it("has five situations, three of them screening packets", () => {
+    expect(day4).toHaveLength(5);
+    expect(day4.filter((s) => s.cost === 90)).toHaveLength(3);
+  });
+
+  it("ends the run on L. Lit", () => {
+    expect(SCRIPT.at(-1)!.id).toBe("SCR-0218");
+    expect(SCRIPT.at(-1)!.subject).toBe("1047-018");
+  });
+
+  it("lets her be right on the last decision of the run", () => {
+    expect(SCRIPT.at(-1)!.truth.error).toBe("NONE");
+  });
+});

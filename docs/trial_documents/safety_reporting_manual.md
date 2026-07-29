@@ -195,7 +195,7 @@ Cross-references in this manual are to numbered sections of this manual unless s
 
 ### The four minimum criteria for a valid initial report — send as soon as you have all four
 
-1. An **identifiable participant** (participant number, e.g. 1047-006 — never a name)
+1. An **identifiable participant** (participant number, e.g. 1047-025 — never a name)
 2. An **identifiable reporter** (your name, role, site, and contact details)
 3. A **suspect product** (blinded IP, Protocol 20210143)
 4. An **event** (what happened, in words)
@@ -859,7 +859,7 @@ elements inside 24 hours and send the discharge summary as a follow-up when it a
 **Email subject line format:**
 
 ```
-SAE INITIAL | 20210143 | Site 1047 | 1047-006 | Cellulitis | Awareness 25-MAY-2023 08:40 PT
+SAE INITIAL | 20210143 | Site 1047 | 1047-025 | Cellulitis | Awareness 25-MAY-2023 08:40 PT
 ```
 
 Use `SAE FOLLOW-UP #n` for follow-ups, keeping the same participant number and event term so the case
@@ -867,7 +867,7 @@ threads.
 
 **Never put a participant name, initials, date of birth, address, medical record number, or any other
 direct identifier in the email body, the subject line, the form, or any attachment.** Identify
-participants **only** by participant number (1047-006) and, where required, year of birth. Redact
+participants **only** by participant number (1047-025) and, where required, year of birth. Redact
 every attachment before it leaves the site — see §12.2, item 18.
 
 ### 11.4 Confirming receipt
@@ -1095,9 +1095,9 @@ sufficient evidence that you met the clock.** File them and go home.
     each page. Verify the redaction on the *scanned* copy — highlighter and some PDF annotation tools
     do not survive flattening.
 
-### 12.3 Fully worked example — participant 1047-006
+### 12.3 Fully worked example — participant 1047-025
 
-**The situation.** Participant 1047-006 is a 47-year-old man, randomized 20-FEB-2023, who received his
+**The situation.** Participant 1047-025 is a 47-year-old man, randomized 20-FEB-2023, who received his
 Week 12 dose (dose 5 of 7) on 15-MAY-2023 (Day 85). On 22-MAY-2023 (Day 92) he developed pain,
 erythema, and swelling of the left forearm over an area of long-standing lichenified AD. He saw his
 primary care physician on 23-MAY-2023 and was given oral cephalexin. He worsened overnight and
@@ -1142,7 +1142,7 @@ minutes after awareness.
                                       been admitted to hospital on 24-MAY-2023.
 
 4.  PARTICIPANT
-    4a. Participant number .......... 1047-006
+    4a. Participant number .......... 1047-025
     4b. Randomization number ........ 205117
     4c. Year of birth ............... 1976      4d. Age at onset: 47
     4e. Sex ......................... [ ] Female   [X] Male
@@ -1208,7 +1208,7 @@ minutes after awareness.
     No AD rescue therapy has been initiated.
 
 12. EVENT NARRATIVE
-    Participant 1047-006 is a 47-year-old man with a 41-year history of
+    Participant 1047-025 is a 47-year-old man with a 41-year history of
     moderate-to-severe atopic dermatitis, randomized on 20-FEB-2023, who has
     received 5 of 7 doses of blinded investigational product. His most recent dose
     was at the Week 12 visit on 15-MAY-2023 (Day 85), administered into the left
@@ -1292,7 +1292,7 @@ minutes after awareness.
 ```
 
 **Transmission.** Emailed to `rocket.safety@harborlightcro.com` at 14:15 PT on 25-MAY-2023, subject
-`SAE INITIAL | 20210143 | Site 1047 | 1047-006 | Cellulitis | Awareness 25-MAY-2023 08:40 PT`; faxed
+`SAE INITIAL | 20210143 | Site 1047 | 1047-025 | Cellulitis | Awareness 25-MAY-2023 08:40 PT`; faxed
 to +1 (888) 555-0177 at 14:22 PT, confirmation sheet retained. No telephone call was required (not a
 death, not life-threatening, causality assessed). Automated acknowledgement received 14:16 PT. Case
 acknowledgement with reference **ROC-2023-000412** received 26-MAY-2023 at 09:12 PT. Entered in
