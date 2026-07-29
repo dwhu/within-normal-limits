@@ -99,9 +99,7 @@ function applyConsequences(state: State, day: Day, script: Situation[]): State {
     if (outcome.email) emails.push(outcome.email);
     if (outcome.roster) {
       const change = outcome.roster;
-      roster = roster.map((s) =>
-        s.id === change.subject ? { ...s, status: change.status } : s,
-      );
+      roster = roster.map((s) => (s.id === change.subject ? { ...s, status: change.status } : s));
     }
   }
 
@@ -119,9 +117,8 @@ export function reducer(state: State, action: Action, script: Situation[]): Stat
     case "SUBMIT": {
       const situation = script[state.index];
       const valuesOk = valuesMatch(action.values, situation.truth.entry);
-      const verdictOk = situation.truth.verdict === undefined
-        ? true
-        : action.verdict === situation.truth.verdict;
+      const verdictOk =
+        situation.truth.verdict === undefined ? true : action.verdict === situation.truth.verdict;
       const correct = valuesOk && verdictOk;
       const outcomeKey: OutcomeKey = correct ? "reviewedCorrect" : "reviewedWrong";
 
