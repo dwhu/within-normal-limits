@@ -125,6 +125,18 @@ right reaches **14 randomized of 22 screened**.
 > randomization walkthrough used 1047-019, which the script has still in screening in Jan 2024
 > (SCR-0219); retargeted to 1047-023, an unused ID just past the site's 22 issued screening numbers.
 
+> **Corpus fix, 29-JUL-2026 (second pass).** edc_manual.md's UI-walkthrough example (dashboard row,
+> casebook, visit folder, vitals/randomization/EASI forms, audit trail, e-signature) put 1047-009 at
+> Week 24 in December 2023. The roster and DE-1109 (day 1's hand-worked vitals) put 1047-009 at
+> Week 8; pharmacy_manual.md and monitoring_plan.md already used 1047-009 consistent with Week 8, so
+> the edc_manual.md walkthrough was the outlier. Retargeted the walkthrough's subject to 1047-024, an
+> unused placeholder ID; no other change, since the example was otherwise self-consistent. Separately,
+> budget.md's §7.2 realised-value table named 1047-006 as the withdrawal-by-subject early
+> termination, but the roster already names 1047-004 L. Auguste for that role, and 1047-006
+> M. Vasquez is enrolled/on-treatment everywhere else in the corpus (edc_manual.md, irt_manual.md,
+> lab_manual.md, safety_reporting_manual.md) with a live day-4 situation (DE-1116) built on that.
+> budget.md's 1047-006 mention was the outlier; retargeted to 1047-004.
+
 ---
 
 ## 4. The script
