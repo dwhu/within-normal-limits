@@ -27,7 +27,10 @@ describe("documents", () => {
   });
 
   it("throws a named error when a document is missing", async () => {
-    vi.stubGlobal("fetch", vi.fn(async () => ({ ok: false, status: 404 })));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({ ok: false, status: 404 })),
+    );
 
     await expect(loadDocument("nope.md")).rejects.toThrow("nope.md");
   });
