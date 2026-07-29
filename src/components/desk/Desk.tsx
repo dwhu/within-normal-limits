@@ -42,6 +42,7 @@ export function Desk({ state, dispatch, script }: Props) {
   };
 
   const submit = (values: FormValues, verdict?: string) => {
+    close("viewer");
     close("ecrf");
     dispatch({ type: "SUBMIT", values, verdict });
   };

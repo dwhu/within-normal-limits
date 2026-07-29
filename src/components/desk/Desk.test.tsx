@@ -75,6 +75,29 @@ describe("Desk", () => {
     vi.unstubAllGlobals();
   });
 
+  it("closes the source viewer along with the form on submit, not just on accept", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({ ok: true, text: async () => "source text" })),
+    );
+
+    const dispatch = vi.fn();
+    render(<Desk state={desk()} dispatch={dispatch} script={FIXTURE_SCRIPT} />);
+
+    await userEvent.click(screen.getByRole("button", { name: /Manually review/ }));
+    await userEvent.click(screen.getByRole("button", { name: "fix-001.md" }));
+    expect(screen.getByLabelText("Find")).toBeInTheDocument();
+
+    await userEvent.type(screen.getByLabelText("BP sitting"), "128/82");
+    await userEvent.type(screen.getByLabelText("Pulse"), "72");
+    await userEvent.click(screen.getByRole("button", { name: /Submit to database/ }));
+
+    expect(dispatch).toHaveBeenCalledWith(expect.objectContaining({ type: "SUBMIT" }));
+    expect(screen.queryByLabelText("Find")).not.toBeInTheDocument();
+
+    vi.unstubAllGlobals();
+  });
+
   it("does not leak values typed during manual review into the next item, even after Accept", async () => {
     // Two same-day, same-form items: the first is assisted (so "Accept as drafted" is
     // available) and the second reuses the vitals template, so a leaked value from the
