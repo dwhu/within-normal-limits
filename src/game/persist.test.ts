@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { clear, load, SAVE_KEY, save } from "@/game/persist";
 import { initialState } from "@/game/state";
@@ -29,5 +29,35 @@ describe("persistence", () => {
     save(initialState);
     clear();
     expect(load()).toBeNull();
+  });
+
+  describe("when localStorage throws", () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it("save() does not throw when setItem throws (e.g. a full store)", () => {
+      vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+        throw new Error("QuotaExceededError");
+      });
+
+      expect(() => save(initialState)).not.toThrow();
+    });
+
+    it("load() returns null rather than throwing when getItem throws", () => {
+      vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
+        throw new Error("localStorage unavailable");
+      });
+
+      expect(load()).toBeNull();
+    });
+
+    it("clear() does not throw when removeItem throws", () => {
+      vi.spyOn(Storage.prototype, "removeItem").mockImplementation(() => {
+        throw new Error("localStorage unavailable");
+      });
+
+      expect(() => clear()).not.toThrow();
+    });
   });
 });
