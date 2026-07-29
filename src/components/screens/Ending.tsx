@@ -5,7 +5,7 @@ import { useState } from "react";
 import { buildAnswer, calibrate } from "@/game/ending";
 import type { Situation, State } from "@/game/types";
 
-const UNCATCHABLE_WORDING =
+export const UNCATCHABLE_WORDING =
   "The blood filed under 1047-005 was drawn from 1047-010, and the other way round. " +
   "Nothing on your desk disagreed with anything else on your desk. The requisition form " +
   "has a field for participant initials — field 5 — and it is pre-printed “not " +
@@ -65,6 +65,10 @@ export function Ending({ state, script }: Props) {
               {preventable.length > 0 && (
                 <>
                   <h2 className="mt-8 tracking-widest">WHAT GOT PAST YOU</h2>
+                  <p className="mt-2 max-w-[70ch]">
+                    These were in the source. Opening it would have found them, at the price the
+                    clock had already shown you.
+                  </p>
                   {preventable.map((r) => (
                     <p key={r.id} className="mt-2 max-w-[70ch]">
                       {r.id} · {r.subject}
