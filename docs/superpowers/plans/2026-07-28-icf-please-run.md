@@ -13,7 +13,8 @@
 - **Path alias:** `@/*` → `./src/*`. Import as `@/game/types`, never by relative path across directories.
 - **Test command:** `npm test` (vitest run). Single file: `npx vitest run src/path/file.test.ts`.
 - **Typecheck:** `npm run typecheck` must pass. `strict: true` — no `any`, no non-null assertions to dodge a type error.
-- **Dates are `DD-MMM-YYYY`** everywhere in game-facing copy (e.g. `08-JAN-2024`). Never ISO, never US-numeric.
+- **Dates are `DD-MMM-YYYY`** (e.g. `08-JAN-2024`) in everything the fiction produces: source documents, eCRF fields, emails, queries, the day-end summary, the audit finding. Never ISO, never US-numeric.
+  **The taskbar clock is the one exception** and reads OS-style (`Mon 08 Jan 2024`), because it is the operating system's chrome rather than the trial's paperwork — the prototype does the same. Do not "correct" it.
 - **Subject IDs are `1047-NNN`.** Roster and email copy render them as `1047-018 · L. Lit`. Never name-only.
 - **Temperatures render as `2–8 °C`** (en dash, space before °C).
 - **Protocol reference string:** `Protocol 20210143, Amendment 3 (29-NOV-2023)`.
