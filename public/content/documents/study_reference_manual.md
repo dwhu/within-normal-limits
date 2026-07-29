@@ -1,0 +1,1 @@
+../../../docs/trial_documents/study_reference_manual.md

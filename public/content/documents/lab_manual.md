@@ -1,0 +1,1 @@
+../../../docs/trial_documents/lab_manual.md

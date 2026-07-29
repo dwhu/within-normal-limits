@@ -1,0 +1,1 @@
+../../../docs/trial_documents/investigators_brochure.md
