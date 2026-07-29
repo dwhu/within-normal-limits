@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+
 import type { WindowId, WindowState } from "@/components/desk/useWindows";
 
 const DAY_LABEL: Record<number, string> = {
@@ -18,6 +20,13 @@ export function formatClock(minutes: number): string {
   return `${h12}:${String(m).padStart(2, "0")} ${h24 < 12 ? "AM" : "PM"}`;
 }
 
+/** What the Start-style EDC button opens — every launchable window that isn't the base queue. */
+const LAUNCHERS: { id: WindowId; title: string; label: string }[] = [
+  { id: "inbox", title: "Inbox", label: "Inbox" },
+  { id: "roster", title: "Subject Roster", label: "Roster" },
+  { id: "documents", title: "Documents", label: "Documents" },
+];
+
 type Props = {
   windows: WindowState[];
   clock: number;
@@ -27,37 +36,55 @@ type Props = {
 };
 
 export function Taskbar({ windows, clock, day, onFocus, onOpen }: Props) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onPointerDown = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onPointerDown);
+    return () => document.removeEventListener("mousedown", onPointerDown);
+  }, [menuOpen]);
+
   return (
     <div className="bevel-out absolute inset-x-0 bottom-0 flex h-[30px] items-center gap-1 px-1">
-      <button
-        type="button"
-        className="bevel-out px-2 py-0.5"
-        onClick={() => onOpen("inbox", "Inbox")}
-      >
-        Inbox
-      </button>
-      <button
-        type="button"
-        className="bevel-out px-2 py-0.5"
-        onClick={() => onOpen("roster", "Subject Roster")}
-      >
-        Roster
-      </button>
-      <button
-        type="button"
-        className="bevel-out px-2 py-0.5"
-        onClick={() => onOpen("documents", "Documents")}
-      >
-        Documents
-      </button>
+      <div ref={menuRef} className="relative h-full">
+        <button
+          type="button"
+          className={`${menuOpen ? "bevel-in" : "bevel-out"} h-full px-2 py-0.5 font-bold`}
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          EDC
+        </button>
 
-      {windows.length > 0 && <div className="bevel-in mx-1 h-[20px] w-px" />}
+        {menuOpen && (
+          <div className="bevel-out absolute bottom-full left-0 mb-1 flex w-[140px] flex-col py-0.5">
+            {LAUNCHERS.map((l) => (
+              <button
+                key={l.id}
+                type="button"
+                className="px-2 py-1 text-left hover:bg-[#dce6f2]"
+                onClick={() => {
+                  onOpen(l.id, l.title);
+                  setMenuOpen(false);
+                }}
+              >
+                {l.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
 
       {windows.map((w) => (
         <button
           key={w.id}
           type="button"
-          className="bevel-in max-w-[160px] truncate px-2 py-0.5"
+          className="bevel-in-active max-w-[160px] truncate px-2 py-0.5"
           onClick={() => onFocus(w.id)}
         >
           {w.title}
