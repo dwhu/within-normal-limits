@@ -44,8 +44,14 @@ export const FORMS: Record<FormId, FormSpec> = {
     },
   },
   safety: {
+    // The visit field is what makes a misattribution catchable. Without it the form is a
+    // verdict radio and nothing else, so an error of the form "right event, wrong visit"
+    // has nowhere to land — the player could submit VERA's draft untouched and be scored
+    // correct. Every safety source document prints the visit under DOSING HISTORY
+    // REFERENCED, so the check is comparing one line of her draft against one line of the
+    // note.
     title: "eCRF — ADVERSE EVENT",
-    fields: [],
+    fields: [{ name: "visit", label: "Visit at event onset", hint: "Week n" }],
     verdict: {
       label: "Determination",
       options: [

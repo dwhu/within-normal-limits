@@ -257,13 +257,13 @@ This is the landing page after login.
 │ Participants                                     [+ Add Participant]  [Search ____] │
 │                                                                                     │
 │  ID        Status          Last visit    Next due     Forms   Qry  Sig   Flags      │
-│  1047-001  ● Completed     W36 08-NOV    —            ▣ 100%   0   ✔     —          │
+│  1047-035  ● Completed     W36 08-NOV    —            ▣ 100%   0   ✔     —          │
 │  1047-006  ● On treatment  W12 04-DEC    W16 01-JAN   ▨  92%   2   ◷    ⏱ 1 overdue │
-│  1047-009  ● On treatment  W08 06-DEC    W12 03-JAN   ▨  88%   3   ◷     —          │
 │  1047-011  ◐ Screening     Scr 05-DEC    D1  12-DEC   ▨  60%   1   ◷    ⌁ eDiary 64%│
 │  1047-012  ○ Screen fail   Scr 21-NOV    —            ▣ 100%   0   ✔     —          │
 │  1047-013  ● On treatment  W20 07-DEC    W24 04-JAN   ▨  95%   0   ◷    ⏱ 1 overdue │
 │  1047-014  ⊘ Early term.   ET  12-OCT    —            ▨  97%   0   ◷     —          │
+│  1047-024  ● On treatment  W08 06-DEC    W12 03-JAN   ▨  88%   3   ◷     —          │
 │                                                       ‹ 1 2 ›   Showing 7 of 23     │
 └────────────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -298,7 +298,7 @@ Click a participant ID.
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────┐
-│ 1047-009 · Randomized 204518 · Enrolled 12-JUN-2023          [Casebook] [Audit] [⇩]│
+│ 1047-024 · Randomized 204518 · Enrolled 12-JUN-2023          [Casebook] [Audit] [⇩]│
 ├────────────────────────────────────────────────────────────────────────────────────┤
 │  Visit             Date          Window   Forms          Queries  Status   Signed   │
 │  Screening         02-JUN-2023   —        12/12  ▣       0        Clean    ✔ 21-JUN │
@@ -326,7 +326,7 @@ generates a protocol deviation that must be entered on the Protocol Deviation fo
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────┐
-│ 1047-009 › Week 24 (Day 178) · Visit date 06-DEC-2023          15/17 forms complete │
+│ 1047-024 › Week 24 (Day 178) · Visit date 06-DEC-2023          15/17 forms complete │
 ├────────────────────────────────────────────────────────────────────────────────────┤
 │  ▣ Visit Date & Status              ▣ Vital Signs           ▣ Physical Exam (full)  │
 │  ▣ Weight                           ▣ 12-lead ECG           ▣ vIGA-AD / rIGA        │
@@ -346,7 +346,7 @@ participant. Adding a record from the Week 24 folder does not tie the record to 
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────┐
-│ 1047-009 › Week 24 › VITAL SIGNS                       Form VS · v9.2.14 · ▣ Saved  │
+│ 1047-024 › Week 24 › VITAL SIGNS                       Form VS · v9.2.14 · ▣ Saved  │
 ├────────────────────────────────────────────────────────────────────────────────────┤
 │ Were vital signs performed?   (•) Yes   ( ) No                                      │
 │ Date of assessment            [06-DEC-2023]   (DD-MMM-YYYY)                         │
@@ -622,7 +622,7 @@ justification (query against inclusion 3).
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────┐
-│ 1047-009 › Day 1 › RANDOMIZATION                       🔒 READ-ONLY · SOURCE: IRT   │
+│ 1047-024 › Day 1 › RANDOMIZATION                       🔒 READ-ONLY · SOURCE: IRT   │
 ├────────────────────────────────────────────────────────────────────────────────────┤
 │ Randomization number       204518                                                   │
 │ Randomization date/time    12-JUN-2023 08:41 PT                                     │
@@ -712,7 +712,7 @@ rater is usually Dr. Nakamura.
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────┐
-│ 1047-009 › Week 24 › EASI                              Rater [Nakamura, Tessa, DO ▾]│
+│ 1047-024 › Week 24 › EASI                              Rater [Nakamura, Tessa, DO ▾]│
 ├────────────────────────────────────────────────────────────────────────────────────┤
 │ Region        Area   Erythema  Edema/Pap  Excoriation  Lichenif.   Mult.  Subtotal  │
 │               (0–6)   (0–3)     (0–3)       (0–3)        (0–3)                       │
@@ -1274,7 +1274,7 @@ at database lock.
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────┐
-│ AUDIT TRAIL — 1047-009 › Week 24 › Weight                                           │
+│ AUDIT TRAIL — 1047-024 › Week 24 › Weight                                           │
 ├────────────────────────────────────────────────────────────────────────────────────┤
 │ 08-DEC-2023 19:02 UTC  P. Raghunathan  CHANGED  68.0 → 68.4 kg                      │
 │    Reason: Transcription error — source worksheet 06-DEC-2023 records 68.4 kg       │
@@ -1351,7 +1351,7 @@ close-out problem.
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────┐
-│ ELECTRONIC SIGNATURE — 1047-009 · Week 24 casebook (17 forms)                        │
+│ ELECTRONIC SIGNATURE — 1047-024 · Week 24 casebook (17 forms)                        │
 ├────────────────────────────────────────────────────────────────────────────────────┤
 │ By signing below I attest that I have reviewed the data contained in this casebook; │
 │ that these data accurately reflect the source records and the conduct of the visit; │

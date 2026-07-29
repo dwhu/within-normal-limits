@@ -94,8 +94,8 @@ ENROLLED
   1047-008  H. Brenner      Enrolled   Week 12
   1047-009  S. Nakashima    Enrolled   Week 8
   1047-010  E. Fontaine     Enrolled   Week 16
-  1047-011  W. Dorsey       Enrolled   Week 20
   1047-004  L. Auguste      Withdrawn (by subject)
+  1047-011  W. Dorsey       Lost to follow-up
 
 SCREENING
   1047-017  C. Hughes
@@ -114,6 +114,105 @@ right reaches **14 randomized of 22 screened**.
 
 > **Known divergence.** RESEARCH_SITE.md §5 records 23 screened / 9 screen failures at end of study;
 > this run reaches 22 / 8. Fix with a two-number edit to that file, or leave it.
+
+> **Corpus fix, 29-JUL-2026.** budget.md records two early terminations, matching RESEARCH_SITE.md
+> §5's "1 withdrawal by subject, 1 lost to follow-up" — but the roster previously carried only the
+> withdrawal (1047-004) and left 1047-011 `Enrolled`, with DE-1113 built as their Week 20 lab panel.
+> budget.md is explicit that 1047-011 was lost to follow-up after Week 16 and attended no later
+> visits, so a Week 20 panel for them is impossible. Fixed here: 1047-011 is now `Lost to follow-up`,
+> and DE-1113 was retargeted to 1047-007 K. Oyelowo's Week 16 labs — the same visit as their Week 16
+> vitals in DE-1112, arriving a day later, as central labs do. Separately, irt_manual.md's
+> randomization walkthrough used 1047-019, which the script has still in screening in Jan 2024
+> (SCR-0219); retargeted to 1047-023, an unused ID just past the site's 22 issued screening numbers.
+
+> **Corpus fix, 29-JUL-2026 (second pass).** edc_manual.md's UI-walkthrough example (dashboard row,
+> casebook, visit folder, vitals/randomization/EASI forms, audit trail, e-signature) put 1047-009 at
+> Week 24 in December 2023. The roster and DE-1109 (day 1's hand-worked vitals) put 1047-009 at
+> Week 8; pharmacy_manual.md and monitoring_plan.md already used 1047-009 consistent with Week 8, so
+> the edc_manual.md walkthrough was the outlier. Retargeted the walkthrough's subject to 1047-024, an
+> unused placeholder ID; no other change, since the example was otherwise self-consistent. Separately,
+> budget.md's §7.2 realised-value table named 1047-006 as the withdrawal-by-subject early
+> termination, but the roster already names 1047-004 L. Auguste for that role, and 1047-006
+> M. Vasquez is enrolled/on-treatment everywhere else in the corpus (edc_manual.md, irt_manual.md,
+> lab_manual.md, safety_reporting_manual.md) with a live day-4 situation (DE-1116) built on that.
+> budget.md's 1047-006 mention was the outlier; retargeted to 1047-004.
+
+> **Corpus fix, 29-JUL-2026 (third pass).** safety_reporting_manual.md §12.3's fully worked SAE
+> example used participant 1047-006, randomized 20-FEB-2023 and hospitalized with cellulitis around
+> its Week 12 visit in May 2023 — but the roster carries 1047-006 M. Vasquez enrolled and at Week 12
+> in January 2024, with DE-1116 (day 4) built on that subject, and a subject cannot be randomized
+> twice. As with the two fixes above, the roster was right and the corpus example was the outlier.
+> Retargeted every occurrence in §12.3 (and the two earlier references to the same worked example, in
+> §11.3's email-subject-line illustration and §12.2's redaction reminder) to **1047-025**, an unused
+> ID past the site's 22 issued screening numbers. 1047-023 and 1047-024 were already spent on the two
+> fixes above.
+
+> **Corpus fix, 29-JUL-2026 (fourth pass).** DE-1116's error was a unit confusion — the pounds figure
+> entered into the kilograms field — labelled `Fabrication`, but a unit confusion is a `Normalization`
+> by this taxonomy's own definition: the value does appear in the source, just under the wrong unit.
+> `Normalization` was already spent twice (DE-1114, DE-1115), so making the label true meant making
+> the mechanism a genuine fabrication instead: a value VERA states with confidence that appears
+> nowhere in the source at all. STUDY_FACTS §5's SoA collects weight only at Screening, Day 1, Week 12,
+> Week 24 and Week 36, so a Week 16 vitals worksheet legitimately carries no weight row — the absence
+> is ordinary, not a gap or an annotation. That also forced DE-1116 off 1047-006 entirely, since
+> edc_manual.md §5.1 and irt_manual.md §6.1/§7.9 still place 1047-006 on two more timelines
+> incompatible with the roster's Week 12/Jan 2024 (a completed Week 12 visit dated 04-DEC-2023, and an
+> End-of-Treatment/Week 24 transaction dated 09-JAN-2024). With no live situation depending on the
+> subject any longer, those two mockups become corpus-internal inconsistencies of the kind already
+> accepted as low-risk in the second-pass note above, rather than something a played situation
+> contradicts. Retargeted to **1047-010 E. Fontaine**, whose only other corpus appearances (day 2's
+> SAF-0034 and the DE-1111 mislabelled-specimen pairing) carry no dated timeline outside the script
+> itself — grepped clean across `docs/trial_documents/*.md`.
+
+> **Corpus fix, 29-JUL-2026 (fifth pass — final pre-merge).** The collision class was
+> systemic rather than six one-offs, so it is now closed by an invariant instead of by
+> inspection: `invariants.test.ts` asserts that **no subject id any situation works appears
+> anywhere in the trial-document corpus**, with a three-entry whitelist for `1047-001` where
+> it is an ID-*format* illustration carrying no visit, date or timeline (`lab_manual.md`,
+> which also defines the numbering as starting at 001; `icf.md`; `protocol.md`). Ten dated
+> corpus examples were retargeted to placeholder ids past the site's 22 issued screening
+> numbers, one id per example: `irt_manual.md` 1047-017 → **1047-026** (the §7.2 screen-failure
+> and re-screen walkthrough plus its dashboard row), 1047-020 → **1047-027** (dashboard row
+> `Screened D1 19-DEC`, which put the SCR-0220 steroid application after Day 1), 1047-008 →
+> **1047-028** (dashboard row, kit-inventory assignment, §7.4 dispense walkthrough), 1047-003 →
+> **1047-029** (dashboard row plus the four-screen emergency unblinding, coherently the same
+> participant unblinded at 02:41 on the day their Week 20 was due); `pharmacy_manual.md`
+> §15.4's accountability log 1047-003 → **1047-030**, 1047-009 → **1047-031**, 1047-007 →
+> **1047-034**, §10.7's excursion example 1047-009 → **1047-032**, §14's field illustration
+> 1047-009 → **1047-033**; `edc_manual.md` §5.1's dashboard row 1047-001 → **1047-035**. Four
+> further mentions were bare parentheticals in prose that nothing else in the corpus referred
+> to, where dropping the identifier costs nothing and inventing a high-numbered one would read
+> falsely — `monitoring_plan.md` §9.5's IMV 1 row (the site's *first* participants cannot
+> plausibly be numbered 035/036), Appendix G's SDV range and its missed-PK-sample finding, and
+> `siv_slide_deck.md`'s speaker note about a forgotten Week 4.
+>
+> **`FORMS.safety` gained a `visit` field, and SAF-0034 became catchable.** The form was a
+> verdict radio and nothing else, so SAF-0034 — `Misattribution`, "right event, wrong visit",
+> the *catchable* counterpart §5 pairs against the uncatchable DE-1111 — had nowhere for its
+> error to land: `truth` and `vera` were identical, and Manually Review → Submit with nothing
+> opened scored as catching it. This is the third time the omission-with-nowhere-to-land
+> failure has been caught (situation 14, then SAF-0032, then here), so it is now an invariant
+> too: **every assisted situation whose `truth.error` is neither `NONE` nor `UNCATCHABLE` must
+> differ from `vera` on at least one form field or on the verdict.** All nine do. Every safety
+> situation now populates `visit` from its source document's `DOSING HISTORY REFERENCED`
+> block, so the field is ordinary rather than a marker on the one wrong item; `saf-0032.md`
+> gained that block, naming the Week 20 dosing visit of 11-DEC-2023.
+>
+> **Three smaller content corrections.** (1) Among the four screening summaries recommending
+> *eligible*, the two correct ones stated a day count and the two wrong ones did not — 4/4
+> separation on a surface feature. SCR-0221's summary now states "13 days before planned Day
+> 1", which makes the fabricated stop date more seductive, not less. Its severity scores moved
+> from EASI 18.6 / BSA 19% / NRS 7 to **EASI 25.4 / BSA 29% / NRS 8** for the same reason: the
+> two wrong summaries were also the two lowest on every severity number, which is a second
+> 4/4 tell. (2) `saf-0035.md` claimed "no fever" for an event at 19:30 on 04-JAN-2024 while
+> `saf-0031.md` documents a measured 38.4 °C from about 16:00 the same evening; §5's argument
+> needs cross-checking 1047-005's records to yield *agreement*, so the claim is removed.
+> (3) SAF-0032 and SAF-0033 were both "cellulitis, two nights inpatient, IV antibiotics" in
+> one week at an eleven-subject site. SAF-0032 is now **eczema herpeticum of both forearms and
+> the neck, three nights inpatient on IV aciclovir** — still AESI 3, still criterion 3, and
+> distinct. Its admission also moved to 30-DEC-2023 → 02-JAN-2024, which resolves two dates
+> the old version could not support: a discharge the day *after* the call that reported it,
+> and an inpatient stay overlapping the Week 24 specimen collection DE-1115 dates 07-JAN-2024.
 
 ---
 
@@ -135,11 +234,11 @@ right reaches **14 randomized of 22 screened**.
 | 9 | 2 | SAF-0032 | 1047-002 D. Achterberg | Safety | **Omission** — truth verdict is `serious`; see note | 60 |
 | 10 | 3 | SCR-0219 | 1047-019 R. Amaya | Screening | **Threshold overconfidence** | 90 |
 | 11 | 3 | SCR-0220 | 1047-020 J. Whitlock | Screening | **Stale context** (answers against Amd 2) | 90 |
-| 12 | 3 | DE-1113 | 1047-011 W. Dorsey | Data entry | **Fabrication** | 60 |
+| 12 | 3 | DE-1113 | 1047-007 K. Oyelowo | Data entry | **Fabrication** | 60 |
 | 13 | 3 | SAF-0033 | 1047-001 R. Jones | Safety | `NONE` — **category 1 harm** | 60 |
-| 14 | 3 | DE-1115 | 1047-002 D. Achterberg | Data entry | **Omission** | 60 |
+| 14 | 3 | DE-1115 | 1047-002 D. Achterberg | Data entry | **Normalization** | 60 |
 | 15 | 4 | SCR-0221 | 1047-021 B. Ferreira | Screening | **Fabrication** | 90 |
-| 16 | 4 | DE-1116 | 1047-006 M. Vasquez | Data entry | **Normalization** | 60 |
+| 16 | 4 | DE-1116 | 1047-010 E. Fontaine | Data entry | **Fabrication** | 60 |
 | 17 | 4 | SCR-0222 | 1047-022 | Screening | `NONE` — eligible | 90 |
 | 18 | 4 | SAF-0035 | 1047-005 T. Channing | Safety | `NONE` | 60 |
 | 19 | 4 | SCR-0218 | 1047-018 L. Lit | Screening | `NONE` — plainly eligible | 90 |
@@ -151,9 +250,9 @@ Composition: 6 screening, 8 data entry, 5 safety.
 | | Count | Items |
 |---|---|---|
 | `NONE` | 6 | 4, 8, 13, 17, 18, 19 |
-| Fabrication | 2 | 12, 15 |
-| Omission | 2 | 9, 14 — **see the constraint below; both need authoring against it** |
-| Normalization | 2 | 5, 16 |
+| Fabrication | 3 | 12, 15, 16 |
+| Omission | 1 | 9 — situation 14 was reassigned; see the constraint below |
+| Normalization | 2 | 5, 14 |
 | Misattribution | 1 | 7 |
 | Stale context | 1 | 11 |
 | Threshold overconfidence | 1 | 10 |
@@ -163,6 +262,15 @@ Composition: 6 screening, 8 data entry, 5 safety.
 omission has to land somewhere the player can see it. If she simply fails to mention something, no
 field is blank, nothing looks wrong, and there is nothing to compare — the error is invisible at any
 verification budget, which makes it a second uncatchable rather than an omission.
+
+**Situation 14 is no longer an omission, and omission is down to one.** DE-1115 was to be a lab panel
+with a flagged eosinophil count VERA fails to mention. Under R18 that does not work: the form opens
+pre-filled, so the eosinophil field still holds a plausible number, the flag is not a form field, and
+nothing on screen is blank or wrong. An omission with nowhere to land is a second uncatchable.
+
+Reassigned to `Normalization`, and situation 16 moved from `Normalization` to `Fabrication` to keep
+the day-3 and day-4 type spreads clean. Net effect: fabrication 3, normalization 2, omission 1. This
+is the cost R18 was recorded as carrying, now actually paid.
 
 **SAF-0032's truth verdict is `serious`, not `not-serious`.** An earlier fact table said otherwise, and
 taken literally it made the item unplayable: if VERA's drafted verdict and the truth verdict are both

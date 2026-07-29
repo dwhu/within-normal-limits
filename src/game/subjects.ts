@@ -11,7 +11,7 @@ export const SEED_ROSTER: Roster = [
   { id: "1047-008", name: "H. Brenner", status: "Enrolled" },
   { id: "1047-009", name: "S. Nakashima", status: "Enrolled" },
   { id: "1047-010", name: "E. Fontaine", status: "Enrolled" },
-  { id: "1047-011", name: "W. Dorsey", status: "Enrolled" },
+  { id: "1047-011", name: "W. Dorsey", status: "Lost to follow-up" },
   { id: "1047-012", name: "A. Reyes", status: "Screen failed" },
   { id: "1047-013", name: "N. Kaur", status: "Screen failed" },
   { id: "1047-014", name: "F. Dubois", status: "Screen failed" },

@@ -451,7 +451,7 @@ records storage years 1–2 2 × 450.00 = 900.00. **Total 31,930.84.**
 ### 7.2 Realised value at 14 randomized
 
 Site 1047 randomized **14** participants against a contracted target of 12. Twelve completed all
-twelve visits; two terminated early (participant 1047-006 withdrew consent after Week 8 and attended
+twelve visits; two terminated early (participant 1047-004 withdrew consent after Week 8 and attended
 an Early Termination visit; participant 1047-011 was lost to follow-up after Week 16 and attended no
 further visits). Nine participants screen-failed. Total visits performed, including screening visits
 for screen failures: **166**.
@@ -459,7 +459,7 @@ for screen failures: **166**.
 | | Calculation | Procedures | Overhead 28% | Stipends | Total |
 |---|---|---:|---:|---:|---:|
 | 12 completers | 12 × 16,639.00 | 199,668.00 | 55,907.04 | 18,000.00 | 273,575.04 |
-| 1047-006 — Screening through Week 8 plus ET visit (6 visits) | 8,119.00 + 1,574.00 | 9,693.00 | 2,714.04 | 750.00 | 13,157.04 |
+| 1047-004 — Screening through Week 8 plus ET visit (6 visits) | 8,119.00 + 1,574.00 | 9,693.00 | 2,714.04 | 750.00 | 13,157.04 |
 | 1047-011 — Screening through Week 16 (7 visits) | | 11,254.00 | 3,151.12 | 875.00 | 15,280.12 |
 | Screen failures (9, per Section 5.4) | | 13,815.50 | 3,868.34 | 1,125.00 | 18,808.84 |
 | **Participant subtotal** | | **234,430.50** | **65,640.54** | **20,750.00** | **320,821.04** |

@@ -81,3 +81,57 @@ describe("SCRIPT — day 2", () => {
     expect(day2.filter((s) => s.truth.error === "NONE")).toHaveLength(1);
   });
 });
+
+describe("SCRIPT — day 3", () => {
+  const day3 = SCRIPT.filter((s) => s.day === 3);
+  const cat1 = day3.find((s) => s.debrief.category === 1);
+
+  it("has five situations, two of them screening packets", () => {
+    expect(day3).toHaveLength(5);
+    expect(day3.filter((s) => s.cost === 90)).toHaveLength(2);
+  });
+
+  it("carries the background-risk harm", () => {
+    expect(cat1).toBeDefined();
+    expect(cat1!.truth.error).toBe("NONE");
+  });
+
+  it("harms the subject whether or not the player verified", () => {
+    expect(cat1!.outcomes.accepted).toEqual(cat1!.outcomes.reviewedCorrect);
+  });
+
+  it("blames nobody for the background-risk harm", () => {
+    expect(cat1!.debrief.line).not.toMatch(/should have|missed|failed to|error/i);
+  });
+
+  it("carries the stale-context and threshold situations", () => {
+    const errors = day3.map((s) => s.truth.error);
+    expect(errors).toContain("stale-context");
+    expect(errors).toContain("threshold");
+  });
+
+  it("fabricates a value that appears nowhere in truth", () => {
+    const fab = day3.find((s) => s.truth.error === "fabrication")!;
+    const stated = Object.values(fab.vera!.entry);
+    const real = Object.values(fab.truth.entry);
+    expect(stated.some((v) => !real.includes(v))).toBe(true);
+  });
+});
+
+describe("SCRIPT — day 4", () => {
+  const day4 = SCRIPT.filter((s) => s.day === 4);
+
+  it("has five situations, three of them screening packets", () => {
+    expect(day4).toHaveLength(5);
+    expect(day4.filter((s) => s.cost === 90)).toHaveLength(3);
+  });
+
+  it("ends the run on L. Lit", () => {
+    expect(SCRIPT.at(-1)!.id).toBe("SCR-0218");
+    expect(SCRIPT.at(-1)!.subject).toBe("1047-018");
+  });
+
+  it("lets her be right on the last decision of the run", () => {
+    expect(SCRIPT.at(-1)!.truth.error).toBe("NONE");
+  });
+});

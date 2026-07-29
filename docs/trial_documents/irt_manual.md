@@ -363,14 +363,14 @@ The dashboard is the landing page. Treat it as a to-do list, not a report.
 │ PARTICIPANTS (14 active)          [search]  │ ALERTS                    (3)  │
 │                                             │                                │
 │  ID        Status          Next visit  Win  │ ⚠ 4 kits expire 31-JAN-2024    │
-│  1047-003  Randomized      W20  18-DEC ±3d  │ ⚠ 1047-014 W12 window closes   │
+│  1047-029  Randomized      W20  18-DEC ±3d  │ ⚠ 1047-014 W12 window closes   │
 │  1047-006  Randomized      W24  09-JAN ±3d  │   in 2 days (15-DEC-2023)      │
-│  1047-008  Randomized      W12  14-DEC ±3d  │ ⚠ Shipment SHP-1047-0034       │
+│  1047-028  Randomized      W12  14-DEC ±3d  │ ⚠ Shipment SHP-1047-0034       │
 │  1047-011  Randomized      W16  26-DEC ±3d  │   awaiting receipt (2 days)    │
 │  1047-014  Randomized      W12  15-DEC ±3d  │                                │
-│  1047-017  Screen failure       —           ├────────────────────────────────┤
-│  1047-019  Screened        D1   11-DEC  —   │ INVENTORY                      │
-│  1047-020  Screened        D1   19-DEC  —   │   Available            9 kits  │
+│  1047-026  Screen failure       —           ├────────────────────────────────┤
+│  1047-027  Screened        D1   19-DEC  —   │ INVENTORY                      │
+│  1047-023  Screened        D1   11-DEC  —   │   Available            9 kits  │
 │  … 6 more                       [ show all ]│   Assigned, not dispensed  1   │
 │                                             │   Quarantined              0   │
 ├─────────────────────────────────────────────┤   Expiring ≤60 days        4   │
@@ -424,7 +424,7 @@ placed apart from the routine action buttons.
 │ 215221   Available     31-JAN-2024   02-OCT-2023   SHP-1047-0029    —        │
 │ 215222   Available     31-JAN-2024   02-OCT-2023   SHP-1047-0029    —        │
 │ 215223   Available     31-JAN-2024   02-OCT-2023   SHP-1047-0029    —        │
-│ 215310   Assigned      30-APR-2024   14-NOV-2023   SHP-1047-0032   1047-008  │
+│ 215310   Assigned      30-APR-2024   14-NOV-2023   SHP-1047-0032   1047-028  │
 │ 215311   Available     30-APR-2024   14-NOV-2023   SHP-1047-0032    —        │
 │ …                                                                            │
 │ Totals:  Available 9 · Assigned 1 · Dispensed 61 · Quarantined 0 · Destroyed 0│
@@ -481,7 +481,7 @@ of birth per local privacy rules, sex.
 │ ✔ Registration complete                            Transaction TX-1047-00291 │
 ├──────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│        PARTICIPANT ID:   1047-019                                            │
+│        PARTICIPANT ID:   1047-023                                            │
 │                                                                              │
 │  Registered 04-DEC-2023 09:12 PT by P. Raghunathan                           │
 │  Use this ID as the screening number on all source and all samples.          │
@@ -504,7 +504,7 @@ generating alerts and they distort the sponsor's screening funnel.
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│ Record screen failure — 1047-017                                             │
+│ Record screen failure — 1047-026                                             │
 ├──────────────────────────────────────────────────────────────────────────────┤
 │  Date of screen failure   [ 27-NOV-2023 ]                                    │
 │  Primary reason           [ ▾ select ]                                       │
@@ -542,14 +542,14 @@ At registration, answer **Yes** to *Is this a re-screen?* and enter the original
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
 │  Is this a re-screen?      (•) Yes    ( ) No                                 │
-│  Previous participant ID   [ 1047-017 ]        ✔ Found — screen failure      │
+│  Previous participant ID   [ 1047-026 ]        ✔ Found — screen failure      │
 │                                                  27-NOV-2023, reason SF06    │
-│  ⓘ A new participant ID will be issued and linked to 1047-017.               │
+│  ⓘ A new participant ID will be issued and linked to 1047-026.               │
 │    Only one re-screen is permitted per participant.                          │
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
 
-The new record carries a banner: **Re-screen of 1047-017.** A second re-screen attempt is blocked
+The new record carries a banner: **Re-screen of 1047-026.** A second re-screen attempt is blocked
 with error `AX-5001`; if a second re-screen is genuinely required, it needs medical monitor approval
 and a help-desk-processed request.
 
@@ -569,7 +569,7 @@ score from your certified rater's source; the negative predose urine pregnancy r
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│ Randomize — 1047-019                                               Step 1/3  │
+│ Randomize — 1047-023                                               Step 1/3  │
 ├──────────────────────────────────────────────────────────────────────────────┤
 │  Visit                    Day 1 / Week 0                                     │
 │  Visit date               [ 11-DEC-2023 ]                                    │
@@ -600,7 +600,7 @@ Step 2 is the confirmation screen. **This is the last point of no return.**
 ┌──────────────────────────────────────────────────────────────────────────────┐
 │ ⚠ CONFIRM RANDOMIZATION — this cannot be undone            Step 2/3          │
 ├──────────────────────────────────────────────────────────────────────────────┤
-│  Participant       1047-019                                                  │
+│  Participant       1047-023                                                  │
 │  Visit             Day 1 / Week 0, 11-DEC-2023                               │
 │  Region            North America                                             │
 │  Baseline vIGA-AD  4                                                         │
@@ -623,7 +623,7 @@ The password re-entry is your electronic signature. It is not a bug.
 │ ✔ RANDOMIZATION COMPLETE                           Transaction TX-1047-00294 │
 ├──────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│    Participant           1047-019                                            │
+│    Participant           1047-023                                            │
 │    RANDOMIZATION NUMBER  204531                                              │
 │                                                                              │
 │    KIT(S) TO DISPENSE AT THIS VISIT                                          │
@@ -685,7 +685,7 @@ assessments and the predose pregnancy test are complete.
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│ Dispense — 1047-008                                                Step 1/2  │
+│ Dispense — 1047-028                                                Step 1/2  │
 ├──────────────────────────────────────────────────────────────────────────────┤
 │  Visit         [ ▾ Week 12 (Day 85, due 14-DEC-2023, ±3 d) ]                 │
 │                  Week 12 is the next expected visit. Other visits are        │
@@ -705,7 +705,7 @@ recorded is blocked (`AX-2014`).
 ┌──────────────────────────────────────────────────────────────────────────────┐
 │ ⚠ CONFIRM DISPENSING — this cannot be undone               Step 2/2          │
 ├──────────────────────────────────────────────────────────────────────────────┤
-│  Participant   1047-008     Visit  Week 12, 14-DEC-2023                      │
+│  Participant   1047-028     Visit  Week 12, 14-DEC-2023                      │
 │                                                                              │
 │  DISPENSE KIT:        2 1 5 3 1 0        Expiry 30-APR-2024                  │
 │                                                                              │
@@ -1002,10 +1002,10 @@ Open the participant record and click **Emergency unblinding**.
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│ ⚠  EMERGENCY UNBLINDING — 1047-003                              Step 1 of 3  │
+│ ⚠  EMERGENCY UNBLINDING — 1047-029                              Step 1 of 3  │
 ├──────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  You are about to reveal the treatment assignment for participant 1047-003.  │
+│  You are about to reveal the treatment assignment for participant 1047-029.  │
 │                                                                              │
 │  This action is IMMEDIATE, IRREVERSIBLE, and PERMANENTLY LOGGED with your    │
 │  name, your role, and the date and time.                                     │
@@ -1033,7 +1033,7 @@ Open the participant record and click **Emergency unblinding**.
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│ ⚠  CONFIRM — 1047-003                                           Step 2 of 3  │
+│ ⚠  CONFIRM — 1047-029                                           Step 2 of 3  │
 ├──────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  There is no way to undo this. The assignment will be displayed on the       │
@@ -1056,10 +1056,10 @@ The type-to-confirm box exists because a button can be clicked by reflex. Typing
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│ TREATMENT ASSIGNMENT — 1047-003                                 Step 3 of 3  │
+│ TREATMENT ASSIGNMENT — 1047-029                                 Step 3 of 3  │
 ├──────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│    Participant 1047-003  ·  Randomization number 204487                      │
+│    Participant 1047-029  ·  Randomization number 204487                      │
 │                                                                              │
 │    ┌────────────────────────────────────────────────────────────────────┐    │
 │    │                                                                    │    │
