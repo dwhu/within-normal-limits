@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, type PointerEvent, type ReactNode } from "react";
+import { type PointerEvent, type ReactNode, useCallback, useRef } from "react";
 
 import type { WindowId, WindowState } from "@/components/desk/useWindows";
 

@@ -11,8 +11,8 @@ export function SignIn({ onSignIn }: { onSignIn: () => void }) {
           </p>
           <h1 className="mt-2 text-2xl font-normal">Site 1047 · Coordinator</h1>
           <p className="mt-4 max-w-[46ch] leading-relaxed">
-            An eight-hour day, in half-hour blocks. A queue that does not care. An
-            assistant who sounds exactly the same whether she is right or wrong.
+            An eight-hour day, in half-hour blocks. A queue that does not care. An assistant who
+            sounds exactly the same whether she is right or wrong.
           </p>
           <dl className="mt-6 grid grid-cols-[80px_1fr] gap-2 items-center">
             <dt>User</dt>
