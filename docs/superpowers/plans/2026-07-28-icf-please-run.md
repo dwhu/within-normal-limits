@@ -77,7 +77,7 @@
 
 | Path | Responsibility |
 |---|---|
-| `public/content/documents/*.md` | The 15 trial documents, copied from `docs/trial_documents/`. |
+| `public/content/documents/*.md` | The 15 trial documents, **symlinked** to `docs/trial_documents/`. Never copied — two copies drift. |
 | `public/content/documents/index.json` | Title + filename + word count for the Documents window. |
 | `public/content/source/*.md` | Per-situation source documents, authored in Tasks 12–15. |
 
@@ -621,14 +621,24 @@ git commit -m "feat(game): types, roster seed, and the reducer"
 - Consumes: nothing.
 - Produces: `type DocEntry = { file: string; title: string; words: number }`; `loadDocIndex(): Promise<DocEntry[]>`; `loadDocument(file: string): Promise<string>`.
 
-- [ ] **Step 1: Copy the trial documents into public**
+- [ ] **Step 1: Symlink the trial documents into public**
+
+The corpus stays authored in `docs/trial_documents/` and is linked, not copied — it is ~1.6 MB, and
+two copies drift apart the first time one is edited.
 
 ```bash
 mkdir -p public/content/documents public/content/source
-cp docs/trial_documents/*.md public/content/documents/
-rm public/content/documents/ASSUMPTIONS.md public/content/documents/index.md
-ls public/content/documents/
+for f in docs/trial_documents/*.md; do
+  b=$(basename "$f")
+  [ "$b" = "ASSUMPTIONS.md" ] && continue
+  [ "$b" = "index.md" ] && continue
+  ln -s "../../../docs/trial_documents/$b" "public/content/documents/$b"
+done
+ls -la public/content/documents/
 ```
+
+Next serves symlinked files out of `public/` in both `next dev` and a production `next build` /
+`next start`. Git stores them as symlinks (mode `120000`), so the repo carries one copy of the corpus.
 
 Expected: 15 files — `budget.md`, `cta.md`, `edc_manual.md`, `form_1572.md`, `icf.md`, `investigators_brochure.md`, `ip_handling_manual.md`, `irt_manual.md`, `lab_manual.md`, `monitoring_plan.md`, `pharmacy_manual.md`, `protocol.md`, `safety_reporting_manual.md`, `siv_slide_deck.md`, `study_reference_manual.md`.
 
