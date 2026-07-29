@@ -399,8 +399,8 @@ const DAY_2: Situation[] = [
           subject: "Query DQ-0114 — subject 1047-002",
           body:
             "Adverse event determination does not match source. Source documents indicate " +
-            "the event meets the hospitalization criterion in the safety reporting manual. " +
-            "Please verify and respond.",
+            "formal inpatient admission, meeting the hospitalization criterion (criterion " +
+            "3) in the safety reporting manual. Please verify and respond.",
         },
       },
       reviewedCorrect: { score: { errorsCaught: 1 } },
@@ -412,16 +412,17 @@ const DAY_2: Situation[] = [
           subject: "Query DQ-0114 — subject 1047-002",
           body:
             "Adverse event determination does not match source. Source documents indicate " +
-            "the event meets the hospitalization criterion in the safety reporting manual. " +
-            "Please verify and respond.",
+            "formal inpatient admission, meeting the hospitalization criterion (criterion " +
+            "3) in the safety reporting manual. Please verify and respond.",
         },
       },
     },
     debrief: {
       line:
-        "The headache wasn't the story. Page two: two days of worsening eczema and an " +
-        "overnight admission for a secondary infection — hospitalization, which makes " +
-        "this serious regardless of how mild the headache was.",
+        "The headache wasn't the story. Page two: the eczema turned into cellulitis, and " +
+        "she spent two nights admitted as an inpatient for IV antibiotics — formal " +
+        "inpatient admission, criterion 3, which makes this serious regardless of how " +
+        "mild the headache was.",
     },
   },
 ];
