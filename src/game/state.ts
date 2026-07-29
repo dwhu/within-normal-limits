@@ -154,6 +154,9 @@ function closeDay(state: State, script: Situation[]): State {
 
 export function reducer(state: State, action: Action, script: Situation[]): State {
   switch (action.type) {
+    case "RESTORE":
+      return action.state;
+
     case "SIGN_IN":
       return { ...state, screen: "desk" };
 

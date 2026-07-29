@@ -91,4 +91,5 @@ export type Action =
   | { type: "ACCEPT" }
   | { type: "SUBMIT"; values: FormValues; verdict?: string }
   | { type: "BEGIN_DAY" }
-  | { type: "SKIP_DAY" };
+  | { type: "SKIP_DAY" }
+  | { type: "RESTORE"; state: State };
