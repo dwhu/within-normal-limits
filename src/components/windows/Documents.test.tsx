@@ -5,14 +5,19 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { Documents } from "@/components/windows/Documents";
 
 const INDEX = [
-  { file: "protocol.md", title: "Protocol 20210143, Amendment 3", words: 25077 },
-  { file: "lab_manual.md", title: "Laboratory Manual", words: 14210 },
+  {
+    file: "protocol.md",
+    title: "Protocol 20210143, Amendment 3",
+    bytes: 166253,
+    modified: "2023-11-29",
+  },
+  { file: "lab_manual.md", title: "Laboratory Manual", bytes: 125741, modified: "2023-03-15" },
 ];
 
 afterEach(() => vi.unstubAllGlobals());
 
 describe("Documents", () => {
-  it("lists every document with its word count", async () => {
+  it("lists every document with its file size and modified date", async () => {
     vi.stubGlobal(
       "fetch",
       vi.fn(async () => ({ ok: true, json: async () => INDEX })),
@@ -20,7 +25,8 @@ describe("Documents", () => {
     render(<Documents onOpen={vi.fn()} />);
 
     await waitFor(() => screen.getByText("Laboratory Manual"));
-    expect(screen.getByText("25,077")).toBeInTheDocument();
+    expect(screen.getByText("162 KB")).toBeInTheDocument();
+    expect(screen.getByText("29-NOV-2023")).toBeInTheDocument();
   });
 
   it("opens the document the player picks", async () => {

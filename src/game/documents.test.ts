@@ -1,6 +1,12 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { loadDocIndex, loadDocument, loadSource } from "@/game/documents";
+import {
+  formatFileDate,
+  formatFileSize,
+  loadDocIndex,
+  loadDocument,
+  loadSource,
+} from "@/game/documents";
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -8,7 +14,9 @@ describe("documents", () => {
   it("loads and returns the index", async () => {
     const fetchMock = vi.fn(async () => ({
       ok: true,
-      json: async () => [{ file: "protocol.md", title: "Protocol", words: 25077 }],
+      json: async () => [
+        { file: "protocol.md", title: "Protocol", bytes: 166253, modified: "2023-11-29" },
+      ],
     }));
     vi.stubGlobal("fetch", fetchMock);
 
@@ -53,5 +61,21 @@ describe("documents", () => {
     expect(first).toBe("# Cached\n");
     expect(second).toBe("# Cached\n");
     expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("formatFileSize", () => {
+  it("renders bytes under a kilobyte as B", () => {
+    expect(formatFileSize(512)).toBe("512 B");
+  });
+
+  it("renders a kilobyte and above as a rounded KB figure", () => {
+    expect(formatFileSize(166253)).toBe("162 KB");
+  });
+});
+
+describe("formatFileDate", () => {
+  it("renders an ISO date as DD-MMM-YYYY", () => {
+    expect(formatFileDate("2023-11-29")).toBe("29-NOV-2023");
   });
 });

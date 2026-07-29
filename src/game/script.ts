@@ -1,3 +1,4 @@
+import { VERA_ARRIVAL } from "@/game/emails";
 import type { Situation } from "@/game/types";
 
 const DAY_1: Situation[] = [
@@ -129,6 +130,7 @@ const DAY_1: Situation[] = [
     cost: 60,
     source: ["de-1110.md"],
     form: "labs",
+    arrivalEmail: VERA_ARRIVAL,
     vera: {
       summary:
         "The Week 12 panel for 1047-003 is complete and within reference range on every " +

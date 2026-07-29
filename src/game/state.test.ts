@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { FIXTURE_SCRIPT } from "@/game/fixtures";
 import { initialState, reducer } from "@/game/state";
-import type { State } from "@/game/types";
+import type { Situation, State } from "@/game/types";
 
 const start = (): State => ({ ...initialState, screen: "desk" });
 const run = (s: State, ...actions: Parameters<typeof reducer>[1][]) =>
@@ -144,5 +144,21 @@ describe("reducer", () => {
     // day is committed twice (a regression a plain "no duplicates" check would miss, since
     // dropping consequences never produces a duplicate).
     expect(s.inbox.map((e) => e.id)).toEqual(["ENR-1", "ENR-2", "AUD-1"]);
+  });
+
+  it("delivers a situation's arrivalEmail the moment it becomes current, mid-day", () => {
+    const arrivalScript: Situation[] = [
+      { ...FIXTURE_SCRIPT[0] },
+      {
+        ...FIXTURE_SCRIPT[1],
+        arrivalEmail: { id: "ARR-1", from: "Test", subject: "Arrival", body: "..." },
+      },
+    ];
+    const s = reducer(start(), { type: "ACCEPT" }, arrivalScript);
+
+    // Fired immediately, not queued for the day's close: the day hasn't ended (both
+    // situations are day 1), so this can only have come from resolve(), not applyConsequences.
+    expect(s.screen).toBe("desk");
+    expect(s.inbox.map((e) => e.id)).toEqual(["ARR-1"]);
   });
 });

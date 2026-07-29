@@ -50,11 +50,14 @@ export function Taskbar({ windows, clock, day, onFocus, onOpen }: Props) {
       >
         Documents
       </button>
+
+      {windows.length > 0 && <div className="bevel-in mx-1 h-[20px] w-px" />}
+
       {windows.map((w) => (
         <button
           key={w.id}
           type="button"
-          className="bevel-out max-w-[160px] truncate px-2 py-0.5"
+          className="bevel-in max-w-[160px] truncate px-2 py-0.5"
           onClick={() => onFocus(w.id)}
         >
           {w.title}

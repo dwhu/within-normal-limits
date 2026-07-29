@@ -1,5 +1,23 @@
 import type { Day, Email } from "@/game/types";
 
+/**
+ * Fires mid-day, not at a day boundary, so it doesn't belong on the LADDER — see
+ * `MIDDAY_EMAILS` in state.ts for where it's actually delivered.
+ */
+export const VERA_ARRIVAL: Email = {
+  id: "OPS-1",
+  from: "Amgen Clinical Operations",
+  subject: "Meet VERA — live at Site 1047 as of today! 🤖",
+  body:
+    "Hi Site 1047!\n\nGood news to help with the push to randomization close — we've gone " +
+    "ahead and provisioned VERA (Virtual Entry & Review Assistant) at your site, effective " +
+    "today. She reads source alongside you and drafts the eCRF entry for review — she never " +
+    "submits anything herself, that's always you, so nothing changes about who's " +
+    "accountable for what goes in the system.\n\nNothing needed on your end, she's already " +
+    "live in the queue. Site 1046 has had her for two weeks and their entry times are down " +
+    "40%. We think you'll love her!\n\n— Clinical Operations",
+};
+
 /** One rung per day-end, scripted. Fires regardless of how the player is doing. */
 export const LADDER: Record<Day, Email[]> = {
   1: [
