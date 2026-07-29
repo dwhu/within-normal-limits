@@ -20,6 +20,7 @@ what got past you."**
 | R1 | **`Batch review all` is cut.** Two verbs only: `Accept` and `Manually Review`. At 30 min flat regardless of count, batch strictly dominated `Accept`. **VISION.md needs the batch row struck from its verb table and the "her batch review opens as a panel inside the rail" line removed.** |
 | R2 | **The run is Mon 08 – Thu 11 Jan 2024**, site at 11 randomized of 12 contracted. RESEARCH_SITE.md records 14 randomized against a contract of 12 — already over target — so this week makes the site's recorded numbers the outcome of the run. Amendment 3 at six weeks old is what makes `stale context` live. |
 | R3 | **`Manually Review` submits typed values for data entry, and a single verdict for screening and safety.** Both are checkable against ground truth. |
+| R18 | **`Manually Review` opens VERA's draft pre-filled, in one window.** Her values and her determination are already in the fields; the player checks them against source and changes what is wrong. Situations with no `vera` block — day 1's manual morning — open empty. The source is not auto-opened: the work item lists its source documents and the player opens them deliberately. **Reverses the earlier "no middle setting" rule**; see the note below and VISION's revised §Time. |
 | R4 | **The document viewer has full-text find.** Omission errors stay hard regardless — you cannot search for what is not there. |
 | R5 | **Queries appear in the Inbox as consequences.** They cost nothing; they are how the player learns something went wrong. |
 | R6 | **Both ladders are scripted email.** Enrollment rungs 1/2/3 at day-ends 1/2/3; audit rungs 1/2 at day-ends 2/3. |
@@ -151,12 +152,29 @@ Composition: 6 screening, 8 data entry, 5 safety.
 |---|---|---|
 | `NONE` | 6 | 4, 8, 13, 17, 18, 19 |
 | Fabrication | 2 | 12, 15 |
-| Omission | 2 | 9, 14 |
+| Omission | 2 | 9, 14 — **see the constraint below; both need authoring against it** |
 | Normalization | 2 | 5, 16 |
 | Misattribution | 1 | 7 |
 | Stale context | 1 | 11 |
 | Threshold overconfidence | 1 | 10 |
 | `UNCATCHABLE` | 1 | 6 |
+
+**Constraint on omission, following R18.** The form now opens pre-filled with VERA's draft, so an
+omission has to land somewhere the player can see it. If she simply fails to mention something, no
+field is blank, nothing looks wrong, and there is nothing to compare — the error is invisible at any
+verification budget, which makes it a second uncatchable rather than an omission.
+
+**Author both omissions so the omitted thing changes a field that exists on the form.** The workable
+shape is a determination: a second adverse event in the last paragraph of a nurse's note that makes
+the item serious rather than not serious. VERA's summary covers only the first event and her drafted
+verdict is `not-serious`; the source says otherwise; the player who opens it changes the radio. The
+field is populated, her value is wrong, and the reason it is wrong is an omission.
+
+Situations 9 and 14 are currently sketched as a nurse's note with an unmentioned second event and a
+lab panel with an unmentioned flagged value. The first works under this constraint. **The second does
+not** — a flagged eosinophil count she does not mention still leaves the eosinophil field filled with
+a plausible number, and the flag is not a form field. Rework 14 into a wrong-value error, or move the
+omission onto its verdict.
 
 Six of sixteen satisfies VISION's "roughly one in three." **Nine of the ten errors are catchable**, so a
 player who verifies everything catches nine, eats the uncatchable one, and still watches R. Jones go to
