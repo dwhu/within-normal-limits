@@ -125,7 +125,7 @@ right reaches **14 randomized of 22 screened**.
 |---|---|---|---|---|---|---|
 | 1 | 1 | SCR-0217 | 1047-017 C. Hughes | Screening | — *manual* | 90 |
 | 2 | 1 | DE-1109 | 1047-009 S. Nakashima | Data entry | — *manual* | 60 |
-| 3 | 1 | SAF-0031 | 1047-006 M. Vasquez | Safety | — *manual* | 60 |
+| 3 | 1 | SAF-0031 | 1047-005 T. Channing | Safety | — *manual* | 60 |
 | | | *11:30 → noon. Sponsor email. The rail fills.* | | | | |
 | 4 | 1 | DE-1110 | 1047-003 P. Sunderland | Data entry | `NONE` | 60 |
 | 5 | 1 | DE-1114 | 1047-008 H. Brenner | Data entry | **Normalization** | 60 |
