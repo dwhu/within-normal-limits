@@ -13,6 +13,8 @@
 - **Path alias:** `@/*` → `./src/*`. Import as `@/game/types`, never by relative path across directories.
 - **Test command:** `npm test` (vitest run). Single file: `npx vitest run src/path/file.test.ts`.
 - **Typecheck:** `npm run typecheck` must pass. `strict: true` — no `any`, no non-null assertions to dodge a type error.
+- **Lint and format is Biome, not ESLint.** Run `npm run check:fix` (`biome check --write .`) before committing — it applies formatting, lint fixes, and import order in one pass. `npm run lint` is Biome's linter only. There is no `eslint.config.mjs`.
+- **CI runs on every pull request** (`.github/workflows/ci.yml`): four parallel jobs — `npx biome ci .`, `npm run typecheck`, `npm test`, `npm run build`. All four must pass. Biome's line width is wider than Prettier's default, so code written to older conventions will need a formatting pass.
 - **Dates are `DD-MMM-YYYY`** (e.g. `08-JAN-2024`) in everything the fiction produces: source documents, eCRF fields, emails, queries, the day-end summary, the audit finding. Never ISO, never US-numeric.
   **The taskbar clock is the one exception** and reads OS-style (`Mon 08 Jan 2024`), because it is the operating system's chrome rather than the trial's paperwork — the prototype does the same. Do not "correct" it.
 - **Subject IDs are `1047-NNN`.** Roster and email copy render them as `1047-018 · L. Lit`. Never name-only.
@@ -4303,7 +4305,7 @@ Expected: PASS, 13 tests. **Any failure here is a content bug, not a test bug** 
 
 - [ ] **Step 3: Run everything and build**
 
-Run: `npm test`, `npm run typecheck`, `npm run lint`, `npm run build`
+Run: `npm test`, `npm run typecheck`, `npm run check`, `npm run build` — the same four checks CI runs
 Expected: all pass.
 
 - [ ] **Step 4: Commit**
