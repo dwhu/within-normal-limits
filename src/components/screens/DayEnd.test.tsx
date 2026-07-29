@@ -30,7 +30,12 @@ describe("DayEnd", () => {
     const { container } = render(
       <DayEnd state={afterDay1()} script={FIXTURE_SCRIPT} onBegin={noop} onSkip={noop} />,
     );
-    expect(container.textContent).not.toMatch(/%|score|accuracy|correct|wrong|missed/i);
+    const banned = /%|score|accuracy|correct|wrong|missed/i;
+    // Visible text — the obvious leak.
+    expect(container.textContent).not.toMatch(banned);
+    // The full markup — titles, aria-labels, data- attributes, class names. A verdict hidden
+    // in a tooltip or a colour-coded class is still a verdict.
+    expect(container.innerHTML).not.toMatch(banned);
   });
 
   it("begins the next day", async () => {
