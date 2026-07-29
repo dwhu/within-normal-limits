@@ -552,15 +552,15 @@ const DAY_3: Situation[] = [
     id: "DE-1113",
     day: 3,
     type: "data-entry",
-    subject: "1047-011",
-    title: "Week 20 central labs",
+    subject: "1047-007",
+    title: "Week 16 central labs",
     blurb: "Chemistry and haematology panel returned from the central laboratory.",
     cost: 60,
     source: ["de-1113.md"],
     form: "labs",
     vera: {
       summary:
-        "The Week 20 panel for 1047-011 is complete. ALT 68 U/L, mildly elevated. AST " +
+        "The Week 16 panel for 1047-007 is complete. ALT 68 U/L, mildly elevated. AST " +
         "26 U/L, creatinine 1.1 mg/dL, and absolute eosinophils 0.29 ×10⁹/L are within " +
         "reference range. No alert values were flagged by the laboratory. The entry is " +
         "drafted and ready for your review.",
@@ -576,7 +576,7 @@ const DAY_3: Situation[] = [
         email: {
           id: "DQ-0118",
           from: "Amgen Data Management",
-          subject: "Query DQ-0118 — subject 1047-011",
+          subject: "Query DQ-0118 — subject 1047-007",
           body: "Reported ALT value does not match source. Please verify and respond.",
         },
       },
@@ -586,7 +586,7 @@ const DAY_3: Situation[] = [
         email: {
           id: "DQ-0118",
           from: "Amgen Data Management",
-          subject: "Query DQ-0118 — subject 1047-011",
+          subject: "Query DQ-0118 — subject 1047-007",
           body: "Reported ALT value does not match source. Please verify and respond.",
         },
       },

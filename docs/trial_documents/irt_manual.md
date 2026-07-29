@@ -369,8 +369,8 @@ The dashboard is the landing page. Treat it as a to-do list, not a report.
 │  1047-011  Randomized      W16  26-DEC ±3d  │   awaiting receipt (2 days)    │
 │  1047-014  Randomized      W12  15-DEC ±3d  │                                │
 │  1047-017  Screen failure       —           ├────────────────────────────────┤
-│  1047-019  Screened        D1   11-DEC  —   │ INVENTORY                      │
-│  1047-020  Screened        D1   19-DEC  —   │   Available            9 kits  │
+│  1047-020  Screened        D1   19-DEC  —   │ INVENTORY                      │
+│  1047-023  Screened        D1   11-DEC  —   │   Available            9 kits  │
 │  … 6 more                       [ show all ]│   Assigned, not dispensed  1   │
 │                                             │   Quarantined              0   │
 ├─────────────────────────────────────────────┤   Expiring ≤60 days        4   │
@@ -481,7 +481,7 @@ of birth per local privacy rules, sex.
 │ ✔ Registration complete                            Transaction TX-1047-00291 │
 ├──────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│        PARTICIPANT ID:   1047-019                                            │
+│        PARTICIPANT ID:   1047-023                                            │
 │                                                                              │
 │  Registered 04-DEC-2023 09:12 PT by P. Raghunathan                           │
 │  Use this ID as the screening number on all source and all samples.          │
@@ -569,7 +569,7 @@ score from your certified rater's source; the negative predose urine pregnancy r
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│ Randomize — 1047-019                                               Step 1/3  │
+│ Randomize — 1047-023                                               Step 1/3  │
 ├──────────────────────────────────────────────────────────────────────────────┤
 │  Visit                    Day 1 / Week 0                                     │
 │  Visit date               [ 11-DEC-2023 ]                                    │
@@ -600,7 +600,7 @@ Step 2 is the confirmation screen. **This is the last point of no return.**
 ┌──────────────────────────────────────────────────────────────────────────────┐
 │ ⚠ CONFIRM RANDOMIZATION — this cannot be undone            Step 2/3          │
 ├──────────────────────────────────────────────────────────────────────────────┤
-│  Participant       1047-019                                                  │
+│  Participant       1047-023                                                  │
 │  Visit             Day 1 / Week 0, 11-DEC-2023                               │
 │  Region            North America                                             │
 │  Baseline vIGA-AD  4                                                         │
@@ -623,7 +623,7 @@ The password re-entry is your electronic signature. It is not a bug.
 │ ✔ RANDOMIZATION COMPLETE                           Transaction TX-1047-00294 │
 ├──────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│    Participant           1047-019                                            │
+│    Participant           1047-023                                            │
 │    RANDOMIZATION NUMBER  204531                                              │
 │                                                                              │
 │    KIT(S) TO DISPENSE AT THIS VISIT                                          │
