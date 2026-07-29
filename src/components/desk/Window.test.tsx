@@ -1,8 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-
-import { Window } from "@/components/desk/Window";
 import type { WindowState } from "@/components/desk/useWindows";
+import { Window } from "@/components/desk/Window";
 
 const w: WindowState = { id: "inbox", title: "Inbox", x: 100, y: 100, w: 400, h: 300, z: 2 };
 
