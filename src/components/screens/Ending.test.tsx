@@ -2,10 +2,45 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
-import { Ending, UNCATCHABLE_WORDING } from "@/components/screens/Ending";
+import { Ending } from "@/components/screens/Ending";
 import { ENDING_FIXTURE, FIXTURE_SCRIPT } from "@/game/fixtures";
 import { initialState, reducer } from "@/game/state";
 import type { Situation, State } from "@/game/types";
+
+// Hardcoded on purpose — do NOT import UNCATCHABLE_WORDING from Ending.tsx and compare
+// against itself. That comparison can only ever detect total absence: reword the
+// component's copy and an import-based check still passes, because both sides of the
+// comparison move together.
+//
+// This string must stay byte-identical to the paragraph as it actually appears in
+// docs/superpowers/specs/2026-07-28-icf-please-run-design.md (the run-design spec, in its
+// "Uncatchable by design" quote block) and docs/superpowers/plans/2026-07-28-icf-please-run.md
+// (the plan's UNCATCHABLE_WORDING literal). Those two are the ones that currently match this
+// text character-for-character, including the curly quotes around "not collected for this
+// study." VISION.md's "Uncatchable by design" section (around line 296) tells the same story
+// but as an earlier illustrative example with different placeholder subject IDs (1047-013 /
+// 1047-015) and straight quotes — it has never been reconciled with the concrete script
+// (1047-005 / 1047-010) the spec, plan, and this component actually use, so it is not a
+// verbatim match today. If you're updating any of these documents, update all of them, and
+// resolve that VISION.md drift while you're in there.
+const EXPECTED_UNCATCHABLE_PARAGRAPH =
+  "The blood filed under 1047-005 was drawn from 1047-010, and the other way round. " +
+  "Nothing on your desk disagreed with anything else on your desk. The requisition form " +
+  "has a field for participant initials — field 5 — and it is pre-printed “not " +
+  "collected for this study.” Had it been filled in, the mismatch would have been " +
+  "caught before the results ever reached you. That was decided by whoever designed the " +
+  "form, not by you.";
+
+// Phrasings that would shift responsibility for an item that is impossible by
+// construction onto the player. None of these may appear anywhere in the rendered ending.
+const BLAME_PATTERNS = [
+  /should have/i,
+  /you missed/i,
+  /you failed/i,
+  /you didn't/i,
+  /could have caught/i,
+  /\bon you\b/i,
+];
 
 const play = (script: Situation[], actions: Parameters<typeof reducer>[1][]): State =>
   actions.reduce((s, a) => reducer(s, a, script), {
@@ -50,7 +85,7 @@ describe("Ending", () => {
       expect(screen.getByText("WHAT YOU COULD NOT HAVE CAUGHT")).toBeInTheDocument();
 
       const background = screen.getByText(/A trial is an experiment on people who volunteered/);
-      const uncatchable = screen.getByText(UNCATCHABLE_WORDING);
+      const uncatchable = screen.getByText(EXPECTED_UNCATCHABLE_PARAGRAPH);
 
       // Different paragraphs, and each one's language is exclusive to it: the category 1
       // wording never turns up in the category 2 paragraph, and vice versa.
@@ -63,14 +98,23 @@ describe("Ending", () => {
 
     it("renders the uncatchable paragraph with its exact authored wording", () => {
       render(<Ending state={finishedEnding()} script={ENDING_FIXTURE} />);
-      expect(screen.getByText(UNCATCHABLE_WORDING)).toBeInTheDocument();
+      expect(screen.getByText(EXPECTED_UNCATCHABLE_PARAGRAPH)).toBeInTheDocument();
     });
 
-    it("never attributes the uncatchable item to the player", () => {
-      render(<Ending state={finishedEnding()} script={ENDING_FIXTURE} />);
-      expect(screen.queryByText(/should have/i)).toBeNull();
-      expect(screen.queryByText(/missed/i)).toBeNull();
-      expect(screen.queryByText(/failed to/i)).toBeNull();
+    it("never attributes the uncatchable item to the player, in any beat", async () => {
+      const { container } = render(<Ending state={finishedEnding()} script={ENDING_FIXTURE} />);
+
+      const rendered: string[] = [];
+      rendered.push(container.textContent ?? "");
+      await userEvent.click(screen.getByRole("button", { name: /Continue/ }));
+      rendered.push(container.textContent ?? "");
+      await userEvent.click(screen.getByRole("button", { name: /Continue/ }));
+      rendered.push(container.textContent ?? "");
+
+      const combined = rendered.join(" ");
+      for (const pattern of BLAME_PATTERNS) {
+        expect(combined).not.toMatch(pattern);
+      }
     });
 
     it("gives category 3 its own framing paragraph", () => {
