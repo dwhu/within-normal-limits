@@ -50,7 +50,7 @@ export type Situation = {
   manual?: true;
   source: string[];
   form: FormId;
-  vera?: { summary: string; entry: FormValues };
+  vera?: { summary: string; entry: FormValues; verdict?: string };
   truth: { error: ErrorType; entry: FormValues; verdict?: string };
   outcomes: Record<OutcomeKey, Outcome>;
   debrief: { line: string; category?: 1 | 2 | 3 };

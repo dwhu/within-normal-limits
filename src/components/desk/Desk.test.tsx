@@ -53,11 +53,26 @@ describe("Desk", () => {
     expect(screen.getByText(/10:30 AM/)).toBeInTheDocument();
   });
 
-  it("opens the source and an empty form when manual review begins", async () => {
+  it("opens exactly one window, the form, when manual review begins", async () => {
     render(<Desk state={desk()} dispatch={vi.fn()} script={FIXTURE_SCRIPT} />);
 
     await userEvent.click(screen.getByRole("button", { name: /Manually review/ }));
     expect(screen.getByText(/eCRF — VITAL SIGNS/)).toBeInTheDocument();
+    expect(screen.queryByLabelText("Find")).not.toBeInTheDocument();
+  });
+
+  it("opens the viewer on a listed source document when clicked", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({ ok: true, text: async () => "source text" })),
+    );
+
+    render(<Desk state={desk()} dispatch={vi.fn()} script={FIXTURE_SCRIPT} />);
+
+    await userEvent.click(screen.getByRole("button", { name: "fix-001.md" }));
+    expect(screen.getByLabelText("Find")).toBeInTheDocument();
+
+    vi.unstubAllGlobals();
   });
 
   it("does not leak values typed during manual review into the next item, even after Accept", async () => {

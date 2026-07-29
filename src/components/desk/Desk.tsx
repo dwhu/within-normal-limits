@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { Taskbar } from "@/components/desk/Taskbar";
 import { useWindows } from "@/components/desk/useWindows";
 import { Window } from "@/components/desk/Window";
@@ -17,6 +19,7 @@ type Props = {
 
 export function Desk({ state, dispatch, script }: Props) {
   const { windows, open, close, focus, move } = useWindows();
+  const [sourceFile, setSourceFile] = useState<string | undefined>();
 
   const today = script.filter((s) => s.day === state.day);
   const current = script[state.index];
@@ -24,8 +27,12 @@ export function Desk({ state, dispatch, script }: Props) {
 
   const beginReview = () => {
     if (!current) return;
-    open("viewer", current.source[0] ?? "source.md");
     open("ecrf", "eCRF");
+  };
+
+  const openSource = (file: string) => {
+    setSourceFile(file);
+    open("viewer", file);
   };
 
   const accept = () => {
@@ -35,7 +42,6 @@ export function Desk({ state, dispatch, script }: Props) {
   };
 
   const submit = (values: FormValues, verdict?: string) => {
-    close("viewer");
     close("ecrf");
     dispatch({ type: "SUBMIT", values, verdict });
   };
@@ -50,9 +56,16 @@ export function Desk({ state, dispatch, script }: Props) {
           onMove={move}
           onClose={w.id === "queue" ? undefined : close}
         >
-          {w.id === "queue" && <WorkQueue today={today} current={current} doneIds={doneIds} />}
+          {w.id === "queue" && (
+            <WorkQueue
+              today={today}
+              current={current}
+              doneIds={doneIds}
+              onOpenSource={openSource}
+            />
+          )}
           {w.id === "viewer" && current && (
-            <DocViewer key={current.id} file={current.source[0]} kind="source" />
+            <DocViewer key={current.id} file={sourceFile ?? current.source[0]} kind="source" />
           )}
           {w.id === "ecrf" && current && (
             <ECRF key={current.id} situation={current} onSubmit={submit} />

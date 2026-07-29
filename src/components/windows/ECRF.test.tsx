@@ -37,7 +37,8 @@ describe("ECRF", () => {
 
   it("will not submit a screening item until a determination is chosen", async () => {
     const onSubmit = vi.fn();
-    render(<ECRF situation={eligibility} onSubmit={onSubmit} />);
+    const noVera = { ...eligibility, vera: undefined };
+    render(<ECRF situation={noVera} onSubmit={onSubmit} />);
 
     await userEvent.click(screen.getByRole("button", { name: /Submit to database/ }));
     expect(onSubmit).not.toHaveBeenCalled();
@@ -53,8 +54,15 @@ describe("ECRF", () => {
     expect(onSubmit).toHaveBeenCalledWith(expect.any(Object), "screen-fail");
   });
 
-  it("never shows VERA's drafted values", () => {
+  it("pre-fills the form with VERA's drafted values and determination", () => {
     render(<ECRF situation={eligibility} onSubmit={vi.fn()} />);
-    expect(screen.getByLabelText("EASI (screening)")).toHaveValue("");
+    expect(screen.getByLabelText("EASI (screening)")).toHaveValue("15.8");
+    expect(screen.getByLabelText("Eligible — randomize")).toBeChecked();
+  });
+
+  it("opens empty when the situation has no VERA block", () => {
+    render(<ECRF situation={vitals} onSubmit={vi.fn()} />);
+    expect(screen.getByLabelText("BP sitting")).toHaveValue("");
+    expect(screen.getByLabelText("Pulse")).toHaveValue("");
   });
 });

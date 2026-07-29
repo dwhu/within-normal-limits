@@ -62,6 +62,7 @@ export const FIXTURE_SCRIPT: Situation[] = [
     vera: {
       summary: "The subject meets all inclusion criteria.",
       entry: { easi: "15.8" },
+      verdict: "eligible",
     },
     truth: { error: "threshold", entry: { easi: "15.8" }, verdict: "screen-fail" },
     outcomes: {

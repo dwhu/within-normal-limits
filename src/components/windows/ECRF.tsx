@@ -12,8 +12,8 @@ type Props = {
 
 export function ECRF({ situation, onSubmit }: Props) {
   const spec = FORMS[situation.form];
-  const [values, setValues] = useState<FormValues>({});
-  const [verdict, setVerdict] = useState<string | undefined>();
+  const [values, setValues] = useState<FormValues>(situation.vera?.entry ?? {});
+  const [verdict, setVerdict] = useState<string | undefined>(situation.vera?.verdict);
 
   const ready = spec.verdict === undefined || verdict !== undefined;
 
