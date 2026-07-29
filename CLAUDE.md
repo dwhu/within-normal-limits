@@ -13,9 +13,13 @@ filename, and the SIMULATED DOCUMENT banner across the whole `docs/` corpus stil
 which was the working title. Leave those alone unless asked — renaming the banner means rewriting it
 in ~46 generated files. `VISION.md` and the run-design spec are also still titled "ICF Please".
 
-The repo is currently a **Next.js scaffold plus a very large body of design and content work**.
-`src/` holds only the create-next-app skeleton — none of the game exists yet. Almost everything of
-value is in `VISION.md` and `docs/`.
+The game is **being built now**, one task per pull request, against
+`docs/superpowers/plans/2026-07-28-icf-please-run.md`. Tasks 1–5 are done: the types and reducer, the
+trial corpus as static assets, the window manager, the desk chrome and sign-in, and the work queue
+with VERA's rail. It is playable end to end against a three-situation test fixture. The nineteen real
+situations arrive in Tasks 12–15.
+
+Check `git log` and the open PRs before assuming what exists.
 
 ## Commands
 
@@ -47,7 +51,7 @@ them anyway. Only `src/**/*.{test,spec}.{ts,tsx}` is collected. Import alias is 
 Three layers, and they are not equal:
 
 1. **`docs/superpowers/specs/2026-07-28-icf-please-run-design.md`** — the agreed spec for one
-   complete four-day run: sixteen numbered decisions (R1–R16), the time arithmetic, the roster, all
+   complete four-day run: seventeen numbered decisions (R1–R17), the time model, the roster, all
    nineteen situations, the architecture. **Where this and VISION disagree, this wins.**
 2. **`VISION.md`** — the design argument: why the game exists, what it is for, the constraints on
    VERA's voice, the error taxonomy, the ending. Still authoritative for everything the spec doesn't
@@ -92,12 +96,23 @@ An imported Claude Design prototype kept as the visual and mechanical reference 
 `docs/prototype/README.md`). **Do not build on it or import from it.** Take the aesthetic split and
 the item-schema shape; leave the rest.
 
-## Planned architecture
+## Architecture
 
 Specified in §8 of the run-design spec. Entirely client-side — no server, no API routes, no LLM calls
-at runtime. Situations are statically authored data modules under `src/game/content/situations/`,
-with the engine in `src/game/engine/` (clock, queue, resolve, consequences, scoring, state) and a
-window-manager desk UI in `src/components/`.
+at runtime.
+
+```
+src/game/         types.ts · state.ts (the reducer) · script.ts · subjects.ts
+                  documents.ts (asset loaders) · fixtures.ts (tests only)
+src/components/   desk/ (geometry, useWindows, Window, Taskbar, Desk)
+                  windows/ · vera/Rail.tsx · screens/
+public/content/   documents/ (the 15 trial docs + index.json) · source/ (per-situation)
+```
+
+**There is no `src/game/engine/` and no `src/game/content/situations/`.** An earlier attempt built a
+simulation layer there — a block clock with a real time budget, cross-day rollover, a queue builder,
+a consequence scheduler — and all of it was deleted. If you find yourself reaching for that shape,
+you are rebuilding the thing that was thrown away. The game is a scripted array and a reducer.
 
 Two structural invariants worth restating because they are easy to violate:
 

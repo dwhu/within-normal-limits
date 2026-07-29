@@ -44,8 +44,9 @@ Every pull request runs four checks in parallel — `check`, `typecheck`, `test`
 [`.github/workflows/ci.yml`](.github/workflows/ci.yml). Running `npm run check:fix` before pushing
 clears the one that fails most often.
 
-**Status:** the design is settled and the trial-document corpus is complete. The game itself is not
-built yet — `src/` is still the project skeleton.
+**Status:** the design is settled, the trial-document corpus is complete, and the game is being built
+one task per pull request. The desk, the window manager, the work queue and VERA's rail are in; it
+plays end to end against a test fixture. The nineteen real situations are still to come.
 
 ## Who it is for
 
