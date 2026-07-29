@@ -1647,7 +1647,7 @@ Under Protocol 20210143, Amendment 1, the AESI categories are:
 > day after the visit, and impossible if it happens "when there's time." The sites that struggle at
 > database lock are never the sites that had complicated participants; they're the sites that ran a
 > two-week lag for eighteen months and then discovered that nobody remembers what happened at Week 4
-> for participant 1047-002. Enter it while you remember it.
+> for their third participant. Enter it while you remember it.
 
 ---
 

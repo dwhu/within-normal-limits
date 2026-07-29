@@ -164,6 +164,56 @@ right reaches **14 randomized of 22 screened**.
 > SAF-0034 and the DE-1111 mislabelled-specimen pairing) carry no dated timeline outside the script
 > itself — grepped clean across `docs/trial_documents/*.md`.
 
+> **Corpus fix, 29-JUL-2026 (fifth pass — final pre-merge).** The collision class was
+> systemic rather than six one-offs, so it is now closed by an invariant instead of by
+> inspection: `invariants.test.ts` asserts that **no subject id any situation works appears
+> anywhere in the trial-document corpus**, with a three-entry whitelist for `1047-001` where
+> it is an ID-*format* illustration carrying no visit, date or timeline (`lab_manual.md`,
+> which also defines the numbering as starting at 001; `icf.md`; `protocol.md`). Ten dated
+> corpus examples were retargeted to placeholder ids past the site's 22 issued screening
+> numbers, one id per example: `irt_manual.md` 1047-017 → **1047-026** (the §7.2 screen-failure
+> and re-screen walkthrough plus its dashboard row), 1047-020 → **1047-027** (dashboard row
+> `Screened D1 19-DEC`, which put the SCR-0220 steroid application after Day 1), 1047-008 →
+> **1047-028** (dashboard row, kit-inventory assignment, §7.4 dispense walkthrough), 1047-003 →
+> **1047-029** (dashboard row plus the four-screen emergency unblinding, coherently the same
+> participant unblinded at 02:41 on the day their Week 20 was due); `pharmacy_manual.md`
+> §15.4's accountability log 1047-003 → **1047-030**, 1047-009 → **1047-031**, 1047-007 →
+> **1047-034**, §10.7's excursion example 1047-009 → **1047-032**, §14's field illustration
+> 1047-009 → **1047-033**; `edc_manual.md` §5.1's dashboard row 1047-001 → **1047-035**. Four
+> further mentions were bare parentheticals in prose that nothing else in the corpus referred
+> to, where dropping the identifier costs nothing and inventing a high-numbered one would read
+> falsely — `monitoring_plan.md` §9.5's IMV 1 row (the site's *first* participants cannot
+> plausibly be numbered 035/036), Appendix G's SDV range and its missed-PK-sample finding, and
+> `siv_slide_deck.md`'s speaker note about a forgotten Week 4.
+>
+> **`FORMS.safety` gained a `visit` field, and SAF-0034 became catchable.** The form was a
+> verdict radio and nothing else, so SAF-0034 — `Misattribution`, "right event, wrong visit",
+> the *catchable* counterpart §5 pairs against the uncatchable DE-1111 — had nowhere for its
+> error to land: `truth` and `vera` were identical, and Manually Review → Submit with nothing
+> opened scored as catching it. This is the third time the omission-with-nowhere-to-land
+> failure has been caught (situation 14, then SAF-0032, then here), so it is now an invariant
+> too: **every assisted situation whose `truth.error` is neither `NONE` nor `UNCATCHABLE` must
+> differ from `vera` on at least one form field or on the verdict.** All nine do. Every safety
+> situation now populates `visit` from its source document's `DOSING HISTORY REFERENCED`
+> block, so the field is ordinary rather than a marker on the one wrong item; `saf-0032.md`
+> gained that block, naming the Week 20 dosing visit of 11-DEC-2023.
+>
+> **Three smaller content corrections.** (1) Among the four screening summaries recommending
+> *eligible*, the two correct ones stated a day count and the two wrong ones did not — 4/4
+> separation on a surface feature. SCR-0221's summary now states "13 days before planned Day
+> 1", which makes the fabricated stop date more seductive, not less. Its severity scores moved
+> from EASI 18.6 / BSA 19% / NRS 7 to **EASI 25.4 / BSA 29% / NRS 8** for the same reason: the
+> two wrong summaries were also the two lowest on every severity number, which is a second
+> 4/4 tell. (2) `saf-0035.md` claimed "no fever" for an event at 19:30 on 04-JAN-2024 while
+> `saf-0031.md` documents a measured 38.4 °C from about 16:00 the same evening; §5's argument
+> needs cross-checking 1047-005's records to yield *agreement*, so the claim is removed.
+> (3) SAF-0032 and SAF-0033 were both "cellulitis, two nights inpatient, IV antibiotics" in
+> one week at an eleven-subject site. SAF-0032 is now **eczema herpeticum of both forearms and
+> the neck, three nights inpatient on IV aciclovir** — still AESI 3, still criterion 3, and
+> distinct. Its admission also moved to 30-DEC-2023 → 02-JAN-2024, which resolves two dates
+> the old version could not support: a discharge the day *after* the call that reported it,
+> and an inpatient stay overlapping the Week 24 specimen collection DE-1115 dates 07-JAN-2024.
+
 ---
 
 ## 4. The script

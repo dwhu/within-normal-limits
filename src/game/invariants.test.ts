@@ -1,3 +1,6 @@
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
 import { describe, expect, it } from "vitest";
 
 import { calibrate } from "@/game/ending";
@@ -63,6 +66,40 @@ describe("shape", () => {
           "an unmatchable key makes this item impossible to pass by manual review",
       ).toEqual([]);
     }
+  });
+});
+
+describe("catchability", () => {
+  it("makes every catchable error differ from VERA on a field or the verdict", () => {
+    // The invariant that has failed three times: an error the player has nowhere to
+    // record is not an error, it is a second uncatchable. It failed on situation 14 (a
+    // flagged lab value that was not a form field), on SAF-0032 (whose truth verdict
+    // matched VERA's drafted one), and on SAF-0034 (a wrong-visit misattribution on a
+    // form that was a verdict radio and nothing else — a player could click Manually
+    // Review and Submit without opening the note and be scored as having caught it).
+    const catchable = assisted.filter(
+      (s) => s.truth.error !== "NONE" && s.truth.error !== "UNCATCHABLE",
+    );
+
+    for (const s of catchable) {
+      const keys = new Set([...Object.keys(s.truth.entry), ...Object.keys(s.vera.entry)]);
+      const differingFields = [...keys].filter(
+        (k) => (s.truth.entry[k] ?? "") !== (s.vera.entry[k] ?? ""),
+      );
+      const verdictDiffers = s.truth.verdict !== s.vera.verdict;
+
+      expect(
+        differingFields.length > 0 || verdictDiffers,
+        `${s.id} (${s.truth.error}): truth is identical to VERA's draft on every field of the ` +
+          `${s.form} form and on the verdict, so submitting her draft untouched scores as ` +
+          "catching the error — reading the source cannot change the outcome. Give the error a " +
+          "field to land on, or move it onto the verdict.",
+      ).toBe(true);
+    }
+
+    // Guards the guard: if the filter ever silently matched nothing, the loop above would
+    // pass vacuously. Nine catchable errors of the ten, per §4.
+    expect(catchable).toHaveLength(9);
   });
 });
 
@@ -275,6 +312,139 @@ describe("set pieces", () => {
         /\b(fault|blame|negligent|negligence|careless|your error|you (?:should|failed to)|preventable)\b/i;
       expect(categoryOneHarm.debrief.line).not.toMatch(blame);
     });
+  });
+});
+
+describe("content on disk", () => {
+  // vitest runs from the repo root, which is also where `public/` is served from.
+  const DOCS_DIR = resolve(process.cwd(), "public/content/documents");
+  const SOURCE_DIR = resolve(process.cwd(), "public/content/source");
+
+  /**
+   * `1047-009` but not the `1047-009` inside `SHP-1047-0091` or `TX-1047-00298`. The corpus
+   * is full of shipment, transaction and note-to-file references built on the site number,
+   * and a bare substring search reads every one of them as a participant.
+   */
+  const SUBJECT_ID = /(?<![-\w])1047-\d{3}(?!\d)/g;
+
+  const subjectIdsIn = (text: string): string[] => text.match(SUBJECT_ID) ?? [];
+
+  /**
+   * Mentions of a situation's subject that are *not* a collision, each one checked by hand.
+   *
+   * Every entry here is an ID-format illustration — "the format is `1047-001`, four digits,
+   * hyphen, three digits" — carrying no visit, no date, and no timeline, so there is nothing
+   * in it for a played situation to contradict. `lab_manual.md` §2 additionally *defines* the
+   * numbering as starting at 001, which is why that one cannot be retargeted at all.
+   */
+  const HARMLESS: { file: string; subject: string; why: string }[] = [
+    {
+      file: "lab_manual.md",
+      subject: "1047-001",
+      why: "requisition-field format spec (§2, §7, §12, appendix); states the numbering starts at 001",
+    },
+    {
+      file: "icf.md",
+      subject: "1047-001",
+      why: "consent form's 'you are given a study number' example",
+    },
+    {
+      file: "protocol.md",
+      subject: "1047-001",
+      why: "pseudonymisation clause's identifier example",
+    },
+  ];
+
+  const docFiles = readdirSync(DOCS_DIR).filter((f) => f.endsWith(".md"));
+  const subjects = new Set(SCRIPT.map((s) => s.subject));
+
+  it("reads the fifteen trial documents off disk", () => {
+    // If this ever finds nothing, every assertion below passes for the wrong reason.
+    expect(docFiles).toHaveLength(15);
+  });
+
+  it("never lets a situation's subject id appear in the trial-document corpus", () => {
+    // Four separate reworks were forced by this one class of bug: a manual, mockup or
+    // worked example that dates a subject the script also works, so a player who opens the
+    // documents is told their subject screen-failed last November, or had the visit they
+    // are entering now on a different date. The roster and the script have been right every
+    // time; the corpus example is always the outlier, and is retargeted to an unused ID.
+    const collisions: string[] = [];
+
+    for (const file of docFiles) {
+      const text = readFileSync(`${DOCS_DIR}/${file}`, "utf8");
+      const found = new Set(subjectIdsIn(text));
+      for (const id of found) {
+        if (!subjects.has(id)) continue;
+        if (HARMLESS.some((h) => h.file === file && h.subject === id)) continue;
+        const situations = SCRIPT.filter((s) => s.subject === id).map((s) => s.id);
+        collisions.push(`${file} mentions ${id}, worked by ${situations.join(", ")}`);
+      }
+    }
+
+    expect(
+      collisions,
+      `the trial corpus dates subjects the script also works:\n  ${collisions.join("\n  ")}\n` +
+        "A player who opens the documents on one of these situations is handed a contradiction " +
+        "the game then scores them wrong for believing. Retarget the corpus example to an " +
+        "unused subject id (1047-026 and up), keeping every part of that example consistent " +
+        "with itself, or add it to HARMLESS with a reason it cannot mislead.",
+    ).toEqual([]);
+  });
+
+  it("keeps every HARMLESS entry live", () => {
+    // A whitelist that outlives what it excused stops being a record of a judgement and
+    // becomes a hole. If a mention is edited away, its entry has to go with it.
+    for (const { file, subject, why } of HARMLESS) {
+      const text = readFileSync(`${DOCS_DIR}/${file}`, "utf8");
+      expect(
+        subjectIdsIn(text).includes(subject),
+        `HARMLESS lists ${subject} in ${file} (${why}) but it no longer appears there — delete the entry`,
+      ).toBe(true);
+    }
+  });
+
+  it("gives every situation its own source documents", () => {
+    // Two situations sharing a source file means one of them is being verified against
+    // another item's paperwork — either a copy-paste carry or a retarget half-applied.
+    const all = SCRIPT.flatMap((s) => s.source.map((file) => ({ id: s.id, file })));
+    const byFile = new Map<string, string[]>();
+    for (const { id, file } of all) byFile.set(file, [...(byFile.get(file) ?? []), id]);
+
+    const shared = [...byFile.entries()].filter(([, ids]) => ids.length > 1);
+    expect(
+      shared.map(([file, ids]) => `${file} is the source for ${ids.join(" and ")}`),
+      "source documents must not be shared between situations",
+    ).toEqual([]);
+  });
+
+  it("points every source reference at a file that exists", () => {
+    // A missing source file is a situation the player cannot verify at all: the viewer
+    // throws, and the only way through the item is to take VERA's word for it.
+    const missing = SCRIPT.flatMap((s) =>
+      s.source.filter((f) => !existsSync(`${SOURCE_DIR}/${f}`)).map((f) => `${s.id} → ${f}`),
+    );
+    expect(missing, "situations reference source documents that are not on disk").toEqual([]);
+  });
+
+  it("gives every query email its own id across situations", () => {
+    // Within one situation `accepted` and `reviewedWrong` deliberately raise the same
+    // query — the sponsor cannot tell the difference, which is the point. Across
+    // situations a reused id means two different failures arrive in the inbox looking
+    // like one, and the player draws the wrong line.
+    const byId = new Map<string, Set<string>>();
+    for (const s of SCRIPT) {
+      for (const outcome of Object.values(s.outcomes)) {
+        if (!outcome.email) continue;
+        byId.set(outcome.email.id, (byId.get(outcome.email.id) ?? new Set()).add(s.id));
+      }
+    }
+
+    const reused = [...byId.entries()].filter(([, ids]) => ids.size > 1);
+    expect(
+      reused.map(([email, ids]) => `${email} is raised by ${[...ids].join(" and ")}`),
+      "one query id must belong to one situation",
+    ).toEqual([]);
   });
 });
 

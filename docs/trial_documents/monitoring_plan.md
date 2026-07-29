@@ -565,7 +565,7 @@ trigger; and open action items past due.
 |---|---|---|---|---|---|
 | 1 | Site Qualification Visit | 04-NOV-2022 | Complete | — | Qualified without conditions |
 | 2 | **Site Initiation Visit** | **21-DEC-2022** | Complete | 6.7 weeks | Activation 06-JAN-2023 |
-| 3 | **IMV 1** | **09-FEB-2023** | Complete | 7.1 weeks | First-participant review; participants 1047-001 and 1047-002; first-participant rule satisfied, step-down to standard matrix approved |
+| 3 | **IMV 1** | **09-FEB-2023** | Complete | 7.1 weeks | First-participant review; the site's first two randomized participants; first-participant rule satisfied, step-down to standard matrix approved |
 | 4 | **IMV 2** | **20-APR-2023** | Complete | 10.0 weeks | Routine, active enrollment |
 | 5 | **IMV 3** | **27-JUL-2023** | Complete | 14.1 weeks | CTM-approved extension; enrollment slowing |
 | 6 | **IMV 4** | **02-NOV-2023** | Complete | 14.1 weeks | Enrollment closed at this site 12-SEP-2023 (14 randomized against a contracted 12). Three action items issued; see Appendix G |
@@ -1625,7 +1625,7 @@ Dear Dr. Okonkwo,
 Thank you for accommodating the interim monitoring visit conducted on 02-NOV-2023, and for the time
 you, Ms. Raghunathan, Mr. Koss, and Dr. Chao gave to the review. Fourteen participants were open to
 review; informed consent was verified for all fourteen, and source data verification and review were
-completed for participants 1047-009 through 1047-014 covering visits through Week 12.
+completed for six of them covering visits through Week 12.
 
 The site continues to maintain complete and orderly source documentation, and investigational
 product accountability and temperature records reconciled without discrepancy for the full period
@@ -1682,7 +1682,7 @@ percentage and any action taken on the visit source worksheet.
 (order of operations)*
 
 One protocol deviation has been logged for a pharmacokinetic sample not collected at a scheduled
-predose timepoint (participant 1047-007). Review of the source record confirms the sample was not
+predose timepoint. Review of the source record confirms the sample was not
 drawn at all; there is no indication that a sample was drawn after dosing. This is confirmed for the
 avoidance of doubt, as a trough sample drawn after administration would be unusable and would
 require notification to the Medical Monitor.

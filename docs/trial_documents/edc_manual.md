@@ -257,7 +257,7 @@ This is the landing page after login.
 │ Participants                                     [+ Add Participant]  [Search ____] │
 │                                                                                     │
 │  ID        Status          Last visit    Next due     Forms   Qry  Sig   Flags      │
-│  1047-001  ● Completed     W36 08-NOV    —            ▣ 100%   0   ✔     —          │
+│  1047-035  ● Completed     W36 08-NOV    —            ▣ 100%   0   ✔     —          │
 │  1047-006  ● On treatment  W12 04-DEC    W16 01-JAN   ▨  92%   2   ◷    ⏱ 1 overdue │
 │  1047-011  ◐ Screening     Scr 05-DEC    D1  12-DEC   ▨  60%   1   ◷    ⌁ eDiary 64%│
 │  1047-012  ○ Screen fail   Scr 21-NOV    —            ▣ 100%   0   ✔     —          │

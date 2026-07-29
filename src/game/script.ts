@@ -86,15 +86,15 @@ const DAY_1: Situation[] = [
     subject: "1047-005",
     title: "Week 16 safety review",
     blurb:
-      "Telephone contact worksheet, one page. No assistant provisioned. Read it and " +
-      "record the determination.",
+      "Telephone contact worksheet, one page. No assistant provisioned. Read it, record " +
+      "the visit the event follows, and enter the determination.",
     cost: 60,
     manual: true,
     source: ["saf-0031.md"],
     form: "safety",
     truth: {
       error: "NONE",
-      entry: {},
+      entry: { visit: "Week 16" },
       verdict: "not-serious",
     },
     outcomes: {
@@ -284,12 +284,16 @@ const DAY_2: Situation[] = [
         "determination is not serious, meaning none of the six seriousness criteria in " +
         "the safety reporting manual are met. The entry is drafted and ready for your " +
         "review.",
-      entry: {},
+      entry: { visit: "Week 12" },
       verdict: "not-serious",
     },
+    // The verdict is right and the entry is wrong: the note's DOSING HISTORY REFERENCED
+    // block prints Week 16 (Day 113), 04-JAN-2024, and she filed the event against the
+    // Week 12 visit five weeks earlier. This is the catchable counterpart to DE-1111 —
+    // one line of her draft against one line of the note.
     truth: {
       error: "misattribution",
-      entry: {},
+      entry: { visit: "Week 16" },
       verdict: "not-serious",
     },
     outcomes: {
@@ -379,15 +383,18 @@ const DAY_2: Situation[] = [
       summary:
         "1047-002 called to report a headache earlier in the week: mild, no aura, no " +
         "visual change, resolved the same day with no treatment and no medical attention " +
-        "sought. This is an adverse event; the determination is not serious, meaning none " +
-        "of the six seriousness criteria in the safety reporting manual are met. The " +
-        "entry is drafted and ready for your review.",
-      entry: {},
+        "sought. Onset follows the Week 20 dosing visit of 11-DEC-2023. This is an " +
+        "adverse event; the determination is not serious, meaning none of the six " +
+        "seriousness criteria in the safety reporting manual are met. The entry is " +
+        "drafted and ready for your review.",
+      entry: { visit: "Week 20" },
       verdict: "not-serious",
     },
+    // Her visit is right; the verdict is not. The omission is on page 2 of the note, and
+    // the only field it can move is the determination radio.
     truth: {
       error: "omission",
-      entry: {},
+      entry: { visit: "Week 20" },
       verdict: "serious",
     },
     outcomes: {
@@ -419,10 +426,10 @@ const DAY_2: Situation[] = [
     },
     debrief: {
       line:
-        "The headache wasn't the story. Page two: the eczema turned into cellulitis, and " +
-        "she spent two nights admitted as an inpatient for IV antibiotics — formal " +
-        "inpatient admission, criterion 3, which makes this serious regardless of how " +
-        "mild the headache was.",
+        "The headache wasn't the story. Page two: the eczema turned into eczema " +
+        "herpeticum, and she spent three nights admitted as an inpatient for IV " +
+        "aciclovir — formal inpatient admission, criterion 3, which makes this serious " +
+        "regardless of how mild the headache was.",
     },
   },
 ];
@@ -609,16 +616,17 @@ const DAY_3: Situation[] = [
     vera: {
       summary:
         "1047-001 was admitted 08-JAN-2024 with cellulitis of the left lower leg and " +
-        "discharged 10-JAN-2024 after two nights of intravenous antibiotics. This is a " +
-        "serious adverse event — hospitalization meets criterion 3 in the safety reporting " +
-        "manual, which means the sponsor must be notified within 24 hours. The " +
-        "determination is serious. The entry is drafted and ready for your review.",
-      entry: {},
+        "discharged 10-JAN-2024 after two nights of intravenous antibiotics. Onset " +
+        "follows the Week 16 dosing visit of 04-JAN-2024. This is a serious adverse " +
+        "event — hospitalization meets criterion 3 in the safety reporting manual, which " +
+        "means the sponsor must be notified within 24 hours. The determination is " +
+        "serious. The entry is drafted and ready for your review.",
+      entry: { visit: "Week 16" },
       verdict: "serious",
     },
     truth: {
       error: "NONE",
-      entry: {},
+      entry: { visit: "Week 16" },
       verdict: "serious",
     },
     outcomes: {
@@ -717,16 +725,17 @@ const DAY_4: Situation[] = [
     form: "eligibility",
     vera: {
       summary:
-        "1047-021's screening packet is complete. EASI 18.6, vIGA-AD 4, BSA 19%, Worst " +
-        "Pruritus NRS 7. Topical calcineurin inhibitor (tacrolimus) was discontinued " +
-        "30-DEC-2023, so the one-week washout is satisfied. The subject meets all inclusion " +
-        "criteria. The entry is drafted and ready for your review.",
-      entry: { easi: "18.6", viga: "4", bsa: "19", nrs: "7" },
+        "1047-021's screening packet is complete. EASI 25.4, vIGA-AD 4, BSA 29%, Worst " +
+        "Pruritus NRS 8. Topical calcineurin inhibitor (tacrolimus) was discontinued " +
+        "30-DEC-2023, 13 days before planned Day 1 — the one-week washout is satisfied. " +
+        "The subject meets all inclusion criteria. The entry is drafted and ready for " +
+        "your review.",
+      entry: { easi: "25.4", viga: "4", bsa: "29", nrs: "8" },
       verdict: "eligible",
     },
     truth: {
       error: "fabrication",
-      entry: { easi: "18.6", viga: "4", bsa: "19", nrs: "7" },
+      entry: { easi: "25.4", viga: "4", bsa: "29", nrs: "8" },
       verdict: "screen-fail",
     },
     outcomes: {
@@ -892,12 +901,12 @@ const DAY_4: Situation[] = [
         "is an adverse event; the determination is not serious, meaning none of the six " +
         "seriousness criteria in the safety reporting manual are met. The entry is drafted " +
         "and ready for your review.",
-      entry: {},
+      entry: { visit: "Week 16" },
       verdict: "not-serious",
     },
     truth: {
       error: "NONE",
-      entry: {},
+      entry: { visit: "Week 16" },
       verdict: "not-serious",
     },
     outcomes: {

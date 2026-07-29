@@ -615,7 +615,7 @@ Reproduced at **Appendix B**.
 > against the ≤30-day allowance.
 >
 > **Actions.** All nine kits moved to QUARANTINE at 07:31 PT with a dated card; flagged in Axion IRT
-> at 07:44 PT; PI informed at 07:35 PT. The Week 8 dosing visit for participant **1047-009** scheduled
+> at 07:44 PT; PI informed at 07:35 PT. The Week 8 dosing visit for participant **1047-032** scheduled
 > that morning was held and rescheduled to 13-NOV-2023, inside the ±3-day window, so no deviation was
 > required. Appendix B was sent to sponsor clinical supply, copying the CRA, at **11:10 PT on
 > 09-NOV-2023** — 4 h 18 min after discovery.
@@ -802,7 +802,7 @@ Every dosing visit must produce a source record containing all of the following.
 
 | # | Field | Notes |
 |---|---|---|
-| 1 | Participant ID and visit | e.g. 1047-009, Week 8 |
+| 1 | Participant ID and visit | e.g. 1047-033, Week 8 |
 | 2 | Date of administration | DD-MMM-YYYY |
 | 3 | **Time out of refrigerator** | 24-hour clock with zone, e.g. 09:12 PT |
 | 4 | **Time of first injection** | Must be ≥30 min after (3) |
@@ -937,11 +937,11 @@ Drug Accountability Record · Site 1047 · Protocol 20210143 · page 7 of 14 · 
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 02-OCT-2023 | Balance forward | — | — | — | — | — | — | — | — | **18** | WLC | — | 9 kits on hand |
 | 05-OCT-2023 | Receipt GRX-1047-0019 | — | — | 214771–214776 | B23-0417 | JAN-2025 | 12 | — | — | **30** | WLC | PR | Logger OK. 6 kits. Checklist filed. |
-| 10-OCT-2023 | Dispense | 1047-003 | Week 12 | 214744 | B23-0392 | NOV-2024 | — | 2 | — | **28** | PR | BK | Both administered. No issue. |
-| 12-OCT-2023 | Dispense | 1047-007 | Week 4 | 214751 | B23-0392 | NOV-2024 | — | 2 | — | **26** | PR | AV | Remote release — WLC by phone 08:41 PT. WLC countersigned 17-OCT-2023. |
-| 17-OCT-2023 | Dispense — aborted | 1047-009 | Week 2 | 214758 | B23-0392 | NOV-2024 | — | 0 | 2 QT | **24** | WLC | BK | Syringe 2 dropped on floor before use. Kit withdrawn intact to QUARANTINE; neither syringe administered. Replacement assigned by IRT — next line. |
-| 17-OCT-2023 | Dispense (replacement) | 1047-009 | Week 2 | 214771 | B23-0417 | JAN-2025 | — | 2 | — | **22** | WLC | BK | Full 300 mg given from 214771. PD-2023-014 filed. |
-| 24-OCT-2023 | Dispense | 1047-003 | Week 16 | 214759 | B23-0392 | NOV-2024 | — | 2 | — | **20** | PR | BK | Partial delivery syringe 2 — leakage at site, ~0.3 mL lost. **Recorded as administered. NOT re-dosed.** PD-2023-015. MM notified 24-OCT-2023 14:20 PT. |
+| 10-OCT-2023 | Dispense | 1047-030 | Week 12 | 214744 | B23-0392 | NOV-2024 | — | 2 | — | **28** | PR | BK | Both administered. No issue. |
+| 12-OCT-2023 | Dispense | 1047-034 | Week 4 | 214751 | B23-0392 | NOV-2024 | — | 2 | — | **26** | PR | AV | Remote release — WLC by phone 08:41 PT. WLC countersigned 17-OCT-2023. |
+| 17-OCT-2023 | Dispense — aborted | 1047-031 | Week 2 | 214758 | B23-0392 | NOV-2024 | — | 0 | 2 QT | **24** | WLC | BK | Syringe 2 dropped on floor before use. Kit withdrawn intact to QUARANTINE; neither syringe administered. Replacement assigned by IRT — next line. |
+| 17-OCT-2023 | Dispense (replacement) | 1047-031 | Week 2 | 214771 | B23-0417 | JAN-2025 | — | 2 | — | **22** | WLC | BK | Full 300 mg given from 214771. PD-2023-014 filed. |
+| 24-OCT-2023 | Dispense | 1047-030 | Week 16 | 214759 | B23-0392 | NOV-2024 | — | 2 | — | **20** | PR | BK | Partial delivery syringe 2 — leakage at site, ~0.3 mL lost. **Recorded as administered. NOT re-dosed.** PD-2023-015. MM notified 24-OCT-2023 14:20 PT. |
 | 31-OCT-2023 | Dispense | 1047-011 | Week 8 | 214760 | B23-0392 | NOV-2024 | — | 2 | — | **18** | PR | AV | Both administered. |
 | 09-NOV-2023 | **Quarantine** | — | — | 214772–214776, 214801–214803, 306115 | mixed | mixed | — | — | 18 QT | **0 available (18 QT)** | WLC | PR | Excursion 08/09-NOV-2023, max 13.4 °C, 12 h 55 min. 9 kits = entire dispensable stock. Appendix B sent 09-NOV-2023 11:10 PT. |
 | 13-NOV-2023 | **Release from quarantine** | — | — | as above | mixed | mixed | — | — | −18 QT | **18** | WLC | PR | Written sponsor disposition 13-NOV-2023: release, no restriction. Filed pharmacy binder §6. |
