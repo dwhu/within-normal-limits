@@ -1,0 +1,26 @@
+import type { Roster } from "@/game/types";
+
+export const SEED_ROSTER: Roster = [
+  { id: "1047-001", name: "R. Jones", status: "Enrolled" },
+  { id: "1047-002", name: "D. Achterberg", status: "Enrolled" },
+  { id: "1047-003", name: "P. Sunderland", status: "Enrolled" },
+  { id: "1047-004", name: "L. Auguste", status: "Withdrawn (by subject)" },
+  { id: "1047-005", name: "T. Channing", status: "Enrolled" },
+  { id: "1047-006", name: "M. Vasquez", status: "Enrolled" },
+  { id: "1047-007", name: "K. Oyelowo", status: "Enrolled" },
+  { id: "1047-008", name: "H. Brenner", status: "Enrolled" },
+  { id: "1047-009", name: "S. Nakashima", status: "Enrolled" },
+  { id: "1047-010", name: "E. Fontaine", status: "Enrolled" },
+  { id: "1047-011", name: "W. Dorsey", status: "Enrolled" },
+  { id: "1047-012", name: "A. Reyes", status: "Screen failed" },
+  { id: "1047-013", name: "N. Kaur", status: "Screen failed" },
+  { id: "1047-014", name: "F. Dubois", status: "Screen failed" },
+  { id: "1047-015", name: "G. Petrov", status: "Screen failed" },
+  { id: "1047-016", name: "S. Abiodun", status: "Screen failed" },
+  { id: "1047-017", name: "C. Hughes", status: "Screening" },
+  { id: "1047-018", name: "L. Lit", status: "Screening" },
+  { id: "1047-019", name: "R. Amaya", status: "Screening" },
+  { id: "1047-020", name: "J. Whitlock", status: "Screening" },
+  { id: "1047-021", name: "B. Ferreira", status: "Screening" },
+  { id: "1047-022", name: "D. Marchetti", status: "Screening" },
+];
