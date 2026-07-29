@@ -15,7 +15,8 @@ Four working days, one sitting.
 
 ## Getting started
 
-Requires Node 20+.
+Requires Node 20.9+. The version CI runs on is pinned in [`.nvmrc`](.nvmrc) (Node 22) — `nvm use`
+picks it up.
 
 ```sh
 npm install
@@ -29,12 +30,19 @@ npm run build      # production build
 npm start          # serve the production build
 npm test           # run the test suite once
 npm run test:watch # watch mode
-npm run lint       # eslint
+npm run check      # biome — lint, format, and import order
+npm run check:fix  # the same, writing fixes
+npm run lint       # biome lint only
+npm run format     # biome format, writing
 npm run typecheck  # tsc --noEmit
 ```
 
-Next.js 16 (App Router), React 19, TypeScript, Tailwind v4, Vitest. Entirely client-side — no
+Next.js 16 (App Router), React 19, TypeScript, Tailwind v4, Vitest, Biome. Entirely client-side — no
 server, no API routes, no model calls at runtime.
+
+Every pull request runs four checks in parallel — `check`, `typecheck`, `test`, `build` — from
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml). Running `npm run check:fix` before pushing
+clears the one that fails most often.
 
 **Status:** the design is settled and the trial-document corpus is complete. The game itself is not
 built yet — `src/` is still the project skeleton.
@@ -115,5 +123,3 @@ the person who could have prevented them is the person reading that screen.
 | [`docs/trial_documents/`](docs/trial_documents/index.md) | The 15-document trial corpus a real site would receive, ~246k words, plus the assumption logs behind it. |
 | [`docs/prototype/`](docs/prototype/README.md) | An earlier playable prototype, kept as a visual and mechanical reference. |
 | [`CLAUDE.md`](CLAUDE.md) | Working notes for Claude Code. |
-
-Built as a take-home assessment for Anthropic ([`docs/swe-assignment.pdf`](docs/swe-assignment.pdf)).
