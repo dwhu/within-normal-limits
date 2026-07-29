@@ -137,9 +137,9 @@ right reaches **14 randomized of 22 screened**.
 | 11 | 3 | SCR-0220 | 1047-020 J. Whitlock | Screening | **Stale context** (answers against Amd 2) | 90 |
 | 12 | 3 | DE-1113 | 1047-011 W. Dorsey | Data entry | **Fabrication** | 60 |
 | 13 | 3 | SAF-0033 | 1047-001 R. Jones | Safety | `NONE` — **category 1 harm** | 60 |
-| 14 | 3 | DE-1115 | 1047-002 D. Achterberg | Data entry | **Omission** | 60 |
+| 14 | 3 | DE-1115 | 1047-002 D. Achterberg | Data entry | **Normalization** | 60 |
 | 15 | 4 | SCR-0221 | 1047-021 B. Ferreira | Screening | **Fabrication** | 90 |
-| 16 | 4 | DE-1116 | 1047-006 M. Vasquez | Data entry | **Normalization** | 60 |
+| 16 | 4 | DE-1116 | 1047-006 M. Vasquez | Data entry | **Fabrication** | 60 |
 | 17 | 4 | SCR-0222 | 1047-022 | Screening | `NONE` — eligible | 90 |
 | 18 | 4 | SAF-0035 | 1047-005 T. Channing | Safety | `NONE` | 60 |
 | 19 | 4 | SCR-0218 | 1047-018 L. Lit | Screening | `NONE` — plainly eligible | 90 |
@@ -151,9 +151,9 @@ Composition: 6 screening, 8 data entry, 5 safety.
 | | Count | Items |
 |---|---|---|
 | `NONE` | 6 | 4, 8, 13, 17, 18, 19 |
-| Fabrication | 2 | 12, 15 |
-| Omission | 2 | 9, 14 — **see the constraint below; both need authoring against it** |
-| Normalization | 2 | 5, 16 |
+| Fabrication | 3 | 12, 15, 16 |
+| Omission | 1 | 9 — situation 14 was reassigned; see the constraint below |
+| Normalization | 2 | 5, 14 |
 | Misattribution | 1 | 7 |
 | Stale context | 1 | 11 |
 | Threshold overconfidence | 1 | 10 |
@@ -163,6 +163,15 @@ Composition: 6 screening, 8 data entry, 5 safety.
 omission has to land somewhere the player can see it. If she simply fails to mention something, no
 field is blank, nothing looks wrong, and there is nothing to compare — the error is invisible at any
 verification budget, which makes it a second uncatchable rather than an omission.
+
+**Situation 14 is no longer an omission, and omission is down to one.** DE-1115 was to be a lab panel
+with a flagged eosinophil count VERA fails to mention. Under R18 that does not work: the form opens
+pre-filled, so the eosinophil field still holds a plausible number, the flag is not a form field, and
+nothing on screen is blank or wrong. An omission with nowhere to land is a second uncatchable.
+
+Reassigned to `Normalization`, and situation 16 moved from `Normalization` to `Fabrication` to keep
+the day-3 and day-4 type spreads clean. Net effect: fabrication 3, normalization 2, omission 1. This
+is the cost R18 was recorded as carrying, now actually paid.
 
 **SAF-0032's truth verdict is `serious`, not `not-serious`.** An earlier fact table said otherwise, and
 taken literally it made the item unplayable: if VERA's drafted verdict and the truth verdict are both
