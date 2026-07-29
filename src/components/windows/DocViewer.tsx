@@ -56,6 +56,12 @@ export function DocViewer({ file, kind }: Props) {
   // biome-ignore lint/correctness/useExhaustiveDependencies: resets the active match whenever the query changes
   useEffect(() => setActive(0), [query]);
 
+  // `active` can point past the end of the match list when something other than the query
+  // changes the match count (e.g. switching to a document where the same query matches fewer
+  // times). Clamp at render so the displayed index and the highlight always stay in range,
+  // rather than only fixing the one path that resets `active` via an effect dependency.
+  const shownActive = count === 0 ? 0 : Math.min(active, count - 1);
+
   if (failed) {
     return <p className="p-3">This document could not be opened.</p>;
   }
@@ -71,7 +77,7 @@ export function DocViewer({ file, kind }: Props) {
           onChange={(e) => setQuery(e.target.value)}
         />
         <span className="font-mono text-neutral-600">
-          {count === 0 ? 0 : active + 1} of {count}
+          {count === 0 ? 0 : shownActive + 1} of {count}
         </span>
         <button
           type="button"
@@ -83,7 +89,7 @@ export function DocViewer({ file, kind }: Props) {
       </div>
 
       <pre className="flex-1 overflow-auto whitespace-pre-wrap p-3 font-mono text-[11px] leading-[1.5]">
-        {text === null ? "Opening…" : highlight(text, query, active)}
+        {text === null ? "Opening…" : highlight(text, query, shownActive)}
       </pre>
     </div>
   );

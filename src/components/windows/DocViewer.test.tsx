@@ -14,6 +14,17 @@ const stub = (text: string) =>
     vi.fn(async () => ({ ok: true, text: async () => text })),
   );
 
+const stubByFile = (byFile: Record<string, string>) =>
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(async (input: string | URL) => {
+      const file = String(input).split("/").pop() ?? "";
+      const text = byFile[file];
+      if (text === undefined) return { ok: false, status: 404 };
+      return { ok: true, text: async () => text };
+    }),
+  );
+
 describe("DocViewer", () => {
   it("renders the document text", async () => {
     stub(TEXT);
@@ -38,6 +49,28 @@ describe("DocViewer", () => {
 
     await userEvent.type(screen.getByLabelText("Find"), "zzzz");
     expect(screen.getByText("0 of 0")).toBeInTheDocument();
+  });
+
+  it("keeps the active match index in range after switching to a document with fewer matches", async () => {
+    const many = "alt alt alt";
+    const few = "alt only once here";
+    stubByFile({ "many.md": many, "few.md": few });
+
+    const { rerender } = render(<DocViewer file="many.md" kind="document" />);
+    await waitFor(() => expect(screen.getByText(many)).toBeInTheDocument());
+
+    await userEvent.type(screen.getByLabelText("Find"), "alt");
+    expect(screen.getByText("1 of 3")).toBeInTheDocument();
+
+    const next = screen.getByRole("button", { name: "Next" });
+    await userEvent.click(next);
+    await userEvent.click(next);
+    expect(screen.getByText("3 of 3")).toBeInTheDocument();
+
+    rerender(<DocViewer file="few.md" kind="document" />);
+
+    await waitFor(() => expect(screen.getByText("1 of 1")).toBeInTheDocument());
+    expect(screen.queryByText("3 of 1")).not.toBeInTheDocument();
   });
 
   it("shows an error when the document cannot be loaded", async () => {
