@@ -427,4 +427,281 @@ const DAY_2: Situation[] = [
   },
 ];
 
-export const SCRIPT: Situation[] = [...DAY_1, ...DAY_2];
+const DAY_3: Situation[] = [
+  {
+    id: "SCR-0219",
+    day: 3,
+    type: "screening",
+    subject: "1047-019",
+    title: "Eligibility review",
+    blurb: "Screening packet, twelve pages.",
+    cost: 90,
+    source: ["scr-0219.md"],
+    form: "eligibility",
+    vera: {
+      summary:
+        "1047-019's screening packet is complete. EASI 15.8, vIGA-AD 3, BSA 14%, Worst " +
+        "Pruritus NRS 6. No washout issues identified — the subject meets all inclusion " +
+        "criteria. The entry is drafted and ready for your review.",
+      entry: { easi: "15.8", viga: "3", bsa: "14", nrs: "6" },
+      verdict: "eligible",
+    },
+    truth: {
+      error: "threshold",
+      entry: { easi: "15.8", viga: "3", bsa: "14", nrs: "6" },
+      verdict: "screen-fail",
+    },
+    outcomes: {
+      accepted: {
+        score: { errorsAccepted: 1, randomized: 1 },
+        roster: { subject: "1047-019", status: "Enrolled" },
+        email: {
+          id: "DQ-0116",
+          from: "Harborlight Clinical Research",
+          subject: "Protocol deviation — subject 1047-019",
+          body:
+            "Randomization recorded for subject 1047-019 with screening EASI 15.8, below " +
+            "the inclusion threshold of EASI ≥16 (Protocol §7, criterion I4). Logged as " +
+            "a protocol deviation. Please provide a corrective and preventive action plan " +
+            "within 5 business days.",
+        },
+      },
+      reviewedCorrect: {
+        score: { errorsCaught: 1 },
+        roster: { subject: "1047-019", status: "Screen failed (EASI <16)" },
+      },
+      reviewedWrong: {
+        score: { errorsAccepted: 1, randomized: 1 },
+        roster: { subject: "1047-019", status: "Enrolled" },
+        email: {
+          id: "DQ-0116",
+          from: "Harborlight Clinical Research",
+          subject: "Protocol deviation — subject 1047-019",
+          body:
+            "Randomization recorded for subject 1047-019 with screening EASI 15.8, below " +
+            "the inclusion threshold of EASI ≥16 (Protocol §7, criterion I4). Logged as " +
+            "a protocol deviation. Please provide a corrective and preventive action plan " +
+            "within 5 business days.",
+        },
+      },
+    },
+    debrief: {
+      line:
+        "She named the number correctly — EASI 15.8 — and drafted eligible anyway. The " +
+        "threshold is 16.",
+    },
+  },
+
+  {
+    id: "SCR-0220",
+    day: 3,
+    type: "screening",
+    subject: "1047-020",
+    title: "Eligibility review",
+    blurb: "Screening packet, twelve pages.",
+    cost: 90,
+    source: ["scr-0220.md"],
+    form: "eligibility",
+    vera: {
+      summary:
+        "1047-020's screening packet is complete. EASI 19.2, vIGA-AD 4, BSA 22%, Worst " +
+        "Pruritus NRS 8. Topical corticosteroid was last applied 02-JAN-2024, with Day 1 " +
+        "planned for 10-JAN-2024 — 8 days. The required washout for topical corticosteroids " +
+        "under this protocol is two weeks, so the washout is not clear. Screening failure " +
+        "recommended. The entry is drafted and ready for your review.",
+      entry: { easi: "19.2", viga: "4", bsa: "22", nrs: "8" },
+      verdict: "screen-fail",
+    },
+    truth: {
+      error: "stale-context",
+      entry: { easi: "19.2", viga: "4", bsa: "22", nrs: "8" },
+      verdict: "eligible",
+    },
+    outcomes: {
+      accepted: {
+        score: { randomized: 1 },
+        roster: { subject: "1047-020", status: "Enrolled" },
+      },
+      reviewedCorrect: {
+        score: { randomized: 1 },
+        roster: { subject: "1047-020", status: "Enrolled" },
+      },
+      reviewedWrong: {
+        score: {},
+        roster: { subject: "1047-020", status: "Screen failed" },
+        email: {
+          id: "DQ-0117",
+          from: "Amgen Data Management",
+          subject: "Query DQ-0117 — subject 1047-020",
+          body:
+            "Eligibility determination recorded as screen failure. Source documents " +
+            "indicate all inclusion criteria were met and the topical corticosteroid " +
+            "washout was satisfied under the protocol version in force. Please verify and " +
+            "respond.",
+        },
+      },
+    },
+    debrief: {
+      line:
+        "The washout she cited is two weeks. Amendment 3, in force since 29-NOV-2023, set " +
+        "it to one week — eight days clears it.",
+    },
+  },
+
+  {
+    id: "DE-1113",
+    day: 3,
+    type: "data-entry",
+    subject: "1047-011",
+    title: "Week 20 central labs",
+    blurb: "Chemistry and haematology panel returned from the central laboratory.",
+    cost: 60,
+    source: ["de-1113.md"],
+    form: "labs",
+    vera: {
+      summary:
+        "The Week 20 panel for 1047-011 is complete. ALT 68 U/L, mildly elevated. AST " +
+        "26 U/L, creatinine 1.1 mg/dL, and absolute eosinophils 0.29 ×10⁹/L are within " +
+        "reference range. No alert values were flagged by the laboratory. The entry is " +
+        "drafted and ready for your review.",
+      entry: { alt: "68", ast: "26", creatinine: "1.1", eos: "0.29" },
+    },
+    truth: {
+      error: "fabrication",
+      entry: { alt: "", ast: "26", creatinine: "1.1", eos: "0.29" },
+    },
+    outcomes: {
+      accepted: {
+        score: { errorsAccepted: 1 },
+        email: {
+          id: "DQ-0118",
+          from: "Amgen Data Management",
+          subject: "Query DQ-0118 — subject 1047-011",
+          body: "Reported ALT value does not match source. Please verify and respond.",
+        },
+      },
+      reviewedCorrect: { score: { errorsCaught: 1 } },
+      reviewedWrong: {
+        score: { errorsAccepted: 1 },
+        email: {
+          id: "DQ-0118",
+          from: "Amgen Data Management",
+          subject: "Query DQ-0118 — subject 1047-011",
+          body: "Reported ALT value does not match source. Please verify and respond.",
+        },
+      },
+    },
+    debrief: {
+      line: "There is no ALT anywhere in the source. She drafted 68 U/L, mildly elevated.",
+    },
+  },
+
+  {
+    id: "SAF-0033",
+    day: 3,
+    type: "safety",
+    subject: "1047-001",
+    title: "Hospitalization — discharge summary review",
+    blurb: "Hospital discharge summary, one page.",
+    cost: 60,
+    source: ["saf-0033.md"],
+    form: "safety",
+    vera: {
+      summary:
+        "1047-001 was admitted 08-JAN-2024 with cellulitis of the left lower leg and " +
+        "discharged 10-JAN-2024 after two nights of intravenous antibiotics. This is a " +
+        "serious adverse event — hospitalization meets criterion 3 in the safety reporting " +
+        "manual, which means the sponsor must be notified within 24 hours. The " +
+        "determination is serious. The entry is drafted and ready for your review.",
+      entry: {},
+      verdict: "serious",
+    },
+    truth: {
+      error: "NONE",
+      entry: {},
+      verdict: "serious",
+    },
+    outcomes: {
+      accepted: {
+        score: { harmed: 1 },
+        roster: { subject: "1047-001", status: "Withdrawn (hospitalized)" },
+      },
+      reviewedCorrect: {
+        score: { harmed: 1 },
+        roster: { subject: "1047-001", status: "Withdrawn (hospitalized)" },
+      },
+      reviewedWrong: {
+        score: { errorsAccepted: 1, harmed: 1 },
+        roster: { subject: "1047-001", status: "Withdrawn (hospitalized)" },
+        email: {
+          id: "DQ-0119",
+          from: "Amgen Global Patient Safety",
+          subject: "Query DQ-0119 — subject 1047-001",
+          body:
+            "Adverse event determination does not match source. Source documents indicate " +
+            "formal inpatient admission, meeting the hospitalization criterion (criterion " +
+            "3) in the safety reporting manual. Please verify and respond.",
+        },
+      },
+    },
+    debrief: {
+      line:
+        "Cellulitis of the left lower leg, two nights inpatient on IV antibiotics — " +
+        "criterion 3, hospitalization. It is on rocatinlimab's own safety table, twice " +
+        "over; this is one of the two.",
+      category: 1,
+    },
+  },
+
+  {
+    id: "DE-1115",
+    day: 3,
+    type: "data-entry",
+    subject: "1047-002",
+    title: "Week 24 central labs",
+    blurb: "Chemistry and haematology panel returned from the central laboratory.",
+    cost: 60,
+    source: ["de-1115.md"],
+    form: "labs",
+    vera: {
+      summary:
+        "The Week 24 panel for 1047-002 is complete and within reference range on every " +
+        "analyte. ALT 22 U/L, AST 25 U/L, creatinine 0.9 mg/dL, absolute eosinophils " +
+        "0.071 ×10⁹/L. No alert values were flagged by the laboratory. The entry is " +
+        "drafted and ready for your review.",
+      entry: { alt: "22", ast: "25", creatinine: "0.9", eos: "0.071" },
+    },
+    truth: {
+      error: "normalization",
+      entry: { alt: "22", ast: "25", creatinine: "0.9", eos: "0.71" },
+    },
+    outcomes: {
+      accepted: {
+        score: { errorsAccepted: 1 },
+        email: {
+          id: "DQ-0120",
+          from: "Amgen Data Management",
+          subject: "Query DQ-0120 — subject 1047-002",
+          body: "Reported eosinophil count does not match source. Please verify and respond.",
+        },
+      },
+      reviewedCorrect: { score: { errorsCaught: 1 } },
+      reviewedWrong: {
+        score: { errorsAccepted: 1 },
+        email: {
+          id: "DQ-0120",
+          from: "Amgen Data Management",
+          subject: "Query DQ-0120 — subject 1047-002",
+          body: "Reported eosinophil count does not match source. Please verify and respond.",
+        },
+      },
+    },
+    debrief: {
+      line:
+        "Source printed 0.71 ×10⁹/L (710 cells/µL), flagged H. She typed 0.071 — three " +
+        "places left, and the flag went with it.",
+    },
+  },
+];
+
+export const SCRIPT: Situation[] = [...DAY_1, ...DAY_2, ...DAY_3];
