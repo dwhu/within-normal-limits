@@ -82,8 +82,8 @@ const DAY_1: Situation[] = [
     id: "SAF-0031",
     day: 1,
     type: "safety",
-    subject: "1047-006",
-    title: "Week 12 safety review",
+    subject: "1047-005",
+    title: "Week 16 safety review",
     blurb:
       "Telephone contact worksheet, one page. No assistant provisioned. Read it and " +
       "record the determination.",
@@ -104,7 +104,7 @@ const DAY_1: Situation[] = [
         email: {
           id: "DQ-0108",
           from: "Amgen Global Patient Safety",
-          subject: "Query DQ-0108 — subject 1047-006",
+          subject: "Query DQ-0108 — subject 1047-005",
           body:
             "Adverse event determination does not match source. Source documents " +
             "indicate the event meets none of the six seriousness criteria in the " +
