@@ -106,4 +106,43 @@ describe("reducer", () => {
     expect(s.resolutions.every((r) => r.action === "accepted")).toBe(true);
     expect(s.screen).toBe("dayend");
   });
+
+  it("skipping a day that exhausts the script still commits its roster changes and emails", () => {
+    const s = run(
+      start(),
+      { type: "ACCEPT" },
+      { type: "ACCEPT" },
+      { type: "BEGIN_DAY" },
+      { type: "SKIP_DAY" },
+    );
+    expect(s.screen).toBe("ending");
+    expect(s.roster.find((r) => r.id === "1047-019")?.status).toBe("Enrolled");
+    expect(s.inbox.map((e) => e.id)).toEqual(expect.arrayContaining(["ENR-2", "AUD-1"]));
+  });
+
+  it("the final day of a run commits its consequences with no BEGIN_DAY to follow it", () => {
+    const s = run(
+      start(),
+      { type: "ACCEPT" },
+      { type: "ACCEPT" },
+      { type: "BEGIN_DAY" },
+      { type: "ACCEPT" },
+    );
+    expect(s.screen).toBe("ending");
+    expect(s.roster.find((r) => r.id === "1047-019")?.status).toBe("Enrolled");
+  });
+
+  it("commits each day's consequences exactly once: a full run's inbox has exactly the expected emails", () => {
+    const s = run(
+      start(),
+      { type: "ACCEPT" },
+      { type: "ACCEPT" },
+      { type: "BEGIN_DAY" },
+      { type: "ACCEPT" },
+    );
+    // Fails if a day's ladder rung is dropped (the original bug) and equally fails if a
+    // day is committed twice (a regression a plain "no duplicates" check would miss, since
+    // dropping consequences never produces a duplicate).
+    expect(s.inbox.map((e) => e.id)).toEqual(["ENR-1", "ENR-2", "AUD-1"]);
+  });
 });

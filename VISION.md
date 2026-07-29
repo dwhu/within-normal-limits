@@ -293,7 +293,9 @@ This is deliberately not the `Misattribution` row in the taxonomy above. That on
 
 So the player should be able to do everything right and still lose a patient. The end-of-run debrief then names exactly which piece of information would have made it catchable, and where it was not on screen. That is the only lesson in the game a developer can go act on. The rest is a game about being careful.
 
-Requirement: the debrief has to be specific enough to be actionable. "You missed something" is worthless. "The blood filed under 1047-013 was drawn from 1047-015, and the other way round. Nothing on your desk disagreed with anything else on your desk. The requisition form has a field for participant initials — field 5 — and it is pre-printed 'not collected for this study.' Had it been filled in, the mismatch would have been caught before the results ever reached you. That was decided by whoever designed the form, not by you."
+Requirement: the debrief has to be specific enough to be actionable. "You missed something" is worthless. This is the wording, and it is quoted verbatim in the run-design spec, the implementation plan, and `src/components/screens/Ending.tsx`. A test hardcodes it so the four cannot drift apart:
+
+> The blood filed under 1047-005 was drawn from 1047-010, and the other way round. Nothing on your desk disagreed with anything else on your desk. The requisition form has a field for participant initials — field 5 — and it is pre-printed “not collected for this study.” Had it been filled in, the mismatch would have been caught before the results ever reached you. That was decided by whoever designed the form, not by you.
 
 Note what makes that line land: the field is not missing. It is printed on the form and switched off, for a defensible reason — minimising identifiable data on a form that travels between organisations is good practice. A reasonable person made a reasonable decision and the cost of it arrived nine months later, on someone else, in a city they had never heard of. Do not soften this to "no second identifier was available." The whole argument is that it was.
 

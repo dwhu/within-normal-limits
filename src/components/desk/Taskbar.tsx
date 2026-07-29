@@ -23,13 +23,32 @@ type Props = {
   clock: number;
   day: number;
   onFocus: (id: WindowId) => void;
+  onOpen: (id: WindowId, title: string) => void;
 };
 
-export function Taskbar({ windows, clock, day, onFocus }: Props) {
+export function Taskbar({ windows, clock, day, onFocus, onOpen }: Props) {
   return (
     <div className="bevel-out absolute inset-x-0 bottom-0 flex h-[30px] items-center gap-1 px-1">
-      <button type="button" className="bevel-out px-2 py-0.5 font-bold">
-        EDC
+      <button
+        type="button"
+        className="bevel-out px-2 py-0.5"
+        onClick={() => onOpen("inbox", "Inbox")}
+      >
+        Inbox
+      </button>
+      <button
+        type="button"
+        className="bevel-out px-2 py-0.5"
+        onClick={() => onOpen("roster", "Subject Roster")}
+      >
+        Roster
+      </button>
+      <button
+        type="button"
+        className="bevel-out px-2 py-0.5"
+        onClick={() => onOpen("documents", "Documents")}
+      >
+        Documents
       </button>
       {windows.map((w) => (
         <button
