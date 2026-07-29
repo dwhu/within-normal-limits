@@ -66,7 +66,7 @@ function resolve(
   const next = script[index];
   const screen: State["screen"] = !next ? "ending" : next.day !== situation.day ? "dayend" : "desk";
 
-  return {
+  const resolved: State = {
     ...state,
     screen,
     index,
@@ -74,6 +74,8 @@ function resolve(
     resolutions: [...state.resolutions, resolution],
     tally: addTally(state.tally, outcome.score),
   };
+
+  return closeDay(resolved, script);
 }
 
 function accept(state: State, script: Situation[]): State {
@@ -125,6 +127,17 @@ function applyConsequences(state: State, script: Situation[]): State {
   return { ...state, roster, inbox: [...state.inbox, ...emails] };
 }
 
+/**
+ * Commits a day's consequences at the moment it actually closes — the transition into
+ * "dayend" or "ending" — rather than waiting on a BEGIN_DAY that is not guaranteed to
+ * follow (SKIP_DAY can jump straight to "ending", and there is no day after the last one).
+ * A no-op otherwise, so it is safe to route every state-producing branch through it.
+ */
+function closeDay(state: State, script: Situation[]): State {
+  if (state.screen !== "dayend" && state.screen !== "ending") return state;
+  return applyConsequences(state, script);
+}
+
 export function reducer(state: State, action: Action, script: Situation[]): State {
   switch (action.type) {
     case "SIGN_IN":
@@ -162,12 +175,12 @@ export function reducer(state: State, action: Action, script: Situation[]): Stat
       while (script[next.index] && script[next.index].day === state.day) {
         next = accept(next, script);
       }
-      return { ...next, screen: script[next.index] ? "dayend" : "ending" };
+      return next;
     }
 
     case "BEGIN_DAY": {
       const day = (state.day + 1) as Day;
-      return { ...applyConsequences(state, script), screen: "desk", day, clock: 0 };
+      return { ...state, screen: "desk", day, clock: 0 };
     }
 
     default:
