@@ -24,3 +24,48 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+:root {
+  --edc-face: #d4d0c8;
+  --edc-light: #ffffff;
+  --edc-shadow: #808080;
+  --edc-dark: #404040;
+  --edc-title-a: #2c4a6e;
+  --edc-title-b: #4a7ba7;
+  --edc-paper: #f4f2ec;
+  --edc-ink: #1a1a1a;
+  --vera-teal: #0f7b7b;
+  --vera-face: #fbfbfa;
+}
+
+body {
+  background: #3a4149;
+  font-family: Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 11px;
+  color: var(--edc-ink);
+  overflow: hidden;
+}
+
+.bevel-out {
+  background: var(--edc-face);
+  border-top: 1px solid var(--edc-light);
+  border-left: 1px solid var(--edc-light);
+  border-right: 1px solid var(--edc-dark);
+  border-bottom: 1px solid var(--edc-dark);
+}
+
+.bevel-in {
+  background: var(--edc-paper);
+  border-top: 1px solid var(--edc-shadow);
+  border-left: 1px solid var(--edc-shadow);
+  border-right: 1px solid var(--edc-light);
+  border-bottom: 1px solid var(--edc-light);
+}
+
+.titlebar {
+  background: linear-gradient(90deg, var(--edc-title-a), var(--edc-title-b));
+  color: #fff;
+  font-weight: 700;
+  cursor: default;
+  user-select: none;
+}

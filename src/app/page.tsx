@@ -1,10 +1,27 @@
+"use client";
+
+import { useCallback, useReducer } from "react";
+
+import { SignIn } from "@/components/screens/SignIn";
+import { SCRIPT } from "@/game/script";
+import { initialState, reducer } from "@/game/state";
+import type { Action, State } from "@/game/types";
+
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-8">
-      <h1 className="text-4xl font-semibold tracking-tight">icf-please</h1>
-      <p className="text-lg text-zinc-600 dark:text-zinc-400">
-        Next.js + TypeScript + Tailwind + Vitest
-      </p>
-    </main>
+  const [state, rawDispatch] = useReducer(
+    (s: State, a: Action) => reducer(s, a, SCRIPT),
+    initialState,
   );
+  const dispatch = useCallback((a: Action) => rawDispatch(a), []);
+
+  switch (state.screen) {
+    case "signin":
+      return <SignIn onSignIn={() => dispatch({ type: "SIGN_IN" })} />;
+    default:
+      return (
+        <main className="p-4">
+          <h1 className="text-lg">Desk — day {state.day}</h1>
+        </main>
+      );
+  }
 }
