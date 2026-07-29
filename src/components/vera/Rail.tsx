@@ -20,8 +20,8 @@ export function Rail({ situation, onAccept, onReview }: Props) {
     >
       {situation && !assisted && (
         <p className="leading-relaxed text-neutral-700">
-          No assistant provisioned for this site. Source documents must be opened and
-          entered by hand.
+          No assistant provisioned for this site. Source documents must be opened and entered by
+          hand.
         </p>
       )}
 
@@ -39,9 +39,7 @@ export function Rail({ situation, onAccept, onReview }: Props) {
 
       {situation && (
         <div className="mt-6">
-          <div className="font-mono text-[10px] tracking-widest text-neutral-500">
-            ACTIONS
-          </div>
+          <div className="font-mono text-[10px] tracking-widest text-neutral-500">ACTIONS</div>
           {assisted && (
             <button
               type="button"

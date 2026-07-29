@@ -44,9 +44,7 @@ describe("Desk", () => {
   });
 
   it("shows the manual review cost for the item type", () => {
-    render(
-      <Desk state={desk({ index: 2, day: 2 })} dispatch={vi.fn()} script={FIXTURE_SCRIPT} />,
-    );
+    render(<Desk state={desk({ index: 2, day: 2 })} dispatch={vi.fn()} script={FIXTURE_SCRIPT} />);
     expect(screen.getByRole("button", { name: /Manually review/ })).toHaveTextContent("1.5 HR");
   });
 

@@ -30,9 +30,7 @@ export function Desk({ state, dispatch, script }: Props) {
           onMove={move}
           onClose={w.id === "queue" ? undefined : close}
         >
-          {w.id === "queue" && (
-            <WorkQueue today={today} current={current} doneIds={doneIds} />
-          )}
+          {w.id === "queue" && <WorkQueue today={today} current={current} doneIds={doneIds} />}
         </Window>
       ))}
 
