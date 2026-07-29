@@ -12,9 +12,10 @@ type Props = {
   today: Situation[];
   current?: Situation;
   doneIds: string[];
+  onOpenSource: (file: string) => void;
 };
 
-export function WorkQueue({ today, current, doneIds }: Props) {
+export function WorkQueue({ today, current, doneIds, onOpenSource }: Props) {
   return (
     <div className="flex h-full flex-col">
       <table className="w-full border-collapse text-left">
@@ -57,6 +58,21 @@ export function WorkQueue({ today, current, doneIds }: Props) {
           </div>
           <h2 className="mt-2 text-base">{current.title}</h2>
           <p className="mt-1 leading-relaxed">{current.blurb}</p>
+          {current.source.length > 0 && (
+            <div className="mt-2 flex flex-wrap items-center gap-2 font-mono text-[10px] text-neutral-600">
+              <span className="tracking-widest">SOURCE</span>
+              {current.source.map((file) => (
+                <button
+                  key={file}
+                  type="button"
+                  className="bevel-out px-1.5 py-0.5 text-black"
+                  onClick={() => onOpenSource(file)}
+                >
+                  {file}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

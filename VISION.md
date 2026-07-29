@@ -130,9 +130,13 @@ The day runs 8:00 AM to 4:00 PM. A clock in the corner advances as work gets don
 
 Minutes were considered and rejected. Half-hour blocks give enough granularity to make working an item by hand feel expensive without making the player compute.
 
-**There is no middle setting.** The player either takes VERA's output or does the item the way they did the three items on day 1 — same documents, same empty form, same price. There is no correct-her-draft mode, because a pre-filled form is a form you skim, and skimming a draft is not verification. It also means the two verbs cost exactly what the game already taught the player they cost: `Manually Review` is the manual morning, at the manual morning's rate, for the rest of the run.
+**`Manually Review` opens VERA's draft, not an empty form.** Her values are already in the fields; the player's job is to check them against source and change what is wrong. Before she is installed — day 1's manual morning — there is no draft and the form opens empty, which is how the player learns what the task costs unaided.
 
-What stays on screen while they work is **VERA's summary in the rail**, not her entry. That is the comparison the whole error taxonomy prices — she states a value, the player goes looking for it in the source, and either it is there or it is not. Withholding her prose would remove the catch; withholding her keystrokes removes the shortcut.
+This reverses an earlier decision, and the earlier reasoning is worth keeping in view: *a pre-filled form is a form you skim, and skimming a draft is not verification.* That is true, and it is now the player's problem rather than the design's. They pay the same 60 or 90 minutes either way; what they buy is the opportunity to check, not the obligation. A player who pays it and skims anyway has done the thing this game is about, and the ending will tell them so.
+
+It also costs one error type. **Omission only survives where the omitted thing changes a field that exists on the form** — a second adverse event that makes a determination serious rather than not serious, say. An omission with nowhere to land is invisible against a pre-filled form: no field is blank, nothing looks wrong, and there is nothing to compare. Author omissions accordingly or not at all.
+
+What stays on screen while they work is **VERA's summary in the rail**, and her entry in the form. The source is one deliberate click away, listed on the work item — reaching for it is the decision the game is actually measuring.
 
 There is no `Escalate to PI` verb. See D16.
 
