@@ -2032,6 +2032,11 @@ export function DocViewer({ file, kind }: Props) {
 
   useEffect(() => setActive(0), [query]);
 
+  // The active index must never exceed the match count. Resetting on `query` alone is not enough:
+  // switching documents with a live query changes the match list too, and would render "3 of 1".
+  // Clamp at render so the invariant holds whatever changed the list.
+  const shownActive = count === 0 ? 0 : Math.min(active, count - 1);
+
   if (failed) {
     return <p className="p-3">This document could not be opened.</p>;
   }
@@ -2047,7 +2052,7 @@ export function DocViewer({ file, kind }: Props) {
           onChange={(e) => setQuery(e.target.value)}
         />
         <span className="font-mono text-neutral-600">
-          {count === 0 ? 0 : active + 1} of {count}
+          {count === 0 ? 0 : shownActive + 1} of {count}
         </span>
         <button
           type="button"
@@ -2059,7 +2064,7 @@ export function DocViewer({ file, kind }: Props) {
       </div>
 
       <pre className="flex-1 overflow-auto whitespace-pre-wrap p-3 font-mono text-[11px] leading-[1.5]">
-        {text === null ? "Opening…" : highlight(text, query, active)}
+        {text === null ? "Opening…" : highlight(text, query, shownActive)}
       </pre>
     </div>
   );
