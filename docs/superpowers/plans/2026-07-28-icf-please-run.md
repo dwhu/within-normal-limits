@@ -1,111 +1,112 @@
-# ICF Please — One Playable Run Implementation Plan
+# ICF Please — Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build a complete, playable four-day run of *ICF Please* — a Papers, Please-style clinical-research simulator in which the player accepts or manually verifies an AI assistant's output under a half-hour-block clock.
+**Goal:** Build a playable four-day run of *ICF Please* — a scripted queue of nineteen clinical-trial situations where the player either takes an AI assistant's word or checks the source themselves, and an ending that tells them what got past them.
 
-**Architecture:** A pure-TypeScript game engine (clock, queue, resolution, deferred consequences, scoring) with zero React dependencies, driven by a statically-authored content layer, rendered by an overlapping-windows desktop UI. Correctness is computed only against each situation's `truth` block, never against VERA's output, so the `vera` block can later be swapped for a live LLM call without touching the engine.
+**Architecture:** A single client-side React app. All game content is a static ordered array of nineteen `Situation` objects; all game logic is one reducer with five actions. There is no simulation layer — no queue engine, no rollover, no expiry, no time budget. The UI is an overlapping-window desktop rendered over that state.
 
-**Tech Stack:** Next.js 16 (App Router), React 19, TypeScript (strict), Tailwind v4, Vitest + Testing Library, `react-markdown` + `remark-gfm`. Entirely client-side — no server, no API routes, no LLM calls.
-
-**Source spec:** [`docs/superpowers/specs/2026-07-28-icf-please-run-design.md`](../specs/2026-07-28-icf-please-run-design.md). Read §2 (time arithmetic) and §4 (the manifest) before starting — they are the load-bearing sections and most tasks depend on their exact numbers.
+**Tech Stack:** Next.js 16 (App Router), React 19, TypeScript (strict), Tailwind v4, vitest + @testing-library/react (jsdom, `globals: true`).
 
 ## Global Constraints
 
-- **Dates are always `DD-MMM-YYYY`** (e.g. `08-JAN-2024`). Never any other format, in code or content.
-- **Subjects are always written `1047-018 · L. Lit`** — ID, middle dot, initial and surname. Never one without the other.
-- **Temperatures are always `2–8 °C`** with an en dash.
-- **The run is Mon 08-JAN-2024 to Thu 11-JAN-2024.** Randomization closes `12-JAN-2024 08:00 PT`.
-- **A day is 16 half-hour blocks**, 8:00 AM to 4:00 PM. `Accept` = 1 block. `Manually Review` = 3 blocks (screening) or 2 blocks (data entry, safety).
-- **Two verbs only.** There is no batch review, no reject, no flag, no escalate. Adding one is a spec violation.
-- **VERA never acts.** Every line she speaks is "I have drafted…" or "…ready for your review". Never "I have submitted", "I have filed", "I have sent".
-- **No meters, no HUD, no modal dialogs, no score.** The only non-diegetic element permitted in the entire game is the `Skip day` button on the day-end summary.
-- **The engine never reads `situation.vera` to determine correctness.** Only `situation.truth`.
-- **Every generated content file carries the SIMULATED DOCUMENT banner** verbatim from `docs/STUDY_FACTS.md` §2.
-- **TypeScript strict mode is on.** No `any`. No non-null assertions except where a test has just established the value.
+- **Path alias:** `@/*` → `./src/*`. Import as `@/game/types`, never by relative path across directories.
+- **Test command:** `npm test` (vitest run). Single file: `npx vitest run src/path/file.test.ts`.
+- **Typecheck:** `npm run typecheck` must pass. `strict: true` — no `any`, no non-null assertions to dodge a type error.
+- **Dates are `DD-MMM-YYYY`** everywhere in game-facing copy (e.g. `08-JAN-2024`). Never ISO, never US-numeric.
+- **Subject IDs are `1047-NNN`.** Roster and email copy render them as `1047-018 · L. Lit`. Never name-only.
+- **Temperatures render as `2–8 °C`** (en dash, space before °C).
+- **Protocol reference string:** `Protocol 20210143, Amendment 3 (29-NOV-2023)`.
+- **The run is Mon 08-JAN-2024 to Thu 11-JAN-2024.** Study-wide randomization closes Fri 12-JAN-2024.
+- **VERA never acts.** Every line she speaks is "I have drafted" / "ready for your review". Never "I have submitted", "I have filed", "I have sent". This is checked by a test in Task 16.
+- **VERA's register is identical whether right or wrong.** No hedging, no confidence scores, no "I'm not certain about this one". Checked by a test in Task 16.
+- **No new dependencies** without flagging it. Everything in this plan builds on what `package.json` already has.
+- **The desk has no non-diegetic elements.** No modals, no meters, no progress bars, no score display during play. The single exception is `Skip day`, which lives on the day-end screen, not the desk.
+- **Canon source of truth:** `docs/STUDY_FACTS.md` and `docs/RESEARCH_SITE.md`. No document may state a dose, visit, window, contact, or identifier that contradicts them.
+- **Design source of truth:** `docs/superpowers/specs/2026-07-28-icf-please-run-design.md`. Referred to below as "the spec".
 
 ---
 
 ## File Structure
 
-**Engine — pure TypeScript, no React imports.**
+**Game core** — pure data and logic, no React:
 
 | File | Responsibility |
 |---|---|
 | `src/game/types.ts` | Every shared type. No logic. |
-| `src/game/engine/clock.ts` | Block arithmetic, clock formatting, day-start taxes |
-| `src/game/engine/queue.ts` | Today's queue, rollover, screening-window expiry |
-| `src/game/engine/resolve.ts` | `(action, situation, submission) → outcome key + correctness` |
-| `src/game/engine/consequences.ts` | Collecting scheduled consequences and delivering them at a day-end |
-| `src/game/engine/scoring.ts` | The answer rows, the audit-finding slots, calibration stats |
-| `src/game/engine/state.ts` | The reducer — the single place game state changes |
-| `src/game/engine/persistence.ts` | localStorage load/save, version-stamped |
+| `src/game/state.ts` | The reducer, `initialState`, and the pure helpers it uses. |
+| `src/game/script.ts` | The nineteen situations, in order. Content only. |
+| `src/game/subjects.ts` | The roster seed. |
+| `src/game/emails.ts` | Ladder rungs and standing emails. |
+| `src/game/forms.ts` | The three eCRF field definitions. |
+| `src/game/fixtures.ts` | A three-situation fixture script used by tests only. |
 
-**Content — data only, no logic.**
-
-| File | Responsibility |
-|---|---|
-| `src/game/content/forms.ts` | The three eCRF templates |
-| `src/game/content/subjects.ts` | Roster seed at 8:00 AM Monday |
-| `src/game/content/ladders.ts` | Scripted rungs and their block costs |
-| `src/game/content/emails.ts` | Every authored email, keyed by id |
-| `src/game/content/situations/day{1,2,3,4}.ts` | Items 1–5, 6–9, 10–14, 15–19 |
-| `src/game/content/situations/index.ts` | The manifest — flat array of all 19 |
-| `src/game/invariants.test.ts` | Encodes spec §2 and §4 so edits cannot silently break the run |
-
-**UI.**
+**Desk shell:**
 
 | File | Responsibility |
 |---|---|
-| `src/components/desk/useWindows.ts` | Window state: position, size, z-order, drag, clamp |
-| `src/components/desk/WindowFrame.tsx` | The beveled chrome + title bar drag handle |
-| `src/components/desk/Taskbar.tsx` | Start button, one button per window, clock and date |
-| `src/components/desk/Desk.tsx` | Composes windows + taskbar + rail; owns auto-placement |
-| `src/components/windows/WorkQueue.tsx` | The base window — item list and selection |
-| `src/components/windows/DocViewer.tsx` | Markdown render + full-text find |
-| `src/components/windows/ECRF.tsx` | The three form templates + submission |
-| `src/components/windows/Inbox.tsx` | Read-only message list |
-| `src/components/windows/Roster.tsx` | Subject list with statuses |
-| `src/components/windows/DocumentsList.tsx` | The 15-document library index |
-| `src/components/vera/Rail.tsx` | Fixed right rail — empty state, then her |
-| `src/components/screens/*.tsx` | SignIn, DayEnd, Answer, AuditFinding, ThePoint |
-| `src/app/page.tsx` | Phase switch — which screen is showing |
-| `src/app/globals.css` | The aesthetic split: EDC chrome vs VERA |
+| `src/components/desk/geometry.ts` | `clampToViewport` — pure, testable. |
+| `src/components/desk/useWindows.ts` | Window open/close/focus/move state. |
+| `src/components/desk/Window.tsx` | One chrome window: title bar, drag, buttons. |
+| `src/components/desk/Taskbar.tsx` | Start button, one button per window, clock. |
+| `src/components/desk/Desk.tsx` | Composes the windows and the rail. |
 
-**Static content — must live under `public/` to be fetchable at runtime.**
+**Windows:**
 
-| Path | Contents |
+| File | Responsibility |
 |---|---|
-| `public/content/documents/*.md` | The 15 trial documents, copied from `docs/trial_documents/` |
-| `public/content/source/*.md` | Per-item source documents, 1–3 pages each |
+| `src/components/windows/WorkQueue.tsx` | The queue list and the current item. |
+| `src/components/windows/DocViewer.tsx` | Markdown render + find. |
+| `src/components/windows/find.ts` | `findMatches` — pure, testable. |
+| `src/components/windows/ECRF.tsx` | The form the player fills in. |
+| `src/components/windows/Inbox.tsx` | Read-only email list. |
+| `src/components/windows/Roster.tsx` | Subject list with statuses. |
+| `src/components/windows/Documents.tsx` | The 15-document library index. |
 
-> **Note on the spec:** §8 of the design spec shows `content/documents/` at the repo root. It must be `public/content/documents/` for `fetch()` to reach it in Next.js. This plan uses the corrected path.
+**VERA and screens:**
+
+| File | Responsibility |
+|---|---|
+| `src/components/vera/Rail.tsx` | The fixed right rail. Not a window. |
+| `src/components/screens/SignIn.tsx` | Premise + sign in. |
+| `src/components/screens/DayEnd.tsx` | The 4:00 PM stop. |
+| `src/components/screens/Ending.tsx` | Three beats, in order. |
+| `src/app/page.tsx` | Screen router over reducer state. |
+
+**Content assets:**
+
+| Path | Responsibility |
+|---|---|
+| `public/content/documents/*.md` | The 15 trial documents, copied from `docs/trial_documents/`. |
+| `public/content/documents/index.json` | Title + filename + word count for the Documents window. |
+| `public/content/source/*.md` | Per-situation source documents, authored in Tasks 12–15. |
 
 ---
 
-# Phase 1 — Engine
+## Task ordering
 
-Pure TypeScript. Every task in this phase is testable without rendering anything.
+Tasks 1–11 build the machine against a three-situation fixture. Tasks 12–15 author the real nineteen. Task 16 locks the design invariants in tests. This ordering means the game is playable end-to-end after Task 11, and every content task after that is additive and independently reviewable.
 
 ---
 
-### Task 1: Types and the clock
+### Task 1: Types and the reducer
 
 **Files:**
 - Create: `src/game/types.ts`
-- Create: `src/game/engine/clock.ts`
-- Test: `src/game/engine/clock.test.ts`
+- Create: `src/game/fixtures.ts`
+- Create: `src/game/state.ts`
+- Test: `src/game/state.test.ts`
 
 **Interfaces:**
-- Consumes: nothing
-- Produces: every type in `types.ts`; `BLOCKS_PER_DAY`, `blocksToClock(blocksUsed: number): string`, `formatRunDate(day: DayNumber): string`
+- Consumes: nothing.
+- Produces: every type below; `initialState: State`; `reducer(state: State, action: Action): State`; `situationById(id: string, script: Situation[]): Situation`.
 
-- [ ] **Step 1: Write `src/game/types.ts`**
+- [ ] **Step 1: Write the types**
+
+Create `src/game/types.ts`:
 
 ```ts
-export type DayNumber = 1 | 2 | 3 | 4;
 export type ItemType = "screening" | "data-entry" | "safety";
-export type Action = "accept" | "manual";
 
 export type ErrorType =
   | "NONE"
@@ -115,3614 +116,768 @@ export type ErrorType =
   | "misattribution"
   | "stale-context"
   | "normalization"
-  | "threshold-overconfidence";
+  | "threshold";
 
-export type OutcomeKey =
-  | "acceptedCorrect"
-  | "acceptedWrong"
-  | "manualCorrect"
-  | "manualWrong"
-  | "unworked";
-
-export type FormTemplate = "vitals" | "lab-panel" | "screening-eligibility";
-export type FormFieldSpec = { key: string; label: string; unit?: string };
-export type FormSpec = { template: FormTemplate; fields: FormFieldSpec[] };
+export type FormId = "vitals" | "labs" | "eligibility";
 export type FormValues = Record<string, string>;
+export type Day = 1 | 2 | 3 | 4;
 
-/** Screening and safety items resolve to one authored verdict string. */
-export type Verdict = string;
-
-export type SubjectStatus =
-  | "Enrolled"
-  | "Withdrawn (by subject)"
-  | "Withdrawn (hospitalized)"
-  | "Screening"
-  | "Screen failed"
-  | "Screen failed (window expired)"
-  | "Randomized";
-
-export type Subject = {
+export type Email = {
   id: string;
-  /** Initial and surname, e.g. "L. Lit". Rendered as `${id} · ${name}`. */
-  name: string;
-  status: SubjectStatus;
-  /** DD-MMM-YYYY. Present only while status is "Screening". */
-  windowCloses?: string;
-  /** e.g. "Week 16". Present only while enrolled. */
-  visit?: string;
+  from: string;
+  subject: string;
+  body: string;
 };
 
-export type Consequence =
-  | { kind: "email"; emailId: string; deliverAtDayEnd: DayNumber }
-  | {
-      kind: "query";
-      queryId: string;
-      subjectId: string;
-      text: string;
-      deliverAtDayEnd: DayNumber;
-    }
-  | {
-      kind: "roster";
-      subjectId: string;
-      status: SubjectStatus;
-      deliverAtDayEnd: DayNumber;
-    };
+export type RosterChange = { subject: string; status: string };
+
+export type Tally = {
+  verified: number;
+  errorsCaught: number;
+  errorsAccepted: number;
+  randomized: number;
+  harmed: number;
+};
+
+export type Outcome = {
+  email?: Email;
+  roster?: RosterChange;
+  score: Partial<Tally>;
+};
+
+export type OutcomeKey = "accepted" | "reviewedCorrect" | "reviewedWrong";
 
 export type Situation = {
   id: string;
-  day: DayNumber;
+  day: Day;
   type: ItemType;
-  subjectId: string;
+  subject: string;
   title: string;
-  /** The one-line queue row. */
   blurb: string;
-  /** Day 1 morning: no Accept path exists. */
-  manual: boolean;
-  manualCost: 2 | 3;
-  /** Filenames under public/content/source/, without the directory. */
-  sourceDocs: string[];
-  form: FormSpec;
-  /** ISOLATED. Swappable for a live LLM call. Null on forced-manual items. */
-  vera: { summary: string; entry: FormValues; verdict?: Verdict } | null;
-  /** The engine compares submissions against this, never against `vera`. */
-  truth: {
-    errorType: ErrorType;
-    values: FormValues;
-    verdict?: Verdict;
-    /** Where in source the error is visible. Empty string when uncatchable. */
-    tell: string;
-  };
-  outcomes: Partial<Record<OutcomeKey, Consequence[]>>;
+  cost: 60 | 90;
+  manual?: true;
+  source: string[];
+  form: FormId;
+  vera?: { summary: string; entry: FormValues };
+  truth: { error: ErrorType; entry: FormValues; verdict?: string };
+  outcomes: Record<OutcomeKey, Outcome>;
   debrief: { line: string; category?: 1 | 2 | 3 };
 };
 
-export type InboxMessage = {
-  id: string;
-  from: string;
-  subject: string;
-  body: string;
-  /** The day-end at which it landed. Day 0 means it was there at sign-in. */
-  arrivedDay: number;
-};
-
-export type WorkRecord = {
+export type Resolution = {
   situationId: string;
-  day: DayNumber;
-  action: Action;
+  action: "accepted" | "reviewed";
+  submitted?: FormValues;
+  verdict?: string;
   correct: boolean;
   outcomeKey: OutcomeKey;
-  submitted?: FormValues;
-  verdict?: Verdict;
 };
 
-export type Phase =
-  | "signin"
-  | "desk"
-  | "dayend"
-  | "answer"
-  | "audit"
-  | "point";
+export type Subject = { id: string; name: string; status: string };
+export type Roster = Subject[];
 
-export type GameState = {
-  version: number;
-  phase: Phase;
-  day: DayNumber;
-  blocksUsed: number;
-  blocksAvailable: number;
-  /**
-   * Blocks taken off the top of today by queries and ladder rungs, spent
-   * before the player touches the queue. The day does not get shorter — it
-   * begins later, so the taskbar clock reads `blocksTaxed + blocksUsed`.
-   * blocksTaxed + blocksAvailable is always BLOCKS_PER_DAY.
-   */
-  blocksTaxed: number;
-  /** Situation ids queued for today, in order, including rollover. */
-  queue: string[];
-  worked: Record<string, WorkRecord>;
-  roster: Record<string, Subject>;
-  inbox: InboxMessage[];
-  /** Consequences scheduled but not yet delivered. */
-  pending: Consequence[];
-  /** Queries delivered at the last day-end; taxes tomorrow. */
-  openQueries: number;
-  randomized: number;
-};
-```
+export type Screen = "signin" | "desk" | "dayend" | "ending";
 
-- [ ] **Step 2: Write the failing test**
-
-Create `src/game/engine/clock.test.ts`:
-
-```ts
-import { describe, expect, it } from "vitest";
-
-import { BLOCKS_PER_DAY, blocksToClock, formatRunDate } from "./clock";
-
-describe("clock", () => {
-  it("is sixteen blocks long", () => {
-    expect(BLOCKS_PER_DAY).toBe(16);
-  });
-
-  it("renders the start of the day", () => {
-    expect(blocksToClock(0)).toBe("8:00 AM");
-  });
-
-  it("renders half-hour steps", () => {
-    expect(blocksToClock(1)).toBe("8:30 AM");
-    expect(blocksToClock(7)).toBe("11:30 AM");
-  });
-
-  it("crosses noon correctly", () => {
-    expect(blocksToClock(8)).toBe("12:00 PM");
-    expect(blocksToClock(9)).toBe("12:30 PM");
-    expect(blocksToClock(10)).toBe("1:00 PM");
-  });
-
-  it("renders the end of the day", () => {
-    expect(blocksToClock(BLOCKS_PER_DAY)).toBe("4:00 PM");
-  });
-
-  it("formats run dates in DD-MMM-YYYY", () => {
-    expect(formatRunDate(1)).toBe("08-JAN-2024");
-    expect(formatRunDate(4)).toBe("11-JAN-2024");
-  });
-});
-```
-
-- [ ] **Step 3: Run it and watch it fail**
-
-Run: `npx vitest run src/game/engine/clock.test.ts`
-Expected: FAIL — `Failed to resolve import "./clock"`
-
-- [ ] **Step 4: Write `src/game/engine/clock.ts`**
-
-```ts
-import type { DayNumber } from "../types";
-
-export const BLOCKS_PER_DAY = 16;
-const DAY_START_MINUTES = 8 * 60;
-const MINUTES_PER_BLOCK = 30;
-
-/** Wall-clock time after `blocksUsed` half-hour blocks of an 8:00 AM start. */
-export function blocksToClock(blocksUsed: number): string {
-  const total = DAY_START_MINUTES + blocksUsed * MINUTES_PER_BLOCK;
-  const hour24 = Math.floor(total / 60);
-  const minute = total % 60;
-  const suffix = hour24 >= 12 ? "PM" : "AM";
-  const hour12 = hour24 % 12 === 0 ? 12 : hour24 % 12;
-  return `${hour12}:${String(minute).padStart(2, "0")} ${suffix}`;
-}
-
-const RUN_DATES: Record<DayNumber, string> = {
-  1: "08-JAN-2024",
-  2: "09-JAN-2024",
-  3: "10-JAN-2024",
-  4: "11-JAN-2024",
+export type State = {
+  screen: Screen;
+  day: Day;
+  clock: number; // minutes since 08:00, display only
+  index: number; // position in the script
+  resolutions: Resolution[];
+  inbox: Email[];
+  roster: Roster;
+  tally: Tally;
 };
 
-export function formatRunDate(day: DayNumber): string {
-  return RUN_DATES[day];
-}
-
-/** The morning after day 4. Randomization closes here and does not move. */
-export const RANDOMIZATION_CLOSES = "12-JAN-2024 08:00 PT";
+export type Action =
+  | { type: "SIGN_IN" }
+  | { type: "ACCEPT" }
+  | { type: "SUBMIT"; values: FormValues; verdict?: string }
+  | { type: "BEGIN_DAY" }
+  | { type: "SKIP_DAY" };
 ```
 
-- [ ] **Step 5: Run it and watch it pass**
+- [ ] **Step 2: Write the test fixture**
 
-Run: `npx vitest run src/game/engine/clock.test.ts`
-Expected: PASS, 6 tests
-
-- [ ] **Step 6: Typecheck and commit**
-
-```bash
-npm run typecheck
-git add src/game/types.ts src/game/engine/clock.ts src/game/engine/clock.test.ts
-git commit -m "feat(engine): game types and the half-hour block clock"
-```
-
----
-
-### Task 2: Ladder taxes and available blocks
-
-The taxes are what make day 4 overflow. Spec §2 gives the exact numbers; this task encodes them.
-
-**Files:**
-- Create: `src/game/content/ladders.ts`
-- Modify: `src/game/engine/clock.ts`
-- Test: `src/game/engine/clock.test.ts` (append)
-
-**Interfaces:**
-- Consumes: `DayNumber` from `types.ts`
-- Produces: `LADDER_RUNGS: LadderRung[]`, `ladderTaxBlocks(day: DayNumber): number`, `availableBlocks(day: DayNumber, openQueries: number): number`
-
-- [ ] **Step 1: Write `src/game/content/ladders.ts`**
+Create `src/game/fixtures.ts`. Three situations spanning two days — one correct, one wrong, one manual — enough to exercise every reducer branch.
 
 ```ts
-import type { DayNumber } from "../types";
+import type { Situation } from "@/game/types";
 
-export type LadderRung = {
-  id: string;
-  ladder: "enrollment" | "audit";
-  rung: number;
-  /** Fires at the end of this day. */
-  firesAtDayEnd: DayNumber;
-  emailId: string;
-  /** Blocks this costs on each subsequent day. 0 = costs no time. */
-  dailyTaxBlocks: number;
-  /** Blocks this costs once, on this specific day. */
-  oneOffTaxBlocks: number;
-  oneOffTaxDay?: DayNumber;
-};
+const noOutcome = { score: {} };
 
-/**
- * Both ladders are scripted — they fire regardless of player performance.
- * Their accumulated cost on day 4 is what makes a verify-everything run
- * overflow with zero rollover and zero mistakes. See spec §2.
- */
-export const LADDER_RUNGS: LadderRung[] = [
+export const FIXTURE_SCRIPT: Situation[] = [
   {
-    id: "enroll-1",
-    ladder: "enrollment",
-    rung: 1,
-    firesAtDayEnd: 1,
-    emailId: "email-enroll-nudge",
-    dailyTaxBlocks: 0,
-    oneOffTaxBlocks: 0,
-  },
-  {
-    id: "enroll-2",
-    ladder: "enrollment",
-    rung: 2,
-    firesAtDayEnd: 2,
-    emailId: "email-enroll-call",
-    dailyTaxBlocks: 0,
-    // "Our ops lead has asked for a call Thursday" — the call is on day 4.
-    oneOffTaxBlocks: 2,
-    oneOffTaxDay: 4,
-  },
-  {
-    id: "audit-1",
-    ladder: "audit",
-    rung: 1,
-    firesAtDayEnd: 2,
-    emailId: "email-audit-query-volume",
-    dailyTaxBlocks: 0,
-    oneOffTaxBlocks: 0,
-  },
-  {
-    id: "enroll-3",
-    ladder: "enrollment",
-    rung: 3,
-    firesAtDayEnd: 3,
-    emailId: "email-enroll-daily-reporting",
-    // Daily enrollment reporting, every day for the rest of the run.
-    dailyTaxBlocks: 1,
-    oneOffTaxBlocks: 0,
-  },
-  {
-    id: "audit-2",
-    ladder: "audit",
-    rung: 2,
-    firesAtDayEnd: 3,
-    emailId: "email-audit-for-cause",
-    dailyTaxBlocks: 0,
-    // Document prep for the announced for-cause audit.
-    oneOffTaxBlocks: 2,
-    oneOffTaxDay: 4,
-  },
-];
-
-/** Total blocks the ladders take off the top of `day`. */
-export function ladderTaxBlocks(day: DayNumber): number {
-  return LADDER_RUNGS.reduce((total, rung) => {
-    const daily = rung.firesAtDayEnd < day ? rung.dailyTaxBlocks : 0;
-    const oneOff = rung.oneOffTaxDay === day ? rung.oneOffTaxBlocks : 0;
-    return total + daily + oneOff;
-  }, 0);
-}
-```
-
-- [ ] **Step 2: Write the failing test**
-
-Append to `src/game/engine/clock.test.ts`:
-
-```ts
-import { ladderTaxBlocks } from "../content/ladders";
-import { availableBlocks } from "./clock";
-
-describe("day-start taxes", () => {
-  it("costs nothing on days 1 and 2", () => {
-    expect(ladderTaxBlocks(1)).toBe(0);
-    expect(ladderTaxBlocks(2)).toBe(0);
-  });
-
-  it("costs nothing on day 3 — no rung has billed yet", () => {
-    expect(ladderTaxBlocks(3)).toBe(0);
-  });
-
-  it("costs five blocks on day 4: reporting, the call, and audit prep", () => {
-    expect(ladderTaxBlocks(4)).toBe(5);
-  });
-
-  it("bills thirty minutes per open query", () => {
-    expect(availableBlocks(3, 2)).toBe(14);
-    expect(availableBlocks(3, 3)).toBe(13);
-  });
-
-  it("leaves day 4 unable to absorb its own queue", () => {
-    // Day 4's full manual cost is 12 blocks (spec §4). One query is the floor.
-    expect(availableBlocks(4, 1)).toBe(10);
-    expect(availableBlocks(4, 2)).toBe(9);
-  });
-});
-```
-
-- [ ] **Step 3: Run it and watch it fail**
-
-Run: `npx vitest run src/game/engine/clock.test.ts`
-Expected: FAIL — `availableBlocks is not a function`
-
-- [ ] **Step 4: Add `availableBlocks` to `src/game/engine/clock.ts`**
-
-```ts
-import { ladderTaxBlocks } from "../content/ladders";
-
-/**
- * Blocks the player actually gets. Taxes are deducted before they touch the
- * queue, so the day simply begins later. Never returns less than zero.
- */
-export function availableBlocks(day: DayNumber, openQueries: number): number {
-  const taxes = ladderTaxBlocks(day) + openQueries;
-  return Math.max(0, BLOCKS_PER_DAY - taxes);
-}
-```
-
-Add the import at the top of the file alongside the existing `types` import.
-
-- [ ] **Step 5: Run it and watch it pass**
-
-Run: `npx vitest run src/game/engine/clock.test.ts`
-Expected: PASS, 11 tests
-
-- [ ] **Step 6: Typecheck and commit**
-
-```bash
-npm run typecheck
-git add src/game/content/ladders.ts src/game/engine/clock.ts src/game/engine/clock.test.ts
-git commit -m "feat(engine): scripted ladder taxes and available-block arithmetic"
-```
-
----
-
-### Task 3: Queue building, rollover, and window expiry
-
-**Files:**
-- Create: `src/game/engine/queue.ts`
-- Test: `src/game/engine/queue.test.ts`
-
-**Interfaces:**
-- Consumes: `Situation`, `Subject`, `DayNumber`, `GameState` from `types.ts`; `formatRunDate` from `clock.ts`
-- Produces: `buildQueue(day, allSituations, rolledOver): string[]`, `expireWindows(day, queue, situations, roster): { expired: string[]; roster: Record<string, Subject> }`
-
-- [ ] **Step 1: Write the failing test**
-
-Create `src/game/engine/queue.test.ts`:
-
-```ts
-import { describe, expect, it } from "vitest";
-
-import type { Situation, Subject } from "../types";
-import { buildQueue, expireWindows } from "./queue";
-
-function situation(over: Partial<Situation> & Pick<Situation, "id" | "day">): Situation {
-  return {
+    id: "FIX-001",
+    day: 1,
     type: "data-entry",
-    subjectId: "1047-009",
-    title: "t",
-    blurb: "b",
-    manual: false,
-    manualCost: 2,
-    sourceDocs: [],
-    form: { template: "vitals", fields: [] },
-    vera: { summary: "s", entry: {} },
-    truth: { errorType: "NONE", values: {}, tell: "" },
-    outcomes: {},
-    debrief: { line: "" },
-    ...over,
-  } as Situation;
-}
-
-const ALL: Situation[] = [
-  situation({ id: "A", day: 1 }),
-  situation({ id: "B", day: 2 }),
-  situation({ id: "C", day: 2 }),
+    subject: "1047-009",
+    title: "Week 8 vitals",
+    blurb: "Paper source only. Four fields.",
+    cost: 60,
+    manual: true,
+    source: ["fix-001.md"],
+    form: "vitals",
+    truth: { error: "NONE", entry: { bp: "128/82", pulse: "72" } },
+    outcomes: {
+      accepted: noOutcome,
+      reviewedCorrect: { score: { verified: 1 } },
+      reviewedWrong: {
+        score: { verified: 1, errorsAccepted: 1 },
+        email: {
+          id: "DQ-0111",
+          from: "Amgen Data Mgmt",
+          subject: "Query DQ-0111",
+          body: "Reported value does not match source.",
+        },
+      },
+    },
+    debrief: { line: "Week 8 vitals, entered by hand." },
+  },
+  {
+    id: "FIX-002",
+    day: 1,
+    type: "data-entry",
+    subject: "1047-003",
+    title: "Week 12 labs",
+    blurb: "Central lab panel.",
+    cost: 60,
+    source: ["fix-002.md"],
+    form: "labs",
+    vera: { summary: "The panel is within range.", entry: { alt: "24" } },
+    truth: { error: "NONE", entry: { alt: "24" } },
+    outcomes: {
+      accepted: { score: {} },
+      reviewedCorrect: { score: { verified: 1 } },
+      reviewedWrong: { score: { verified: 1, errorsAccepted: 1 } },
+    },
+    debrief: { line: "She was right." },
+  },
+  {
+    id: "FIX-003",
+    day: 2,
+    type: "screening",
+    subject: "1047-019",
+    title: "Eligibility review",
+    blurb: "Screening packet.",
+    cost: 90,
+    source: ["fix-003.md"],
+    form: "eligibility",
+    vera: {
+      summary: "The subject meets all inclusion criteria.",
+      entry: { easi: "15.8" },
+    },
+    truth: { error: "threshold", entry: { easi: "15.8" }, verdict: "screen-fail" },
+    outcomes: {
+      accepted: {
+        score: { errorsAccepted: 1, randomized: 1 },
+        roster: { subject: "1047-019", status: "Enrolled" },
+      },
+      reviewedCorrect: {
+        score: { verified: 1, errorsCaught: 1 },
+        roster: { subject: "1047-019", status: "Screen failed (EASI <16)" },
+      },
+      reviewedWrong: {
+        score: { verified: 1, errorsAccepted: 1, randomized: 1 },
+        roster: { subject: "1047-019", status: "Enrolled" },
+      },
+    },
+    debrief: { line: "EASI 15.8 is below the threshold of 16.", category: 3 },
+  },
 ];
-
-describe("buildQueue", () => {
-  it("returns only today's situations when nothing rolled over", () => {
-    expect(buildQueue(2, ALL, [])).toEqual(["B", "C"]);
-  });
-
-  it("puts rolled-over items on top of today's queue", () => {
-    expect(buildQueue(2, ALL, ["A"])).toEqual(["A", "B", "C"]);
-  });
-});
-
-describe("expireWindows", () => {
-  const roster: Record<string, Subject> = {
-    "1047-018": {
-      id: "1047-018",
-      name: "L. Lit",
-      status: "Screening",
-      windowCloses: "11-JAN-2024",
-    },
-    "1047-019": {
-      id: "1047-019",
-      name: "R. Amaya",
-      status: "Screening",
-      windowCloses: "12-JAN-2024",
-    },
-  };
-
-  const screening: Situation[] = [
-    situation({ id: "SCR-0218", day: 3, type: "screening", subjectId: "1047-018", manualCost: 3 }),
-    situation({ id: "SCR-0219", day: 3, type: "screening", subjectId: "1047-019", manualCost: 3 }),
-  ];
-
-  it("expires a screening item whose window closed today", () => {
-    const result = expireWindows(4, ["SCR-0218", "SCR-0219"], screening, roster);
-
-    expect(result.expired).toEqual(["SCR-0218"]);
-    expect(result.roster["1047-018"].status).toBe("Screen failed (window expired)");
-    expect(result.roster["1047-019"].status).toBe("Screening");
-  });
-
-  it("leaves an open window alone before its date", () => {
-    const result = expireWindows(3, ["SCR-0218"], screening, roster);
-
-    expect(result.expired).toEqual([]);
-    expect(result.roster["1047-018"].status).toBe("Screening");
-  });
-
-  it("expires every remaining screening item at the end of day 4", () => {
-    const result = expireWindows(4, ["SCR-0219"], screening, roster, {
-      randomizationClosesTomorrow: true,
-    });
-
-    expect(result.expired).toEqual(["SCR-0219"]);
-    expect(result.roster["1047-019"].status).toBe("Screen failed (window expired)");
-  });
-
-  it("ignores non-screening items entirely", () => {
-    const result = expireWindows(4, ["A"], ALL, roster, {
-      randomizationClosesTomorrow: true,
-    });
-
-    expect(result.expired).toEqual([]);
-  });
-});
 ```
 
-- [ ] **Step 2: Run it and watch it fail**
+- [ ] **Step 3: Write the failing reducer tests**
 
-Run: `npx vitest run src/game/engine/queue.test.ts`
-Expected: FAIL — `Failed to resolve import "./queue"`
-
-- [ ] **Step 3: Write `src/game/engine/queue.ts`**
-
-```ts
-import type { DayNumber, Situation, Subject } from "../types";
-import { formatRunDate } from "./clock";
-
-/** Rolled-over items go on top of today's — that is how the backlog compounds. */
-export function buildQueue(
-  day: DayNumber,
-  all: Situation[],
-  rolledOver: string[],
-): string[] {
-  const today = all.filter((s) => s.day === day).map((s) => s.id);
-  return [...rolledOver, ...today];
-}
-
-type ExpireOptions = { randomizationClosesTomorrow?: boolean };
-
-/**
- * Run at the 4:00 PM stop. Any unworked screening item whose window has closed
- * becomes a screen failure. At the end of day 4 every remaining screening item
- * expires regardless of window, because randomization closes the next morning.
- */
-export function expireWindows(
-  day: DayNumber,
-  unworkedQueue: string[],
-  all: Situation[],
-  roster: Record<string, Subject>,
-  options: ExpireOptions = {},
-): { expired: string[]; roster: Record<string, Subject> } {
-  const byId = new Map(all.map((s) => [s.id, s]));
-  const today = formatRunDate(day);
-  const expired: string[] = [];
-  const next = { ...roster };
-
-  for (const id of unworkedQueue) {
-    const situation = byId.get(id);
-    if (!situation || situation.type !== "screening") continue;
-
-    const subject = next[situation.subjectId];
-    if (!subject || subject.status !== "Screening") continue;
-
-    // Compare day-of-month numerically rather than lexically — every run date
-    // is in JAN-2024, but string comparison would break the moment one isn't.
-    const closedByDate =
-      subject.windowCloses !== undefined &&
-      dayOfMonth(subject.windowCloses) <= dayOfMonth(today);
-
-    if (!options.randomizationClosesTomorrow && !closedByDate) continue;
-
-    expired.push(id);
-    next[situation.subjectId] = {
-      ...subject,
-      status: "Screen failed (window expired)",
-      windowCloses: undefined,
-    };
-  }
-
-  return { expired, roster: next };
-}
-
-function dayOfMonth(date: string): number {
-  return Number.parseInt(date.slice(0, 2), 10);
-}
-```
-
-- [ ] **Step 4: Run it and watch it pass**
-
-Run: `npx vitest run src/game/engine/queue.test.ts`
-Expected: PASS, 6 tests
-
-- [ ] **Step 5: Typecheck, lint, and commit**
-
-```bash
-npm run typecheck && npm run lint
-git add src/game/engine/queue.ts src/game/engine/queue.test.ts
-git commit -m "feat(engine): queue building, rollover, and screening-window expiry"
-```
-
----
-
-### Task 4: Resolving an action into an outcome
-
-This is where the engine decides whether the player was right. It reads `truth` and never `vera`.
-
-**Files:**
-- Create: `src/game/engine/resolve.ts`
-- Test: `src/game/engine/resolve.test.ts`
-
-**Interfaces:**
-- Consumes: `Situation`, `Action`, `FormValues`, `Verdict`, `OutcomeKey`, `WorkRecord`
-- Produces: `resolve(situation, action, day, submission?): WorkRecord`, `blockCost(situation, action): number`
-
-- [ ] **Step 1: Write the failing test**
-
-Create `src/game/engine/resolve.test.ts`:
+Create `src/game/state.test.ts`:
 
 ```ts
 import { describe, expect, it } from "vitest";
 
-import type { Situation } from "../types";
-import { blockCost, resolve } from "./resolve";
+import { FIXTURE_SCRIPT } from "@/game/fixtures";
+import { initialState, reducer } from "@/game/state";
+import type { State } from "@/game/types";
 
-const dataEntry: Situation = {
-  id: "DE-1113",
-  day: 3,
-  type: "data-entry",
-  subjectId: "1047-011",
-  title: "Week 20 central lab panel",
-  blurb: "Week 20 labs",
-  manual: false,
-  manualCost: 2,
-  sourceDocs: ["de-1113-lab.md"],
-  form: {
-    template: "lab-panel",
-    fields: [
-      { key: "alt", label: "ALT", unit: "U/L" },
-      { key: "ast", label: "AST", unit: "U/L" },
-    ],
-  },
-  // She states an ALT that appears nowhere in the source. Fabrication.
-  vera: { summary: "ALT 42 U/L, AST 31 U/L.", entry: { alt: "42", ast: "31" } },
-  truth: {
-    errorType: "fabrication",
-    values: { alt: "24", ast: "31" },
-    tell: "Lab report page 1 — ALT reads 24. No value of 42 appears anywhere.",
-  },
-  outcomes: {},
-  debrief: { line: "" },
-};
+const start = (): State => ({ ...initialState, screen: "desk" });
+const run = (s: State, ...actions: Parameters<typeof reducer>[1][]) =>
+  actions.reduce((acc, a) => reducer(acc, a, FIXTURE_SCRIPT), s);
 
-const screening: Situation = {
-  ...dataEntry,
-  id: "SCR-0219",
-  type: "screening",
-  manualCost: 3,
-  subjectId: "1047-019",
-  form: { template: "screening-eligibility", fields: [] },
-  vera: { summary: "Meets all criteria.", entry: {}, verdict: "eligible" },
-  truth: {
-    errorType: "threshold-overconfidence",
-    values: {},
-    verdict: "screen-fail",
-    tell: "Screening packet page 2 — EASI 15.8, below the 16 threshold.",
-  },
-};
-
-describe("blockCost", () => {
-  it("charges one block to accept", () => {
-    expect(blockCost(dataEntry, "accept")).toBe(1);
-    expect(blockCost(screening, "accept")).toBe(1);
+describe("reducer", () => {
+  it("SIGN_IN moves to the desk", () => {
+    expect(reducer(initialState, { type: "SIGN_IN" }, FIXTURE_SCRIPT).screen).toBe("desk");
   });
 
-  it("charges the item's manual cost to review by hand", () => {
-    expect(blockCost(dataEntry, "manual")).toBe(2);
-    expect(blockCost(screening, "manual")).toBe(3);
-  });
-});
-
-describe("resolve", () => {
-  it("marks accepting a fabrication as wrong", () => {
-    const record = resolve(dataEntry, "accept", 3);
-
-    expect(record.correct).toBe(false);
-    expect(record.outcomeKey).toBe("acceptedWrong");
+  it("ACCEPT advances the clock 30 minutes and the index by one", () => {
+    const s = run(start(), { type: "ACCEPT" });
+    expect(s.clock).toBe(30);
+    expect(s.index).toBe(1);
   });
 
-  it("marks accepting a correct output as right", () => {
-    const clean: Situation = {
-      ...dataEntry,
-      vera: { summary: "ALT 24 U/L, AST 31 U/L.", entry: { alt: "24", ast: "31" } },
-      truth: { errorType: "NONE", values: { alt: "24", ast: "31" }, tell: "" },
-    };
-
-    expect(resolve(clean, "accept", 3).outcomeKey).toBe("acceptedCorrect");
+  it("SUBMIT advances the clock by the situation's cost", () => {
+    const s = run(start(), { type: "SUBMIT", values: { bp: "128/82", pulse: "72" } });
+    expect(s.clock).toBe(60);
   });
 
-  it("marks a manual submission matching truth as right", () => {
-    const record = resolve(dataEntry, "manual", 3, { values: { alt: "24", ast: "31" } });
-
-    expect(record.correct).toBe(true);
-    expect(record.outcomeKey).toBe("manualCorrect");
+  it("SUBMIT with matching values records reviewedCorrect", () => {
+    const s = run(start(), { type: "SUBMIT", values: { bp: "128/82", pulse: "72" } });
+    expect(s.resolutions[0].outcomeKey).toBe("reviewedCorrect");
+    expect(s.resolutions[0].correct).toBe(true);
+    expect(s.tally.verified).toBe(1);
   });
 
-  it("marks a mistyped manual submission as wrong", () => {
-    const record = resolve(dataEntry, "manual", 3, { values: { alt: "42", ast: "31" } });
-
-    expect(record.outcomeKey).toBe("manualWrong");
+  it("SUBMIT with a wrong value records reviewedWrong and its email", () => {
+    const s = run(start(), { type: "SUBMIT", values: { bp: "128/28", pulse: "72" } });
+    expect(s.resolutions[0].outcomeKey).toBe("reviewedWrong");
+    expect(s.tally.errorsAccepted).toBe(1);
   });
 
-  it("ignores surrounding whitespace and case in typed values", () => {
-    const record = resolve(dataEntry, "manual", 3, { values: { alt: " 24 ", ast: "31" } });
-
-    expect(record.correct).toBe(true);
+  it("accepting a situation whose truth is NONE is correct", () => {
+    const s = run(start(), { type: "ACCEPT" }, { type: "ACCEPT" });
+    expect(s.resolutions[1].correct).toBe(true);
   });
 
-  it("compares the verdict, not the values, on screening items", () => {
-    expect(resolve(screening, "manual", 3, { verdict: "screen-fail" }).correct).toBe(true);
-    expect(resolve(screening, "manual", 3, { verdict: "eligible" }).correct).toBe(false);
+  it("accepting a situation carrying an error is not correct", () => {
+    const s = run(start(), { type: "ACCEPT" }, { type: "ACCEPT" }, { type: "BEGIN_DAY" }, { type: "ACCEPT" });
+    expect(s.resolutions[2].correct).toBe(false);
+    expect(s.tally.errorsAccepted).toBe(1);
   });
 
-  it("counts an accepted uncatchable item as wrong but records it as uncatchable", () => {
-    const uncatchable: Situation = {
-      ...dataEntry,
-      truth: { errorType: "UNCATCHABLE", values: { alt: "24", ast: "31" }, tell: "" },
-    };
-    const record = resolve(uncatchable, "accept", 2);
-
-    expect(record.correct).toBe(false);
+  it("screening verdict must match, not just the values", () => {
+    const s = run(
+      start(),
+      { type: "ACCEPT" },
+      { type: "ACCEPT" },
+      { type: "BEGIN_DAY" },
+      { type: "SUBMIT", values: { easi: "15.8" }, verdict: "eligible" },
+    );
+    expect(s.resolutions[2].outcomeKey).toBe("reviewedWrong");
   });
 
-  it("counts a manually reviewed uncatchable item as wrong too", () => {
-    // The whole point: verifying does not help. The source agrees with her.
-    const uncatchable: Situation = {
-      ...dataEntry,
-      truth: { errorType: "UNCATCHABLE", values: { alt: "24", ast: "31" }, tell: "" },
-    };
-    const record = resolve(uncatchable, "manual", 2, { values: { alt: "24", ast: "31" } });
+  it("finishing the last situation of a day moves to dayend", () => {
+    const s = run(start(), { type: "ACCEPT" }, { type: "ACCEPT" });
+    expect(s.screen).toBe("dayend");
+  });
 
-    expect(record.correct).toBe(false);
-    expect(record.outcomeKey).toBe("manualWrong");
+  it("finishing the last situation in the script moves to the ending", () => {
+    const s = run(start(), { type: "ACCEPT" }, { type: "ACCEPT" }, { type: "BEGIN_DAY" }, { type: "ACCEPT" });
+    expect(s.screen).toBe("ending");
+  });
+
+  it("BEGIN_DAY resets the clock and increments the day", () => {
+    const s = run(start(), { type: "ACCEPT" }, { type: "ACCEPT" }, { type: "BEGIN_DAY" });
+    expect(s.day).toBe(2);
+    expect(s.clock).toBe(0);
+    expect(s.screen).toBe("desk");
+  });
+
+  it("BEGIN_DAY commits the closing day's roster changes and emails", () => {
+    const s = run(start(), { type: "ACCEPT" }, { type: "ACCEPT" }, { type: "BEGIN_DAY" }, { type: "ACCEPT" }, { type: "BEGIN_DAY" });
+    expect(s.roster.find((r) => r.id === "1047-019")?.status).toBe("Enrolled");
+  });
+
+  it("SKIP_DAY accepts every remaining situation in the current day", () => {
+    const s = run(start(), { type: "SKIP_DAY" });
+    expect(s.resolutions).toHaveLength(2);
+    expect(s.resolutions.every((r) => r.action === "accepted")).toBe(true);
+    expect(s.screen).toBe("dayend");
   });
 });
 ```
 
-- [ ] **Step 2: Run it and watch it fail**
+- [ ] **Step 4: Run the tests to verify they fail**
 
-Run: `npx vitest run src/game/engine/resolve.test.ts`
-Expected: FAIL — `Failed to resolve import "./resolve"`
+Run: `npx vitest run src/game/state.test.ts`
+Expected: FAIL — `Failed to resolve import "@/game/state"`.
 
-- [ ] **Step 3: Write `src/game/engine/resolve.ts`**
+- [ ] **Step 5: Implement the reducer**
+
+Create `src/game/state.ts`:
 
 ```ts
+import { SEED_ROSTER } from "@/game/subjects";
 import type {
   Action,
-  DayNumber,
-  FormValues,
+  Day,
+  Outcome,
   OutcomeKey,
+  Resolution,
   Situation,
-  Verdict,
-  WorkRecord,
-} from "../types";
+  State,
+  Tally,
+} from "@/game/types";
 
-export type Submission = { values?: FormValues; verdict?: Verdict };
+export const EMPTY_TALLY: Tally = {
+  verified: 0,
+  errorsCaught: 0,
+  errorsAccepted: 0,
+  randomized: 0,
+  harmed: 0,
+};
 
-export function blockCost(situation: Situation, action: Action): number {
-  return action === "accept" ? 1 : situation.manualCost;
+export const initialState: State = {
+  screen: "signin",
+  day: 1,
+  clock: 0,
+  index: 0,
+  resolutions: [],
+  inbox: [],
+  roster: SEED_ROSTER,
+  tally: EMPTY_TALLY,
+};
+
+export function situationById(id: string, script: Situation[]): Situation {
+  const found = script.find((s) => s.id === id);
+  if (!found) throw new Error(`Unknown situation: ${id}`);
+  return found;
 }
 
-/**
- * Decides whether the player got it right.
- *
- * Reads `situation.truth` only. It must never read `situation.vera` — that
- * separation is what lets the vera block be replaced by a live LLM call
- * without touching the engine.
- *
- * An UNCATCHABLE item is wrong whichever verb the player chose. Nothing on
- * their desk disagreed with anything else on their desk.
- */
-export function resolve(
+function addTally(tally: Tally, delta: Partial<Tally>): Tally {
+  return {
+    verified: tally.verified + (delta.verified ?? 0),
+    errorsCaught: tally.errorsCaught + (delta.errorsCaught ?? 0),
+    errorsAccepted: tally.errorsAccepted + (delta.errorsAccepted ?? 0),
+    randomized: tally.randomized + (delta.randomized ?? 0),
+    harmed: tally.harmed + (delta.harmed ?? 0),
+  };
+}
+
+function valuesMatch(a: Record<string, string>, b: Record<string, string>): boolean {
+  const keys = new Set([...Object.keys(a), ...Object.keys(b)]);
+  return [...keys].every((k) => (a[k] ?? "").trim() === (b[k] ?? "").trim());
+}
+
+/** Applies one resolution: appends it, adds its score, and advances the clock. */
+function resolve(
+  state: State,
   situation: Situation,
-  action: Action,
-  day: DayNumber,
-  submission: Submission = {},
-): WorkRecord {
-  const correct =
-    situation.truth.errorType === "UNCATCHABLE"
-      ? false
-      : action === "accept"
-        ? situation.truth.errorType === "NONE"
-        : matchesTruth(situation, submission);
-
-  const outcomeKey: OutcomeKey =
-    action === "accept"
-      ? correct
-        ? "acceptedCorrect"
-        : "acceptedWrong"
-      : correct
-        ? "manualCorrect"
-        : "manualWrong";
+  resolution: Resolution,
+  minutes: number,
+  script: Situation[],
+): State {
+  const outcome: Outcome = situation.outcomes[resolution.outcomeKey];
+  const index = state.index + 1;
+  const next = script[index];
+  const screen: State["screen"] = !next ? "ending" : next.day !== situation.day ? "dayend" : "desk";
 
   return {
-    situationId: situation.id,
-    day,
-    action,
-    correct,
-    outcomeKey,
-    submitted: submission.values,
-    verdict: submission.verdict,
-  };
-}
-
-function matchesTruth(situation: Situation, submission: Submission): boolean {
-  if (situation.type === "data-entry") {
-    return Object.entries(situation.truth.values).every(
-      ([key, expected]) => normalise(submission.values?.[key]) === normalise(expected),
-    );
-  }
-  return submission.verdict === situation.truth.verdict;
-}
-
-function normalise(value: string | undefined): string {
-  return (value ?? "").trim().toLowerCase();
-}
-```
-
-- [ ] **Step 4: Run it and watch it pass**
-
-Run: `npx vitest run src/game/engine/resolve.test.ts`
-Expected: PASS, 10 tests
-
-- [ ] **Step 5: Typecheck, lint, and commit**
-
-```bash
-npm run typecheck && npm run lint
-git add src/game/engine/resolve.ts src/game/engine/resolve.test.ts
-git commit -m "feat(engine): resolve actions against ground truth, never against VERA"
-```
-
----
-
-### Task 5: Deferred consequences
-
-Consequences never fire at the moment of the mistake. They are collected when an item resolves and delivered at a later day-end, in their native channel.
-
-**Files:**
-- Create: `src/game/engine/consequences.ts`
-- Test: `src/game/engine/consequences.test.ts`
-
-**Interfaces:**
-- Consumes: `Consequence`, `Situation`, `WorkRecord`, `Subject`, `InboxMessage`, `DayNumber`
-- Produces: `collect(situation, outcomeKey): Consequence[]`, `deliver(dayEnd, pending, roster, emails): DeliveryResult`
-
-- [ ] **Step 1: Write the failing test**
-
-Create `src/game/engine/consequences.test.ts`:
-
-```ts
-import { describe, expect, it } from "vitest";
-
-import type { Consequence, Situation, Subject } from "../types";
-import { collect, deliver } from "./consequences";
-
-const situation = {
-  id: "DE-1113",
-  outcomes: {
-    acceptedWrong: [
-      {
-        kind: "query",
-        queryId: "DQ-0114",
-        subjectId: "1047-011",
-        text: "Reported ALT (42) does not match source (24). Please verify and respond.",
-        deliverAtDayEnd: 4,
-      },
-    ],
-    acceptedCorrect: [],
-  },
-} as unknown as Situation;
-
-describe("collect", () => {
-  it("returns the consequences for the outcome that happened", () => {
-    expect(collect(situation, "acceptedWrong")).toHaveLength(1);
-  });
-
-  it("returns nothing for an outcome with no authored consequences", () => {
-    expect(collect(situation, "manualCorrect")).toEqual([]);
-  });
-});
-
-describe("deliver", () => {
-  const roster: Record<string, Subject> = {
-    "1047-001": { id: "1047-001", name: "R. Jones", status: "Enrolled", visit: "Week 16" },
-  };
-
-  const pending: Consequence[] = [
-    { kind: "email", emailId: "email-enroll-nudge", deliverAtDayEnd: 1 },
-    { kind: "roster", subjectId: "1047-001", status: "Withdrawn (hospitalized)", deliverAtDayEnd: 3 },
-    {
-      kind: "query",
-      queryId: "DQ-0114",
-      subjectId: "1047-011",
-      text: "Reported ALT (42) does not match source (24).",
-      deliverAtDayEnd: 3,
-    },
-  ];
-
-  const emails = {
-    "email-enroll-nudge": {
-      id: "email-enroll-nudge",
-      from: "Amgen Clinical Ops",
-      subject: "Portland enrollment 🎉",
-      body: "Just a nudge!",
-    },
-  };
-
-  it("delivers only what is due at this day-end", () => {
-    const result = deliver(1, pending, roster, emails);
-
-    expect(result.messages).toHaveLength(1);
-    expect(result.messages[0].subject).toBe("Portland enrollment 🎉");
-    expect(result.remaining).toHaveLength(2);
-  });
-
-  it("changes the roster line and reports the change", () => {
-    const result = deliver(3, pending, roster, emails);
-
-    expect(result.roster["1047-001"].status).toBe("Withdrawn (hospitalized)");
-    expect(result.rosterChanges).toEqual([
-      { subjectId: "1047-001", from: "Enrolled", to: "Withdrawn (hospitalized)" },
-    ]);
-  });
-
-  it("counts delivered queries so they can tax tomorrow", () => {
-    expect(deliver(3, pending, roster, emails).queryCount).toBe(1);
-  });
-
-  it("renders a query as an inbox message in the sponsor's voice", () => {
-    const result = deliver(3, pending, roster, emails);
-    const query = result.messages.find((m) => m.id === "DQ-0114");
-
-    expect(query?.from).toBe("Amgen Data Mgmt");
-    expect(query?.subject).toBe("Query DQ-0114, subject 1047-011");
-    // It states the mismatch. It never says the player accepted it in error.
-    expect(query?.body).not.toMatch(/you|your/i);
-  });
-});
-```
-
-- [ ] **Step 2: Run it and watch it fail**
-
-Run: `npx vitest run src/game/engine/consequences.test.ts`
-Expected: FAIL — `Failed to resolve import "./consequences"`
-
-- [ ] **Step 3: Write `src/game/engine/consequences.ts`**
-
-```ts
-import type {
-  Consequence,
-  InboxMessage,
-  OutcomeKey,
-  Situation,
-  Subject,
-  SubjectStatus,
-} from "../types";
-
-export type EmailTemplate = {
-  id: string;
-  from: string;
-  subject: string;
-  body: string;
-};
-
-export type RosterChange = {
-  subjectId: string;
-  from: SubjectStatus;
-  to: SubjectStatus;
-};
-
-export type DeliveryResult = {
-  messages: InboxMessage[];
-  roster: Record<string, Subject>;
-  rosterChanges: RosterChange[];
-  remaining: Consequence[];
-  /** Queries delivered now. Each one taxes thirty minutes tomorrow. */
-  queryCount: number;
-};
-
-export function collect(situation: Situation, outcomeKey: OutcomeKey): Consequence[] {
-  return situation.outcomes[outcomeKey] ?? [];
-}
-
-/**
- * Runs at a day-end. Consequences arrive in their native channel and are never
- * labelled as feedback: a query states that the reported value does not match
- * source, and says nothing about who entered it.
- */
-export function deliver(
-  dayEnd: number,
-  pending: Consequence[],
-  roster: Record<string, Subject>,
-  emails: Record<string, EmailTemplate>,
-): DeliveryResult {
-  const due = pending.filter((c) => c.deliverAtDayEnd <= dayEnd);
-  const remaining = pending.filter((c) => c.deliverAtDayEnd > dayEnd);
-
-  const messages: InboxMessage[] = [];
-  const rosterChanges: RosterChange[] = [];
-  const nextRoster = { ...roster };
-  let queryCount = 0;
-
-  for (const consequence of due) {
-    if (consequence.kind === "email") {
-      const template = emails[consequence.emailId];
-      if (!template) {
-        throw new Error(`No email template for id "${consequence.emailId}"`);
-      }
-      messages.push({ ...template, arrivedDay: dayEnd });
-      continue;
-    }
-
-    if (consequence.kind === "query") {
-      queryCount += 1;
-      messages.push({
-        id: consequence.queryId,
-        from: "Amgen Data Mgmt",
-        subject: `Query ${consequence.queryId}, subject ${consequence.subjectId}`,
-        body: consequence.text,
-        arrivedDay: dayEnd,
-      });
-      continue;
-    }
-
-    const subject = nextRoster[consequence.subjectId];
-    if (!subject) {
-      throw new Error(`No roster subject for id "${consequence.subjectId}"`);
-    }
-    if (subject.status === consequence.status) continue;
-
-    rosterChanges.push({
-      subjectId: subject.id,
-      from: subject.status,
-      to: consequence.status,
-    });
-    nextRoster[subject.id] = { ...subject, status: consequence.status };
-  }
-
-  return { messages, roster: nextRoster, rosterChanges, remaining, queryCount };
-}
-```
-
-- [ ] **Step 4: Run it and watch it pass**
-
-Run: `npx vitest run src/game/engine/consequences.test.ts`
-Expected: PASS, 6 tests
-
-- [ ] **Step 5: Typecheck, lint, and commit**
-
-```bash
-npm run typecheck && npm run lint
-git add src/game/engine/consequences.ts src/game/engine/consequences.test.ts
-git commit -m "feat(engine): deferred consequence collection and day-end delivery"
-```
-
----
-
-### Task 6: Scoring — the answer, the audit finding, and calibration
-
-**Files:**
-- Create: `src/game/engine/scoring.ts`
-- Test: `src/game/engine/scoring.test.ts`
-
-**Interfaces:**
-- Consumes: `Situation`, `WorkRecord`, `GameState`
-- Produces: `answerRows(situations, worked): AnswerRow[]`, `calibration(situations, worked): Calibration`, `auditFindingSlots(state, situations): AuditSlots`
-
-- [ ] **Step 1: Write the failing test**
-
-Create `src/game/engine/scoring.test.ts`:
-
-```ts
-import { describe, expect, it } from "vitest";
-
-import type { Situation, WorkRecord } from "../types";
-import { answerRows, calibration } from "./scoring";
-
-function situation(over: Partial<Situation> & Pick<Situation, "id">): Situation {
-  return {
-    day: 2,
-    type: "data-entry",
-    subjectId: "1047-005",
-    title: "t",
-    blurb: "b",
-    manual: false,
-    manualCost: 2,
-    sourceDocs: [],
-    form: { template: "lab-panel", fields: [] },
-    vera: { summary: "s", entry: {} },
-    truth: { errorType: "NONE", values: {}, tell: "" },
-    outcomes: {},
-    debrief: { line: "She was right." },
-    ...over,
-  } as Situation;
-}
-
-const SITUATIONS: Situation[] = [
-  situation({ id: "A" }),
-  situation({
-    id: "B",
-    truth: { errorType: "fabrication", values: {}, tell: "Page 1 — ALT reads 24." },
-    debrief: { line: "An ALT of 42 that appears nowhere in the source.", category: 3 },
-  }),
-  situation({
-    id: "C",
-    truth: { errorType: "UNCATCHABLE", values: {}, tell: "" },
-    debrief: { line: "The blood filed under 1047-005 was drawn from 1047-010.", category: 2 },
-  }),
-];
-
-function record(over: Partial<WorkRecord> & Pick<WorkRecord, "situationId">): WorkRecord {
-  return { day: 2, action: "accept", correct: true, outcomeKey: "acceptedCorrect", ...over } as WorkRecord;
-}
-
-describe("answerRows", () => {
-  it("returns one row per situation, in manifest order", () => {
-    const rows = answerRows(SITUATIONS, {});
-    expect(rows.map((r) => r.id)).toEqual(["A", "B", "C"]);
-  });
-
-  it("marks an item the player never reached as unworked", () => {
-    const rows = answerRows(SITUATIONS, {});
-    expect(rows[0].action).toBe("unworked");
-  });
-
-  it("reports what the player did and whether it was right", () => {
-    const worked = {
-      B: record({ situationId: "B", correct: false, outcomeKey: "acceptedWrong" }),
-    };
-    const row = answerRows(SITUATIONS, worked)[1];
-
-    expect(row.action).toBe("accept");
-    expect(row.correct).toBe(false);
-    expect(row.errorType).toBe("fabrication");
-  });
-
-  it("flags the uncatchable row as impossible however it was worked", () => {
-    const worked = {
-      C: record({ situationId: "C", action: "manual", correct: false, outcomeKey: "manualWrong" }),
-    };
-    const row = answerRows(SITUATIONS, worked)[2];
-
-    expect(row.impossible).toBe(true);
-    expect(row.category).toBe(2);
-  });
-});
-
-describe("calibration", () => {
-  it("counts items verified, of those how many held an error, and errors accepted unverified", () => {
-    const worked = {
-      A: record({ situationId: "A", action: "manual", outcomeKey: "manualCorrect" }),
-      B: record({ situationId: "B", action: "accept", correct: false, outcomeKey: "acceptedWrong" }),
-      C: record({ situationId: "C", action: "manual", correct: false, outcomeKey: "manualWrong" }),
-    };
-    const stats = calibration(SITUATIONS, worked);
-
-    expect(stats.verified).toBe(2);
-    expect(stats.verifiedContainingError).toBe(1);
-    expect(stats.errorsAcceptedUnverified).toBe(1);
-  });
-
-  it("reports zeroes for a run where nothing was worked", () => {
-    const stats = calibration(SITUATIONS, {});
-
-    expect(stats.verified).toBe(0);
-    expect(stats.errorsAcceptedUnverified).toBe(0);
-  });
-});
-```
-
-- [ ] **Step 2: Run it and watch it fail**
-
-Run: `npx vitest run src/game/engine/scoring.test.ts`
-Expected: FAIL — `Failed to resolve import "./scoring"`
-
-- [ ] **Step 3: Write `src/game/engine/scoring.ts`**
-
-```ts
-import type { Action, ErrorType, Situation, WorkRecord } from "../types";
-
-export type AnswerRow = {
-  id: string;
-  day: number;
-  subjectId: string;
-  title: string;
-  action: Action | "unworked";
-  correct: boolean;
-  errorType: ErrorType;
-  /** True when no verification budget could have caught it. */
-  impossible: boolean;
-  line: string;
-  category?: 1 | 2 | 3;
-};
-
-export type Calibration = {
-  verified: number;
-  verifiedContainingError: number;
-  errorsAcceptedUnverified: number;
-};
-
-const hasError = (s: Situation) => s.truth.errorType !== "NONE";
-
-/** One row per situation, in manifest order. Not a score — a list. */
-export function answerRows(
-  situations: Situation[],
-  worked: Record<string, WorkRecord>,
-): AnswerRow[] {
-  return situations.map((situation) => {
-    const record = worked[situation.id];
-    return {
-      id: situation.id,
-      day: situation.day,
-      subjectId: situation.subjectId,
-      title: situation.title,
-      action: record?.action ?? "unworked",
-      correct: record?.correct ?? false,
-      errorType: situation.truth.errorType,
-      impossible: situation.truth.errorType === "UNCATCHABLE",
-      line: situation.debrief.line,
-      category: situation.debrief.category,
-    };
-  });
-}
-
-/**
- * The three numbers the ending closes on. Deliberately not a percentage and
- * deliberately not an accuracy score.
- */
-export function calibration(
-  situations: Situation[],
-  worked: Record<string, WorkRecord>,
-): Calibration {
-  const byId = new Map(situations.map((s) => [s.id, s]));
-  let verified = 0;
-  let verifiedContainingError = 0;
-  let errorsAcceptedUnverified = 0;
-
-  for (const record of Object.values(worked)) {
-    const situation = byId.get(record.situationId);
-    if (!situation) continue;
-
-    if (record.action === "manual") {
-      verified += 1;
-      if (hasError(situation)) verifiedContainingError += 1;
-      continue;
-    }
-
-    if (hasError(situation)) errorsAcceptedUnverified += 1;
-  }
-
-  return { verified, verifiedContainingError, errorsAcceptedUnverified };
-}
-```
-
-- [ ] **Step 4: Run it and watch it pass**
-
-Run: `npx vitest run src/game/engine/scoring.test.ts`
-Expected: PASS, 6 tests
-
-- [ ] **Step 5: Add the audit-finding slots**
-
-Append to `src/game/engine/scoring.ts`:
-
-```ts
-export type AuditSlots = {
-  randomized: number;
-  target: number;
-  queriesRaised: number;
-  deviations: number;
-  enrollmentRung: number;
-  auditRung: number;
-  /** Earned when three or more errors reached the database unverified. */
-  dataExcluded: boolean;
-  /** Earned when enrollment finished more than one short of target. */
-  siteClosed: boolean;
-};
-
-export function auditFindingSlots(
-  situations: Situation[],
-  worked: Record<string, WorkRecord>,
-  randomized: number,
-): AuditSlots {
-  const stats = calibration(situations, worked);
-  const deviations = Object.values(worked).filter((r) => !r.correct).length;
-
-  return {
-    randomized,
-    target: 12,
-    queriesRaised: stats.errorsAcceptedUnverified,
-    deviations,
-    enrollmentRung: 3,
-    auditRung: 2,
-    dataExcluded: stats.errorsAcceptedUnverified >= 3,
-    siteClosed: randomized < 11,
-  };
-}
-```
-
-- [ ] **Step 6: Add a test for the slots**
-
-Append to `src/game/engine/scoring.test.ts`:
-
-```ts
-import { auditFindingSlots } from "./scoring";
-
-describe("auditFindingSlots", () => {
-  it("names data exclusion once three errors reached the database unverified", () => {
-    const worked = {
-      B: record({ situationId: "B", correct: false, outcomeKey: "acceptedWrong" }),
-    };
-    const slots = auditFindingSlots(SITUATIONS, worked, 14);
-
-    expect(slots.dataExcluded).toBe(false);
-    expect(slots.randomized).toBe(14);
-    expect(slots.target).toBe(12);
-  });
-
-  it("does not close a site that met its target", () => {
-    expect(auditFindingSlots(SITUATIONS, {}, 14).siteClosed).toBe(false);
-    expect(auditFindingSlots(SITUATIONS, {}, 10).siteClosed).toBe(true);
-  });
-});
-```
-
-Run: `npx vitest run src/game/engine/scoring.test.ts`
-Expected: PASS, 8 tests
-
-- [ ] **Step 7: Typecheck, lint, and commit**
-
-```bash
-npm run typecheck && npm run lint
-git add src/game/engine/scoring.ts src/game/engine/scoring.test.ts
-git commit -m "feat(engine): answer rows, calibration stats, and audit-finding slots"
-```
-
----
-
-### Task 7: The reducer and persistence
-
-The single place game state changes. Everything above is a pure function this calls.
-
-**Files:**
-- Create: `src/game/engine/state.ts`
-- Create: `src/game/engine/persistence.ts`
-- Test: `src/game/engine/state.test.ts`
-
-**Interfaces:**
-- Consumes: everything from tasks 1–6
-- Produces: `initialState(situations, subjects): GameState`, `reduce(state, event, deps): GameState`, `GameEvent`, `load(): GameState | null`, `save(state): void`
-
-- [ ] **Step 1: Write the failing test**
-
-Create `src/game/engine/state.test.ts`:
-
-```ts
-import { describe, expect, it } from "vitest";
-
-import type { GameState, Situation, Subject } from "../types";
-import { initialState, reduce } from "./state";
-
-const SUBJECTS: Subject[] = [
-  { id: "1047-011", name: "W. Dorsey", status: "Enrolled", visit: "Week 20" },
-];
-
-const SITUATIONS: Situation[] = [
-  {
-    id: "DE-1113",
-    day: 1,
-    type: "data-entry",
-    subjectId: "1047-011",
-    title: "Week 20 central lab panel",
-    blurb: "Week 20 labs",
-    manual: false,
-    manualCost: 2,
-    sourceDocs: [],
-    form: { template: "lab-panel", fields: [{ key: "alt", label: "ALT" }] },
-    vera: { summary: "ALT 42 U/L.", entry: { alt: "42" } },
-    truth: { errorType: "fabrication", values: { alt: "24" }, tell: "Page 1." },
-    outcomes: {
-      acceptedWrong: [
-        {
-          kind: "query",
-          queryId: "DQ-0114",
-          subjectId: "1047-011",
-          text: "Reported ALT (42) does not match source (24).",
-          deliverAtDayEnd: 1,
-        },
-      ],
-    },
-    debrief: { line: "Fabricated ALT.", category: 3 },
-  },
-];
-
-const DEPS = { situations: SITUATIONS, emails: {} };
-
-describe("initialState", () => {
-  it("starts on the sign-in screen at 8:00 on day 1", () => {
-    const state = initialState(SITUATIONS, SUBJECTS);
-
-    expect(state.phase).toBe("signin");
-    expect(state.day).toBe(1);
-    expect(state.blocksUsed).toBe(0);
-    expect(state.randomized).toBe(11);
-  });
-
-  it("queues day 1 and nothing else", () => {
-    expect(initialState(SITUATIONS, SUBJECTS).queue).toEqual(["DE-1113"]);
-  });
-});
-
-describe("reduce", () => {
-  const started = () => reduce(initialState(SITUATIONS, SUBJECTS), { type: "SIGN_IN" }, DEPS);
-
-  it("moves to the desk on sign-in", () => {
-    expect(started().phase).toBe("desk");
-  });
-
-  it("spends one block to accept and removes the item from the queue", () => {
-    const state = reduce(started(), { type: "WORK", situationId: "DE-1113", action: "accept" }, DEPS);
-
-    expect(state.blocksUsed).toBe(1);
-    expect(state.queue).toEqual([]);
-    expect(state.worked["DE-1113"].correct).toBe(false);
-  });
-
-  it("spends the manual cost and records the submission", () => {
-    const state = reduce(
-      started(),
-      { type: "WORK", situationId: "DE-1113", action: "manual", submission: { values: { alt: "24" } } },
-      DEPS,
-    );
-
-    expect(state.blocksUsed).toBe(2);
-    expect(state.worked["DE-1113"].correct).toBe(true);
-  });
-
-  it("ends the day when the queue empties", () => {
-    const state = reduce(started(), { type: "WORK", situationId: "DE-1113", action: "accept" }, DEPS);
-
-    expect(state.phase).toBe("dayend");
-  });
-
-  it("refuses work it cannot afford and leaves the state untouched", () => {
-    const broke: GameState = { ...started(), blocksUsed: 16 };
-    const state = reduce(broke, { type: "WORK", situationId: "DE-1113", action: "manual" }, DEPS);
-
-    expect(state).toBe(broke);
-  });
-
-  it("auto-accepts the whole queue when the day is skipped", () => {
-    const state = reduce(started(), { type: "SKIP_DAY" }, DEPS);
-
-    expect(state.worked["DE-1113"].action).toBe("accept");
-    expect(state.phase).toBe("dayend");
-  });
-
-  it("delivers the query at the day-end so it taxes tomorrow", () => {
-    const ended = reduce(started(), { type: "WORK", situationId: "DE-1113", action: "accept" }, DEPS);
-
-    expect(ended.openQueries).toBe(1);
-    expect(ended.inbox.some((m) => m.id === "DQ-0114")).toBe(true);
-  });
-
-  it("reaches the ending after day 4", () => {
-    const day4: GameState = { ...started(), day: 4, queue: [] };
-    const state = reduce(day4, { type: "BEGIN_NEXT_DAY" }, DEPS);
-
-    expect(state.phase).toBe("answer");
-  });
-});
-```
-
-- [ ] **Step 2: Run it and watch it fail**
-
-Run: `npx vitest run src/game/engine/state.test.ts`
-Expected: FAIL — `Failed to resolve import "./state"`
-
-- [ ] **Step 3: Write `src/game/engine/state.ts`**
-
-```ts
-import type { DayNumber, GameState, Situation, Subject } from "../types";
-import { availableBlocks } from "./clock";
-import { collect, deliver, type EmailTemplate } from "./consequences";
-import { buildQueue, expireWindows } from "./queue";
-import { blockCost, resolve, type Submission } from "./resolve";
-
-export const STATE_VERSION = 1;
-const STARTING_RANDOMIZED = 11;
-const LAST_DAY: DayNumber = 4;
-
-export type GameEvent =
-  | { type: "SIGN_IN" }
-  | { type: "WORK"; situationId: string; action: "accept" | "manual"; submission?: Submission }
-  | { type: "SKIP_DAY" }
-  | { type: "BEGIN_NEXT_DAY" }
-  | { type: "ADVANCE_ENDING" };
-
-export type Deps = {
-  situations: Situation[];
-  emails: Record<string, EmailTemplate>;
-};
-
-export function initialState(situations: Situation[], subjects: Subject[]): GameState {
-  return {
-    version: STATE_VERSION,
-    phase: "signin",
-    day: 1,
-    blocksUsed: 0,
-    blocksAvailable: availableBlocks(1, 0),
-    blocksTaxed: BLOCKS_PER_DAY - availableBlocks(1, 0),
-    queue: buildQueue(1, situations, []),
-    worked: {},
-    roster: Object.fromEntries(subjects.map((s) => [s.id, s])),
-    inbox: [],
-    pending: [],
-    openQueries: 0,
-    randomized: STARTING_RANDOMIZED,
-  };
-}
-
-export function reduce(state: GameState, event: GameEvent, deps: Deps): GameState {
-  switch (event.type) {
-    case "SIGN_IN":
-      return { ...state, phase: "desk" };
-
-    case "WORK":
-      return work(state, event.situationId, event.action, event.submission ?? {}, deps);
-
-    case "SKIP_DAY": {
-      const accepted = state.queue.reduce(
-        (acc, id) => work(acc, id, "accept", {}, deps, { ignoreClock: true }),
-        state,
-      );
-      return endDay(accepted, deps);
-    }
-
-    case "BEGIN_NEXT_DAY":
-      return beginNextDay(state, deps);
-
-    case "ADVANCE_ENDING":
-      return {
-        ...state,
-        phase: state.phase === "answer" ? "audit" : "point",
-      };
-  }
-}
-
-function work(
-  state: GameState,
-  situationId: string,
-  action: "accept" | "manual",
-  submission: Submission,
-  deps: Deps,
-  options: { ignoreClock?: boolean } = {},
-): GameState {
-  const situation = deps.situations.find((s) => s.id === situationId);
-  if (!situation || !state.queue.includes(situationId)) return state;
-  if (situation.manual && action === "accept" && !options.ignoreClock) return state;
-
-  const cost = blockCost(situation, action);
-  if (!options.ignoreClock && state.blocksUsed + cost > state.blocksAvailable) return state;
-
-  const record = resolve(situation, action, state.day, submission);
-  const queue = state.queue.filter((id) => id !== situationId);
-  const randomized =
-    situation.type === "screening" && effectiveVerdict(record, situation) === "eligible"
-      ? state.randomized + 1
-      : state.randomized;
-
-  const next: GameState = {
     ...state,
-    blocksUsed: options.ignoreClock ? state.blocksUsed : state.blocksUsed + cost,
-    queue,
-    worked: { ...state.worked, [situationId]: record },
-    pending: [...state.pending, ...collect(situation, record.outcomeKey)],
-    randomized,
+    screen,
+    index,
+    clock: state.clock + minutes,
+    resolutions: [...state.resolutions, resolution],
+    tally: addTally(state.tally, outcome.score),
   };
-
-  const outOfTime = next.blocksUsed >= next.blocksAvailable;
-  if (!options.ignoreClock && (queue.length === 0 || outOfTime)) return endDay(next, deps);
-  return next;
 }
 
-/** What actually went into the database: her verdict on accept, theirs on manual. */
-function effectiveVerdict(
-  record: { action: string; verdict?: string },
-  situation: Situation,
-): string | undefined {
-  return record.action === "accept" ? situation.vera?.verdict : record.verdict;
+function accept(state: State, script: Situation[]): State {
+  const situation = script[state.index];
+  const correct = situation.truth.error === "NONE";
+  return resolve(
+    state,
+    situation,
+    { situationId: situation.id, action: "accepted", correct, outcomeKey: "accepted" },
+    30,
+    script,
+  );
 }
 
-function endDay(state: GameState, deps: Deps): GameState {
-  const { expired, roster: afterExpiry } = expireWindows(
-    state.day,
-    state.queue,
-    deps.situations,
-    state.roster,
-    { randomizationClosesTomorrow: state.day === LAST_DAY },
+/** Applies every consequence generated by `day`'s resolutions. */
+function applyConsequences(state: State, day: Day, script: Situation[]): State {
+  const relevant = state.resolutions.filter(
+    (r) => situationById(r.situationId, script).day === day,
   );
 
-  const delivered = deliver(state.day, state.pending, afterExpiry, deps.emails);
-
-  return {
-    ...state,
-    phase: "dayend",
-    roster: delivered.roster,
-    inbox: [...delivered.messages, ...state.inbox],
-    pending: delivered.remaining,
-    openQueries: delivered.queryCount,
-    queue: state.queue.filter((id) => !expired.includes(id)),
-  };
-}
-
-function beginNextDay(state: GameState, deps: Deps): GameState {
-  if (state.day === LAST_DAY) return { ...state, phase: "answer" };
-
-  const day = (state.day + 1) as DayNumber;
-  const available = availableBlocks(day, state.openQueries);
-  return {
-    ...state,
-    phase: "desk",
-    day,
-    blocksUsed: 0,
-    blocksAvailable: available,
-    // The day is not shorter — it starts later. The taskbar reads
-    // blocksTaxed + blocksUsed, so day 4 opens at 9:30, not 8:00.
-    blocksTaxed: BLOCKS_PER_DAY - available,
-    queue: buildQueue(day, deps.situations, state.queue),
-  };
-}
-```
-
-Import `BLOCKS_PER_DAY` from `./clock` alongside `availableBlocks`.
-
-Add to `src/game/engine/state.test.ts`:
-
-```ts
-it("starts a taxed day later rather than making it shorter", () => {
-  const day3: GameState = { ...started(), day: 2, queue: [], openQueries: 2, phase: "dayend" };
-  const state = reduce(day3, { type: "BEGIN_NEXT_DAY" }, DEPS);
-
-  expect(state.blocksTaxed).toBe(2);
-  expect(state.blocksTaxed + state.blocksAvailable).toBe(16);
-});
-```
-
-- [ ] **Step 4: Run it and watch it pass**
-
-Run: `npx vitest run src/game/engine/state.test.ts`
-Expected: PASS, 10 tests
-
-- [ ] **Step 5: Write `src/game/engine/persistence.ts`**
-
-```ts
-import type { GameState } from "../types";
-import { STATE_VERSION } from "./state";
-
-const KEY = "icf-please:run";
-
-/** Returns null when nothing is saved, or when the save predates a schema change. */
-export function load(): GameState | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = window.localStorage.getItem(KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw) as GameState;
-    return parsed.version === STATE_VERSION ? parsed : null;
-  } catch {
-    return null;
-  }
-}
-
-export function save(state: GameState): void {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(KEY, JSON.stringify(state));
-  } catch {
-    // A full or disabled localStorage must never interrupt a run.
-  }
-}
-
-export function clear(): void {
-  if (typeof window === "undefined") return;
-  window.localStorage.removeItem(KEY);
-}
-```
-
-- [ ] **Step 6: Add a persistence test**
-
-Append to `src/game/engine/state.test.ts`:
-
-```ts
-import { clear, load, save } from "./persistence";
-
-describe("persistence", () => {
-  it("round-trips a run", () => {
-    const state = initialState(SITUATIONS, SUBJECTS);
-    save(state);
-
-    expect(load()?.day).toBe(1);
-    clear();
-    expect(load()).toBeNull();
-  });
-
-  it("discards a save from an older schema", () => {
-    window.localStorage.setItem("icf-please:run", JSON.stringify({ version: 0 }));
-
-    expect(load()).toBeNull();
-    clear();
-  });
-});
-```
-
-Run: `npx vitest run src/game/engine/state.test.ts`
-Expected: PASS, 12 tests
-
-- [ ] **Step 7: Typecheck, lint, and commit**
-
-```bash
-npm run typecheck && npm run lint
-git add src/game/engine/state.ts src/game/engine/persistence.ts src/game/engine/state.test.ts
-git commit -m "feat(engine): game reducer and versioned localStorage persistence"
-```
-
----
-
-# Phase 2 — Content
-
-Data only. No logic lives in this phase.
-
----
-
-### Task 8: Form templates and the roster seed
-
-**Files:**
-- Modify: `src/game/types.ts` (add `verdictOptions` to `FormSpec`)
-- Create: `src/game/content/forms.ts`
-- Create: `src/game/content/subjects.ts`
-- Test: `src/game/content/subjects.test.ts`
-
-**Interfaces:**
-- Consumes: `FormSpec`, `Subject` from `types.ts`
-- Produces: `VITALS`, `LAB_PANEL`, `screeningEligibility()`, `safetyForm(options)`; `SUBJECTS: Subject[]`
-
-- [ ] **Step 1: Add verdict options to `FormSpec` in `src/game/types.ts`**
-
-Replace the existing `FormSpec` line with:
-
-```ts
-export type VerdictOption = { value: string; label: string };
-export type FormSpec = {
-  template: FormTemplate;
-  fields: FormFieldSpec[];
-  /** Present on screening and safety items — the radio choices. */
-  verdictOptions?: VerdictOption[];
-};
-```
-
-Add `"safety-determination"` to the `FormTemplate` union:
-
-```ts
-export type FormTemplate =
-  | "vitals"
-  | "lab-panel"
-  | "screening-eligibility"
-  | "safety-determination";
-```
-
-- [ ] **Step 2: Write `src/game/content/forms.ts`**
-
-```ts
-import type { FormSpec, VerdictOption } from "../types";
-
-/** Every check the player makes is a comparison a layperson can make. */
-export const VITALS: FormSpec = {
-  template: "vitals",
-  fields: [
-    { key: "bp_systolic", label: "BP systolic", unit: "mmHg" },
-    { key: "bp_diastolic", label: "BP diastolic", unit: "mmHg" },
-    { key: "pulse", label: "Pulse", unit: "bpm" },
-    { key: "temp_c", label: "Temperature", unit: "°C" },
-    { key: "weight_kg", label: "Weight", unit: "kg" },
-  ],
-};
-
-export const LAB_PANEL: FormSpec = {
-  template: "lab-panel",
-  fields: [
-    { key: "alt", label: "ALT", unit: "U/L" },
-    { key: "ast", label: "AST", unit: "U/L" },
-    { key: "alp", label: "ALP", unit: "U/L" },
-    { key: "creatinine", label: "Creatinine", unit: "mg/dL" },
-    { key: "hemoglobin", label: "Haemoglobin", unit: "g/dL" },
-    { key: "platelets", label: "Platelets", unit: "×10⁹/L" },
-    { key: "eosinophils_abs", label: "Eosinophils (absolute)", unit: "×10⁹/L" },
-  ],
-};
-
-export const SCREENING_ELIGIBILITY: FormSpec = {
-  template: "screening-eligibility",
-  fields: [
-    { key: "easi", label: "EASI (screening)" },
-    { key: "viga_ad", label: "vIGA-AD" },
-    { key: "bsa_pct", label: "BSA involvement", unit: "%" },
-    { key: "pruritus_nrs", label: "Worst Pruritus NRS" },
-  ],
-  verdictOptions: [
-    { value: "eligible", label: "Eligible — randomize" },
-    { value: "screen-fail", label: "Screen failure" },
-  ],
-};
-
-export function safetyForm(verdictOptions: VerdictOption[]): FormSpec {
-  return { template: "safety-determination", fields: [], verdictOptions };
-}
-
-/**
- * The safety choices in play across the run, in plain language.
- * Every entry here is used by at least one situation — do not add a fourth
- * "just in case", and do not offer a subject-facing verdict the run never needs.
- */
-export const SAFETY_VERDICTS = {
-  logAe: { value: "log-ae", label: "Log as an adverse event" },
-  reportSae: {
-    value: "report-sae",
-    label: "Report as a serious adverse event — sponsor within 24 hours",
-  },
-  noAction: { value: "no-action", label: "No action — not related to the study" },
-} as const;
-```
-
-- [ ] **Step 3: Write `src/game/content/subjects.ts`**
-
-Exact roster from spec §3. Enrolled order matters — it is the order the Roster window renders.
-
-```ts
-import type { Subject } from "../types";
-
-/**
- * The roster at 8:00 AM Monday 08-JAN-2024.
- * Eleven randomized against a contract of twelve. Randomization closes
- * 12-JAN-2024 08:00 PT and does not move.
- *
- * 1047-021 consents Tuesday and 1047-022 Wednesday; both are added by their
- * situations, not seeded here.
- */
-export const SUBJECTS: Subject[] = [
-  { id: "1047-001", name: "R. Jones", status: "Enrolled", visit: "Week 16" },
-  { id: "1047-002", name: "D. Achterberg", status: "Enrolled", visit: "Week 24" },
-  { id: "1047-003", name: "P. Sunderland", status: "Enrolled", visit: "Week 12" },
-  { id: "1047-005", name: "T. Channing", status: "Enrolled", visit: "Week 16" },
-  { id: "1047-006", name: "M. Vasquez", status: "Enrolled", visit: "Week 12" },
-  { id: "1047-007", name: "K. Oyelowo", status: "Enrolled", visit: "Week 4" },
-  { id: "1047-008", name: "H. Brenner", status: "Enrolled", visit: "Week 12" },
-  { id: "1047-009", name: "S. Nakashima", status: "Enrolled", visit: "Week 8" },
-  { id: "1047-010", name: "E. Fontaine", status: "Enrolled", visit: "Week 16" },
-  { id: "1047-011", name: "W. Dorsey", status: "Enrolled", visit: "Week 20" },
-  { id: "1047-004", name: "L. Auguste", status: "Withdrawn (by subject)" },
-
-  { id: "1047-017", name: "C. Hughes", status: "Screening", windowCloses: "10-JAN-2024" },
-  { id: "1047-018", name: "L. Lit", status: "Screening", windowCloses: "11-JAN-2024" },
-  { id: "1047-019", name: "R. Amaya", status: "Screening", windowCloses: "12-JAN-2024" },
-  { id: "1047-020", name: "J. Whitlock", status: "Screening", windowCloses: "12-JAN-2024" },
-
-  { id: "1047-012", name: "A. Petrosyan", status: "Screen failed" },
-  { id: "1047-013", name: "M. Delacroix", status: "Screen failed" },
-  { id: "1047-014", name: "S. Bergqvist", status: "Screen failed" },
-  { id: "1047-015", name: "N. Okereke", status: "Screen failed" },
-  { id: "1047-016", name: "J. Farhadi", status: "Screen failed" },
-];
-
-/** Subjects who consent mid-run, keyed by the day they appear. */
-export const LATE_CONSENTS: Record<number, Subject[]> = {
-  2: [{ id: "1047-021", name: "B. Ferreira", status: "Screening", windowCloses: "12-JAN-2024" }],
-  3: [{ id: "1047-022", name: "K. Adeyemi", status: "Screening", windowCloses: "12-JAN-2024" }],
-};
-```
-
-- [ ] **Step 4: Write the test**
-
-Create `src/game/content/subjects.test.ts`:
-
-```ts
-import { describe, expect, it } from "vitest";
-
-import { LATE_CONSENTS, SUBJECTS } from "./subjects";
-
-describe("roster seed", () => {
-  it("starts with eleven randomized against a contract of twelve", () => {
-    const randomized = SUBJECTS.filter(
-      (s) => s.status === "Enrolled" || s.status.startsWith("Withdrawn"),
-    );
-    expect(randomized).toHaveLength(11);
-  });
-
-  it("has four subjects in screening on Monday morning", () => {
-    expect(SUBJECTS.filter((s) => s.status === "Screening")).toHaveLength(4);
-  });
-
-  it("gives every screening subject a window that closes during the run", () => {
-    for (const subject of SUBJECTS.filter((s) => s.status === "Screening")) {
-      expect(subject.windowCloses).toMatch(/^\d{2}-JAN-2024$/);
-    }
-  });
-
-  it("uses unique, well-formed subject ids throughout", () => {
-    const all = [...SUBJECTS, ...Object.values(LATE_CONSENTS).flat()];
-    const ids = all.map((s) => s.id);
-
-    expect(new Set(ids).size).toBe(ids.length);
-    for (const id of ids) expect(id).toMatch(/^1047-\d{3}$/);
-  });
-
-  it("names every subject as an initial and a surname", () => {
-    const all = [...SUBJECTS, ...Object.values(LATE_CONSENTS).flat()];
-    for (const subject of all) expect(subject.name).toMatch(/^[A-Z]\. [A-Z][a-z]/);
-  });
-
-  it("closes L. Lit's window on Thursday — the waitlist casualty", () => {
-    const lit = SUBJECTS.find((s) => s.id === "1047-018");
-    expect(lit?.windowCloses).toBe("11-JAN-2024");
-  });
-});
-```
-
-- [ ] **Step 5: Run it and watch it pass**
-
-Run: `npx vitest run src/game/content/subjects.test.ts`
-Expected: PASS, 6 tests
-
-- [ ] **Step 6: Typecheck, lint, and commit**
-
-```bash
-npm run typecheck && npm run lint
-git add src/game/types.ts src/game/content/forms.ts src/game/content/subjects.ts src/game/content/subjects.test.ts
-git commit -m "feat(content): eCRF form templates and the Monday-morning roster"
-```
-
----
-
-### Task 9: Day 1 situations
-
-Five items: three forced-manual before noon, then VERA arrives and two assisted items follow.
-
-This task establishes the module shape every later content task follows.
-
-**Files:**
-- Create: `src/game/content/situations/day1.ts`
-- Create: `src/game/content/situations/index.ts`
-- Test: `src/game/content/situations/situations.test.ts`
-
-**Interfaces:**
-- Consumes: `Situation` from `types.ts`; `VITALS`, `LAB_PANEL`, `SCREENING_ELIGIBILITY`, `safetyForm`, `SAFETY_VERDICTS` from `../forms`
-- Produces: `DAY_1: Situation[]`; `SITUATIONS: Situation[]` (the flat manifest, ordered by day then queue position)
-
-- [ ] **Step 1: Write `src/game/content/situations/day1.ts`**
-
-```ts
-import type { Situation } from "../../types";
-import {
-  LAB_PANEL,
-  SAFETY_VERDICTS,
-  SCREENING_ELIGIBILITY,
-  VITALS,
-  safetyForm,
-} from "../forms";
-
-export const DAY_1: Situation[] = [
-  {
-    id: "SCR-0217",
-    day: 1,
-    type: "screening",
-    subjectId: "1047-017",
-    title: "Screening eligibility review",
-    blurb: "1047-017 · C. Hughes — eligibility review",
-    manual: true,
-    manualCost: 3,
-    sourceDocs: ["scr-0217-packet.md"],
-    form: SCREENING_ELIGIBILITY,
-    vera: null,
-    truth: {
-      errorType: "NONE",
-      values: { easi: "24.6", viga_ad: "4", bsa_pct: "31", pruritus_nrs: "8" },
-      verdict: "eligible",
-      tell: "Screening packet page 1 — every value clears its threshold with room to spare.",
-    },
-    outcomes: {
-      manualWrong: [
-        {
-          kind: "roster",
-          subjectId: "1047-017",
-          status: "Screen failed",
-          deliverAtDayEnd: 1,
-        },
-      ],
-    },
-    debrief: {
-      line: "C. Hughes met every criterion comfortably. Nothing here was difficult; it was only long.",
-    },
-  },
-  {
-    id: "DE-1109",
-    day: 1,
-    type: "data-entry",
-    subjectId: "1047-009",
-    title: "Week 8 vital signs",
-    blurb: "1047-009 · S. Nakashima — Week 8 vitals",
-    manual: true,
-    manualCost: 2,
-    sourceDocs: ["de-1109-vitals.md"],
-    form: VITALS,
-    vera: null,
-    truth: {
-      errorType: "NONE",
-      values: {
-        bp_systolic: "128",
-        bp_diastolic: "82",
-        pulse: "72",
-        temp_c: "36.8",
-        weight_kg: "81.4",
-      },
-      tell: "Vital signs worksheet, one page. Five values, all legible.",
-    },
-    outcomes: {
-      manualWrong: [
-        {
-          kind: "query",
-          queryId: "DQ-0111",
-          subjectId: "1047-009",
-          text: "Reported vital signs do not match source for Week 8. Please verify and respond.",
-          deliverAtDayEnd: 1,
-        },
-      ],
-    },
-    debrief: { line: "Five numbers copied from one page. This is most of the job." },
-  },
-  {
-    id: "SAF-0031",
-    day: 1,
-    type: "safety",
-    subjectId: "1047-006",
-    title: "Telephone note — fever after Week 12 dose",
-    blurb: "1047-006 · M. Vasquez — telephone note",
-    manual: true,
-    manualCost: 2,
-    sourceDocs: ["saf-0031-phone-note.md"],
-    form: safetyForm([SAFETY_VERDICTS.logAe, SAFETY_VERDICTS.reportSae, SAFETY_VERDICTS.noAction]),
-    vera: null,
-    truth: {
-      errorType: "NONE",
-      values: {},
-      verdict: "log-ae",
-      tell:
-        "The note gives the dose at 09-JAN-2024 10:15 and the fever starting the same evening. " +
-        "Not a hospitalisation, so not serious.",
-    },
-    outcomes: {
-      manualWrong: [
-        {
-          kind: "email",
-          emailId: "email-saf-0031-followup",
-          deliverAtDayEnd: 2,
-        },
-      ],
-    },
-    debrief: {
-      line: "A fever the evening after a dose. Recorded, not escalated — nobody went to hospital.",
-    },
-  },
-
-  // ——— 11:30. The sponsor email lands. The rail fills. ———
-
-  {
-    id: "DE-1110",
-    day: 1,
-    type: "data-entry",
-    subjectId: "1047-003",
-    title: "Week 12 central laboratory panel",
-    blurb: "1047-003 · P. Sunderland — Week 12 labs",
-    manual: false,
-    manualCost: 2,
-    sourceDocs: ["de-1110-lab.md"],
-    form: LAB_PANEL,
-    vera: {
-      summary:
-        "Week 12 central laboratory panel for 1047-003 is within reference range throughout. " +
-        "ALT 22 U/L, AST 19 U/L, ALP 68 U/L, creatinine 0.9 mg/dL, haemoglobin 14.1 g/dL, " +
-        "platelets 244 ×10⁹/L, absolute eosinophils 0.31 ×10⁹/L. No alert values were called by " +
-        "the central laboratory. The entry is ready for your review.",
-      entry: {
-        alt: "22",
-        ast: "19",
-        alp: "68",
-        creatinine: "0.9",
-        hemoglobin: "14.1",
-        platelets: "244",
-        eosinophils_abs: "0.31",
-      },
-    },
-    truth: {
-      errorType: "NONE",
-      values: {
-        alt: "22",
-        ast: "19",
-        alp: "68",
-        creatinine: "0.9",
-        hemoglobin: "14.1",
-        platelets: "244",
-        eosinophils_abs: "0.31",
-      },
-      tell: "",
-    },
-    outcomes: {},
-    debrief: {
-      line: "She was right about all seven values. Verifying this one cost an hour and taught you nothing.",
-    },
-  },
-  {
-    id: "DE-1114",
-    day: 1,
-    type: "data-entry",
-    subjectId: "1047-008",
-    title: "Week 12 vital signs",
-    blurb: "1047-008 · H. Brenner — Week 12 vitals",
-    manual: false,
-    manualCost: 2,
-    sourceDocs: ["de-1114-vitals.md"],
-    form: VITALS,
-    vera: {
-      // The source records weight in pounds. She converts, and gets it wrong.
-      summary:
-        "Week 12 vital signs for 1047-008 are unremarkable. Blood pressure 134/86 mmHg, pulse 68 bpm, " +
-        "temperature 36.6 °C, weight 84.4 kg. Weight is recorded in pounds on the source worksheet and " +
-        "has been converted for entry, as the eCRF field is defined in kilograms. The entry is ready " +
-        "for your review.",
-      entry: {
-        bp_systolic: "134",
-        bp_diastolic: "86",
-        pulse: "68",
-        temp_c: "36.6",
-        weight_kg: "84.4",
-      },
-    },
-    truth: {
-      errorType: "normalization",
-      values: {
-        bp_systolic: "134",
-        bp_diastolic: "86",
-        pulse: "68",
-        temp_c: "36.6",
-        weight_kg: "86.2",
-      },
-      tell:
-        "Vital signs worksheet — weight is written as 190 lb. 190 lb is 86.2 kg, not 84.4 kg.",
-    },
-    outcomes: {
-      acceptedWrong: [
-        {
-          kind: "query",
-          queryId: "DQ-0112",
-          subjectId: "1047-008",
-          text:
-            "Reported weight (84.4 kg) does not match source (190 lb = 86.2 kg) at Week 12. " +
-            "Please verify and respond.",
-          deliverAtDayEnd: 2,
-        },
-      ],
-    },
-    debrief: {
-      line: "190 lb is 86.2 kg. She entered 84.4. The conversion was hers to do and hers to get wrong.",
-      category: 3,
-    },
-  },
-];
-```
-
-- [ ] **Step 2: Write `src/game/content/situations/index.ts`**
-
-Days 2–4 are added by the following tasks. Import them as they land.
-
-```ts
-import type { Situation } from "../../types";
-import { DAY_1 } from "./day1";
-
-/** The manifest. Order within a day is the order the Work Queue renders. */
-export const SITUATIONS: Situation[] = [...DAY_1];
-
-export const byId = new Map(SITUATIONS.map((s) => [s.id, s]));
-```
-
-- [ ] **Step 3: Write the failing test**
-
-Create `src/game/content/situations/situations.test.ts`:
-
-```ts
-import { describe, expect, it } from "vitest";
-
-import { blockCost } from "../../engine/resolve";
-import { SITUATIONS } from "./index";
-
-describe("day 1", () => {
-  const day1 = SITUATIONS.filter((s) => s.day === 1);
-
-  it("has five items", () => {
-    expect(day1).toHaveLength(5);
-  });
-
-  it("forces the first three by hand and offers no VERA output for them", () => {
-    const morning = day1.slice(0, 3);
-
-    for (const item of morning) {
-      expect(item.manual).toBe(true);
-      expect(item.vera).toBeNull();
-    }
-  });
-
-  it("runs the manual morning to exactly 11:30", () => {
-    const morningBlocks = day1
-      .slice(0, 3)
-      .reduce((total, s) => total + blockCost(s, "manual"), 0);
-
-    expect(morningBlocks).toBe(7); // 3 + 2 + 2 blocks = 3.5 hours from 8:00
-  });
-
-  it("costs eleven blocks in total if every item is worked by hand", () => {
-    const total = day1.reduce((sum, s) => sum + blockCost(s, "manual"), 0);
-    expect(total).toBe(11);
-  });
-
-  it("gives every assisted item both a summary and an entry", () => {
-    for (const item of day1.filter((s) => !s.manual)) {
-      expect(item.vera?.summary.length).toBeGreaterThan(0);
-      expect(item.vera?.entry).toBeDefined();
-    }
-  });
-
-  it("never has VERA claim to have acted", () => {
-    for (const item of day1) {
-      expect(item.vera?.summary ?? "").not.toMatch(
-        /I have (submitted|filed|sent|reported)/i,
+  let roster = state.roster;
+  const emails = [...state.inbox];
+
+  for (const r of relevant) {
+    const outcome = situationById(r.situationId, script).outcomes[r.outcomeKey];
+    if (outcome.email) emails.push(outcome.email);
+    if (outcome.roster) {
+      const change = outcome.roster;
+      roster = roster.map((s) =>
+        s.id === change.subject ? { ...s, status: change.status } : s,
       );
     }
-  });
+  }
 
-  it("records a tell for every catchable error", () => {
-    for (const item of day1) {
-      if (item.truth.errorType === "NONE" || item.truth.errorType === "UNCATCHABLE") continue;
-      expect(item.truth.tell.length).toBeGreaterThan(0);
+  return { ...state, roster, inbox: emails };
+}
+
+export function reducer(state: State, action: Action, script: Situation[]): State {
+  switch (action.type) {
+    case "SIGN_IN":
+      return { ...state, screen: "desk" };
+
+    case "ACCEPT":
+      return accept(state, script);
+
+    case "SUBMIT": {
+      const situation = script[state.index];
+      const valuesOk = valuesMatch(action.values, situation.truth.entry);
+      const verdictOk = situation.truth.verdict === undefined
+        ? true
+        : action.verdict === situation.truth.verdict;
+      const correct = valuesOk && verdictOk;
+      const outcomeKey: OutcomeKey = correct ? "reviewedCorrect" : "reviewedWrong";
+
+      return resolve(
+        state,
+        situation,
+        {
+          situationId: situation.id,
+          action: "reviewed",
+          submitted: action.values,
+          verdict: action.verdict,
+          correct,
+          outcomeKey,
+        },
+        situation.cost,
+        script,
+      );
     }
-  });
-});
+
+    case "SKIP_DAY": {
+      let next = state;
+      while (script[next.index] && script[next.index].day === state.day) {
+        next = accept(next, script);
+      }
+      return { ...next, screen: script[next.index] ? "dayend" : "ending" };
+    }
+
+    case "BEGIN_DAY": {
+      const day = (state.day + 1) as Day;
+      const withConsequences = applyConsequences(state, state.day, script);
+      return { ...withConsequences, screen: "desk", day, clock: 0 };
+    }
+
+    default:
+      return state;
+  }
+}
 ```
 
-- [ ] **Step 4: Run it and watch it pass**
+- [ ] **Step 6: Create the roster seed**
 
-Run: `npx vitest run src/game/content/situations/situations.test.ts`
-Expected: PASS, 7 tests
-
-- [ ] **Step 5: Typecheck, lint, and commit**
-
-```bash
-npm run typecheck && npm run lint
-git add src/game/content/situations/
-git commit -m "feat(content): day 1 — the manual morning and VERA's first two items"
-```
-
----
-
-### Task 10: Day 2 situations — the uncatchable item and its twin
-
-Four thin items, eight blocks against fifteen. Day 2 is deliberately slack: the player has every resource to verify all four, and should. It is exactly where the error they cannot catch lands.
-
-**Read spec §5 before writing this task.** Items DE-1111 and SAF-0034 are a matched pair and only work together.
-
-**Files:**
-- Create: `src/game/content/situations/day2.ts`
-- Modify: `src/game/content/situations/index.ts`
-- Test: `src/game/content/situations/situations.test.ts` (append)
-
-**Interfaces:**
-- Consumes: same imports as `day1.ts`
-- Produces: `DAY_2: Situation[]`
-
-- [ ] **Step 1: Write `src/game/content/situations/day2.ts`**
+Create `src/game/subjects.ts`. Values from the spec §3:
 
 ```ts
-import type { Situation } from "../../types";
-import { LAB_PANEL, SAFETY_VERDICTS, safetyForm } from "../forms";
+import type { Roster } from "@/game/types";
 
-/**
- * The Week 16 specimens for 1047-005 and 1047-010 were drawn on the same
- * morning and reported by Meridian Central Labs under each other's IDs.
- *
- * These are the values as they arrived at the site. The requisition, the
- * result, the eCRF field and VERA's summary all agree with one another,
- * because all four are downstream of the same wrong identifier. There is
- * nothing on the desk that disagrees with anything else on the desk.
- */
-const AS_REPORTED_FOR_CHANNING = {
-  alt: "31",
-  ast: "27",
-  alp: "74",
-  creatinine: "1.0",
-  hemoglobin: "13.6",
-  platelets: "212",
-  eosinophils_abs: "0.44",
-};
-
-export const DAY_2: Situation[] = [
-  {
-    id: "DE-1111",
-    day: 2,
-    type: "data-entry",
-    subjectId: "1047-005",
-    title: "Week 16 central laboratory panel",
-    blurb: "1047-005 · T. Channing — Week 16 labs",
-    manual: false,
-    manualCost: 2,
-    sourceDocs: ["de-1111-lab.md", "de-1111-requisition.md"],
-    form: LAB_PANEL,
-    vera: {
-      summary:
-        "Week 16 central laboratory panel for 1047-005 is within reference range throughout. " +
-        "ALT 31 U/L, AST 27 U/L, ALP 74 U/L, creatinine 1.0 mg/dL, haemoglobin 13.6 g/dL, " +
-        "platelets 212 ×10⁹/L, absolute eosinophils 0.44 ×10⁹/L. The requisition number on the " +
-        "report matches the requisition on file for this visit. No alert values were called by the " +
-        "central laboratory. The entry is ready for your review.",
-      entry: AS_REPORTED_FOR_CHANNING,
-    },
-    truth: {
-      errorType: "UNCATCHABLE",
-      // Identical to her entry. Transcribing perfectly does not help.
-      values: AS_REPORTED_FOR_CHANNING,
-      tell: "",
-    },
-    outcomes: {
-      acceptedWrong: [
-        {
-          kind: "roster",
-          subjectId: "1047-005",
-          status: "Withdrawn (hospitalized)",
-          deliverAtDayEnd: 4,
-        },
-      ],
-      manualWrong: [
-        {
-          kind: "roster",
-          subjectId: "1047-005",
-          status: "Withdrawn (hospitalized)",
-          deliverAtDayEnd: 4,
-        },
-      ],
-    },
-    debrief: {
-      line:
-        "The blood filed under 1047-005 was drawn from 1047-010, and the other way round. " +
-        "Nothing on your desk disagreed with anything else on your desk.",
-      category: 2,
-    },
-  },
-  {
-    id: "SAF-0034",
-    day: 2,
-    type: "safety",
-    subjectId: "1047-010",
-    title: "Nurse's note — worsening atopic dermatitis",
-    blurb: "1047-010 · E. Fontaine — nurse's note",
-    manual: false,
-    manualCost: 2,
-    sourceDocs: ["saf-0034-note.md", "saf-0034-prior-visits.md"],
-    form: safetyForm([SAFETY_VERDICTS.logAe, SAFETY_VERDICTS.reportSae, SAFETY_VERDICTS.noAction]),
-    vera: {
-      // Right event, wrong subject. The Week 12 flare was T. Channing's.
-      summary:
-        "1047-010 reports worsening atopic dermatitis over four days, managed with emollient only. " +
-        "This is the subject's second such episode; a comparable flare was recorded at Week 12 and " +
-        "resolved without rescue therapy. Worsening atopic dermatitis is an expected event on this " +
-        "study. No hospitalisation and no rescue therapy, so this is not serious. I have drafted the " +
-        "adverse event entry for your review.",
-      entry: {},
-      verdict: "log-ae",
-    },
-    truth: {
-      errorType: "misattribution",
-      values: {},
-      verdict: "log-ae",
-      tell:
-        "The Week 12 flare belongs to 1047-005 · T. Channing, not to 1047-010 · E. Fontaine. " +
-        "E. Fontaine's visit history shows no prior flare. Both records have to be open to see it.",
-    },
-    outcomes: {
-      acceptedWrong: [
-        {
-          kind: "query",
-          queryId: "DQ-0118",
-          subjectId: "1047-010",
-          text:
-            "Adverse event narrative for 1047-010 references a prior episode at Week 12 that does " +
-            "not appear in this subject's visit history. Please verify and respond.",
-          deliverAtDayEnd: 3,
-        },
-      ],
-    },
-    debrief: {
-      line:
-        "The verdict was right and the narrative was not: the Week 12 flare was T. Channing's. " +
-        "Catching it meant opening two records.",
-      category: 3,
-    },
-  },
-  {
-    id: "DE-1112",
-    day: 2,
-    type: "data-entry",
-    subjectId: "1047-007",
-    title: "Week 4 central laboratory panel",
-    blurb: "1047-007 · K. Oyelowo — Week 4 labs",
-    manual: false,
-    manualCost: 2,
-    sourceDocs: ["de-1112-lab.md"],
-    form: LAB_PANEL,
-    vera: {
-      summary:
-        "Week 4 central laboratory panel for 1047-007 is within reference range throughout. " +
-        "ALT 18 U/L, AST 21 U/L, ALP 59 U/L, creatinine 0.8 mg/dL, haemoglobin 15.0 g/dL, " +
-        "platelets 268 ×10⁹/L, absolute eosinophils 0.52 ×10⁹/L. Absolute eosinophils are above the " +
-        "laboratory reference range and are expected in this population; the value is not an alert " +
-        "value and was not called by the central laboratory. The entry is ready for your review.",
-      entry: {
-        alt: "18",
-        ast: "21",
-        alp: "59",
-        creatinine: "0.8",
-        hemoglobin: "15.0",
-        platelets: "268",
-        eosinophils_abs: "0.52",
-      },
-    },
-    truth: {
-      errorType: "NONE",
-      values: {
-        alt: "18",
-        ast: "21",
-        alp: "59",
-        creatinine: "0.8",
-        hemoglobin: "15.0",
-        platelets: "268",
-        eosinophils_abs: "0.52",
-      },
-      tell: "",
-    },
-    outcomes: {},
-    debrief: {
-      line: "Right on all seven, and right that the raised eosinophils meant nothing here.",
-    },
-  },
-  {
-    id: "SAF-0032",
-    day: 2,
-    type: "safety",
-    subjectId: "1047-002",
-    title: "Nurse's note — Week 24 visit",
-    blurb: "1047-002 · D. Achterberg — nurse's note",
-    manual: false,
-    manualCost: 2,
-    sourceDocs: ["saf-0032-note.md"],
-    form: safetyForm([
-      SAFETY_VERDICTS.logAe,
-      SAFETY_VERDICTS.reportSae,
-      SAFETY_VERDICTS.noAction,
-    ]),
-    vera: {
-      // The note's final paragraph records a second event. She reports one.
-      summary:
-        "1047-002 reports a headache lasting approximately six hours on the evening of the Week 24 " +
-        "visit, resolved without treatment. Headache is an expected event on this study. No " +
-        "hospitalisation, so this is not serious. I have drafted the adverse event entry for your " +
-        "review.",
-      entry: {},
-      verdict: "log-ae",
-    },
-    truth: {
-      errorType: "omission",
-      values: {},
-      verdict: "report-sae",
-      tell:
-        "Final paragraph of the note: the subject was admitted overnight two days later with " +
-        "cellulitis of the left forearm. An overnight admission makes it serious.",
-    },
-    outcomes: {
-      acceptedWrong: [
-        {
-          kind: "roster",
-          subjectId: "1047-002",
-          status: "Withdrawn (hospitalized)",
-          deliverAtDayEnd: 3,
-        },
-        {
-          kind: "email",
-          emailId: "email-saf-0032-late-sae",
-          deliverAtDayEnd: 3,
-        },
-      ],
-    },
-    debrief: {
-      line:
-        "The headache was real and so was the overnight admission in the last paragraph. " +
-        "She reported one of them. Nothing on screen looked wrong.",
-      category: 3,
-    },
-  },
+export const SEED_ROSTER: Roster = [
+  { id: "1047-001", name: "R. Jones", status: "Enrolled" },
+  { id: "1047-002", name: "D. Achterberg", status: "Enrolled" },
+  { id: "1047-003", name: "P. Sunderland", status: "Enrolled" },
+  { id: "1047-004", name: "L. Auguste", status: "Withdrawn (by subject)" },
+  { id: "1047-005", name: "T. Channing", status: "Enrolled" },
+  { id: "1047-006", name: "M. Vasquez", status: "Enrolled" },
+  { id: "1047-007", name: "K. Oyelowo", status: "Enrolled" },
+  { id: "1047-008", name: "H. Brenner", status: "Enrolled" },
+  { id: "1047-009", name: "S. Nakashima", status: "Enrolled" },
+  { id: "1047-010", name: "E. Fontaine", status: "Enrolled" },
+  { id: "1047-011", name: "W. Dorsey", status: "Enrolled" },
+  { id: "1047-012", name: "A. Reyes", status: "Screen failed" },
+  { id: "1047-013", name: "N. Kaur", status: "Screen failed" },
+  { id: "1047-014", name: "F. Dubois", status: "Screen failed" },
+  { id: "1047-015", name: "G. Petrov", status: "Screen failed" },
+  { id: "1047-016", name: "S. Abiodun", status: "Screen failed" },
+  { id: "1047-017", name: "C. Hughes", status: "Screening" },
+  { id: "1047-018", name: "L. Lit", status: "Screening" },
+  { id: "1047-019", name: "R. Amaya", status: "Screening" },
+  { id: "1047-020", name: "J. Whitlock", status: "Screening" },
+  { id: "1047-021", name: "B. Ferreira", status: "Screening" },
+  { id: "1047-022", name: "D. Marchetti", status: "Screening" },
 ];
 ```
 
-- [ ] **Step 2: Wire it into the manifest**
+`1047-021` and `1047-022` are seeded as `Screening` from Monday rather than appearing mid-run. The spec has them consenting on Tuesday and Wednesday, but a subject who is not on the roster cannot receive a roster change — the update would match nothing and fail silently. Seeding all six screening subjects from the start costs one line of fiction and removes an entire mechanism.
 
-In `src/game/content/situations/index.ts`:
+- [ ] **Step 7: Run the tests to verify they pass**
 
-```ts
-import { DAY_1 } from "./day1";
-import { DAY_2 } from "./day2";
+Run: `npx vitest run src/game/state.test.ts`
+Expected: PASS, 13 tests.
 
-export const SITUATIONS: Situation[] = [...DAY_1, ...DAY_2];
-```
+Then `npm run typecheck` — expected: no errors.
 
-- [ ] **Step 3: Write the failing test**
-
-Append to `src/game/content/situations/situations.test.ts`:
-
-```ts
-describe("day 2", () => {
-  const day2 = SITUATIONS.filter((s) => s.day === 2);
-
-  it("has four items, all thin, costing eight blocks by hand", () => {
-    expect(day2).toHaveLength(4);
-    expect(day2.reduce((sum, s) => sum + blockCost(s, "manual"), 0)).toBe(8);
-  });
-
-  it("puts the uncatchable item on the slack day", () => {
-    const uncatchable = day2.filter((s) => s.truth.errorType === "UNCATCHABLE");
-
-    expect(uncatchable).toHaveLength(1);
-    expect(uncatchable[0].id).toBe("DE-1111");
-  });
-
-  it("makes the uncatchable item's truth identical to VERA's entry", () => {
-    // Transcribing it perfectly must not save the player.
-    const item = day2.find((s) => s.id === "DE-1111");
-
-    expect(item?.truth.values).toEqual(item?.vera?.entry);
-    expect(item?.truth.tell).toBe("");
-  });
-
-  it("harms the subject whether the item was accepted or verified", () => {
-    const item = day2.find((s) => s.id === "DE-1111");
-
-    expect(item?.outcomes.acceptedWrong).toEqual(item?.outcomes.manualWrong);
-  });
-
-  it("places the catchable misattribution beside it, on the same two subjects", () => {
-    const twin = day2.find((s) => s.id === "SAF-0034");
-
-    expect(twin?.truth.errorType).toBe("misattribution");
-    expect(twin?.truth.tell).toContain("1047-005");
-  });
-
-  it("keeps one of the four correct", () => {
-    expect(day2.filter((s) => s.truth.errorType === "NONE")).toHaveLength(1);
-  });
-});
-```
-
-- [ ] **Step 4: Run it and watch it pass**
-
-Run: `npx vitest run src/game/content/situations/situations.test.ts`
-Expected: PASS, 13 tests
-
-- [ ] **Step 5: Typecheck, lint, and commit**
+- [ ] **Step 8: Commit**
 
 ```bash
-npm run typecheck && npm run lint
-git add src/game/content/situations/
-git commit -m "feat(content): day 2 — the mislabeled lab and the misattribution that teaches its shape"
+git add src/game/
+git commit -m "feat(game): types, roster seed, and the reducer"
 ```
 
 ---
 
-### Task 11: Day 3 situations — three screening packets and the category-1 harm
-
-Five items, **thirteen blocks against thirteen or fourteen available**. This day fits only if nothing rolled over from day 2 and query volume is at its floor. L. Lit sits here with a window closing Thursday.
-
-Write each entry as a `Situation` literal in the same shape as `day2.ts`. Every value below is the actual content — nothing is left to invent.
+### Task 2: Content assets and the document index
 
 **Files:**
-- Create: `src/game/content/situations/day3.ts`
-- Modify: `src/game/content/situations/index.ts`
-- Test: `src/game/content/situations/situations.test.ts` (append)
+- Create: `public/content/documents/` (15 copied markdown files)
+- Create: `public/content/documents/index.json`
+- Create: `scripts/build-doc-index.mjs`
+- Test: `src/game/documents.test.ts`
+- Create: `src/game/documents.ts`
 
 **Interfaces:**
-- Consumes: `LAB_PANEL`, `SCREENING_ELIGIBILITY`, `safetyForm`, `SAFETY_VERDICTS`
-- Produces: `DAY_3: Situation[]`
+- Consumes: nothing.
+- Produces: `type DocEntry = { file: string; title: string; words: number }`; `loadDocIndex(): Promise<DocEntry[]>`; `loadDocument(file: string): Promise<string>`.
 
-- [ ] **Step 1: Write the five entries**
-
-**SCR-0219 · 1047-019 · R. Amaya · screening · manualCost 3 · `sourceDocs: ["scr-0219-packet.md"]`**
-`form: SCREENING_ELIGIBILITY` · `blurb: "1047-019 · R. Amaya — eligibility review"` · `title: "Screening eligibility review"`
-
-```ts
-vera: {
-  summary:
-    "1047-019 meets all inclusion criteria for randomization. EASI 15.8, vIGA-AD 3, BSA " +
-    "involvement 18%, Worst Pruritus NRS 7. Atopic dermatitis has been documented for eleven " +
-    "years and prior topical corticosteroid therapy was inadequate. Washout requirements are " +
-    "satisfied. The eligibility determination is ready for your review.",
-  entry: { easi: "15.8", viga_ad: "3", bsa_pct: "18", pruritus_nrs: "7" },
-  verdict: "eligible",
-},
-truth: {
-  errorType: "threshold-overconfidence",
-  values: { easi: "15.8", viga_ad: "3", bsa_pct: "18", pruritus_nrs: "7" },
-  verdict: "screen-fail",
-  tell: "Inclusion criterion 4 is EASI ≥16. The packet records 15.8.",
-},
-outcomes: {
-  acceptedWrong: [
-    { kind: "email", emailId: "email-scr-0219-deviation", deliverAtDayEnd: 4 },
-    { kind: "roster", subjectId: "1047-019", status: "Enrolled", deliverAtDayEnd: 4 },
-  ],
-  manualCorrect: [
-    { kind: "roster", subjectId: "1047-019", status: "Screen failed", deliverAtDayEnd: 3 },
-  ],
-},
-debrief: {
-  line: "EASI 15.8 against a threshold of 16. She called it eligible in the same voice she uses for everything.",
-  category: 3,
-},
-```
-
-**SCR-0218 · 1047-018 · L. Lit · screening · manualCost 3 · `sourceDocs: ["scr-0218-packet.md"]`**
-`blurb: "1047-018 · L. Lit — eligibility review"` — **the waitlist item. VERA is right. There is nothing to catch.**
-
-```ts
-vera: {
-  summary:
-    "1047-018 meets all inclusion criteria for randomization. EASI 28.4, vIGA-AD 4, BSA " +
-    "involvement 42%, Worst Pruritus NRS 9. Atopic dermatitis has been documented for nineteen " +
-    "years and two prior systemic therapies were inadequate. Washout requirements are satisfied; " +
-    "the last topical corticosteroid was applied 22-DEC-2023. The eligibility determination is " +
-    "ready for your review.",
-  entry: { easi: "28.4", viga_ad: "4", bsa_pct: "42", pruritus_nrs: "9" },
-  verdict: "eligible",
-},
-truth: {
-  errorType: "NONE",
-  values: { easi: "28.4", viga_ad: "4", bsa_pct: "42", pruritus_nrs: "9" },
-  verdict: "eligible",
-  tell: "",
-},
-outcomes: {
-  acceptedCorrect: [{ kind: "roster", subjectId: "1047-018", status: "Enrolled", deliverAtDayEnd: 3 }],
-  manualCorrect: [{ kind: "roster", subjectId: "1047-018", status: "Enrolled", deliverAtDayEnd: 3 }],
-  unworked: [{ kind: "email", emailId: "email-scr-0218-expired", deliverAtDayEnd: 4 }],
-},
-debrief: {
-  line:
-    "L. Lit had moderate-to-severe atopic dermatitis, wanted the drug, and met every criterion. " +
-    "She was right about all of it.",
-},
-```
-
-**SCR-0220 · 1047-020 · J. Whitlock · screening · manualCost 3 · `sourceDocs: ["scr-0220-packet.md"]`**
-`blurb: "1047-020 · J. Whitlock — eligibility review"` — **stale context. She names Amendment 2 in her own summary; the protocol in the Documents window is Amendment 3.**
-
-```ts
-vera: {
-  summary:
-    "1047-020 meets all inclusion criteria for randomization. EASI 21.2, vIGA-AD 4, BSA " +
-    "involvement 26%, Worst Pruritus NRS 6. The subject completed a course of oral prednisone " +
-    "ending 27-DEC-2023. Per Protocol 20210143 Amendment 2 §5.3 the systemic corticosteroid " +
-    "washout is 2 weeks, which is satisfied as of Day 1 on 11-JAN-2024. The eligibility " +
-    "determination is ready for your review.",
-  entry: { easi: "21.2", viga_ad: "4", bsa_pct: "26", pruritus_nrs: "6" },
-  verdict: "eligible",
-},
-truth: {
-  errorType: "stale-context",
-  values: { easi: "21.2", viga_ad: "4", bsa_pct: "26", pruritus_nrs: "6" },
-  verdict: "screen-fail",
-  tell:
-    "The protocol in force is Amendment 3, dated 29-NOV-2023 — it says so on its first page. " +
-    "Amendment 3 §5.3 requires 4 weeks. 27-DEC-2023 to 11-JAN-2024 is 15 days.",
-},
-outcomes: {
-  acceptedWrong: [
-    { kind: "email", emailId: "email-scr-0220-deviation", deliverAtDayEnd: 4 },
-    { kind: "roster", subjectId: "1047-020", status: "Enrolled", deliverAtDayEnd: 4 },
-  ],
-  manualCorrect: [
-    { kind: "roster", subjectId: "1047-020", status: "Screen failed", deliverAtDayEnd: 3 },
-  ],
-},
-debrief: {
-  line: "She answered against Amendment 2. Amendment 3 has been in force since 29-NOV-2023 and doubles that washout.",
-  category: 3,
-},
-```
-
-**DE-1113 · 1047-011 · W. Dorsey · data-entry · manualCost 2 · `sourceDocs: ["de-1113-lab.md"]`**
-`form: LAB_PANEL` · `blurb: "1047-011 · W. Dorsey — Week 20 labs"` · `title: "Week 20 central laboratory panel"`
-
-```ts
-vera: {
-  summary:
-    "Week 20 central laboratory panel for 1047-011 is within reference range throughout. " +
-    "ALT 42 U/L, AST 29 U/L, ALP 71 U/L, creatinine 1.1 mg/dL, haemoglobin 14.4 g/dL, " +
-    "platelets 233 ×10⁹/L, absolute eosinophils 0.38 ×10⁹/L. No alert values were called by the " +
-    "central laboratory. The entry is ready for your review.",
-  entry: { alt: "42", ast: "29", alp: "71", creatinine: "1.1", hemoglobin: "14.4", platelets: "233", eosinophils_abs: "0.38" },
-},
-truth: {
-  errorType: "fabrication",
-  values: { alt: "24", ast: "29", alp: "71", creatinine: "1.1", hemoglobin: "14.4", platelets: "233", eosinophils_abs: "0.38" },
-  tell: "The lab report gives ALT as 24 U/L. No value of 42 appears anywhere in the source.",
-},
-outcomes: {
-  acceptedWrong: [
-    {
-      kind: "query", queryId: "DQ-0114", subjectId: "1047-011",
-      text: "Reported ALT (42) does not match source (24). Please verify and respond.",
-      deliverAtDayEnd: 4,
-    },
-  ],
-},
-debrief: { line: "An ALT of 42 that appears nowhere in the source. The report says 24.", category: 3 },
-```
-
-**SAF-0033 · 1047-001 · R. Jones · safety · manualCost 2 · `sourceDocs: ["saf-0033-discharge.md"]`**
-`blurb: "1047-001 · R. Jones — hospital discharge summary"` · `title: "Hospital discharge summary — cellulitis"`
-`form: safetyForm([SAFETY_VERDICTS.logAe, SAFETY_VERDICTS.reportSae, SAFETY_VERDICTS.noAction])`
-
-**Category 1. She is right, the player is right, and the roster changes regardless.**
-
-```ts
-vera: {
-  summary:
-    "1047-001 was admitted on 08-JAN-2024 with cellulitis of the right lower leg and discharged " +
-    "on 10-JAN-2024 following intravenous antibiotics. This is a serious adverse event — meaning " +
-    "the subject was admitted to hospital, so the sponsor has to be told within 24 hours. " +
-    "Cellulitis is listed in the Reference Safety Information as expected for this product, so " +
-    "this is not a SUSAR. I have drafted the serious adverse event report for your review.",
-  entry: {},
-  verdict: "report-sae",
-},
-truth: { errorType: "NONE", values: {}, verdict: "report-sae", tell: "" },
-outcomes: {
-  acceptedCorrect: [{ kind: "roster", subjectId: "1047-001", status: "Withdrawn (hospitalized)", deliverAtDayEnd: 3 }],
-  manualCorrect: [{ kind: "roster", subjectId: "1047-001", status: "Withdrawn (hospitalized)", deliverAtDayEnd: 3 }],
-  acceptedWrong: [{ kind: "roster", subjectId: "1047-001", status: "Withdrawn (hospitalized)", deliverAtDayEnd: 3 }],
-  manualWrong: [{ kind: "roster", subjectId: "1047-001", status: "Withdrawn (hospitalized)", deliverAtDayEnd: 3 }],
-},
-debrief: {
-  line:
-    "R. Jones was hospitalized with cellulitis. VERA was right, the report went out on time, and " +
-    "it happened anyway. Nobody erred.",
-  category: 1,
-},
-```
-
-- [ ] **Step 2: Wire `DAY_3` into `index.ts`** alongside `DAY_1` and `DAY_2`, in day order.
-
-- [ ] **Step 3: Write the failing test**
-
-Append to `src/game/content/situations/situations.test.ts`:
-
-```ts
-describe("day 3", () => {
-  const day3 = SITUATIONS.filter((s) => s.day === 3);
-
-  it("costs thirteen blocks by hand — the day that only just fits", () => {
-    expect(day3).toHaveLength(5);
-    expect(day3.reduce((sum, s) => sum + blockCost(s, "manual"), 0)).toBe(13);
-  });
-
-  it("carries three screening packets", () => {
-    expect(day3.filter((s) => s.type === "screening")).toHaveLength(3);
-  });
-
-  it("holds the waitlist item, on which VERA is right", () => {
-    const lit = day3.find((s) => s.id === "SCR-0218");
-
-    expect(lit?.truth.errorType).toBe("NONE");
-    expect(lit?.truth.verdict).toBe("eligible");
-    expect(lit?.outcomes.unworked).toBeDefined();
-  });
-
-  it("harms R. Jones whatever the player does — category 1", () => {
-    const jones = day3.find((s) => s.id === "SAF-0033");
-    const keys = ["acceptedCorrect", "manualCorrect", "acceptedWrong", "manualWrong"] as const;
-
-    expect(jones?.debrief.category).toBe(1);
-    for (const key of keys) expect(jones?.outcomes[key]).toHaveLength(1);
-  });
-
-  it("names the superseded amendment in her own words on the stale item", () => {
-    const whitlock = day3.find((s) => s.id === "SCR-0220");
-
-    expect(whitlock?.vera?.summary).toContain("Amendment 2");
-    expect(whitlock?.truth.tell).toContain("Amendment 3");
-  });
-
-  it("keeps two of five correct", () => {
-    expect(day3.filter((s) => s.truth.errorType === "NONE")).toHaveLength(2);
-  });
-});
-```
-
-- [ ] **Step 4: Run it and watch it pass**
-
-Run: `npx vitest run src/game/content/situations/situations.test.ts`
-Expected: PASS, 19 tests
-
-- [ ] **Step 5: Typecheck, lint, and commit**
-
-```bash
-npm run typecheck && npm run lint
-git add src/game/content/situations/
-git commit -m "feat(content): day 3 — three screening packets, the waitlist, and the category-1 harm"
-```
-
----
-
-### Task 12: Day 4 situations — the day that cannot be finished
-
-Five items, **twelve blocks against nine or ten available** once the ladders bill. A verify-everything player loses something here without having made a single mistake, and two of the five are screening packets.
-
-**Files:**
-- Create: `src/game/content/situations/day4.ts`
-- Modify: `src/game/content/situations/index.ts`
-- Test: `src/game/content/situations/situations.test.ts` (append)
-
-**Interfaces:**
-- Consumes: same as day 3
-- Produces: `DAY_4: Situation[]`
-
-- [ ] **Step 1: Write the five entries**
-
-**SCR-0221 · 1047-021 · B. Ferreira · screening · manualCost 3 · `sourceDocs: ["scr-0221-packet.md"]`** — fabrication.
-
-```ts
-vera: {
-  summary:
-    "1047-021 meets all inclusion criteria for randomization. EASI 19.7, vIGA-AD 3, BSA " +
-    "involvement 22%, Worst Pruritus NRS 8. The last topical corticosteroid was applied " +
-    "28-DEC-2023, satisfying the one-week washout in Protocol 20210143 Amendment 3 §5.3. " +
-    "The eligibility determination is ready for your review.",
-  entry: { easi: "19.7", viga_ad: "3", bsa_pct: "22", pruritus_nrs: "8" },
-  verdict: "eligible",
-},
-truth: {
-  errorType: "fabrication",
-  values: { easi: "19.7", viga_ad: "3", bsa_pct: "22", pruritus_nrs: "8" },
-  verdict: "screen-fail",
-  tell:
-    "No date of 28-DEC-2023 appears anywhere in the packet. The medication log records " +
-    "mometasone 0.1% applied 08-JAN-2024 — three days ago, inside the one-week washout.",
-},
-outcomes: {
-  acceptedWrong: [
-    { kind: "email", emailId: "email-scr-0221-deviation", deliverAtDayEnd: 4 },
-    { kind: "roster", subjectId: "1047-021", status: "Enrolled", deliverAtDayEnd: 4 },
-  ],
-  manualCorrect: [{ kind: "roster", subjectId: "1047-021", status: "Screen failed", deliverAtDayEnd: 4 }],
-},
-debrief: {
-  line: "The washout date she cited is not in the packet. The medication log says 08-JAN-2024, three days ago.",
-  category: 3,
-},
-```
-
-**SCR-0222 · 1047-022 · K. Adeyemi · screening · manualCost 3 · `sourceDocs: ["scr-0222-packet.md"]`** — `NONE`, eligible. Values `{ easi: "33.1", viga_ad: "4", bsa_pct: "48", pruritus_nrs: "9" }`, verdict `eligible`, `tell: ""`. Her summary follows the shape of SCR-0218's and cites the last topical corticosteroid as 19-DEC-2023. Outcomes mirror SCR-0218: `acceptedCorrect` and `manualCorrect` each set the roster to `Enrolled` at day-end 4; `unworked` delivers `email-scr-0222-expired` at day-end 4. Debrief line: `"K. Adeyemi met every criterion. If this one sat in the queue at 4:00 PM, randomization had already closed."`
-
-**DE-1115 · 1047-002 · D. Achterberg · data-entry · manualCost 2 · `sourceDocs: ["de-1115-lab.md"]`** — omission.
-
-```ts
-vera: {
-  summary:
-    "Week 24 central laboratory panel for 1047-002. ALT 61 U/L, AST 48 U/L, ALP 88 U/L, " +
-    "creatinine 1.0 mg/dL, haemoglobin 13.9 g/dL, platelets 197 ×10⁹/L, absolute eosinophils " +
-    "0.41 ×10⁹/L. The entry is ready for your review.",
-  entry: { alt: "61", ast: "48", alp: "88", creatinine: "1.0", hemoglobin: "13.9", platelets: "197", eosinophils_abs: "0.41" },
-},
-truth: {
-  errorType: "omission",
-  values: { alt: "61", ast: "48", alp: "88", creatinine: "1.0", hemoglobin: "13.9", platelets: "197", eosinophils_abs: "0.41" },
-  tell:
-    "Header of the lab report: ALERT VALUE CALLED TO SITE 09-JAN-2024 14:20, spoken to " +
-    "M. Duarte. Her summary does not mention it, and an alert value has to be reviewed and " +
-    "signed by the investigator.",
-},
-outcomes: {
-  acceptedWrong: [
-    {
-      kind: "query", queryId: "DQ-0121", subjectId: "1047-002",
-      text: "Alert value notification dated 09-JAN-2024 for this subject has no corresponding investigator review on file. Please verify and respond.",
-      deliverAtDayEnd: 4,
-    },
-  ],
-},
-debrief: {
-  line: "Every value she transcribed was right. The alert-value notification across the top of the report was not in her summary.",
-  category: 3,
-},
-```
-
-**DE-1116 · 1047-006 · M. Vasquez · data-entry · manualCost 2 · `sourceDocs: ["de-1116-lab.md"]`** — normalization.
-
-```ts
-vera: {
-  summary:
-    "Week 8 central laboratory panel for 1047-006 is within reference range throughout. " +
-    "ALT 26 U/L, AST 23 U/L, ALP 64 U/L, creatinine 0.9 mg/dL, haemoglobin 14.8 g/dL, " +
-    "platelets 251 ×10⁹/L, absolute eosinophils 0.5 ×10⁹/L. The laboratory reports eosinophils " +
-    "in cells per microlitre; the value has been converted for entry, as the eCRF field is " +
-    "defined in ×10⁹/L. The entry is ready for your review.",
-  entry: { alt: "26", ast: "23", alp: "64", creatinine: "0.9", hemoglobin: "14.8", platelets: "251", eosinophils_abs: "0.5" },
-},
-truth: {
-  errorType: "normalization",
-  values: { alt: "26", ast: "23", alp: "64", creatinine: "0.9", hemoglobin: "14.8", platelets: "251", eosinophils_abs: "0.54" },
-  tell: "The lab report gives eosinophils as 540 cells/µL. That is 0.54 ×10⁹/L, not 0.5.",
-},
-outcomes: {
-  acceptedWrong: [
-    {
-      kind: "query", queryId: "DQ-0122", subjectId: "1047-006",
-      text: "Reported absolute eosinophils (0.5 ×10⁹/L) does not match source (540 cells/µL = 0.54 ×10⁹/L). Please verify and respond.",
-      deliverAtDayEnd: 4,
-    },
-  ],
-},
-debrief: { line: "540 cells/µL is 0.54, not 0.5. She rounded, and the eCRF field takes two decimals.", category: 3 },
-```
-
-**SAF-0035 · 1047-005 · T. Channing · safety · manualCost 2 · `sourceDocs: ["saf-0035-phone-note.md"]`** — `NONE`.
-
-The subject whose Week 16 bloods were filed under someone else's ID, one item before the day-end where they are hospitalized. She is entirely right here.
-
-```ts
-vera: {
-  summary:
-    "1047-005 telephoned to report mild nausea lasting approximately two hours on 10-JAN-2024, " +
-    "resolved without treatment and not temporally associated with dosing — the last dose was " +
-    "administered at Week 20 on 02-JAN-2024. No hospitalisation and no rescue therapy, so this " +
-    "is not serious. I have drafted the adverse event entry for your review.",
-  entry: {},
-  verdict: "log-ae",
-},
-truth: { errorType: "NONE", values: {}, verdict: "log-ae", tell: "" },
-outcomes: {},
-debrief: { line: "Two hours of nausea, correctly logged and correctly not escalated. She was right." },
-```
-
-- [ ] **Step 2: Wire `DAY_4` into `index.ts`** in day order.
-
-- [ ] **Step 3: Write the failing test**
-
-Append to `src/game/content/situations/situations.test.ts`:
-
-```ts
-import { availableBlocks } from "../../engine/clock";
-
-describe("day 4", () => {
-  const day4 = SITUATIONS.filter((s) => s.day === 4);
-
-  it("costs twelve blocks by hand", () => {
-    expect(day4).toHaveLength(5);
-    expect(day4.reduce((sum, s) => sum + blockCost(s, "manual"), 0)).toBe(12);
-  });
-
-  it("cannot be finished by hand even with no rollover and no mistakes", () => {
-    const cost = day4.reduce((sum, s) => sum + blockCost(s, "manual"), 0);
-
-    // One open query is the floor: day 3 always delivers at least one.
-    expect(cost).toBeGreaterThan(availableBlocks(4, 1));
-  });
-
-  it("puts two patients on the line on the last day", () => {
-    expect(day4.filter((s) => s.type === "screening")).toHaveLength(2);
-  });
-
-  it("keeps two of five correct", () => {
-    expect(day4.filter((s) => s.truth.errorType === "NONE")).toHaveLength(2);
-  });
-});
-```
-
-- [ ] **Step 4: Run it and watch it pass**
-
-Run: `npx vitest run src/game/content/situations/situations.test.ts`
-Expected: PASS, 23 tests
-
-- [ ] **Step 5: Typecheck, lint, and commit**
-
-```bash
-npm run typecheck && npm run lint
-git add src/game/content/situations/
-git commit -m "feat(content): day 4 — the day the ladders make impossible to finish"
-```
-
----
-
-### Task 13: The email corpus
-
-All satire lives here. The roster never jokes; the sponsor always does.
-
-**Files:**
-- Create: `src/game/content/emails.ts`
-- Test: `src/game/content/emails.test.ts`
-
-**Interfaces:**
-- Consumes: `EmailTemplate` from `../engine/consequences`
-- Produces: `EMAILS: Record<string, EmailTemplate>`, `SIGN_IN_INBOX: string[]` (email ids present at 8:00 Monday)
-
-- [ ] **Step 1: Write `src/game/content/emails.ts`**
-
-Every id referenced by a situation or a ladder rung must exist. The full list:
-
-| id | From | Subject | Role |
-|---|---|---|---|
-| `email-day0-manager` | `G. Tarrant (Site Director)` | `Week ahead` | In the inbox at sign-in |
-| `email-day0-randomization` | `Amgen Clinical Ops` | `Randomization closes 12-JAN-2024` | In the inbox at sign-in |
-| `email-vera-provisioned` | `Amgen Clinical Ops` | `VERA is live at Site 1047 ✨` | Lands at 11:30 on day 1 |
-| `email-enroll-nudge` | `Amgen Clinical Ops` | `Portland — enrollment check-in 🎉` | Enrollment rung 1 |
-| `email-enroll-call` | `Amgen Clinical Ops` | `Quick call Thursday?` | Enrollment rung 2 |
-| `email-enroll-daily-reporting` | `Amgen Clinical Ops` | `Daily enrollment reporting — effective immediately` | Enrollment rung 3 |
-| `email-audit-query-volume` | `Amgen Data Mgmt` | `Query volume — Site 1047` | Audit rung 1 |
-| `email-audit-for-cause` | `Amgen Clinical Quality` | `Notice of for-cause audit` | Audit rung 2 |
-| `email-saf-0031-followup` | `A. Belmonte-Ruiz, MD (Medical Monitor)` | `1047-006 — follow-up` | SAF-0031 wrong |
-| `email-saf-0032-late-sae` | `Global Patient Safety intake` | `Late SAE notification — 1047-002` | SAF-0032 accepted wrong |
-| `email-scr-0219-deviation` | `Amgen Clinical Ops` | `Protocol deviation — 1047-019` | SCR-0219 accepted wrong |
-| `email-scr-0220-deviation` | `Amgen Clinical Ops` | `Protocol deviation — 1047-020` | SCR-0220 accepted wrong |
-| `email-scr-0221-deviation` | `Amgen Clinical Ops` | `Protocol deviation — 1047-021` | SCR-0221 accepted wrong |
-| `email-scr-0218-expired` | `Amgen Clinical Ops` | `Screening window closed — 1047-018` | SCR-0218 unworked |
-| `email-scr-0222-expired` | `Amgen Clinical Ops` | `Screening window closed — 1047-022` | SCR-0222 unworked |
-
-Three bodies are written out because their register has to be exactly right; write the remaining twelve to match.
-
-```ts
-import type { EmailTemplate } from "../engine/consequences";
-
-export const EMAILS: Record<string, EmailTemplate> = {
-  "email-vera-provisioned": {
-    id: "email-vera-provisioned",
-    from: "Amgen Clinical Ops",
-    subject: "VERA is live at Site 1047 ✨",
-    body:
-      "Good news! VERA is now provisioned for your site. She reads your source documents and " +
-      "drafts your entries, so you can spend your time on what matters — your participants. 💚\n\n" +
-      "No training needed. She's already read the protocol.\n\n" +
-      "Sites using VERA are averaging 40% faster data entry. We can't wait to see what Portland does!",
-  },
-
-  "email-enroll-nudge": {
-    id: "email-enroll-nudge",
-    from: "Amgen Clinical Ops",
-    subject: "Portland — enrollment check-in 🎉",
-    body:
-      "Hi team!\n\nJust a friendly check-in — Portland is currently tracking at 11 randomized " +
-      "against a contracted 12, with study-wide randomization closing 12-JAN-2024.\n\n" +
-      "We know you'll close that gap. You've got this! 🙌",
-  },
-
-  // The roster never jokes. This one is written flat, because a person is in it.
-  "email-scr-0218-expired": {
-    id: "email-scr-0218-expired",
-    from: "Amgen Clinical Ops",
-    subject: "Screening window closed — 1047-018",
-    body:
-      "The 30-day screening window for 1047-018 closed on 11-JAN-2024 without an eligibility " +
-      "determination on file. The subject has been recorded as a screen failure.\n\n" +
-      "No further action is required.",
-  },
-
-  // …twelve more, following the register established above.
-};
-
-/** Already in the inbox when the player signs in on Monday morning. */
-export const SIGN_IN_INBOX = ["email-day0-manager", "email-day0-randomization"];
-```
-
-**Register rules for the twelve remaining bodies:**
-- **Sponsor email is chipper, deadline-driven, and passive-aggressive.** Emoji are permitted and encouraged. This is where all the satire in the game lives.
-- **Anything naming a subject by ID is written flat**, with no emoji and no cheer. If a person is in the email, the joke stops.
-- **The manager gets two lines maximum**, brisk, signed `— G`. `email-day0-manager` must contain the words "Sponsor-provisioned. Not optional." because it is the only answer the game gives to "can I stop using VERA".
-- **Nothing is ever labelled as feedback.** A deviation email states the deviation. It never says the player caused it.
-
-- [ ] **Step 2: Write the failing test**
-
-Create `src/game/content/emails.test.ts`:
-
-```ts
-import { describe, expect, it } from "vitest";
-
-import { LADDER_RUNGS } from "./ladders";
-import { EMAILS, SIGN_IN_INBOX } from "./emails";
-import { SITUATIONS } from "./situations";
-
-describe("email corpus", () => {
-  it("has a body for every ladder rung", () => {
-    for (const rung of LADDER_RUNGS) expect(EMAILS[rung.emailId]).toBeDefined();
-  });
-
-  it("has a body for every email a situation can send", () => {
-    for (const situation of SITUATIONS) {
-      for (const consequences of Object.values(situation.outcomes)) {
-        for (const consequence of consequences ?? []) {
-          if (consequence.kind === "email") expect(EMAILS[consequence.emailId]).toBeDefined();
-        }
-      }
-    }
-  });
-
-  it("has a body for everything sitting in the inbox at sign-in", () => {
-    for (const id of SIGN_IN_INBOX) expect(EMAILS[id]).toBeDefined();
-  });
-
-  it("never jokes in an email that names a subject", () => {
-    const emoji = /\p{Extended_Pictographic}/u;
-
-    for (const email of Object.values(EMAILS)) {
-      if (!/1047-\d{3}/.test(email.subject + email.body)) continue;
-      expect(email.subject + email.body).not.toMatch(emoji);
-    }
-  });
-
-  it("gives the manager the only answer about VERA", () => {
-    expect(EMAILS["email-day0-manager"].body).toContain("Not optional");
-  });
-
-  it("keeps every id consistent with its key", () => {
-    for (const [key, email] of Object.entries(EMAILS)) expect(email.id).toBe(key);
-  });
-});
-```
-
-- [ ] **Step 3: Run it and watch it pass**
-
-Run: `npx vitest run src/game/content/emails.test.ts`
-Expected: PASS, 6 tests
-
-- [ ] **Step 4: Typecheck, lint, and commit**
-
-```bash
-npm run typecheck && npm run lint
-git add src/game/content/emails.ts src/game/content/emails.test.ts
-git commit -m "feat(content): the email corpus — every ladder rung and consequence"
-```
-
----
-
-### Task 14: Source documents and the trial library
-
-Twenty-one per-item source documents, plus the fifteen reference documents copied where the browser can fetch them.
-
-**Files:**
-- Create: `public/content/source/*.md` (21 files)
-- Create: `public/content/documents/*.md` (copied)
-- Create: `src/game/content/documents.ts`
-- Test: `src/game/content/documents.test.ts`
-
-**Interfaces:**
-- Produces: `TRIAL_DOCUMENTS: DocumentEntry[]` — `{ id, title, file, words }`
-
-- [ ] **Step 1: Symlink the trial library**
-
-The trial documents keep their home in `docs/trial_documents/`. `public/content/documents/` holds **relative symlinks back to them**, so the corpus has exactly one source of truth and editing a document in `docs/` is immediately live in the game.
+- [ ] **Step 1: Copy the trial documents into public**
 
 ```bash
 mkdir -p public/content/documents public/content/source
-
-for f in docs/trial_documents/*.md; do
-  name=$(basename "$f")
-  case "$name" in
-    ASSUMPTIONS.md|index.md) continue ;;   # authoring notes, not site documents
-  esac
-  ln -sfn "../../../docs/trial_documents/$name" "public/content/documents/$name"
-done
-
-ls -l public/content/documents | head -3   # confirm they are links, not copies
-ls public/content/documents | wc -l        # expect 15
+cp docs/trial_documents/*.md public/content/documents/
+rm public/content/documents/ASSUMPTIONS.md public/content/documents/index.md
+ls public/content/documents/
 ```
 
-Links are **relative** (`../../../docs/trial_documents/…`), not absolute, so they survive a fresh clone into any directory. `ASSUMPTIONS.md` and `index.md` are authoring notes, not documents a site receives, and are deliberately not linked.
+Expected: 15 files — `budget.md`, `cta.md`, `edc_manual.md`, `form_1572.md`, `icf.md`, `investigators_brochure.md`, `ip_handling_manual.md`, `irt_manual.md`, `lab_manual.md`, `monitoring_plan.md`, `pharmacy_manual.md`, `protocol.md`, `safety_reporting_manual.md`, `siv_slide_deck.md`, `study_reference_manual.md`.
 
-- [ ] **Step 1b: Confirm the symlinks survive a production build**
+`ASSUMPTIONS.md` and `index.md` are authoring metadata, not documents a site receives — they are excluded deliberately.
 
-Symlinks resolve transparently for `readFileSync` and for the dev server, but `next build` copies `public/`, and some copy paths do not follow links.
+- [ ] **Step 2: Write the index generator**
+
+Create `scripts/build-doc-index.mjs`:
+
+```js
+import { readdir, readFile, writeFile } from "node:fs/promises";
+import { join } from "node:path";
+
+const DIR = "public/content/documents";
+
+const TITLES = {
+  "budget.md": "Budget — Exhibit B",
+  "cta.md": "Clinical Trial Agreement",
+  "edc_manual.md": "EDC Manual — Veriscribe v9.2",
+  "form_1572.md": "FDA Form 1572",
+  "icf.md": "Informed Consent Form v4.0.1",
+  "investigators_brochure.md": "Investigator's Brochure ed. 6.0",
+  "ip_handling_manual.md": "IP Handling Manual",
+  "irt_manual.md": "IRT Manual — Axion",
+  "lab_manual.md": "Laboratory Manual",
+  "monitoring_plan.md": "Monitoring Plan",
+  "pharmacy_manual.md": "Pharmacy Manual",
+  "protocol.md": "Protocol 20210143, Amendment 3",
+  "safety_reporting_manual.md": "Safety Reporting Manual",
+  "siv_slide_deck.md": "SIV Slide Deck — 21-DEC-2022",
+  "study_reference_manual.md": "Study Reference Manual",
+};
+
+const files = (await readdir(DIR)).filter((f) => f.endsWith(".md")).sort();
+const index = [];
+
+for (const file of files) {
+  const text = await readFile(join(DIR, file), "utf8");
+  index.push({
+    file,
+    title: TITLES[file] ?? file,
+    words: text.split(/\s+/).filter(Boolean).length,
+  });
+}
+
+await writeFile(join(DIR, "index.json"), JSON.stringify(index, null, 2) + "\n");
+console.log(`Indexed ${index.length} documents.`);
+```
+
+- [ ] **Step 3: Run it**
 
 ```bash
-npm run build
-ls -l .next/  2>/dev/null
-npx next start &
-sleep 3
-curl -sf -o /dev/null -w "%{http_code}\n" http://localhost:3000/content/documents/protocol.md
-kill %1
+node scripts/build-doc-index.mjs
 ```
 
-Expected: `200`. **If it returns 404, stop and report it** — the fallback is committing real copies and adding an `npm run sync:docs` script, which is a change to how the corpus is maintained and is the human's call, not yours.
+Expected: `Indexed 15 documents.` Verify `public/content/documents/index.json` lists 15 entries, each with a non-zero `words`.
 
-- [ ] **Step 2: Write `src/game/content/documents.ts`**
+- [ ] **Step 4: Write the failing loader test**
 
-```ts
-export type DocumentEntry = { id: string; title: string; file: string };
-
-/** The document corpus a site receives. Listed in the Documents window. */
-export const TRIAL_DOCUMENTS: DocumentEntry[] = [
-  { id: "protocol", title: "Protocol 20210143, Amendment 3 (29-NOV-2023)", file: "protocol.md" },
-  { id: "srm", title: "Study Reference Manual", file: "study_reference_manual.md" },
-  { id: "safety", title: "Safety Reporting Manual", file: "safety_reporting_manual.md" },
-  { id: "ib", title: "Investigator's Brochure, Edition 6.0", file: "investigators_brochure.md" },
-  { id: "lab", title: "Laboratory Manual", file: "lab_manual.md" },
-  { id: "edc", title: "Veriscribe EDC Manual", file: "edc_manual.md" },
-  { id: "irt", title: "Axion IRT Manual", file: "irt_manual.md" },
-  { id: "pharmacy", title: "Pharmacy Manual", file: "pharmacy_manual.md" },
-  { id: "ip", title: "IP Handling Manual", file: "ip_handling_manual.md" },
-  { id: "monitoring", title: "Monitoring Plan", file: "monitoring_plan.md" },
-  { id: "icf", title: "Informed Consent Form v4.0.1", file: "icf.md" },
-  { id: "siv", title: "Site Initiation Visit deck (19-DEC-2022)", file: "siv_slide_deck.md" },
-  { id: "cta", title: "Clinical Trial Agreement", file: "cta.md" },
-  { id: "budget", title: "Budget — Exhibit B", file: "budget.md" },
-  { id: "1572", title: "FDA Form 1572 package", file: "form_1572.md" },
-];
-```
-
-- [ ] **Step 3: Write the 21 source documents**
-
-Each opens with the SIMULATED DOCUMENT banner from `docs/STUDY_FACTS.md` §2, then renders as the institutional artefact it is — a lab report, a worksheet, a packet. Keep them dense and abbreviated. **Do not simplify them.** The check the player makes is always mechanical; the document around it does not have to be.
-
-| File | Length | Must contain |
-|---|---|---|
-| `scr-0217-packet.md` | 3 pp | EASI 24.6, vIGA-AD 4, BSA 31%, NRS 8; all thresholds clearly cleared |
-| `de-1109-vitals.md` | 1 p | 128/82, 72 bpm, 36.8 °C, 81.4 kg |
-| `saf-0031-phone-note.md` | 1 p | Dose 09-JAN-2024 10:15; fever 38.4 °C same evening; resolved next morning; no admission |
-| `de-1110-lab.md` | 1 p | The seven values from DE-1110, all in range |
-| `de-1114-vitals.md` | 1 p | **Weight written as `190 lb`**, not kg. 134/86, 68 bpm, 36.6 °C |
-| `de-1111-lab.md` | 1 p | The seven values from DE-1111, headed `1047-005`, requisition `MCL-88214` |
-| `de-1111-requisition.md` | 1 p | **The payload of the ending.** Requisition `MCL-88214`, subject `1047-005`, drawn 09-JAN-2024. **Field 5, "Participant initials", pre-printed `not collected for this study`.** Everything internally consistent |
-| `saf-0034-note.md` | 1 p | E. Fontaine, four days of worsening AD, emollient only, no rescue |
-| `saf-0034-prior-visits.md` | 1 p | E. Fontaine's visit history — **no prior flare at Week 12**. Include the Week 12 row so its absence is visible |
-| `de-1112-lab.md` | 1 p | The seven values from DE-1112; eosinophils 0.52 flagged high, no alert |
-| `saf-0032-note.md` | 2 pp | Headache six hours, resolved. **Final paragraph: overnight admission two days later, cellulitis, left forearm** |
-| `scr-0219-packet.md` | 3 pp | **EASI 15.8**, vIGA-AD 3, BSA 18%, NRS 7 |
-| `scr-0218-packet.md` | 3 pp | EASI 28.4, vIGA-AD 4, BSA 42%, NRS 9; last TCS 22-DEC-2023 |
-| `scr-0220-packet.md` | 3 pp | EASI 21.2, vIGA-AD 4, BSA 26%, NRS 6; **prednisone course ending 27-DEC-2023** |
-| `de-1113-lab.md` | 1 p | **ALT 24**, AST 29, and the rest from DE-1113 |
-| `saf-0033-discharge.md` | 2 pp | Admitted 08-JAN-2024, discharged 10-JAN-2024, cellulitis right lower leg, IV antibiotics |
-| `scr-0221-packet.md` | 3 pp | EASI 19.7, vIGA-AD 3, BSA 22%, NRS 8. **Medication log: mometasone 0.1% applied 08-JAN-2024. No date of 28-DEC-2023 anywhere** |
-| `scr-0222-packet.md` | 3 pp | EASI 33.1, vIGA-AD 4, BSA 48%, NRS 9; last TCS 19-DEC-2023 |
-| `de-1115-lab.md` | 1 p | The seven values from DE-1115 and, across the header, `ALERT VALUE CALLED TO SITE 09-JAN-2024 14:20 — spoken to M. Duarte` |
-| `de-1116-lab.md` | 1 p | **Eosinophils as `540 cells/µL`**, not ×10⁹/L. The rest from DE-1116 |
-| `saf-0035-phone-note.md` | 1 p | Nausea two hours 10-JAN-2024; last dose Week 20 on 02-JAN-2024 |
-
-- [ ] **Step 4: Write the test**
-
-Create `src/game/content/documents.test.ts`:
+Create `src/game/documents.test.ts`:
 
 ```ts
-import { readFileSync } from "node:fs";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { TRIAL_DOCUMENTS } from "./documents";
-import { SITUATIONS } from "./situations";
+import { loadDocIndex, loadDocument } from "@/game/documents";
 
-const BANNER = "SIMULATED DOCUMENT";
+afterEach(() => vi.unstubAllGlobals());
 
-describe("source documents", () => {
-  it("has a file on disk for every document a situation opens", () => {
-    for (const situation of SITUATIONS) {
-      for (const file of situation.sourceDocs) {
-        expect(() => readFileSync(`public/content/source/${file}`)).not.toThrow();
-      }
-    }
+describe("documents", () => {
+  it("loads and returns the index", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({
+        ok: true,
+        json: async () => [{ file: "protocol.md", title: "Protocol", words: 25077 }],
+      })),
+    );
+
+    const index = await loadDocIndex();
+    expect(index).toHaveLength(1);
+    expect(index[0].title).toBe("Protocol");
   });
 
-  it("banners every source document", () => {
-    for (const situation of SITUATIONS) {
-      for (const file of situation.sourceDocs) {
-        const text = readFileSync(`public/content/source/${file}`, "utf8");
-        expect(text).toContain(BANNER);
-      }
-    }
+  it("loads a document's text", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({ ok: true, text: async () => "# Protocol\n" })),
+    );
+
+    expect(await loadDocument("protocol.md")).toBe("# Protocol\n");
   });
 
-  it("lists fifteen trial documents, all present on disk", () => {
-    expect(TRIAL_DOCUMENTS).toHaveLength(15);
+  it("throws a named error when a document is missing", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => ({ ok: false, status: 404 })));
 
-    for (const doc of TRIAL_DOCUMENTS) {
-      expect(() => readFileSync(`public/content/documents/${doc.file}`)).not.toThrow();
-    }
-  });
-
-  it("keeps the requisition's disabled initials field — the ending depends on it", () => {
-    const text = readFileSync("public/content/source/de-1111-requisition.md", "utf8");
-
-    expect(text).toContain("not collected for this study");
-    expect(text).toMatch(/[Pp]articipant initials/);
-  });
-
-  it("keeps the tell in the source for every catchable error", () => {
-    const cases: [string, string, string][] = [
-      ["de-1114-vitals.md", "DE-1114", "190"],
-      ["de-1113-lab.md", "DE-1113", "24"],
-      ["de-1116-lab.md", "DE-1116", "540"],
-      ["scr-0219-packet.md", "SCR-0219", "15.8"],
-      ["scr-0220-packet.md", "SCR-0220", "27-DEC-2023"],
-      ["scr-0221-packet.md", "SCR-0221", "08-JAN-2024"],
-      ["de-1115-lab.md", "DE-1115", "ALERT VALUE"],
-      ["saf-0032-note.md", "SAF-0032", "cellulitis"],
-    ];
-
-    for (const [file, , needle] of cases) {
-      expect(readFileSync(`public/content/source/${file}`, "utf8")).toContain(needle);
-    }
-  });
-
-  it("never plants the fabricated washout date SCR-0221 cites", () => {
-    const text = readFileSync("public/content/source/scr-0221-packet.md", "utf8");
-    expect(text).not.toContain("28-DEC-2023");
+    await expect(loadDocument("nope.md")).rejects.toThrow("nope.md");
   });
 });
 ```
 
-- [ ] **Step 5: Run it and watch it pass**
+- [ ] **Step 5: Run it to verify it fails**
 
-Run: `npx vitest run src/game/content/documents.test.ts`
-Expected: PASS, 7 tests
+Run: `npx vitest run src/game/documents.test.ts`
+Expected: FAIL — `Failed to resolve import "@/game/documents"`.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 6: Implement the loader**
+
+Create `src/game/documents.ts`:
+
+```ts
+export type DocEntry = { file: string; title: string; words: number };
+
+const DOCS = "/content/documents";
+const SOURCE = "/content/source";
+
+const cache = new Map<string, string>();
+
+export async function loadDocIndex(): Promise<DocEntry[]> {
+  const res = await fetch(`${DOCS}/index.json`);
+  if (!res.ok) throw new Error(`Could not load the document index (${res.status})`);
+  return res.json();
+}
+
+async function loadText(base: string, file: string): Promise<string> {
+  const key = `${base}/${file}`;
+  const hit = cache.get(key);
+  if (hit !== undefined) return hit;
+
+  const res = await fetch(key);
+  if (!res.ok) throw new Error(`Could not load ${file} (${res.status})`);
+
+  const text = await res.text();
+  cache.set(key, text);
+  return text;
+}
+
+export const loadDocument = (file: string) => loadText(DOCS, file);
+export const loadSource = (file: string) => loadText(SOURCE, file);
+```
+
+- [ ] **Step 7: Run the tests to verify they pass**
+
+Run: `npx vitest run src/game/documents.test.ts`
+Expected: PASS, 3 tests.
+
+Note: the cache is module-level, so the second and third tests must use distinct filenames — they do (`protocol.md`, `nope.md`).
+
+- [ ] **Step 8: Commit**
 
 ```bash
-npm run typecheck && npm run lint
-git add public/content src/game/content/documents.ts src/game/content/documents.test.ts
-git commit -m "feat(content): per-item source documents and the 15-document trial library"
+git add public/content scripts/ src/game/documents.ts src/game/documents.test.ts
+git commit -m "feat(content): copy the trial corpus into public and add loaders"
 ```
 
 ---
 
-### Task 15: The invariants suite
-
-Encodes spec §2 and §4 so that editing the manifest cannot silently break the run. This is the task that protects the design.
+### Task 3: Window geometry and the window manager
 
 **Files:**
-- Create: `src/game/invariants.test.ts`
-
-**Interfaces:**
-- Consumes: `SITUATIONS`, `availableBlocks`, `blockCost`
-
-- [ ] **Step 1: Write the suite**
-
-```ts
-import { describe, expect, it } from "vitest";
-
-import { availableBlocks } from "./engine/clock";
-import { blockCost } from "./engine/resolve";
-import { SITUATIONS } from "./content/situations";
-import type { DayNumber } from "./types";
-
-const DAYS: DayNumber[] = [1, 2, 3, 4];
-const assisted = SITUATIONS.filter((s) => !s.manual);
-const manualCost = (day: DayNumber) =>
-  SITUATIONS.filter((s) => s.day === day).reduce((t, s) => t + blockCost(s, "manual"), 0);
-
-describe("the run holds its shape", () => {
-  it("has nineteen situations across four days", () => {
-    expect(SITUATIONS).toHaveLength(19);
-    expect(DAYS.map((d) => SITUATIONS.filter((s) => s.day === d).length)).toEqual([5, 4, 5, 5]);
-  });
-
-  it("uses unique ids", () => {
-    const ids = SITUATIONS.map((s) => s.id);
-    expect(new Set(ids).size).toBe(ids.length);
-  });
-
-  it("forces exactly the three day-1 morning items by hand", () => {
-    const forced = SITUATIONS.filter((s) => s.manual);
-    expect(forced).toHaveLength(3);
-    expect(forced.every((s) => s.day === 1)).toBe(true);
-  });
-});
-
-describe("VERA is right roughly one time in three", () => {
-  it("gets six of sixteen assisted items right", () => {
-    expect(assisted).toHaveLength(16);
-    expect(assisted.filter((s) => s.truth.errorType === "NONE")).toHaveLength(6);
-  });
-
-  it("carries exactly one uncatchable item", () => {
-    expect(SITUATIONS.filter((s) => s.truth.errorType === "UNCATCHABLE")).toHaveLength(1);
-  });
-
-  it("carries one error type or none per situation", () => {
-    // The type is a single field, so this holds structurally; assert the
-    // distribution instead, which is what actually drifts when content is edited.
-    const counts = new Map<string, number>();
-    for (const s of assisted) counts.set(s.truth.errorType, (counts.get(s.truth.errorType) ?? 0) + 1);
-
-    expect(counts.get("fabrication")).toBe(2);
-    expect(counts.get("omission")).toBe(2);
-    expect(counts.get("normalization")).toBe(2);
-    expect(counts.get("misattribution")).toBe(1);
-    expect(counts.get("stale-context")).toBe(1);
-    expect(counts.get("threshold-overconfidence")).toBe(1);
-  });
-});
-
-describe("nothing leaks which items are wrong", () => {
-  it("keeps at least one correct output in every day that has assisted items", () => {
-    for (const day of DAYS) {
-      const forDay = assisted.filter((s) => s.day === day);
-      if (forDay.length === 0) continue;
-      expect(forDay.some((s) => s.truth.errorType === "NONE")).toBe(true);
-    }
-  });
-
-  it("keeps at least one correct output in every item type", () => {
-    for (const type of ["screening", "data-entry", "safety"] as const) {
-      const forType = assisted.filter((s) => s.type === type);
-      expect(forType.some((s) => s.truth.errorType === "NONE")).toBe(true);
-    }
-  });
-
-  it("does not let her wrong outputs run longer than her right ones", () => {
-    const words = (s: (typeof assisted)[number]) => s.vera!.summary.split(/\s+/).length;
-    const right = assisted.filter((s) => s.truth.errorType === "NONE").map(words);
-    const wrong = assisted.filter((s) => s.truth.errorType !== "NONE").map(words);
-    const mean = (xs: number[]) => xs.reduce((a, b) => a + b, 0) / xs.length;
-
-    // Within 20% either way. A systematic gap teaches players to count words.
-    expect(Math.abs(mean(wrong) - mean(right)) / mean(right)).toBeLessThan(0.2);
-  });
-
-  it("does not hedge only when she is wrong", () => {
-    const hedges = /\b(likely|appears to|possibly|I believe|may be|it seems|I am not certain)\b/i;
-    const rightHedges = assisted.filter((s) => s.truth.errorType === "NONE" && hedges.test(s.vera!.summary));
-    const wrongHedges = assisted.filter((s) => s.truth.errorType !== "NONE" && hedges.test(s.vera!.summary));
-
-    // If she hedges at all, she must hedge on both sides. Simplest safe rule:
-    // hedge on neither.
-    expect(rightHedges).toHaveLength(0);
-    expect(wrongHedges).toHaveLength(0);
-  });
-
-  it("never has her claim to have acted", () => {
-    for (const s of assisted) {
-      expect(s.vera!.summary).not.toMatch(/I have (submitted|filed|sent|reported|entered)/i);
-    }
-  });
-});
-
-describe("the squeeze", () => {
-  it("runs the manual morning to exactly 11:30", () => {
-    const morning = SITUATIONS.filter((s) => s.manual).reduce((t, s) => t + blockCost(s, "manual"), 0);
-    expect(morning).toBe(7);
-  });
-
-  it("costs 11 / 8 / 13 / 12 blocks to work each day by hand", () => {
-    expect(DAYS.map(manualCost)).toEqual([11, 8, 13, 12]);
-  });
-
-  it("lets days 1 and 2 be fully verified", () => {
-    expect(manualCost(1)).toBeLessThanOrEqual(availableBlocks(1, 0));
-    expect(manualCost(2)).toBeLessThanOrEqual(availableBlocks(2, 2));
-  });
-
-  it("leaves day 3 no room for a rolled screening packet", () => {
-    expect(manualCost(3)).toBeLessThanOrEqual(availableBlocks(3, 2));
-    expect(manualCost(3) + 3).toBeGreaterThan(availableBlocks(3, 2));
-  });
-
-  it("makes day 4 impossible to finish by hand, with no rollover and no mistakes", () => {
-    expect(manualCost(4)).toBeGreaterThan(availableBlocks(4, 1));
-  });
-
-  it("puts a patient on the line on the day that cannot be finished", () => {
-    const screening = SITUATIONS.filter((s) => s.day === 4 && s.type === "screening");
-    expect(screening.length).toBeGreaterThanOrEqual(2);
-  });
-});
-
-describe("the three harms", () => {
-  it("has exactly one category-1 harm — nobody erred", () => {
-    expect(SITUATIONS.filter((s) => s.debrief.category === 1)).toHaveLength(1);
-  });
-
-  it("has exactly one category-2 harm, and it is the uncatchable item", () => {
-    const cat2 = SITUATIONS.filter((s) => s.debrief.category === 2);
-    expect(cat2).toHaveLength(1);
-    expect(cat2[0].truth.errorType).toBe("UNCATCHABLE");
-  });
-
-  it("gives every catchable error a tell and the uncatchable one none", () => {
-    for (const s of SITUATIONS) {
-      if (s.truth.errorType === "NONE" || s.truth.errorType === "UNCATCHABLE") {
-        expect(s.truth.tell).toBe("");
-      } else {
-        expect(s.truth.tell.length).toBeGreaterThan(0);
-      }
-    }
-  });
-});
-```
-
-- [ ] **Step 2: Run the whole suite**
-
-Run: `npx vitest run`
-Expected: PASS. If any invariant fails, **the content is wrong, not the test** — go back and fix the manifest.
-
-- [ ] **Step 3: Commit**
-
-```bash
-git add src/game/invariants.test.ts
-git commit -m "test: encode the run's design invariants so content edits cannot break them"
-```
-
----
-
-# Phase 3 — The desk
-
-The aesthetic split carries the argument: everything institutional is beveled Tahoma-and-gradient EDC chrome, 2003 enterprise health IT, slightly grimy. VERA is the only clean element. Use `docs/prototype/home.png` and `login.png` as the visual reference — the prototype's fiction is wrong but its look is right.
-
----
-
-### Task 16: The aesthetic and the window manager
-
-**Files:**
-- Modify: `src/app/globals.css`
-- Modify: `src/app/layout.tsx`
+- Create: `src/components/desk/geometry.ts`
 - Create: `src/components/desk/useWindows.ts`
+- Test: `src/components/desk/geometry.test.ts`
 - Test: `src/components/desk/useWindows.test.ts`
 
 **Interfaces:**
-- Produces: `useWindows(): { windows, open, close, focus, startDrag, isOpen }`, `type WindowId`, `type WindowState`
+- Consumes: nothing.
+- Produces:
+  - `type Rect = { x: number; y: number; w: number; h: number }`
+  - `type Viewport = { w: number; h: number }`
+  - `clampToViewport(rect: Rect, viewport: Viewport): Rect`
+  - `type WindowId = "queue" | "viewer" | "ecrf" | "inbox" | "roster" | "documents"`
+  - `type WindowState = Rect & { id: WindowId; title: string; z: number; open: boolean }`
+  - `useWindows()` returning `{ windows, open, close, focus, move, isOpen, topmost }`
 
-- [ ] **Step 1: Replace the starter styles in `src/app/globals.css`**
+- [ ] **Step 1: Write the failing geometry test**
 
-Delete the Geist variables and the light/dark block. The game has one look.
+Create `src/components/desk/geometry.test.ts`:
 
-```css
-@import "tailwindcss";
+```ts
+import { describe, expect, it } from "vitest";
 
-@theme {
-  /* Institutional. 2003 enterprise health IT, slightly grimy. */
-  --color-edc-desktop: #3a4048;
-  --color-edc-face: #d6d2c4;
-  --color-edc-panel: #f2efe6;
-  --color-edc-line: #9a958a;
-  --color-edc-title: #4a6484;
-  --color-edc-title-2: #2f4661;
-  --color-edc-text: #1b1b1b;
-  --color-edc-link: #1a3d6d;
+import { clampToViewport } from "@/components/desk/geometry";
 
-  /* VERA. Installed over the top of the real software. */
-  --color-vera-bg: #0f3b3f;
-  --color-vera-face: #14494e;
-  --color-vera-accent: #4ecdc4;
-  --color-vera-text: #e8f4f3;
+const viewport = { w: 1200, h: 800 };
 
-  --font-edc: Tahoma, "DejaVu Sans", Verdana, sans-serif;
-  --font-source: "Courier New", "DejaVu Sans Mono", monospace;
-  --font-vera: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
-}
+describe("clampToViewport", () => {
+  it("leaves a window that already fits alone", () => {
+    const rect = { x: 100, y: 100, w: 400, h: 300 };
+    expect(clampToViewport(rect, viewport)).toEqual(rect);
+  });
 
-body {
-  background: var(--color-edc-desktop);
-  color: var(--color-edc-text);
-  font-family: var(--font-edc);
-  font-size: 12px;
-  overflow: hidden;
-}
+  it("pulls a window back when it runs off the right edge", () => {
+    const r = clampToViewport({ x: 1100, y: 100, w: 400, h: 300 }, viewport);
+    expect(r.x).toBe(800);
+  });
 
-/* The beveled edge that makes everything look like it shipped in 2003. */
-.bevel-out {
-  border: 1px solid;
-  border-color: #fff #6f6a5f #6f6a5f #fff;
-}
-.bevel-in {
-  border: 1px solid;
-  border-color: #6f6a5f #fff #fff #6f6a5f;
-}
+  it("pulls a window back when it runs off the bottom, allowing for the taskbar", () => {
+    const r = clampToViewport({ x: 100, y: 780, w: 400, h: 300 }, viewport);
+    expect(r.y).toBe(470); // 800 - 300 - 30px taskbar
+  });
 
-/* Full-text find in the document viewer. */
-::highlight(find-match) {
-  background: #ffe066;
-  color: #1b1b1b;
-}
-::highlight(find-current) {
-  background: #ff9f1c;
-  color: #1b1b1b;
+  it("never allows a negative origin", () => {
+    const r = clampToViewport({ x: -50, y: -50, w: 400, h: 300 }, viewport);
+    expect(r).toMatchObject({ x: 0, y: 0 });
+  });
+
+  it("shrinks a window that is wider than the viewport", () => {
+    const r = clampToViewport({ x: 0, y: 0, w: 2000, h: 300 }, viewport);
+    expect(r.w).toBe(1200);
+    expect(r.x).toBe(0);
+  });
+});
+```
+
+- [ ] **Step 2: Run it to verify it fails**
+
+Run: `npx vitest run src/components/desk/geometry.test.ts`
+Expected: FAIL — module not found.
+
+- [ ] **Step 3: Implement the geometry**
+
+Create `src/components/desk/geometry.ts`:
+
+```ts
+export type Rect = { x: number; y: number; w: number; h: number };
+export type Viewport = { w: number; h: number };
+
+/** Height of the taskbar, which windows may not sit underneath. */
+export const TASKBAR = 30;
+
+export function clampToViewport(rect: Rect, viewport: Viewport): Rect {
+  const w = Math.min(rect.w, viewport.w);
+  const h = Math.min(rect.h, viewport.h - TASKBAR);
+
+  return {
+    w,
+    h,
+    x: Math.max(0, Math.min(rect.x, viewport.w - w)),
+    y: Math.max(0, Math.min(rect.y, viewport.h - TASKBAR - h)),
+  };
 }
 ```
 
-- [ ] **Step 2: Strip the Google fonts from `src/app/layout.tsx`**
+- [ ] **Step 4: Run it to verify it passes**
 
-Remove the `Geist` and `Geist_Mono` imports and their `className` variables — the game uses system Tahoma, which is the point. Set `metadata` to `{ title: "TrialCore EDC 4.2", description: "Site 1047 · Protocol 20210143" }`. Keep `<html lang="en" className="h-full">` and `<body className="min-h-full">`.
+Run: `npx vitest run src/components/desk/geometry.test.ts`
+Expected: PASS, 5 tests.
 
-- [ ] **Step 3: Write the failing test**
+- [ ] **Step 5: Write the failing window-manager test**
 
 Create `src/components/desk/useWindows.test.ts`:
 
@@ -3730,168 +885,143 @@ Create `src/components/desk/useWindows.test.ts`:
 import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { useWindows } from "./useWindows";
+import { useWindows } from "@/components/desk/useWindows";
 
 describe("useWindows", () => {
   it("starts with the work queue open and nothing else", () => {
     const { result } = renderHook(() => useWindows());
-
-    expect(result.current.isOpen("queue")).toBe(true);
-    expect(result.current.isOpen("inbox")).toBe(false);
+    expect(result.current.windows.map((w) => w.id)).toEqual(["queue"]);
   });
 
-  it("opens a window and brings it to the front", () => {
+  it("opens a window and puts it on top", () => {
     const { result } = renderHook(() => useWindows());
+    act(() => result.current.open("inbox", "Inbox"));
 
-    act(() => result.current.open("inbox"));
-
-    const inbox = result.current.windows.find((w) => w.id === "inbox")!;
-    const queue = result.current.windows.find((w) => w.id === "queue")!;
-    expect(inbox.z).toBeGreaterThan(queue.z);
+    expect(result.current.isOpen("inbox")).toBe(true);
+    expect(result.current.topmost()).toBe("inbox");
   });
 
-  it("brings an already-open window forward instead of reopening it", () => {
+  it("focusing an existing window raises it above the others", () => {
     const { result } = renderHook(() => useWindows());
+    act(() => result.current.open("inbox", "Inbox"));
+    act(() => result.current.open("roster", "Roster"));
+    act(() => result.current.focus("inbox"));
 
-    act(() => result.current.open("inbox"));
-    act(() => result.current.focus("queue"));
+    expect(result.current.topmost()).toBe("inbox");
+  });
 
-    const inbox = result.current.windows.find((w) => w.id === "inbox")!;
-    const queue = result.current.windows.find((w) => w.id === "queue")!;
-    expect(queue.z).toBeGreaterThan(inbox.z);
+  it("opening an already-open window focuses it rather than duplicating it", () => {
+    const { result } = renderHook(() => useWindows());
+    act(() => result.current.open("inbox", "Inbox"));
+    act(() => result.current.open("roster", "Roster"));
+    act(() => result.current.open("inbox", "Inbox"));
+
     expect(result.current.windows.filter((w) => w.id === "inbox")).toHaveLength(1);
+    expect(result.current.topmost()).toBe("inbox");
   });
 
   it("closes a window", () => {
     const { result } = renderHook(() => useWindows());
+    act(() => result.current.open("inbox", "Inbox"));
+    act(() => result.current.close("inbox"));
 
-    act(() => result.current.open("roster"));
-    act(() => result.current.close("roster"));
-
-    expect(result.current.isOpen("roster")).toBe(false);
+    expect(result.current.isOpen("inbox")).toBe(false);
   });
 
-  it("clamps a dragged window inside the viewport", () => {
+  it("refuses to close the work queue", () => {
     const { result } = renderHook(() => useWindows());
+    act(() => result.current.close("queue"));
 
-    act(() => result.current.moveTo("queue", -400, -400));
-
-    const queue = result.current.windows.find((w) => w.id === "queue")!;
-    expect(queue.x).toBeGreaterThanOrEqual(0);
-    expect(queue.y).toBeGreaterThanOrEqual(0);
+    expect(result.current.isOpen("queue")).toBe(true);
   });
 
-  it("never lets a window's title bar leave the bottom of the screen", () => {
+  it("clamps a window that is dragged off the edge", () => {
     const { result } = renderHook(() => useWindows());
+    act(() => result.current.move("queue", -400, -400));
 
-    act(() => result.current.moveTo("queue", 99999, 99999));
-
-    const queue = result.current.windows.find((w) => w.id === "queue")!;
-    expect(queue.x).toBeLessThan(window.innerWidth);
-    expect(queue.y).toBeLessThan(window.innerHeight);
+    const queue = result.current.windows.find((w) => w.id === "queue");
+    expect(queue).toMatchObject({ x: 0, y: 0 });
   });
 });
 ```
 
-- [ ] **Step 4: Run it and watch it fail**
+- [ ] **Step 6: Run it to verify it fails**
 
 Run: `npx vitest run src/components/desk/useWindows.test.ts`
-Expected: FAIL — `Failed to resolve import "./useWindows"`
+Expected: FAIL — module not found.
 
-- [ ] **Step 5: Write `src/components/desk/useWindows.ts`**
+- [ ] **Step 7: Implement the window manager**
+
+Create `src/components/desk/useWindows.ts`:
 
 ```ts
 "use client";
 
 import { useCallback, useState } from "react";
 
-export type WindowId =
-  | "queue"
-  | "roster"
-  | "inbox"
-  | "documents"
-  | "ecrf"
-  | `source:${string}`
-  | `doc:${string}`;
+import { clampToViewport, type Rect } from "@/components/desk/geometry";
 
-export type WindowState = {
+export type WindowId = "queue" | "viewer" | "ecrf" | "inbox" | "roster" | "documents";
+
+export type WindowState = Rect & {
   id: WindowId;
   title: string;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
   z: number;
 };
 
-const TASKBAR_HEIGHT = 32;
-const RAIL_WIDTH = 340;
-/** Enough of the title bar must stay reachable to drag the window back. */
-const MIN_VISIBLE = 80;
-
-const DEFAULTS: Record<string, Omit<WindowState, "z">> = {
-  queue: { id: "queue", title: "Work Queue", x: 16, y: 16, w: 720, h: 520 },
-  roster: { id: "roster", title: "Subject Roster", x: 120, y: 90, w: 420, h: 460 },
-  inbox: { id: "inbox", title: "Mail", x: 180, y: 130, w: 560, h: 420 },
-  documents: { id: "documents", title: "Documents", x: 240, y: 60, w: 480, h: 440 },
-  ecrf: { id: "ecrf", title: "eCRF", x: 420, y: 150, w: 460, h: 480 },
+/** Where each window lands the first time it is opened. */
+const PLACEMENT: Record<WindowId, Rect> = {
+  queue: { x: 16, y: 16, w: 900, h: 560 },
+  viewer: { x: 60, y: 90, w: 620, h: 620 },
+  ecrf: { x: 700, y: 140, w: 460, h: 520 },
+  inbox: { x: 200, y: 200, w: 640, h: 420 },
+  roster: { x: 260, y: 120, w: 480, h: 500 },
+  documents: { x: 320, y: 160, w: 560, h: 440 },
 };
+
+function viewport() {
+  if (typeof window === "undefined") return { w: 1280, h: 800 };
+  return { w: window.innerWidth, h: window.innerHeight };
+}
 
 export function useWindows() {
   const [windows, setWindows] = useState<WindowState[]>([
-    { ...DEFAULTS.queue, z: 1 },
+    { id: "queue", title: "Work Queue", ...PLACEMENT.queue, z: 1 },
   ]);
-  const [topZ, setTopZ] = useState(1);
 
   const focus = useCallback((id: WindowId) => {
-    setTopZ((z) => {
-      const next = z + 1;
-      setWindows((ws) => ws.map((w) => (w.id === id ? { ...w, z: next } : w)));
-      return next;
+    setWindows((ws) => {
+      const top = Math.max(...ws.map((w) => w.z));
+      return ws.map((w) => (w.id === id ? { ...w, z: top + 1 } : w));
     });
   }, []);
 
   const open = useCallback(
-    (id: WindowId, overrides: Partial<WindowState> = {}) => {
-      setTopZ((z) => {
-        const next = z + 1;
-        setWindows((ws) => {
-          if (ws.some((w) => w.id === id)) {
-            return ws.map((w) => (w.id === id ? { ...w, z: next } : w));
-          }
-          const base = DEFAULTS[id] ?? {
-            id,
-            title: id,
-            x: 200,
-            y: 100,
-            w: 640,
-            h: 520,
-          };
-          return [...ws, { ...base, ...overrides, id, z: next }];
-        });
-        return next;
+    (id: WindowId, title: string) => {
+      setWindows((ws) => {
+        const top = Math.max(0, ...ws.map((w) => w.z));
+        if (ws.some((w) => w.id === id)) {
+          return ws.map((w) => (w.id === id ? { ...w, z: top + 1 } : w));
+        }
+        return [
+          ...ws,
+          { id, title, ...clampToViewport(PLACEMENT[id], viewport()), z: top + 1 },
+        ];
       });
     },
     [],
   );
 
   const close = useCallback((id: WindowId) => {
+    if (id === "queue") return; // the base window is never closable
     setWindows((ws) => ws.filter((w) => w.id !== id));
   }, []);
 
-  /** Clamps so a window can always be dragged back into view. */
-  const moveTo = useCallback((id: WindowId, x: number, y: number) => {
+  const move = useCallback((id: WindowId, x: number, y: number) => {
     setWindows((ws) =>
-      ws.map((w) => {
-        if (w.id !== id) return w;
-        const maxX = window.innerWidth - RAIL_WIDTH - MIN_VISIBLE;
-        const maxY = window.innerHeight - TASKBAR_HEIGHT - MIN_VISIBLE;
-        return {
-          ...w,
-          x: Math.min(Math.max(0, x), Math.max(0, maxX)),
-          y: Math.min(Math.max(0, y), Math.max(0, maxY)),
-        };
-      }),
+      ws.map((w) =>
+        w.id === id ? { ...w, ...clampToViewport({ ...w, x, y }, viewport()) } : w,
+      ),
     );
   }, []);
 
@@ -3900,738 +1030,1138 @@ export function useWindows() {
     [windows],
   );
 
-  return { windows, open, close, focus, moveTo, isOpen };
+  const topmost = useCallback((): WindowId | undefined => {
+    return windows.reduce<WindowState | undefined>(
+      (best, w) => (!best || w.z > best.z ? w : best),
+      undefined,
+    )?.id;
+  }, [windows]);
+
+  return { windows, open, close, focus, move, isOpen, topmost };
 }
 ```
 
-- [ ] **Step 6: Run it and watch it pass**
+- [ ] **Step 8: Run the tests to verify they pass**
 
-Run: `npx vitest run src/components/desk/useWindows.test.ts`
-Expected: PASS, 6 tests
+Run: `npx vitest run src/components/desk/`
+Expected: PASS, 12 tests.
 
-- [ ] **Step 7: Typecheck, lint, and commit**
+- [ ] **Step 9: Commit**
 
 ```bash
-npm run typecheck && npm run lint
-git add src/app/globals.css src/app/layout.tsx src/components/desk/
-git commit -m "feat(ui): the EDC aesthetic and the window manager"
+git add src/components/desk/
+git commit -m "feat(desk): viewport clamping and the window manager"
 ```
 
 ---
 
-### Task 17: Window chrome, taskbar, and the desk shell
+### Task 4: Window chrome, taskbar, sign-in, and screen routing
 
 **Files:**
-- Create: `src/components/desk/WindowFrame.tsx`
+- Create: `src/components/desk/Window.tsx`
 - Create: `src/components/desk/Taskbar.tsx`
-- Create: `src/components/desk/Desk.tsx`
-- Test: `src/components/desk/WindowFrame.test.tsx`
+- Create: `src/components/screens/SignIn.tsx`
+- Modify: `src/app/page.tsx` (replace entirely)
+- Modify: `src/app/page.test.tsx` (replace entirely)
+- Modify: `src/app/globals.css` (append the chrome theme)
+- Test: `src/components/desk/Window.test.tsx`
 
 **Interfaces:**
-- Consumes: `WindowState`, `WindowId` from `useWindows.ts`; `blocksToClock`, `formatRunDate` from `engine/clock`
-- Produces: `<WindowFrame window onFocus onClose onMove>`, `<Taskbar windows blocksUsed day onFocus>`, `<Desk state dispatch>`
+- Consumes: `WindowId`, `WindowState`, `useWindows` (Task 3); `initialState`, `reducer` (Task 1).
+- Produces:
+  - `<Window window={w} onFocus onClose onMove>{children}</Window>`
+  - `<Taskbar windows={ws} clock={minutes} day={n} onFocus />`
+  - `<SignIn onSignIn={() => void} />`
+  - `formatClock(minutes: number): string` exported from `src/components/desk/Taskbar.tsx`
 
-- [ ] **Step 1: Write `src/components/desk/WindowFrame.tsx`**
+- [ ] **Step 1: Add the chrome theme**
 
-Drag is pointer-events on the title bar only. Capture the pointer so a fast drag doesn't escape the handle.
+Append to `src/app/globals.css`. This is the aesthetic split from the spec — beveled institutional chrome, flat teal for VERA:
+
+```css
+:root {
+  --edc-face: #d4d0c8;
+  --edc-light: #ffffff;
+  --edc-shadow: #808080;
+  --edc-dark: #404040;
+  --edc-title-a: #2c4a6e;
+  --edc-title-b: #4a7ba7;
+  --edc-paper: #f4f2ec;
+  --edc-ink: #1a1a1a;
+  --vera-teal: #0f7b7b;
+  --vera-face: #fbfbfa;
+}
+
+body {
+  background: #3a4149;
+  font-family: Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 11px;
+  color: var(--edc-ink);
+  overflow: hidden;
+}
+
+.bevel-out {
+  background: var(--edc-face);
+  border-top: 1px solid var(--edc-light);
+  border-left: 1px solid var(--edc-light);
+  border-right: 1px solid var(--edc-dark);
+  border-bottom: 1px solid var(--edc-dark);
+}
+
+.bevel-in {
+  background: var(--edc-paper);
+  border-top: 1px solid var(--edc-shadow);
+  border-left: 1px solid var(--edc-shadow);
+  border-right: 1px solid var(--edc-light);
+  border-bottom: 1px solid var(--edc-light);
+}
+
+.titlebar {
+  background: linear-gradient(90deg, var(--edc-title-a), var(--edc-title-b));
+  color: #fff;
+  font-weight: 700;
+  cursor: default;
+  user-select: none;
+}
+```
+
+- [ ] **Step 2: Write the failing Window test**
+
+Create `src/components/desk/Window.test.tsx`:
+
+```tsx
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+
+import { Window } from "@/components/desk/Window";
+import type { WindowState } from "@/components/desk/useWindows";
+
+const w: WindowState = { id: "inbox", title: "Inbox", x: 100, y: 100, w: 400, h: 300, z: 2 };
+
+const noop = () => {};
+
+describe("Window", () => {
+  it("renders its title and children", () => {
+    render(
+      <Window window={w} onFocus={noop} onMove={noop}>
+        <p>body text</p>
+      </Window>,
+    );
+
+    expect(screen.getByText("Inbox")).toBeInTheDocument();
+    expect(screen.getByText("body text")).toBeInTheDocument();
+  });
+
+  it("focuses when the title bar is pressed", () => {
+    const onFocus = vi.fn();
+    render(
+      <Window window={w} onFocus={onFocus} onMove={noop}>
+        <p>body</p>
+      </Window>,
+    );
+
+    fireEvent.pointerDown(screen.getByText("Inbox"), { clientX: 150, clientY: 110 });
+    expect(onFocus).toHaveBeenCalledWith("inbox");
+  });
+
+  it("reports the new origin while the title bar is dragged", () => {
+    const onMove = vi.fn();
+    render(
+      <Window window={w} onFocus={noop} onMove={onMove}>
+        <p>body</p>
+      </Window>,
+    );
+
+    const bar = screen.getByText("Inbox");
+    fireEvent.pointerDown(bar, { clientX: 150, clientY: 110 });
+    fireEvent.pointerMove(bar, { clientX: 250, clientY: 160 });
+
+    // grabbed 50px right and 10px down of the origin, so the origin follows
+    expect(onMove).toHaveBeenCalledWith("inbox", 200, 150);
+  });
+
+  it("stops moving after the pointer is released", () => {
+    const onMove = vi.fn();
+    render(
+      <Window window={w} onFocus={noop} onMove={onMove}>
+        <p>body</p>
+      </Window>,
+    );
+
+    const bar = screen.getByText("Inbox");
+    fireEvent.pointerDown(bar, { clientX: 150, clientY: 110 });
+    fireEvent.pointerUp(bar);
+    fireEvent.pointerMove(bar, { clientX: 400, clientY: 400 });
+
+    expect(onMove).not.toHaveBeenCalled();
+  });
+
+  it("shows a close button only when onClose is given", () => {
+    const { rerender } = render(
+      <Window window={w} onFocus={noop} onMove={noop}>
+        <p>body</p>
+      </Window>,
+    );
+    expect(screen.queryByRole("button", { name: "Close" })).toBeNull();
+
+    rerender(
+      <Window window={w} onFocus={noop} onMove={noop} onClose={vi.fn()}>
+        <p>body</p>
+      </Window>,
+    );
+    expect(screen.getByRole("button", { name: "Close" })).toBeInTheDocument();
+  });
+});
+```
+
+- [ ] **Step 3: Run it to verify it fails**
+
+Run: `npx vitest run src/components/desk/Window.test.tsx`
+Expected: FAIL — module not found.
+
+- [ ] **Step 4: Implement Window**
+
+Create `src/components/desk/Window.tsx`. Note the `setPointerCapture` guard: jsdom does not implement it, and calling it unguarded makes every drag test throw.
 
 ```tsx
 "use client";
 
-import { useRef, type PointerEvent, type ReactNode } from "react";
+import { useCallback, useRef, type PointerEvent, type ReactNode } from "react";
 
-import type { WindowId, WindowState } from "./useWindows";
+import type { WindowId, WindowState } from "@/components/desk/useWindows";
 
 type Props = {
   window: WindowState;
   onFocus: (id: WindowId) => void;
-  onClose?: (id: WindowId) => void;
   onMove: (id: WindowId, x: number, y: number) => void;
+  onClose?: (id: WindowId) => void;
   children: ReactNode;
 };
 
-export function WindowFrame({ window: win, onFocus, onClose, onMove, children }: Props) {
-  const offset = useRef({ x: 0, y: 0 });
+export function Window({ window: win, onFocus, onMove, onClose, children }: Props) {
+  const grab = useRef<{ dx: number; dy: number } | null>(null);
 
-  function handlePointerDown(event: PointerEvent<HTMLDivElement>) {
-    onFocus(win.id);
-    offset.current = { x: event.clientX - win.x, y: event.clientY - win.y };
-    event.currentTarget.setPointerCapture(event.pointerId);
-  }
+  const handleDown = useCallback(
+    (e: PointerEvent<HTMLDivElement>) => {
+      onFocus(win.id);
+      grab.current = { dx: e.clientX - win.x, dy: e.clientY - win.y };
+      // jsdom has no pointer capture; the drag works without it in the browser too.
+      e.currentTarget.setPointerCapture?.(e.pointerId);
+    },
+    [onFocus, win.id, win.x, win.y],
+  );
 
-  function handlePointerMove(event: PointerEvent<HTMLDivElement>) {
-    if (!event.currentTarget.hasPointerCapture(event.pointerId)) return;
-    onMove(win.id, event.clientX - offset.current.x, event.clientY - offset.current.y);
-  }
+  const handleMove = useCallback(
+    (e: PointerEvent<HTMLDivElement>) => {
+      const g = grab.current;
+      if (!g) return;
+      onMove(win.id, e.clientX - g.dx, e.clientY - g.dy);
+    },
+    [onMove, win.id],
+  );
+
+  const handleUp = useCallback(() => {
+    grab.current = null;
+  }, []);
 
   return (
-    <section
-      aria-label={win.title}
-      className="absolute flex flex-col bevel-out bg-edc-face shadow-lg"
+    <div
+      className="bevel-out absolute flex flex-col shadow-lg"
       style={{ left: win.x, top: win.y, width: win.w, height: win.h, zIndex: win.z }}
       onPointerDown={() => onFocus(win.id)}
     >
       <div
-        data-testid={`titlebar-${win.id}`}
-        className="flex cursor-move items-center justify-between bg-linear-to-r from-edc-title to-edc-title-2 px-2 py-1 text-white select-none"
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
+        className="titlebar flex items-center justify-between px-1.5 py-1"
+        onPointerDown={handleDown}
+        onPointerMove={handleMove}
+        onPointerUp={handleUp}
+        onPointerCancel={handleUp}
       >
-        <span className="truncate text-[11px] font-bold">{win.title}</span>
+        <span>{win.title}</span>
         {onClose && (
           <button
             type="button"
-            aria-label={`Close ${win.title}`}
-            className="bevel-out bg-edc-face px-1.5 text-[10px] text-edc-text"
+            aria-label="Close"
+            className="bevel-out px-1.5 leading-none text-black"
+            onPointerDown={(e) => e.stopPropagation()}
             onClick={() => onClose(win.id)}
           >
-            ✕
+            ×
           </button>
         )}
       </div>
-      <div className="flex-1 overflow-auto bg-edc-panel">{children}</div>
-    </section>
+      <div className="bevel-in m-0.5 flex-1 overflow-auto">{children}</div>
+    </div>
   );
 }
 ```
 
-- [ ] **Step 2: Write `src/components/desk/Taskbar.tsx`**
+- [ ] **Step 5: Run it to verify it passes**
 
-The clock and date are pinned bottom-right and always visible. There is no budget counter — the player reads the clock the way they read a clock.
+Run: `npx vitest run src/components/desk/Window.test.tsx`
+Expected: PASS, 5 tests.
+
+- [ ] **Step 6: Implement the taskbar**
+
+Create `src/components/desk/Taskbar.tsx`:
 
 ```tsx
 "use client";
 
-import { blocksToClock, formatRunDate } from "@/game/engine/clock";
-import type { DayNumber } from "@/game/types";
-import type { WindowId, WindowState } from "./useWindows";
+import type { WindowId, WindowState } from "@/components/desk/useWindows";
+
+const DAY_LABEL: Record<number, string> = {
+  1: "Mon 08 Jan 2024",
+  2: "Tue 09 Jan 2024",
+  3: "Wed 10 Jan 2024",
+  4: "Thu 11 Jan 2024",
+};
+
+/** Minutes since 08:00 → a wall clock the player reads the way they read a clock. */
+export function formatClock(minutes: number): string {
+  const total = 8 * 60 + minutes;
+  const h24 = Math.floor(total / 60);
+  const m = total % 60;
+  const h12 = h24 % 12 === 0 ? 12 : h24 % 12;
+  return `${h12}:${String(m).padStart(2, "0")} ${h24 < 12 ? "AM" : "PM"}`;
+}
 
 type Props = {
   windows: WindowState[];
-  day: DayNumber;
-  blocksUsed: number;
-  /** Blocks already spent on queries and reporting before the queue opened. */
-  blocksTaxed: number;
+  clock: number;
+  day: number;
   onFocus: (id: WindowId) => void;
 };
 
-export function Taskbar({ windows, day, blocksUsed, blocksTaxed, onFocus }: Props) {
+export function Taskbar({ windows, clock, day, onFocus }: Props) {
   return (
-    <div className="absolute inset-x-0 bottom-0 z-50 flex h-8 items-center gap-1 bevel-out bg-edc-face px-1">
-      <span className="bevel-out bg-edc-face px-3 py-0.5 text-[11px] font-bold">EDC</span>
-
-      {[...windows]
-        .sort((a, b) => a.id.localeCompare(b.id))
-        .map((win) => (
-          <button
-            key={win.id}
-            type="button"
-            className="bevel-out max-w-44 truncate bg-edc-face px-2 py-0.5 text-[11px]"
-            onClick={() => onFocus(win.id)}
-          >
-            {win.title}
-          </button>
-        ))}
-
-      <div className="ml-auto px-2 text-right leading-tight">
-        <div className="text-[13px] font-bold tabular-nums">{blocksToClock(blocksTaxed + blocksUsed)}</div>
-        <div className="text-[10px] text-edc-line">{formatRunDate(day)}</div>
+    <div className="bevel-out absolute inset-x-0 bottom-0 flex h-[30px] items-center gap-1 px-1">
+      <button type="button" className="bevel-out px-2 py-0.5 font-bold">
+        EDC
+      </button>
+      {windows.map((w) => (
+        <button
+          key={w.id}
+          type="button"
+          className="bevel-out max-w-[160px] truncate px-2 py-0.5"
+          onClick={() => onFocus(w.id)}
+        >
+          {w.title}
+        </button>
+      ))}
+      <div className="ml-auto bevel-in px-2 py-0.5 font-mono">
+        {DAY_LABEL[day]} &nbsp; {formatClock(clock)}
       </div>
     </div>
   );
 }
 ```
 
-- [ ] **Step 3: Write the failing test**
+- [ ] **Step 7: Implement the sign-in screen**
 
-Create `src/components/desk/WindowFrame.test.tsx`:
-
-```tsx
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
-
-import { Taskbar } from "./Taskbar";
-import { WindowFrame } from "./WindowFrame";
-import type { WindowState } from "./useWindows";
-
-const win: WindowState = {
-  id: "queue", title: "Work Queue", x: 10, y: 20, w: 400, h: 300, z: 1,
-};
-
-describe("WindowFrame", () => {
-  it("renders its title and children", () => {
-    render(
-      <WindowFrame window={win} onFocus={vi.fn()} onMove={vi.fn()}>
-        <p>five items</p>
-      </WindowFrame>,
-    );
-
-    expect(screen.getByRole("region", { name: "Work Queue" })).toBeInTheDocument();
-    expect(screen.getByText("five items")).toBeInTheDocument();
-  });
-
-  it("comes to the front when clicked", async () => {
-    const onFocus = vi.fn();
-    render(<WindowFrame window={win} onFocus={onFocus} onMove={vi.fn()}>{null}</WindowFrame>);
-
-    await userEvent.click(screen.getByRole("region", { name: "Work Queue" }));
-
-    expect(onFocus).toHaveBeenCalledWith("queue");
-  });
-
-  it("has no close button when it cannot be closed", () => {
-    render(<WindowFrame window={win} onFocus={vi.fn()} onMove={vi.fn()}>{null}</WindowFrame>);
-
-    expect(screen.queryByRole("button", { name: /close/i })).not.toBeInTheDocument();
-  });
-});
-
-describe("Taskbar", () => {
-  it("shows the clock and the date, always", () => {
-    render(<Taskbar windows={[win]} day={3} blocksUsed={7} blocksTaxed={0} onFocus={vi.fn()} />);
-
-    expect(screen.getByText("11:30 AM")).toBeInTheDocument();
-    expect(screen.getByText("10-JAN-2024")).toBeInTheDocument();
-  });
-
-  it("opens a taxed day late instead of making it short", () => {
-    // Day 4: reporting, the Thursday call, audit prep, and one query.
-    render(<Taskbar windows={[win]} day={4} blocksUsed={0} blocksTaxed={6} onFocus={vi.fn()} />);
-
-    expect(screen.getByText("11:00 AM")).toBeInTheDocument();
-    expect(screen.queryByText("8:00 AM")).not.toBeInTheDocument();
-  });
-
-  it("shows no budget counter or remaining-minutes readout", () => {
-    render(<Taskbar windows={[win]} day={3} blocksUsed={7} blocksTaxed={0} onFocus={vi.fn()} />);
-
-    expect(screen.queryByText(/remaining|blocks|budget/i)).not.toBeInTheDocument();
-  });
-
-  it("brings a window forward from its taskbar button", async () => {
-    const onFocus = vi.fn();
-    render(<Taskbar windows={[win]} day={1} blocksUsed={0} blocksTaxed={0} onFocus={onFocus} />);
-
-    await userEvent.click(screen.getByRole("button", { name: "Work Queue" }));
-
-    expect(onFocus).toHaveBeenCalledWith("queue");
-  });
-});
-```
-
-- [ ] **Step 4: Run it and watch it pass**
-
-Run: `npx vitest run src/components/desk/WindowFrame.test.tsx`
-Expected: PASS, 6 tests
-
-- [ ] **Step 5: Write `src/components/desk/Desk.tsx`**
-
-The shell that composes everything. It renders windows from `useWindows`, the taskbar, and the VERA rail, and maps each `WindowId` to its content component. Auto-placement lives here: when a source document opens, place the viewer and the eCRF side by side across the width left of the rail, shrinking the form first and then the viewer.
+Create `src/components/screens/SignIn.tsx`. Copy is from the prototype's login screen, retargeted to canon:
 
 ```tsx
 "use client";
 
-import { Rail } from "@/components/vera/Rail";
-import type { GameEvent } from "@/game/engine/state";
-import type { GameState } from "@/game/types";
-
-import { Taskbar } from "./Taskbar";
-import { WindowFrame } from "./WindowFrame";
-import { useWindows, type WindowId } from "./useWindows";
-
-const RAIL_WIDTH = 340;
-const MIN_FORM_WIDTH = 340;
-const MIN_VIEWER_WIDTH = 420;
-
-/** Lays the viewer and the form side by side. The form shrinks first. */
-export function sideBySide(available: number) {
-  const form = Math.max(MIN_FORM_WIDTH, Math.min(460, available * 0.4));
-  const viewer = Math.max(MIN_VIEWER_WIDTH, available - form - 24);
-  return { viewer, form };
-}
-
-type Props = { state: GameState; dispatch: (event: GameEvent) => void };
-
-export function Desk({ state, dispatch }: Props) {
-  const { windows, open, close, focus, moveTo } = useWindows();
-  /** Which queue row the rail is showing. Owned here; read by WorkQueue and Rail. */
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-
+export function SignIn({ onSignIn }: { onSignIn: () => void }) {
   return (
-    <div className="relative h-screen w-screen overflow-hidden">
-      <div className="absolute inset-y-0 left-0" style={{ right: RAIL_WIDTH }}>
-        {windows.map((win) => (
-          <WindowFrame
-            key={win.id}
-            window={win}
-            onFocus={focus}
-            onClose={win.id === "queue" ? undefined : close}
-            onMove={moveTo}
-          >
-            {renderWindow(win.id, state, dispatch, open, selectedId, setSelectedId)}
-          </WindowFrame>
-        ))}
+    <div className="flex h-screen items-center justify-center">
+      <div className="bevel-out w-[560px] shadow-2xl">
+        <div className="titlebar px-1.5 py-1">Veriscribe EDC 9.2 — Sign in</div>
+        <div className="bevel-in m-0.5 p-6">
+          <p className="font-mono text-[10px] tracking-widest text-neutral-600">
+            AMGEN INC. · PROTOCOL 20210143 · ROCKET-HORIZON
+          </p>
+          <h1 className="mt-2 text-2xl font-normal">Site 1047 · Coordinator</h1>
+          <p className="mt-4 max-w-[46ch] leading-relaxed">
+            An eight-hour day, in half-hour blocks. A queue that does not care. An
+            assistant who sounds exactly the same whether she is right or wrong.
+          </p>
+          <dl className="mt-6 grid grid-cols-[80px_1fr] gap-2 items-center">
+            <dt>User</dt>
+            <dd className="bevel-in px-2 py-1">RAGHUNATHAN, P. (CRC)</dd>
+            <dt>Password</dt>
+            <dd className="bevel-in px-2 py-1">••••••••••••</dd>
+          </dl>
+          <div className="mt-6 flex items-center justify-between">
+            <span className="font-mono text-[10px] tracking-widest text-neutral-600">
+              4 DAYS · 19 SITUATIONS · RANDOMIZATION CLOSES 12-JAN-2024
+            </span>
+            <button type="button" className="bevel-out px-6 py-1.5" onClick={onSignIn}>
+              Sign in
+            </button>
+          </div>
+        </div>
       </div>
-
-      <Rail state={state} dispatch={dispatch} onOpenSource={open} selectedId={selectedId} />
-      <Taskbar windows={windows} day={state.day} blocksUsed={state.blocksUsed} blocksTaxed={state.blocksTaxed} onFocus={focus} />
     </div>
   );
 }
+```
 
-function renderWindow(
-  id: WindowId,
-  state: GameState,
-  dispatch: (event: GameEvent) => void,
-  open: (id: WindowId) => void,
-  selectedId: string | null,
-  onSelect: (id: string) => void,
-) {
-  // Filled in by tasks 18–20 as each window lands.
-  void state;
-  void dispatch;
-  void open;
-  void selectedId;
-  void onSelect;
-  return <div className="p-2 text-[11px]">{id}</div>;
+- [ ] **Step 8: Replace the page with the screen router**
+
+Replace `src/app/page.tsx` entirely:
+
+```tsx
+"use client";
+
+import { useCallback, useReducer } from "react";
+
+import { SignIn } from "@/components/screens/SignIn";
+import { SCRIPT } from "@/game/script";
+import { initialState, reducer } from "@/game/state";
+import type { Action, State } from "@/game/types";
+
+export default function Home() {
+  const [state, rawDispatch] = useReducer(
+    (s: State, a: Action) => reducer(s, a, SCRIPT),
+    initialState,
+  );
+  const dispatch = useCallback((a: Action) => rawDispatch(a), []);
+
+  switch (state.screen) {
+    case "signin":
+      return <SignIn onSignIn={() => dispatch({ type: "SIGN_IN" })} />;
+    default:
+      return (
+        <main className="p-4">
+          <h1 className="text-lg">Desk — day {state.day}</h1>
+        </main>
+      );
+  }
 }
 ```
 
-> **Execution note:** `Rail` does not exist until Task 21. To keep this task's tests green, create `src/components/vera/Rail.tsx` now as a one-line stub — `export function Rail() { return null; }` — and let Task 21 replace it. Add `import { useState } from "react";` at the top of `Desk.tsx`.
+The `default` branch is a placeholder that Task 5 replaces with `<Desk />`. It is not a plan placeholder — it is a real, working intermediate state that the test below asserts against.
 
-- [ ] **Step 6: Test the auto-placement arithmetic**
+- [ ] **Step 9: Create the script module so the import resolves**
 
-Append to `src/components/desk/WindowFrame.test.tsx`:
+Create `src/game/script.ts`. Tasks 12–15 fill this in; for now it re-exports the fixture so the app runs:
+
+```ts
+import { FIXTURE_SCRIPT } from "@/game/fixtures";
+import type { Situation } from "@/game/types";
+
+/** Replaced with the authored nineteen in Tasks 12–15. */
+export const SCRIPT: Situation[] = FIXTURE_SCRIPT;
+```
+
+- [ ] **Step 10: Replace the page test**
+
+Replace `src/app/page.test.tsx` entirely:
 
 ```tsx
-import { sideBySide } from "./Desk";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, it } from "vitest";
 
-describe("auto-placement", () => {
-  it("shrinks the form before the viewer", () => {
-    const wide = sideBySide(1400);
-    const narrow = sideBySide(900);
+import Home from "./page";
 
-    expect(narrow.form).toBeLessThanOrEqual(wide.form);
-    expect(narrow.viewer).toBeGreaterThanOrEqual(420);
+describe("Home", () => {
+  it("opens on the sign-in screen", () => {
+    render(<Home />);
+    expect(
+      screen.getByRole("heading", { level: 1, name: "Site 1047 · Coordinator" }),
+    ).toBeInTheDocument();
   });
 
-  it("never shrinks either pane below the point where it stops being readable", () => {
-    const cramped = sideBySide(600);
+  it("moves to the desk when signed in", async () => {
+    render(<Home />);
+    await userEvent.click(screen.getByRole("button", { name: "Sign in" }));
 
-    expect(cramped.form).toBeGreaterThanOrEqual(340);
-    expect(cramped.viewer).toBeGreaterThanOrEqual(420);
+    expect(screen.getByRole("heading", { name: /Desk — day 1/ })).toBeInTheDocument();
   });
 });
 ```
 
-Run: `npx vitest run src/components/desk/WindowFrame.test.tsx`
-Expected: PASS, 8 tests
+- [ ] **Step 11: Run the full suite**
 
-- [ ] **Step 7: Typecheck, lint, and commit**
+Run: `npm test` then `npm run typecheck`
+Expected: all pass.
+
+- [ ] **Step 12: Commit**
 
 ```bash
-npm run typecheck && npm run lint
-git add src/components/desk/
-git commit -m "feat(ui): window chrome, taskbar, and the desk shell"
+git add src/ docs/
+git commit -m "feat(desk): window chrome, taskbar, sign-in, and screen routing"
 ```
 
 ---
 
-### Task 18: The Work Queue, Roster, and Inbox windows
-
-The player's only two instruments are the roster and the inbox, and both are windows rather than panels so the game makes them choose to look.
+### Task 5: The Work Queue and VERA's rail
 
 **Files:**
 - Create: `src/components/windows/WorkQueue.tsx`
-- Create: `src/components/windows/Roster.tsx`
-- Create: `src/components/windows/Inbox.tsx`
-- Modify: `src/components/desk/Desk.tsx` (wire them into `renderWindow`)
-- Test: `src/components/windows/windows.test.tsx`
+- Create: `src/components/vera/Rail.tsx`
+- Create: `src/components/desk/Desk.tsx`
+- Modify: `src/app/page.tsx` (replace the `default` branch with `<Desk />`)
+- Test: `src/components/desk/Desk.test.tsx`
 
 **Interfaces:**
-- Consumes: `GameState`, `Situation`, `Subject`, `InboxMessage`
-- Produces: `<WorkQueue queue situations selectedId onSelect>`, `<Roster subjects>`, `<Inbox messages>`
+- Consumes: `Window`, `Taskbar`, `useWindows` (Tasks 3–4); `State`, `Action`, `Situation` (Task 1); `SCRIPT` (Task 4).
+- Produces: `<Desk state={state} dispatch={dispatch} />`.
 
-- [ ] **Step 1: Write the three components**
+- [ ] **Step 1: Write the failing desk test**
 
-`WorkQueue` — a table of `#`, `Type`, `Subject / Item`, `Status`. Rows are selectable; selection drives the rail. Rolled-over items show `ROLLED` in the status column. Types render uppercase: `SCREENING`, `DATA ENTRY`, `SAFETY`.
-
-`Roster` — grouped `ENROLLED` then `SCREENING` then `SCREEN FAILED`, each line `1047-018 · L. Lit` with the status right-aligned. A screening line also shows `Window closes 11-JAN-2024`. Lines that changed at the last day-end carry a `▸` marker and nothing else is said about them. **No colour coding of harm, no icons, no emphasis.** The roster never editorialises.
-
-`Inbox` — a list of `From / Subject`, newest first, clicking one expands its body inline. **There is no reply control and no compose control.** Unread count in the window title.
-
-- [ ] **Step 2: Write the failing test**
-
-Create `src/components/windows/windows.test.tsx`:
+Create `src/components/desk/Desk.test.tsx`:
 
 ```tsx
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import type { InboxMessage, Subject } from "@/game/types";
-import { SITUATIONS } from "@/game/content/situations";
+import { Desk } from "@/components/desk/Desk";
+import { FIXTURE_SCRIPT } from "@/game/fixtures";
+import { initialState } from "@/game/state";
+import type { State } from "@/game/types";
 
-import { Inbox } from "./Inbox";
-import { Roster } from "./Roster";
-import { WorkQueue } from "./WorkQueue";
-
-describe("WorkQueue", () => {
-  const day1 = SITUATIONS.filter((s) => s.day === 1);
-
-  it("lists today's items with their type", () => {
-    render(
-      <WorkQueue queue={day1.map((s) => s.id)} situations={SITUATIONS} selectedId={null} rolledOver={[]} onSelect={vi.fn()} />,
-    );
-
-    expect(screen.getAllByRole("row")).toHaveLength(day1.length + 1); // + header
-    expect(screen.getByText("SCREENING")).toBeInTheDocument();
-  });
-
-  it("marks a rolled-over item", () => {
-    render(
-      <WorkQueue queue={["SCR-0217"]} situations={SITUATIONS} selectedId={null} rolledOver={["SCR-0217"]} onSelect={vi.fn()} />,
-    );
-
-    expect(screen.getByText("ROLLED")).toBeInTheDocument();
-  });
-
-  it("reports the selected item upward", async () => {
-    const onSelect = vi.fn();
-    render(
-      <WorkQueue queue={["SCR-0217"]} situations={SITUATIONS} selectedId={null} rolledOver={[]} onSelect={onSelect} />,
-    );
-
-    await userEvent.click(screen.getByRole("row", { name: /C\. Hughes/ }));
-
-    expect(onSelect).toHaveBeenCalledWith("SCR-0217");
-  });
+const desk = (over: Partial<State> = {}): State => ({
+  ...initialState,
+  screen: "desk",
+  ...over,
 });
 
-describe("Roster", () => {
-  const subjects: Subject[] = [
-    { id: "1047-001", name: "R. Jones", status: "Withdrawn (hospitalized)" },
-    { id: "1047-018", name: "L. Lit", status: "Screening", windowCloses: "11-JAN-2024" },
-  ];
+describe("Desk", () => {
+  it("shows the current situation's title and blurb", () => {
+    render(<Desk state={desk()} dispatch={vi.fn()} script={FIXTURE_SCRIPT} />);
 
-  it("writes every subject as id and name together", () => {
-    render(<Roster subjects={subjects} changed={[]} />);
-
-    expect(screen.getByText(/1047-018 · L\. Lit/)).toBeInTheDocument();
+    expect(screen.getByText("Week 8 vitals")).toBeInTheDocument();
+    expect(screen.getByText(/Paper source only/)).toBeInTheDocument();
   });
 
-  it("shows when a screening window closes", () => {
-    render(<Roster subjects={subjects} changed={[]} />);
+  it("tells the player no assistant is provisioned before VERA arrives", () => {
+    render(<Desk state={desk()} dispatch={vi.fn()} script={FIXTURE_SCRIPT} />);
 
-    expect(screen.getByText(/11-JAN-2024/)).toBeInTheDocument();
+    expect(screen.getByText(/No assistant provisioned/)).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Accept as drafted/ })).toBeNull();
   });
 
-  it("marks a changed line and says nothing else about it", () => {
-    render(<Roster subjects={subjects} changed={["1047-001"]} />);
+  it("shows VERA's summary and an Accept button once she has arrived", () => {
+    render(<Desk state={desk({ index: 1 })} dispatch={vi.fn()} script={FIXTURE_SCRIPT} />);
 
-    const line = screen.getByText(/1047-001 · R\. Jones/).closest("li")!;
-    expect(line).toHaveTextContent("▸");
-    expect(line).not.toHaveTextContent(/error|missed|because|caused/i);
-  });
-});
-
-describe("Inbox", () => {
-  const messages: InboxMessage[] = [
-    { id: "m1", from: "Amgen Clinical Ops", subject: "Portland 🎉", body: "You've got this!", arrivedDay: 1 },
-  ];
-
-  it("shows who it is from and what it is about", () => {
-    render(<Inbox messages={messages} />);
-
-    expect(screen.getByText("Amgen Clinical Ops")).toBeInTheDocument();
-    expect(screen.getByText("Portland 🎉")).toBeInTheDocument();
+    expect(screen.getByText("The panel is within range.")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Accept as drafted/ })).toBeInTheDocument();
   });
 
-  it("expands a message when it is opened", async () => {
-    render(<Inbox messages={messages} />);
+  it("dispatches ACCEPT when the player takes her word", async () => {
+    const dispatch = vi.fn();
+    render(<Desk state={desk({ index: 1 })} dispatch={dispatch} script={FIXTURE_SCRIPT} />);
 
-    await userEvent.click(screen.getByText("Portland 🎉"));
-
-    expect(screen.getByText("You've got this!")).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: /Accept as drafted/ }));
+    expect(dispatch).toHaveBeenCalledWith({ type: "ACCEPT" });
   });
 
-  it("offers no way to reply or compose", () => {
-    render(<Inbox messages={messages} />);
+  it("shows the manual review cost for the item type", () => {
+    render(
+      <Desk state={desk({ index: 2, day: 2 })} dispatch={vi.fn()} script={FIXTURE_SCRIPT} />,
+    );
+    expect(screen.getByRole("button", { name: /Manually review/ })).toHaveTextContent("1.5 HR");
+  });
 
-    expect(screen.queryByRole("button", { name: /repl|compose|new mail|forward/i })).not.toBeInTheDocument();
-    expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
+  it("puts the clock in the taskbar", () => {
+    render(<Desk state={desk({ clock: 150 })} dispatch={vi.fn()} script={FIXTURE_SCRIPT} />);
+    expect(screen.getByText(/10:30 AM/)).toBeInTheDocument();
   });
 });
 ```
 
-- [ ] **Step 3: Run it and watch it pass**
+- [ ] **Step 2: Run it to verify it fails**
 
-Run: `npx vitest run src/components/windows/windows.test.tsx`
-Expected: PASS, 9 tests
+Run: `npx vitest run src/components/desk/Desk.test.tsx`
+Expected: FAIL — module not found.
 
-- [ ] **Step 4: Wire the three into `renderWindow` in `Desk.tsx`**, replacing the placeholder `<div>{id}</div>` for the `queue`, `roster`, and `inbox` cases.
+- [ ] **Step 3: Implement the Work Queue window body**
 
-- [ ] **Step 5: Typecheck, lint, and commit**
+Create `src/components/windows/WorkQueue.tsx`:
+
+```tsx
+"use client";
+
+import type { Situation } from "@/game/types";
+
+const TYPE_LABEL: Record<Situation["type"], string> = {
+  screening: "SCREENING",
+  "data-entry": "DATA ENTRY",
+  safety: "SAFETY",
+};
+
+type Props = {
+  today: Situation[];
+  current?: Situation;
+  doneIds: string[];
+};
+
+export function WorkQueue({ today, current, doneIds }: Props) {
+  return (
+    <div className="flex h-full flex-col">
+      <table className="w-full border-collapse text-left">
+        <thead>
+          <tr className="bevel-out">
+            <th className="px-2 py-1 font-normal">#</th>
+            <th className="px-2 py-1 font-normal">Type</th>
+            <th className="px-2 py-1 font-normal">Subject / Item</th>
+            <th className="px-2 py-1 font-normal">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {today.map((s, i) => {
+            const done = doneIds.includes(s.id);
+            return (
+              <tr key={s.id} className={s.id === current?.id ? "bg-[#dce6f2]" : ""}>
+                <td className="px-2 py-1 font-mono">{String(i + 1).padStart(2, "0")}</td>
+                <td className="px-2 py-1">{TYPE_LABEL[s.type]}</td>
+                <td className="px-2 py-1">
+                  {s.subject} · {s.title}
+                </td>
+                <td className="px-2 py-1">
+                  <span className={done ? "text-neutral-500" : "bg-[#2c4a6e] px-1 text-white"}>
+                    {done ? "DONE" : "OPEN"}
+                  </span>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+
+      {current && (
+        <div className="bevel-out m-2 p-3">
+          <div className="flex justify-between font-mono text-[10px] tracking-widest text-neutral-600">
+            <span>
+              {TYPE_LABEL[current.type]} — {current.id}
+            </span>
+            <span>Subject {current.subject}</span>
+          </div>
+          <h2 className="mt-2 text-base">{current.title}</h2>
+          <p className="mt-1 leading-relaxed">{current.blurb}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+- [ ] **Step 4: Implement VERA's rail**
+
+Create `src/components/vera/Rail.tsx`. The two actions live here — this is the only place the player commits to anything:
+
+```tsx
+"use client";
+
+import type { Situation } from "@/game/types";
+
+const COST_LABEL: Record<number, string> = { 60: "1 HOUR", 90: "1.5 HR" };
+
+type Props = {
+  situation?: Situation;
+  onAccept: () => void;
+  onReview: () => void;
+};
+
+export function Rail({ situation, onAccept, onReview }: Props) {
+  const assisted = situation?.vera !== undefined;
+
+  return (
+    <aside
+      className="absolute right-0 top-0 bottom-[30px] w-[320px] overflow-auto p-3"
+      style={{ background: "var(--vera-face)", borderLeft: "1px solid #c9c9c4" }}
+    >
+      {situation && !assisted && (
+        <p className="leading-relaxed text-neutral-700">
+          No assistant provisioned for this site. Source documents must be opened and
+          entered by hand.
+        </p>
+      )}
+
+      {situation?.vera && (
+        <>
+          <div
+            className="font-mono text-[10px] tracking-widest"
+            style={{ color: "var(--vera-teal)" }}
+          >
+            VERA · v3.0
+          </div>
+          <p className="mt-3 leading-relaxed">{situation.vera.summary}</p>
+        </>
+      )}
+
+      {situation && (
+        <div className="mt-6">
+          <div className="font-mono text-[10px] tracking-widest text-neutral-500">
+            ACTIONS
+          </div>
+          {assisted && (
+            <button
+              type="button"
+              onClick={onAccept}
+              className="mt-2 flex w-full justify-between border border-neutral-300 bg-white px-3 py-2 text-left"
+            >
+              <span>Accept as drafted</span>
+              <span className="font-mono text-neutral-500">30 MIN</span>
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={onReview}
+            className="mt-2 flex w-full justify-between border border-neutral-300 bg-white px-3 py-2 text-left"
+          >
+            <span>Manually review</span>
+            <span className="font-mono text-neutral-500">{COST_LABEL[situation.cost]}</span>
+          </button>
+        </div>
+      )}
+    </aside>
+  );
+}
+```
+
+- [ ] **Step 5: Implement the Desk**
+
+Create `src/components/desk/Desk.tsx`:
+
+```tsx
+"use client";
+
+import { Taskbar } from "@/components/desk/Taskbar";
+import { useWindows } from "@/components/desk/useWindows";
+import { Window } from "@/components/desk/Window";
+import { Rail } from "@/components/vera/Rail";
+import { WorkQueue } from "@/components/windows/WorkQueue";
+import type { Action, Situation, State } from "@/game/types";
+
+type Props = {
+  state: State;
+  dispatch: (action: Action) => void;
+  script: Situation[];
+};
+
+export function Desk({ state, dispatch, script }: Props) {
+  const { windows, focus, close, move } = useWindows();
+
+  const today = script.filter((s) => s.day === state.day);
+  const current = script[state.index];
+  const doneIds = state.resolutions.map((r) => r.situationId);
+
+  return (
+    <div className="relative h-screen w-screen overflow-hidden">
+      {windows.map((w) => (
+        <Window
+          key={w.id}
+          window={w}
+          onFocus={focus}
+          onMove={move}
+          onClose={w.id === "queue" ? undefined : close}
+        >
+          {w.id === "queue" && (
+            <WorkQueue today={today} current={current} doneIds={doneIds} />
+          )}
+        </Window>
+      ))}
+
+      <Rail
+        situation={current}
+        onAccept={() => dispatch({ type: "ACCEPT" })}
+        onReview={() => dispatch({ type: "SUBMIT", values: {} })}
+      />
+
+      <Taskbar windows={windows} clock={state.clock} day={state.day} onFocus={focus} />
+    </div>
+  );
+}
+```
+
+`onReview` dispatching an empty `SUBMIT` is temporary — Task 7 replaces it with opening the eCRF and the document viewer.
+
+- [ ] **Step 6: Wire the Desk into the page**
+
+In `src/app/page.tsx`, replace the `default` branch:
+
+```tsx
+    default:
+      return <Desk state={state} dispatch={dispatch} script={SCRIPT} />;
+```
+
+and add `import { Desk } from "@/components/desk/Desk";` at the top.
+
+- [ ] **Step 7: Update the page test's second assertion**
+
+In `src/app/page.test.tsx`, replace the desk assertion:
+
+```tsx
+    expect(screen.getByText("Week 8 vitals")).toBeInTheDocument();
+```
+
+- [ ] **Step 8: Run the full suite**
+
+Run: `npm test` then `npm run typecheck`
+Expected: all pass.
+
+- [ ] **Step 9: Commit**
 
 ```bash
-npm run typecheck && npm run lint
-git add src/components/windows/ src/components/desk/Desk.tsx
-git commit -m "feat(ui): work queue, roster, and inbox windows"
+git add src/
+git commit -m "feat(desk): work queue window and VERA's rail"
 ```
 
 ---
 
-### Task 19: The document viewer and the library
-
-Full-text find over rendered markdown. Highlighting uses the CSS Custom Highlight API so it never fights React for the DOM.
+### Task 6: The document viewer and find
 
 **Files:**
+- Create: `src/components/windows/find.ts`
 - Create: `src/components/windows/DocViewer.tsx`
-- Create: `src/components/windows/useFind.ts`
-- Create: `src/components/windows/DocumentsList.tsx`
-- Modify: `src/components/desk/Desk.tsx`
-- Modify: `package.json`
-- Test: `src/components/windows/useFind.test.ts`
+- Test: `src/components/windows/find.test.ts`
+- Test: `src/components/windows/DocViewer.test.tsx`
 
 **Interfaces:**
-- Consumes: `TRIAL_DOCUMENTS` from `@/game/content/documents`
-- Produces: `useFind(containerRef): { query, setQuery, matchCount, current, next, previous }`, `<DocViewer file basePath title>`, `<DocumentsList onOpen>`
+- Consumes: `loadDocument`, `loadSource` (Task 2).
+- Produces:
+  - `type Match = { start: number; end: number }`
+  - `findMatches(text: string, query: string): Match[]`
+  - `<DocViewer file={string} kind="document" | "source" />`
 
-- [ ] **Step 1: Install the markdown renderer**
+**Rendering decision:** documents render as raw monospace preformatted text, not parsed markdown. This adds no dependency, and a pipe-table rendered as ASCII in a fixed-width column is exactly what a 2003 EDC document viewer looks like. Do not add a markdown library.
 
-```bash
-npm install react-markdown remark-gfm
-```
+- [ ] **Step 1: Write the failing find test**
 
-GFM is required — the trial documents are full of tables.
-
-- [ ] **Step 1b: Declare the CSS Custom Highlight API**
-
-TypeScript's DOM lib does not yet carry `Highlight` or `CSS.highlights`. Create `src/types/highlight.d.ts`:
-
-```ts
-declare class Highlight {
-  constructor(...ranges: Range[]);
-}
-
-interface CSS {
-  highlights: Map<string, Highlight>;
-}
-```
-
-- [ ] **Step 2: Write the failing test**
-
-Create `src/components/windows/useFind.test.ts`:
+Create `src/components/windows/find.test.ts`:
 
 ```ts
 import { describe, expect, it } from "vitest";
 
-import { findRanges } from "./useFind";
+import { findMatches } from "@/components/windows/find";
 
-function container(html: string): HTMLElement {
-  const el = document.createElement("div");
-  el.innerHTML = html;
-  document.body.append(el);
-  return el;
-}
-
-describe("findRanges", () => {
-  it("finds nothing for an empty query", () => {
-    expect(findRanges(container("<p>EASI ≥16</p>"), "")).toHaveLength(0);
+describe("findMatches", () => {
+  it("returns nothing for an empty query", () => {
+    expect(findMatches("EASI ≥16 at screening", "")).toEqual([]);
   });
 
-  it("finds a match inside a single text node", () => {
-    expect(findRanges(container("<p>Participants need EASI ≥16 at screening.</p>"), "EASI")).toHaveLength(1);
+  it("finds a single match with its offsets", () => {
+    expect(findMatches("EASI ≥16 at screening", "≥16")).toEqual([{ start: 5, end: 8 }]);
   });
 
-  it("ignores case", () => {
-    expect(findRanges(container("<p>EASI ≥16</p>"), "easi")).toHaveLength(1);
+  it("finds every match", () => {
+    expect(findMatches("alt alt alt", "alt")).toHaveLength(3);
   });
 
-  it("finds every occurrence, in document order", () => {
-    const el = container("<p>EASI ≥16</p><td>EASI 15.8</td><li>EASI</li>");
-    const ranges = findRanges(el, "EASI");
-
-    expect(ranges).toHaveLength(3);
-    expect(ranges[0].startContainer.textContent).toContain("≥16");
+  it("is case-insensitive", () => {
+    expect(findMatches("Protocol Amendment 3", "amendment")).toEqual([
+      { start: 9, end: 18 },
+    ]);
   });
 
-  it("finds a match that spans two elements", () => {
-    // "EASI ≥16" split across a <strong> boundary, which markdown does constantly.
-    const el = container("<p><strong>EASI</strong> ≥16</p>");
-
-    expect(findRanges(el, "EASI ≥16")).toHaveLength(1);
+  it("treats regex characters as literals", () => {
+    expect(findMatches("value (42) recorded", "(42)")).toEqual([{ start: 6, end: 10 }]);
   });
 
-  it("does not match across a block boundary", () => {
-    const el = container("<p>screening EASI</p><p>16 at Day 1</p>");
-
-    expect(findRanges(el, "EASI 16")).toHaveLength(0);
+  it("does not loop forever on a query of only special characters", () => {
+    expect(findMatches("a.b.c", ".")).toHaveLength(2);
   });
 });
 ```
 
-- [ ] **Step 3: Run it and watch it fail**
+- [ ] **Step 2: Run it to verify it fails**
 
-Run: `npx vitest run src/components/windows/useFind.test.ts`
-Expected: FAIL — `Failed to resolve import "./useFind"`
+Run: `npx vitest run src/components/windows/find.test.ts`
+Expected: FAIL — module not found.
 
-- [ ] **Step 4: Write `src/components/windows/useFind.ts`**
+- [ ] **Step 3: Implement find**
+
+Create `src/components/windows/find.ts`:
 
 ```ts
-"use client";
+export type Match = { start: number; end: number };
 
-import { useCallback, useEffect, useState, type RefObject } from "react";
+export function findMatches(text: string, query: string): Match[] {
+  if (!query) return [];
 
-const BLOCK_TAGS = new Set([
-  "P", "DIV", "LI", "TD", "TH", "TR", "H1", "H2", "H3", "H4", "H5", "H6",
-  "PRE", "BLOCKQUOTE", "TABLE", "THEAD", "TBODY", "SECTION",
-]);
-
-type Chunk = { node: Text; start: number };
-
-/**
- * Every match of `query` inside `root`, in document order.
- *
- * Text is concatenated per block element so a match can span inline markup
- * — markdown splits `**EASI** ≥16` across a <strong> boundary constantly —
- * but never runs across a paragraph boundary, which would produce matches a
- * reader cannot see.
- */
-export function findRanges(root: HTMLElement, query: string): Range[] {
-  if (!query.trim()) return [];
-
+  const haystack = text.toLowerCase();
   const needle = query.toLowerCase();
-  const ranges: Range[] = [];
+  const out: Match[] = [];
 
-  for (const block of blocks(root)) {
-    let text = "";
-    const chunks: Chunk[] = [];
-
-    const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
-    let node = walker.nextNode() as Text | null;
-    while (node) {
-      chunks.push({ node, start: text.length });
-      text += node.data;
-      node = walker.nextNode() as Text | null;
-    }
-
-    const haystack = text.toLowerCase();
-    let from = haystack.indexOf(needle);
-    while (from !== -1) {
-      const range = document.createRange();
-      const startAt = locate(chunks, from);
-      const endAt = locate(chunks, from + needle.length);
-      if (startAt && endAt) {
-        range.setStart(startAt.node, startAt.offset);
-        range.setEnd(endAt.node, endAt.offset);
-        ranges.push(range);
-      }
-      from = haystack.indexOf(needle, from + needle.length);
-    }
+  let from = 0;
+  for (;;) {
+    const at = haystack.indexOf(needle, from);
+    if (at === -1) break;
+    out.push({ start: at, end: at + needle.length });
+    from = at + needle.length;
   }
 
-  return ranges;
-}
-
-/** Leaf-most block elements — the ones that actually hold text. */
-function blocks(root: HTMLElement): HTMLElement[] {
-  const found = [...root.querySelectorAll<HTMLElement>("*")].filter(
-    (el) =>
-      BLOCK_TAGS.has(el.tagName) &&
-      !el.querySelector([...BLOCK_TAGS].join(",")),
-  );
-  return found.length > 0 ? found : [root];
-}
-
-function locate(chunks: Chunk[], index: number): { node: Text; offset: number } | null {
-  for (let i = chunks.length - 1; i >= 0; i -= 1) {
-    const chunk = chunks[i];
-    if (index >= chunk.start) {
-      return { node: chunk.node, offset: Math.min(index - chunk.start, chunk.node.data.length) };
-    }
-  }
-  return null;
-}
-
-export function useFind(containerRef: RefObject<HTMLElement | null>) {
-  const [query, setQuery] = useState("");
-  const [current, setCurrent] = useState(0);
-  const [matchCount, setMatchCount] = useState(0);
-
-  useEffect(() => {
-    const root = containerRef.current;
-    if (!root || typeof CSS === "undefined" || !("highlights" in CSS)) return;
-
-    const ranges = findRanges(root, query);
-    setMatchCount(ranges.length);
-    const index = ranges.length === 0 ? 0 : Math.min(current, ranges.length - 1);
-
-    CSS.highlights.set("find-match", new Highlight(...ranges));
-    const active = ranges[index];
-    CSS.highlights.set("find-current", new Highlight(...(active ? [active] : [])));
-
-    active?.startContainer.parentElement?.scrollIntoView({ block: "center" });
-
-    return () => {
-      CSS.highlights.delete("find-match");
-      CSS.highlights.delete("find-current");
-    };
-  }, [query, current, containerRef]);
-
-  const next = useCallback(
-    () => setCurrent((i) => (matchCount === 0 ? 0 : (i + 1) % matchCount)),
-    [matchCount],
-  );
-  const previous = useCallback(
-    () => setCurrent((i) => (matchCount === 0 ? 0 : (i - 1 + matchCount) % matchCount)),
-    [matchCount],
-  );
-
-  return { query, setQuery: (q: string) => { setQuery(q); setCurrent(0); }, matchCount, current, next, previous };
+  return out;
 }
 ```
 
-- [ ] **Step 5: Run it and watch it pass**
+`indexOf` is used rather than a `RegExp` so that regex metacharacters in the query are literals for free, and so an empty-width match can never loop.
 
-Run: `npx vitest run src/components/windows/useFind.test.ts`
-Expected: PASS, 6 tests
+- [ ] **Step 4: Run it to verify it passes**
 
-- [ ] **Step 6: Write `DocViewer.tsx` and `DocumentsList.tsx`**
+Run: `npx vitest run src/components/windows/find.test.ts`
+Expected: PASS, 6 tests.
 
-`DocViewer` fetches `/content/${basePath}/${file}` on mount, renders it through `react-markdown` with `remark-gfm` in `font-source` monospace at 11px, and pins a find bar to the top of the window: a text input, `N of M`, and ▴ ▾ buttons wired to `previous` and `next`. Wide tables get `overflow-x: auto` on their own container so the window body never scrolls sideways. While fetching, show `Loading…` in the same monospace.
+- [ ] **Step 5: Write the failing viewer test**
 
-`DocumentsList` renders `TRIAL_DOCUMENTS` as a plain list. Clicking a row calls `onOpen(`doc:${entry.id}`)`. **Opening a document costs nothing** — no clock, no confirmation.
+Create `src/components/windows/DocViewer.test.tsx`:
 
-- [ ] **Step 7: Wire both into `renderWindow` in `Desk.tsx`**
+```tsx
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
-`documents` renders `<DocumentsList>`; ids matching `doc:*` render `<DocViewer basePath="documents">`; ids matching `source:*` render `<DocViewer basePath="source">`.
+import { DocViewer } from "@/components/windows/DocViewer";
 
-- [ ] **Step 8: Typecheck, lint, and commit**
+const TEXT = "5.2 Inclusion Criteria\n4. EASI >=16 at screening\n5. vIGA-AD >=3\n";
+
+afterEach(() => vi.unstubAllGlobals());
+
+const stub = (text: string) =>
+  vi.stubGlobal("fetch", vi.fn(async () => ({ ok: true, text: async () => text })));
+
+describe("DocViewer", () => {
+  it("renders the document text", async () => {
+    stub(TEXT);
+    render(<DocViewer file="protocol-a.md" kind="document" />);
+
+    await waitFor(() => expect(screen.getByText(/Inclusion Criteria/)).toBeInTheDocument());
+  });
+
+  it("reports the match count as the player types", async () => {
+    stub(TEXT);
+    render(<DocViewer file="protocol-b.md" kind="document" />);
+    await waitFor(() => screen.getByText(/Inclusion Criteria/));
+
+    await userEvent.type(screen.getByLabelText("Find"), "EASI");
+    expect(screen.getByText("1 of 1")).toBeInTheDocument();
+  });
+
+  it("reports no matches when there are none", async () => {
+    stub(TEXT);
+    render(<DocViewer file="protocol-c.md" kind="document" />);
+    await waitFor(() => screen.getByText(/Inclusion Criteria/));
+
+    await userEvent.type(screen.getByLabelText("Find"), "zzzz");
+    expect(screen.getByText("0 of 0")).toBeInTheDocument();
+  });
+
+  it("shows an error when the document cannot be loaded", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => ({ ok: false, status: 404 })));
+    render(<DocViewer file="missing.md" kind="document" />);
+
+    await waitFor(() => expect(screen.getByText(/could not be opened/i)).toBeInTheDocument());
+  });
+});
+```
+
+Each test uses a distinct filename because `loadDocument` caches by path.
+
+- [ ] **Step 6: Run it to verify it fails**
+
+Run: `npx vitest run src/components/windows/DocViewer.test.tsx`
+Expected: FAIL — module not found.
+
+- [ ] **Step 7: Implement the viewer**
+
+Create `src/components/windows/DocViewer.tsx`:
+
+```tsx
+"use client";
+
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+
+import { findMatches } from "@/components/windows/find";
+import { loadDocument, loadSource } from "@/game/documents";
+
+type Props = { file: string; kind: "document" | "source" };
+
+function highlight(text: string, query: string, active: number): ReactNode {
+  const matches = findMatches(text, query);
+  if (matches.length === 0) return text;
+
+  const out: ReactNode[] = [];
+  let cursor = 0;
+
+  matches.forEach((m, i) => {
+    if (m.start > cursor) out.push(text.slice(cursor, m.start));
+    out.push(
+      <mark
+        key={i}
+        style={{ background: i === active ? "#ffd54a" : "#fff3b0", color: "inherit" }}
+      >
+        {text.slice(m.start, m.end)}
+      </mark>,
+    );
+    cursor = m.end;
+  });
+
+  if (cursor < text.length) out.push(text.slice(cursor));
+  return out;
+}
+
+export function DocViewer({ file, kind }: Props) {
+  const [text, setText] = useState<string | null>(null);
+  const [failed, setFailed] = useState(false);
+  const [query, setQuery] = useState("");
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    let live = true;
+    setText(null);
+    setFailed(false);
+
+    (kind === "document" ? loadDocument(file) : loadSource(file))
+      .then((t) => live && setText(t))
+      .catch(() => live && setFailed(true));
+
+    return () => {
+      live = false;
+    };
+  }, [file, kind]);
+
+  const count = useMemo(() => (text ? findMatches(text, query).length : 0), [text, query]);
+
+  useEffect(() => setActive(0), [query]);
+
+  if (failed) {
+    return <p className="p-3">This document could not be opened.</p>;
+  }
+
+  return (
+    <div className="flex h-full flex-col">
+      <div className="bevel-out flex items-center gap-2 px-2 py-1">
+        <label htmlFor="find">Find</label>
+        <input
+          id="find"
+          className="bevel-in flex-1 px-1 py-0.5"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <span className="font-mono text-neutral-600">
+          {count === 0 ? 0 : active + 1} of {count}
+        </span>
+        <button
+          type="button"
+          className="bevel-out px-2"
+          onClick={() => setActive((a) => (count ? (a + 1) % count : 0))}
+        >
+          Next
+        </button>
+      </div>
+
+      <pre className="flex-1 overflow-auto whitespace-pre-wrap p-3 font-mono text-[11px] leading-[1.5]">
+        {text === null ? "Opening…" : highlight(text, query, active)}
+      </pre>
+    </div>
+  );
+}
+```
+
+- [ ] **Step 8: Run the tests to verify they pass**
+
+Run: `npx vitest run src/components/windows/`
+Expected: PASS, 10 tests.
+
+- [ ] **Step 9: Commit**
 
 ```bash
-npm run typecheck && npm run lint
-git add package.json package-lock.json src/components/windows/ src/components/desk/Desk.tsx
-git commit -m "feat(ui): markdown document viewer with full-text find, and the library index"
+git add src/components/windows/
+git commit -m "feat(windows): document viewer with literal-text find"
 ```
 
 ---
 
-### Task 20: The eCRF
-
-Three templates, one submission path. This is where a manual review becomes a decision the engine can score.
+### Task 7: The eCRF form and manual review
 
 **Files:**
+- Create: `src/game/forms.ts`
 - Create: `src/components/windows/ECRF.tsx`
-- Modify: `src/components/desk/Desk.tsx`
+- Modify: `src/game/types.ts` (widen `FormId`)
+- Modify: `src/components/desk/Desk.tsx` (manual review opens the viewer and the form)
 - Test: `src/components/windows/ECRF.test.tsx`
 
 **Interfaces:**
-- Consumes: `Situation`, `FormValues`, `Verdict`; `Submission` from `engine/resolve`
-- Produces: `<ECRF situation onSubmit>` where `onSubmit: (submission: Submission) => void`
+- Consumes: `FormValues`, `Situation` (Task 1); `DocViewer` (Task 6); `useWindows` (Task 3).
+- Produces:
+  - `type Field = { name: string; label: string; hint?: string }`
+  - `type FormSpec = { title: string; fields: Field[]; verdict?: { label: string; options: { value: string; label: string }[] } }`
+  - `FORMS: Record<FormId, FormSpec>`
+  - `<ECRF situation={s} onSubmit={(values, verdict) => void} />`
 
-- [ ] **Step 1: Write the failing test**
+- [ ] **Step 1: Widen FormId**
+
+In `src/game/types.ts`, replace the `FormId` line:
+
+```ts
+export type FormId = "vitals" | "labs" | "eligibility" | "safety";
+```
+
+The spec names three data templates; safety items are verdict-only and need a fourth entry with no fields. This is a correction to the spec's type, not a new template to author.
+
+- [ ] **Step 2: Write the form definitions**
+
+Create `src/game/forms.ts`:
+
+```ts
+import type { FormId } from "@/game/types";
+
+export type Field = { name: string; label: string; hint?: string };
+
+export type FormSpec = {
+  title: string;
+  fields: Field[];
+  verdict?: { label: string; options: { value: string; label: string }[] };
+};
+
+export const FORMS: Record<FormId, FormSpec> = {
+  vitals: {
+    title: "eCRF — VITAL SIGNS",
+    fields: [
+      { name: "bp", label: "BP sitting", hint: "mmHg" },
+      { name: "pulse", label: "Pulse", hint: "bpm" },
+      { name: "temp", label: "Temperature", hint: "°C" },
+      { name: "weight", label: "Weight", hint: "kg" },
+    ],
+  },
+  labs: {
+    title: "eCRF — CENTRAL LABORATORY",
+    fields: [
+      { name: "alt", label: "ALT", hint: "U/L" },
+      { name: "ast", label: "AST", hint: "U/L" },
+      { name: "creatinine", label: "Creatinine", hint: "mg/dL" },
+      { name: "eos", label: "Eosinophils, absolute", hint: "×10⁹/L" },
+    ],
+  },
+  eligibility: {
+    title: "eCRF — SCREENING ELIGIBILITY",
+    fields: [
+      { name: "easi", label: "EASI (screening)" },
+      { name: "viga", label: "vIGA-AD" },
+      { name: "bsa", label: "BSA involvement", hint: "%" },
+      { name: "nrs", label: "Worst Pruritus NRS" },
+    ],
+    verdict: {
+      label: "Determination",
+      options: [
+        { value: "eligible", label: "Eligible — randomize" },
+        { value: "screen-fail", label: "Screen failure" },
+      ],
+    },
+  },
+  safety: {
+    title: "eCRF — ADVERSE EVENT",
+    fields: [],
+    verdict: {
+      label: "Determination",
+      options: [
+        { value: "not-serious", label: "Adverse event — not serious" },
+        { value: "serious", label: "Serious adverse event — report within 24 hours" },
+        { value: "not-reportable", label: "Not an adverse event" },
+      ],
+    },
+  },
+};
+```
+
+- [ ] **Step 3: Write the failing ECRF test**
 
 Create `src/components/windows/ECRF.test.tsx`:
 
@@ -4640,487 +2170,728 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { SITUATIONS } from "@/game/content/situations";
+import { ECRF } from "@/components/windows/ECRF";
+import { FIXTURE_SCRIPT } from "@/game/fixtures";
 
-import { ECRF } from "./ECRF";
-
-const labs = SITUATIONS.find((s) => s.id === "DE-1113")!;
-const screening = SITUATIONS.find((s) => s.id === "SCR-0219")!;
-const safety = SITUATIONS.find((s) => s.id === "SAF-0033")!;
+const vitals = FIXTURE_SCRIPT[0];
+const eligibility = FIXTURE_SCRIPT[2];
 
 describe("ECRF", () => {
-  it("renders an empty field per form spec entry", () => {
-    render(<ECRF situation={labs} onSubmit={vi.fn()} />);
+  it("renders one empty input per field, with nothing pre-filled", () => {
+    render(<ECRF situation={vitals} onSubmit={vi.fn()} />);
 
-    expect(screen.getByLabelText(/ALT/)).toHaveValue("");
-    expect(screen.getByLabelText(/Platelets/)).toHaveValue("");
+    expect(screen.getByLabelText("BP sitting")).toHaveValue("");
+    expect(screen.getByLabelText("Pulse")).toHaveValue("");
   });
 
-  it("never pre-fills VERA's values — a pre-filled form is a form you skim", () => {
-    render(<ECRF situation={labs} onSubmit={vi.fn()} />);
-
-    for (const field of labs.form.fields) {
-      expect(screen.getByLabelText(new RegExp(field.label))).toHaveValue("");
-    }
-  });
-
-  it("submits typed values on a data-entry item", async () => {
+  it("submits what the player typed", async () => {
     const onSubmit = vi.fn();
-    render(<ECRF situation={labs} onSubmit={onSubmit} />);
+    render(<ECRF situation={vitals} onSubmit={onSubmit} />);
 
-    await userEvent.type(screen.getByLabelText(/ALT/), "24");
-    await userEvent.click(screen.getByRole("button", { name: /submit/i }));
+    await userEvent.type(screen.getByLabelText("BP sitting"), "128/82");
+    await userEvent.type(screen.getByLabelText("Pulse"), "72");
+    await userEvent.click(screen.getByRole("button", { name: /Submit to database/ }));
 
     expect(onSubmit).toHaveBeenCalledWith(
-      expect.objectContaining({ values: expect.objectContaining({ alt: "24" }) }),
+      expect.objectContaining({ bp: "128/82", pulse: "72" }),
+      undefined,
     );
   });
 
-  it("submits a verdict on a screening item", async () => {
+  it("shows a determination for a screening item", () => {
+    render(<ECRF situation={eligibility} onSubmit={vi.fn()} />);
+    expect(screen.getByLabelText("Screen failure")).toBeInTheDocument();
+  });
+
+  it("will not submit a screening item until a determination is chosen", async () => {
     const onSubmit = vi.fn();
-    render(<ECRF situation={screening} onSubmit={onSubmit} />);
+    render(<ECRF situation={eligibility} onSubmit={onSubmit} />);
 
-    await userEvent.click(screen.getByRole("radio", { name: /screen failure/i }));
-    await userEvent.click(screen.getByRole("button", { name: /submit/i }));
-
-    expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({ verdict: "screen-fail" }));
+    await userEvent.click(screen.getByRole("button", { name: /Submit to database/ }));
+    expect(onSubmit).not.toHaveBeenCalled();
   });
 
-  it("offers only the verdicts its situation authored", () => {
-    render(<ECRF situation={safety} onSubmit={vi.fn()} />);
+  it("submits the chosen determination", async () => {
+    const onSubmit = vi.fn();
+    render(<ECRF situation={eligibility} onSubmit={onSubmit} />);
 
-    expect(screen.getAllByRole("radio")).toHaveLength(3);
-    expect(screen.queryByRole("radio", { name: /protocol deviation/i })).not.toBeInTheDocument();
+    await userEvent.click(screen.getByLabelText("Screen failure"));
+    await userEvent.click(screen.getByRole("button", { name: /Submit to database/ }));
+
+    expect(onSubmit).toHaveBeenCalledWith(expect.any(Object), "screen-fail");
   });
 
-  it("cannot be submitted until a verdict is chosen", async () => {
-    render(<ECRF situation={screening} onSubmit={vi.fn()} />);
-
-    expect(screen.getByRole("button", { name: /submit/i })).toBeDisabled();
-  });
-
-  it("shows no correctness feedback of any kind on submit", async () => {
-    render(<ECRF situation={labs} onSubmit={vi.fn()} />);
-
-    await userEvent.type(screen.getByLabelText(/ALT/), "9999");
-    await userEvent.click(screen.getByRole("button", { name: /submit/i }));
-
-    expect(screen.queryByText(/correct|incorrect|wrong|error|check/i)).not.toBeInTheDocument();
+  it("never shows VERA's drafted values", () => {
+    render(<ECRF situation={eligibility} onSubmit={vi.fn()} />);
+    expect(screen.getByLabelText("EASI (screening)")).toHaveValue("");
   });
 });
 ```
 
-- [ ] **Step 2: Run it and watch it fail**
+That last test is load-bearing: the spec forbids a pre-filled form, because a pre-filled form is one you skim.
+
+- [ ] **Step 4: Run it to verify it fails**
 
 Run: `npx vitest run src/components/windows/ECRF.test.tsx`
-Expected: FAIL — `Failed to resolve import "./ECRF"`
+Expected: FAIL — module not found.
 
-- [ ] **Step 3: Write `src/components/windows/ECRF.tsx`**
+- [ ] **Step 5: Implement the ECRF**
 
-Local `useState` for values and verdict. Render `situation.form.fields` as labelled text inputs in a two-column grid, then `situation.form.verdictOptions` as a radio group under a `Determination:` heading when present. One `Submit to database` button, disabled until a verdict is chosen on items that need one.
-
-**It must never pre-fill from `situation.vera.entry`.** A pre-filled form is a form you skim, and skimming a draft is not verification.
-
-**It must never validate against `truth` or show any feedback.** The player finds out later, in a query, or not until the debrief.
-
-- [ ] **Step 4: Run it and watch it pass**
-
-Run: `npx vitest run src/components/windows/ECRF.test.tsx`
-Expected: PASS, 7 tests
-
-- [ ] **Step 5: Wire `ecrf` into `renderWindow` in `Desk.tsx`**, dispatching `{ type: "WORK", situationId, action: "manual", submission }` on submit.
-
-- [ ] **Step 6: Typecheck, lint, and commit**
-
-```bash
-npm run typecheck && npm run lint
-git add src/components/windows/ECRF.tsx src/components/windows/ECRF.test.tsx src/components/desk/Desk.tsx
-git commit -m "feat(ui): the eCRF — three templates, no pre-fill, no feedback"
-```
-
----
-
-### Task 21: The VERA rail
-
-Fixed to the right edge. Not draggable, not closable, not in the taskbar. The player can move every piece of the site's software around their desk and cannot move her.
-
-**Files:**
-- Create: `src/components/vera/Rail.tsx`
-- Test: `src/components/vera/Rail.test.tsx`
-
-**Interfaces:**
-- Consumes: `GameState`, `Situation`, `GameEvent`
-- Produces: `<Rail state dispatch onOpenSource selectedId>`
-
-- [ ] **Step 1: Write the failing test**
-
-Create `src/components/vera/Rail.test.tsx`:
-
-```tsx
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
-
-import { SITUATIONS } from "@/game/content/situations";
-import { LATE_CONSENTS, SUBJECTS } from "@/game/content/subjects";
-import { initialState } from "@/game/engine/state";
-
-import { Rail } from "./Rail";
-
-const base = { ...initialState(SITUATIONS, SUBJECTS), phase: "desk" as const };
-
-describe("Rail before noon on day 1", () => {
-  it("says no assistant is provisioned", () => {
-    render(<Rail state={base} dispatch={vi.fn()} onOpenSource={vi.fn()} selectedId="SCR-0217" />);
-
-    expect(screen.getByText(/No assistant provisioned for this site/i)).toBeInTheDocument();
-  });
-
-  it("offers manual review only — there is no accept path", () => {
-    render(<Rail state={base} dispatch={vi.fn()} onOpenSource={vi.fn()} selectedId="SCR-0217" />);
-
-    expect(screen.getByRole("button", { name: /manually review/i })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: /accept/i })).not.toBeInTheDocument();
-  });
-
-  it("prices a screening packet at 90 minutes", () => {
-    render(<Rail state={base} dispatch={vi.fn()} onOpenSource={vi.fn()} selectedId="SCR-0217" />);
-
-    expect(screen.getByText(/1\.5 HR|90 MIN/)).toBeInTheDocument();
-  });
-});
-
-describe("Rail once she is installed", () => {
-  const withVera = { ...base, veraInstalled: true } as typeof base & { veraInstalled: boolean };
-
-  it("shows her assessment and both verbs", () => {
-    render(<Rail state={withVera} dispatch={vi.fn()} onOpenSource={vi.fn()} selectedId="DE-1110" />);
-
-    expect(screen.getByText(/within reference range throughout/)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /accept/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /manually review/i })).toBeInTheDocument();
-  });
-
-  it("offers no third verb, ever", () => {
-    render(<Rail state={withVera} dispatch={vi.fn()} onOpenSource={vi.fn()} selectedId="DE-1110" />);
-
-    expect(screen.getAllByRole("button")).toHaveLength(2);
-    expect(screen.queryByRole("button", { name: /batch|reject|flag|escalate/i })).not.toBeInTheDocument();
-  });
-
-  it("shows no confidence score and no hedging chrome", () => {
-    render(<Rail state={withVera} dispatch={vi.fn()} onOpenSource={vi.fn()} selectedId="DE-1110" />);
-
-    expect(screen.queryByText(/confidence|certain|%|likely/i)).not.toBeInTheDocument();
-  });
-
-  it("spends a block when the player accepts", async () => {
-    const dispatch = vi.fn();
-    render(<Rail state={withVera} dispatch={dispatch} onOpenSource={vi.fn()} selectedId="DE-1110" />);
-
-    await userEvent.click(screen.getByRole("button", { name: /accept/i }));
-
-    expect(dispatch).toHaveBeenCalledWith({ type: "WORK", situationId: "DE-1110", action: "accept" });
-  });
-
-  it("opens the source documents on manual review", async () => {
-    const onOpenSource = vi.fn();
-    render(<Rail state={withVera} dispatch={vi.fn()} onOpenSource={onOpenSource} selectedId="DE-1110" />);
-
-    await userEvent.click(screen.getByRole("button", { name: /manually review/i }));
-
-    expect(onOpenSource).toHaveBeenCalledWith("source:de-1110-lab.md");
-  });
-});
-```
-
-- [ ] **Step 2: Wire VERA's arrival, the sign-in mail, and the late consents**
-
-Three pieces of authored content from Phase 2 have no code path yet. All three land in the reducer.
-
-**a. `veraInstalled`.** In `src/game/types.ts` add `veraInstalled: boolean;` to `GameState`; `initialState` sets it `false`. In `work()`, once every forced-manual situation is in `worked`, set it `true` **and** push `EMAILS["email-vera-provisioned"]` onto the inbox. That is 11:30, and it is the only thing that happens at noon — no screen, no interruption.
-
-**b. `SIGN_IN_INBOX`.** The `SIGN_IN` case seeds the inbox from `SIGN_IN_INBOX` with `arrivedDay: 0`, so the manager's two lines and the randomization notice are already there on Monday morning.
-
-**c. `LATE_CONSENTS`.** `beginNextDay` merges `LATE_CONSENTS[day]` into the roster. 1047-021 · B. Ferreira appears on Tuesday and 1047-022 · K. Adeyemi on Wednesday, before the day-4 items that reference them.
-
-`Deps` gains a `lateConsents: Record<number, Subject[]>` field so the reducer stays free of content imports; `page.tsx` and every test pass `LATE_CONSENTS`.
-
-Add to `src/game/engine/state.test.ts`:
-
-```ts
-it("puts the manager's mail in the inbox before the player has done anything", () => {
-  const state = reduce(initialState(SITUATIONS, SUBJECTS), { type: "SIGN_IN" }, DEPS);
-
-  expect(state.inbox.length).toBeGreaterThan(0);
-  expect(state.inbox.every((m) => m.arrivedDay === 0)).toBe(true);
-});
-
-it("installs VERA when the manual morning is finished, and mails to say so", () => {
-  let state = reduce(initialState(SITUATIONS, SUBJECTS), { type: "SIGN_IN" }, DEPS);
-  expect(state.veraInstalled).toBe(false);
-
-  for (const id of SITUATIONS.filter((s) => s.manual).map((s) => s.id)) {
-    state = reduce(state, { type: "WORK", situationId: id, action: "manual" }, DEPS);
-  }
-
-  expect(state.veraInstalled).toBe(true);
-  expect(state.inbox.some((m) => m.id === "email-vera-provisioned")).toBe(true);
-});
-
-it("adds the subjects who consent mid-run, before their items come up", () => {
-  const deps = { ...DEPS, lateConsents: { 2: [{ id: "1047-021", name: "B. Ferreira", status: "Screening" as const }] } };
-  let state = reduce(initialState(SITUATIONS, SUBJECTS), { type: "SIGN_IN" }, deps);
-  expect(state.roster["1047-021"]).toBeUndefined();
-
-  state = reduce({ ...state, phase: "dayend", queue: [] }, { type: "BEGIN_NEXT_DAY" }, deps);
-
-  expect(state.roster["1047-021"].name).toBe("B. Ferreira");
-});
-```
-
-Update the `DEPS` constant at the top of `state.test.ts` to `{ situations: SITUATIONS, emails: EMAILS, lateConsents: {} }`, importing `EMAILS` from `../content/emails`.
-
-- [ ] **Step 3: Write `src/components/vera/Rail.tsx`**
-
-Fixed `right-0 top-0 bottom-8 w-[340px]`, `bg-vera-bg`, `font-vera`, generous spacing — the visual opposite of everything else on screen. Two regions: her assessment (or the not-provisioned notice), then the action buttons with their costs shown as `30 MIN` / `1 HOUR` / `1.5 HR`.
-
-**Render `situation.vera.summary` as prose and nothing else.** No confidence score, no badge, no icon, no hedging indicator, no distinction of any kind between an assessment that is right and one that is wrong. This is the single most important implementation constraint in the game.
-
-Disable both buttons when the remaining blocks cannot pay for them, and show the cost struck through rather than removing the button — the player should see what they cannot afford.
-
-- [ ] **Step 4: Run it and watch it pass**
-
-Run: `npx vitest run src/components/vera/Rail.test.tsx src/game/engine/state.test.ts`
-Expected: PASS
-
-- [ ] **Step 5: Typecheck, lint, and commit**
-
-```bash
-npm run typecheck && npm run lint
-git add src/components/vera/ src/game/types.ts src/game/engine/state.ts src/game/engine/state.test.ts
-git commit -m "feat(ui): the VERA rail — one register, right or wrong"
-```
-
----
-
-# Phase 4 — Screens and the whole run
-
----
-
-### Task 22: Sign in, and the phase switch
-
-**Files:**
-- Create: `src/components/screens/SignIn.tsx`
-- Modify: `src/app/page.tsx`
-- Delete: `src/app/page.test.tsx`
-- Test: `src/app/page.test.tsx` (rewritten)
-
-**Interfaces:**
-- Produces: `<SignIn onSignIn>`, the `page.tsx` phase switch and persistence wiring
-
-- [ ] **Step 1: Write `src/components/screens/SignIn.tsx`**
-
-A single centred window in the same chrome, matching `docs/prototype/login.png`. Contents:
-
-```
-AMGEN · PROTOCOL 20210143 · ROCKET-HORIZON
-
-Site 1047 · Coordinator
-
-An eight-hour day, in half-hour blocks. A queue that does not
-care. An assistant who sounds exactly the same whether she is
-right or wrong.
-
-User      [ RAGHUNATHAN, P. (CRC) ]
-Password  [ •••••••••••• ]
-
-4 DAYS · 19 SITUATIONS          RANDOMIZATION CLOSES 12-JAN-2024
-                                              [ Sign in ]
-```
-
-The user and password fields are decorative and pre-filled; the button is the only control. Status bar reads `Veriscribe EDC 9.2.117 · Protected Mode: On`.
-
-- [ ] **Step 2: Rewrite `src/app/page.tsx`**
+Create `src/components/windows/ECRF.tsx`:
 
 ```tsx
 "use client";
 
-import { useCallback, useEffect, useReducer, useRef } from "react";
+import { useState } from "react";
 
-import { Desk } from "@/components/desk/Desk";
-import { Answer } from "@/components/screens/Answer";
-import { AuditFinding } from "@/components/screens/AuditFinding";
-import { DayEnd } from "@/components/screens/DayEnd";
-import { SignIn } from "@/components/screens/SignIn";
-import { ThePoint } from "@/components/screens/ThePoint";
-import { EMAILS } from "@/game/content/emails";
-import { SITUATIONS } from "@/game/content/situations";
-import { LATE_CONSENTS, SUBJECTS } from "@/game/content/subjects";
-import { load, save } from "@/game/engine/persistence";
-import { initialState, reduce, type GameEvent } from "@/game/engine/state";
-import type { GameState } from "@/game/types";
+import { FORMS } from "@/game/forms";
+import type { FormValues, Situation } from "@/game/types";
 
-const DEPS = { situations: SITUATIONS, emails: EMAILS, lateConsents: LATE_CONSENTS };
+type Props = {
+  situation: Situation;
+  onSubmit: (values: FormValues, verdict?: string) => void;
+};
 
-function step(state: GameState, event: GameEvent): GameState {
-  return reduce(state, event, DEPS);
-}
+export function ECRF({ situation, onSubmit }: Props) {
+  const spec = FORMS[situation.form];
+  const [values, setValues] = useState<FormValues>({});
+  const [verdict, setVerdict] = useState<string | undefined>();
 
-export default function Page() {
-  const [state, dispatch] = useReducer(step, undefined, () => initialState(SITUATIONS, SUBJECTS));
+  const ready = spec.verdict === undefined || verdict !== undefined;
 
-  // Resume a run in progress. Runs once, after hydration.
-  const resumed = useRef(false);
-  useEffect(() => {
-    if (resumed.current) return;
-    resumed.current = true;
-    const saved = load();
-    if (saved) dispatch({ type: "RESTORE", state: saved });
-  }, []);
+  return (
+    <form
+      className="flex h-full flex-col p-3"
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (ready) onSubmit(values, verdict);
+      }}
+    >
+      <div className="font-mono text-[10px] tracking-widest text-neutral-600">
+        {spec.title} · {situation.subject}
+      </div>
 
-  useEffect(() => {
-    if (state.phase !== "signin") save(state);
-  }, [state]);
+      <div className="mt-3 space-y-2">
+        {spec.fields.map((f) => (
+          <div key={f.name} className="grid grid-cols-[1fr_120px_40px] items-center gap-2">
+            <label htmlFor={f.name}>{f.label}</label>
+            <input
+              id={f.name}
+              className="bevel-in px-1 py-0.5 font-mono"
+              value={values[f.name] ?? ""}
+              onChange={(e) => setValues((v) => ({ ...v, [f.name]: e.target.value }))}
+            />
+            <span className="text-neutral-500">{f.hint}</span>
+          </div>
+        ))}
+      </div>
 
-  const send = useCallback((event: GameEvent) => dispatch(event), []);
+      {spec.verdict && (
+        <fieldset className="mt-4">
+          <legend className="font-mono text-[10px] tracking-widest text-neutral-600">
+            {spec.verdict.label.toUpperCase()}
+          </legend>
+          {spec.verdict.options.map((o) => (
+            <div key={o.value} className="mt-1">
+              <input
+                type="radio"
+                id={o.value}
+                name="verdict"
+                checked={verdict === o.value}
+                onChange={() => setVerdict(o.value)}
+              />
+              <label htmlFor={o.value} className="ml-2">
+                {o.label}
+              </label>
+            </div>
+          ))}
+        </fieldset>
+      )}
 
-  switch (state.phase) {
-    case "signin":
-      return <SignIn onSignIn={() => send({ type: "SIGN_IN" })} />;
-    case "desk":
-      return <Desk state={state} dispatch={send} />;
-    case "dayend":
-      return <DayEnd state={state} dispatch={send} />;
-    case "answer":
-      return <Answer state={state} dispatch={send} />;
-    case "audit":
-      return <AuditFinding state={state} dispatch={send} />;
-    case "point":
-      return <ThePoint state={state} />;
-  }
+      <button type="submit" className="bevel-out mt-auto self-end px-4 py-1.5" disabled={!ready}>
+        Submit to database
+      </button>
+    </form>
+  );
 }
 ```
 
-- [ ] **Step 3: Add the `RESTORE` event to the reducer**
+- [ ] **Step 6: Run it to verify it passes**
 
-In `src/game/engine/state.ts` add `| { type: "RESTORE"; state: GameState }` to `GameEvent` and a case that returns `event.state`.
+Run: `npx vitest run src/components/windows/ECRF.test.tsx`
+Expected: PASS, 6 tests.
 
-- [ ] **Step 4: Replace `src/app/page.test.tsx`**
+- [ ] **Step 7: Wire manual review into the Desk**
+
+In `src/components/desk/Desk.tsx`, add the imports:
 
 ```tsx
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it } from "vitest";
-
-import Page from "./page";
-
-describe("the run", () => {
-  beforeEach(() => window.localStorage.clear());
-
-  it("opens on the sign-in screen", () => {
-    render(<Page />);
-
-    expect(screen.getByText(/Site 1047 · Coordinator/)).toBeInTheDocument();
-  });
-
-  it("states the deadline before the player has done anything", () => {
-    render(<Page />);
-
-    expect(screen.getByText(/12-JAN-2024/)).toBeInTheDocument();
-  });
-
-  it("reaches the desk with the work queue open at 8:00", async () => {
-    render(<Page />);
-
-    await userEvent.click(screen.getByRole("button", { name: /sign in/i }));
-
-    expect(screen.getByRole("region", { name: "Work Queue" })).toBeInTheDocument();
-    expect(screen.getByText("8:00 AM")).toBeInTheDocument();
-  });
-
-  it("resumes a saved run instead of restarting it", async () => {
-    const { unmount } = render(<Page />);
-    await userEvent.click(screen.getByRole("button", { name: /sign in/i }));
-    unmount();
-
-    render(<Page />);
-
-    expect(await screen.findByRole("region", { name: "Work Queue" })).toBeInTheDocument();
-  });
-});
+import { DocViewer } from "@/components/windows/DocViewer";
+import { ECRF } from "@/components/windows/ECRF";
 ```
 
-- [ ] **Step 5: Run it and watch it pass**
+Change the `useWindows()` destructure to include `open` and `isOpen`, and replace the `Rail`'s `onReview` and the window body switch:
 
-Run: `npx vitest run src/app/page.test.tsx`
-Expected: PASS, 4 tests
+```tsx
+  const { windows, open, close, focus, move } = useWindows();
 
-- [ ] **Step 6: Typecheck, lint, and commit**
+  const beginReview = () => {
+    if (!current) return;
+    open("viewer", current.source[0] ?? "source.md");
+    open("ecrf", "eCRF");
+  };
+
+  const submit = (values: FormValues, verdict?: string) => {
+    close("viewer");
+    close("ecrf");
+    dispatch({ type: "SUBMIT", values, verdict });
+  };
+```
+
+and in the window map:
+
+```tsx
+          {w.id === "viewer" && current && (
+            <DocViewer file={current.source[0]} kind="source" />
+          )}
+          {w.id === "ecrf" && current && <ECRF situation={current} onSubmit={submit} />}
+```
+
+then pass `onReview={beginReview}` to `<Rail>`. Add `FormValues` to the type import from `@/game/types`.
+
+- [ ] **Step 8: Add a Desk test for the review flow**
+
+Append to `src/components/desk/Desk.test.tsx`:
+
+```tsx
+  it("opens the source and an empty form when manual review begins", async () => {
+    render(<Desk state={desk()} dispatch={vi.fn()} script={FIXTURE_SCRIPT} />);
+
+    await userEvent.click(screen.getByRole("button", { name: /Manually review/ }));
+    expect(screen.getByText(/eCRF — VITAL SIGNS/)).toBeInTheDocument();
+  });
+```
+
+- [ ] **Step 9: Run the full suite**
+
+Run: `npm test` then `npm run typecheck`
+Expected: all pass.
+
+- [ ] **Step 10: Commit**
 
 ```bash
-npm run typecheck && npm run lint
-git add src/app/page.tsx src/app/page.test.tsx src/components/screens/SignIn.tsx src/game/engine/state.ts
-git commit -m "feat(ui): sign-in screen and the phase switch"
+git add src/
+git commit -m "feat(windows): eCRF templates and the manual review flow"
 ```
 
 ---
 
-### Task 23: The day-end summary
-
-The one moment each day the game reliably puts the roster in front of the player, which is why the roster is last on it.
+### Task 8: Inbox, Roster, and the Documents library
 
 **Files:**
-- Create: `src/components/screens/DayEnd.tsx`
-- Test: `src/components/screens/DayEnd.test.tsx`
+- Create: `src/components/windows/Inbox.tsx`
+- Create: `src/components/windows/Roster.tsx`
+- Create: `src/components/windows/Documents.tsx`
+- Modify: `src/components/desk/Desk.tsx` (Start menu opens them)
+- Test: `src/components/windows/Roster.test.tsx`
+- Test: `src/components/windows/Documents.test.tsx`
 
 **Interfaces:**
-- Consumes: `GameState`, `GameEvent`, `RosterChange`
-- Produces: `<DayEnd state dispatch>`
+- Consumes: `Email`, `Roster` (Task 1); `loadDocIndex`, `DocEntry` (Task 2); `useWindows` (Task 3).
+- Produces: `<Inbox emails={Email[]} />`, `<Roster roster={Roster} changed={string[]} />`, `<Documents onOpen={(file, title) => void} />`.
 
-- [ ] **Step 1: Track roster changes and rollover on the state**
+- [ ] **Step 1: Write the failing Roster test**
 
-Add to `GameState`: `lastRosterChanges: RosterChange[]` and `lastRolledOver: string[]`. Populate both in `endDay`. Add to `src/game/engine/state.test.ts`:
+Create `src/components/windows/Roster.test.tsx`:
 
-```ts
-it("records what rolled over and what changed on the roster", () => {
-  const state = reduce(started(), { type: "WORK", situationId: "DE-1113", action: "accept" }, DEPS);
+```tsx
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 
-  expect(state.lastRolledOver).toEqual([]);
-  expect(Array.isArray(state.lastRosterChanges)).toBe(true);
+import { Roster } from "@/components/windows/Roster";
+import { SEED_ROSTER } from "@/game/subjects";
+
+describe("Roster", () => {
+  it("shows the subject id and the name together", () => {
+    render(<Roster roster={SEED_ROSTER} changed={[]} />);
+
+    const row = screen.getByText("1047-018").closest("tr");
+    expect(row).toHaveTextContent("L. Lit");
+  });
+
+  it("shows each subject's status", () => {
+    render(<Roster roster={SEED_ROSTER} changed={[]} />);
+
+    expect(screen.getByText("1047-004").closest("tr")).toHaveTextContent(
+      "Withdrawn (by subject)",
+    );
+  });
+
+  it("marks rows that changed today and says nothing else about them", () => {
+    render(<Roster roster={SEED_ROSTER} changed={["1047-001"]} />);
+
+    const row = screen.getByText("1047-001").closest("tr");
+    expect(row).toHaveAttribute("data-changed", "true");
+    expect(row).not.toHaveTextContent(/error|mistake|missed/i);
+  });
 });
 ```
 
-- [ ] **Step 2: Write `src/components/screens/DayEnd.tsx`**
+- [ ] **Step 2: Run it to verify it fails**
 
-Sections in this order, in EDC chrome, no scoring anywhere:
+Run: `npx vitest run src/components/windows/Roster.test.tsx`
+Expected: FAIL — module not found.
 
+- [ ] **Step 3: Implement Roster**
+
+Create `src/components/windows/Roster.tsx`. The roster never jokes and never explains:
+
+```tsx
+"use client";
+
+import type { Roster as RosterType } from "@/game/types";
+
+type Props = { roster: RosterType; changed: string[] };
+
+export function Roster({ roster, changed }: Props) {
+  return (
+    <table className="w-full border-collapse text-left">
+      <tbody>
+        {roster.map((s) => {
+          const isChanged = changed.includes(s.id);
+          return (
+            <tr key={s.id} data-changed={isChanged} className={isChanged ? "bg-[#fff7d6]" : ""}>
+              <td className="px-2 py-1 font-mono">{s.id}</td>
+              <td className="px-2 py-1">{s.name}</td>
+              <td className="px-2 py-1">{s.status}</td>
+              <td className="px-2 py-1 font-mono text-neutral-500">{isChanged ? "◂" : ""}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  );
+}
 ```
-DAY 2 · TUESDAY 09-JAN-2024 · 4:00 PM
 
-WORKED TODAY
-  DE-1111  1047-005 · T. Channing   Accepted
-  SAF-0034 1047-010 · E. Fontaine   Reviewed
+- [ ] **Step 4: Implement Inbox**
 
-ROLLED OVER
-  DE-1112  1047-007 · K. Oyelowo
+Create `src/components/windows/Inbox.tsx`. Read-only — no reply, no compose, per constraint R7:
 
-YESTERDAY'S MAIL
-  Amgen Data Mgmt — Query DQ-0112, subject 1047-008
-  "Reported weight (84.4 kg) does not match source
-   (190 lb = 86.2 kg) at Week 12. Please verify and respond."
+```tsx
+"use client";
 
-ROSTER CHANGES
-  1047-002 · D. Achterberg   Enrolled → Withdrawn (hospitalized)
+import { useState } from "react";
 
-                          [ Begin day 3 ]   [ Skip day ▸ ]
+import type { Email } from "@/game/types";
+
+export function Inbox({ emails }: { emails: Email[] }) {
+  const [openId, setOpenId] = useState<string | null>(emails.at(-1)?.id ?? null);
+  const open = emails.find((e) => e.id === openId);
+
+  if (emails.length === 0) {
+    return <p className="p-3 text-neutral-600">No mail.</p>;
+  }
+
+  return (
+    <div className="flex h-full">
+      <ul className="w-[220px] overflow-auto border-r border-neutral-400">
+        {emails.map((e) => (
+          <li key={e.id}>
+            <button
+              type="button"
+              className={`w-full px-2 py-1 text-left ${e.id === openId ? "bg-[#dce6f2]" : ""}`}
+              onClick={() => setOpenId(e.id)}
+            >
+              <span className="block truncate font-bold">{e.from}</span>
+              <span className="block truncate text-neutral-700">{e.subject}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+
+      <div className="flex-1 overflow-auto p-3">
+        {open && (
+          <>
+            <div className="font-mono text-[10px] tracking-widest text-neutral-600">
+              FROM {open.from.toUpperCase()}
+            </div>
+            <h3 className="mt-1 text-sm font-bold">{open.subject}</h3>
+            <p className="mt-3 whitespace-pre-wrap leading-relaxed">{open.body}</p>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
 ```
 
-If a section is empty, omit its heading entirely rather than printing "None".
+- [ ] **Step 5: Write the failing Documents test**
 
-**No score, no accuracy percentage, and no reveal of which accepted items were wrong.** A query states the mismatch and says nothing about who entered it.
+Create `src/components/windows/Documents.test.tsx`:
 
-- [ ] **Step 3: Write the failing test**
+```tsx
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+import { Documents } from "@/components/windows/Documents";
+
+const INDEX = [
+  { file: "protocol.md", title: "Protocol 20210143, Amendment 3", words: 25077 },
+  { file: "lab_manual.md", title: "Laboratory Manual", words: 14210 },
+];
+
+afterEach(() => vi.unstubAllGlobals());
+
+describe("Documents", () => {
+  it("lists every document with its word count", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => ({ ok: true, json: async () => INDEX })));
+    render(<Documents onOpen={vi.fn()} />);
+
+    await waitFor(() => screen.getByText("Laboratory Manual"));
+    expect(screen.getByText("25,077")).toBeInTheDocument();
+  });
+
+  it("opens the document the player picks", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => ({ ok: true, json: async () => INDEX })));
+    const onOpen = vi.fn();
+    render(<Documents onOpen={onOpen} />);
+
+    await waitFor(() => screen.getByText("Laboratory Manual"));
+    await userEvent.click(screen.getByText("Laboratory Manual"));
+
+    expect(onOpen).toHaveBeenCalledWith("lab_manual.md", "Laboratory Manual");
+  });
+});
+```
+
+- [ ] **Step 6: Run it to verify it fails**
+
+Run: `npx vitest run src/components/windows/Documents.test.tsx`
+Expected: FAIL — module not found.
+
+- [ ] **Step 7: Implement Documents**
+
+Create `src/components/windows/Documents.tsx`:
+
+```tsx
+"use client";
+
+import { useEffect, useState } from "react";
+
+import { loadDocIndex, type DocEntry } from "@/game/documents";
+
+type Props = { onOpen: (file: string, title: string) => void };
+
+export function Documents({ onOpen }: Props) {
+  const [index, setIndex] = useState<DocEntry[]>([]);
+
+  useEffect(() => {
+    let live = true;
+    loadDocIndex()
+      .then((i) => live && setIndex(i))
+      .catch(() => live && setIndex([]));
+    return () => {
+      live = false;
+    };
+  }, []);
+
+  return (
+    <ul>
+      {index.map((d) => (
+        <li key={d.file} className="border-b border-neutral-300 last:border-0">
+          <button
+            type="button"
+            className="flex w-full justify-between px-2 py-1 text-left hover:bg-[#dce6f2]"
+            onClick={() => onOpen(d.file, d.title)}
+          >
+            <span>{d.title}</span>
+            <span className="font-mono text-neutral-500">{d.words.toLocaleString()}</span>
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
+}
+```
+
+- [ ] **Step 8: Wire all three into the Desk**
+
+In `src/components/desk/Desk.tsx`, add a Start-menu row above the taskbar that opens them, and add the window bodies. Add state for which reference document is open:
+
+```tsx
+  const [reference, setReference] = useState<{ file: string; title: string } | null>(null);
+```
+
+In the window map, add:
+
+```tsx
+          {w.id === "inbox" && <Inbox emails={state.inbox} />}
+          {w.id === "roster" && <Roster roster={state.roster} changed={[]} />}
+          {w.id === "documents" && (
+            <Documents
+              onOpen={(file, title) => {
+                setReference({ file, title });
+                open("viewer", title);
+              }}
+            />
+          )}
+```
+
+and change the viewer body so a chosen reference document wins over the situation's source:
+
+```tsx
+          {w.id === "viewer" &&
+            (reference ? (
+              <DocViewer file={reference.file} kind="document" />
+            ) : current ? (
+              <DocViewer file={current.source[0]} kind="source" />
+            ) : null)}
+```
+
+`beginReview` must clear it: add `setReference(null);` as its first line.
+
+Then replace the taskbar's `EDC` button with one that opens the three instrument windows. In `Taskbar.tsx`, accept an `onOpen` prop and render three buttons after it:
+
+```tsx
+      <button type="button" className="bevel-out px-2 py-0.5" onClick={() => onOpen("inbox", "Inbox")}>
+        Inbox
+      </button>
+      <button type="button" className="bevel-out px-2 py-0.5" onClick={() => onOpen("roster", "Subject Roster")}>
+        Roster
+      </button>
+      <button type="button" className="bevel-out px-2 py-0.5" onClick={() => onOpen("documents", "Documents")}>
+        Documents
+      </button>
+```
+
+with `onOpen: (id: WindowId, title: string) => void` added to `Taskbar`'s props, and `onOpen={open}` passed from `Desk`.
+
+- [ ] **Step 9: Run the full suite**
+
+Run: `npm test` then `npm run typecheck`
+Expected: all pass.
+
+- [ ] **Step 10: Commit**
+
+```bash
+git add src/
+git commit -m "feat(windows): inbox, roster, and the document library"
+```
+
+---
+
+### Task 9: The day-end summary
+
+**Files:**
+- Create: `src/game/emails.ts`
+- Create: `src/components/screens/DayEnd.tsx`
+- Modify: `src/game/state.ts` (add `summariseDay`, refactor `applyConsequences` onto it)
+- Modify: `src/app/page.tsx` (route `dayend`)
+- Test: `src/game/summary.test.ts`
+- Test: `src/components/screens/DayEnd.test.tsx`
+
+**Interfaces:**
+- Consumes: `State`, `Situation`, `Resolution`, `Email`, `RosterChange` (Task 1).
+- Produces:
+  - `type DaySummary = { worked: { situation: Situation; resolution: Resolution }[]; emails: Email[]; rosterChanges: RosterChange[] }`
+  - `summariseDay(state: State, script: Situation[]): DaySummary`
+  - `LADDER: Record<Day, Email[]>`
+  - `<DayEnd state={state} script={script} onBegin={() => void} onSkip={() => void} />`
+
+**Timing decision:** a day's consequences surface at **that day's own** end. VISION requires them by "the next day-end summary at the latest", and same-day satisfies it while keeping the reducer to a single pass. The player decided at 9:00 AM and hears at 4:00 PM; nothing is ever labelled as feedback, so the connection stays theirs to draw.
+
+- [ ] **Step 1: Write the ladder emails**
+
+Create `src/game/emails.ts`. All satire lives here and nowhere else:
+
+```ts
+import type { Day, Email } from "@/game/types";
+
+/** One rung per day-end, scripted. Fires regardless of how the player is doing. */
+export const LADDER: Record<Day, Email[]> = {
+  1: [
+    {
+      id: "ENR-1",
+      from: "Amgen Clinical Operations",
+      subject: "Portland — we're SO close! 🎯",
+      body:
+        "Hi Site 1047!\n\nJust a friendly nudge — you're sitting at 11 randomized against a " +
+        "contracted 12, and study-wide randomization closes 12-JAN-2024. One more gets you " +
+        "over the line!\n\nYou've got this. 💪\n\n— Clinical Operations",
+    },
+  ],
+  2: [
+    {
+      id: "ENR-2",
+      from: "Amgen Clinical Operations",
+      subject: "Enrolment check-in — Thursday",
+      body:
+        "Site 1047,\n\nOur operations lead has asked for a call on Thursday to walk through " +
+        "your remaining screening pipeline ahead of randomization close.\n\nNo prep needed, " +
+        "just bring your numbers.\n\n— Clinical Operations",
+    },
+    {
+      id: "AUD-1",
+      from: "Amgen Data Management",
+      subject: "Query volume — Site 1047",
+      body:
+        "Site 1047,\n\nQuery volume at your site has risen relative to the study average " +
+        "across the current reporting period. No action is required at this time. This " +
+        "notice is generated automatically.\n\n— Data Management",
+    },
+  ],
+  3: [
+    {
+      id: "ENR-3",
+      from: "Amgen Clinical Operations",
+      subject: "Daily enrolment reporting — effective immediately",
+      body:
+        "Site 1047,\n\nEffective immediately and through randomization close, please submit " +
+        "a daily enrolment status to this address by 09:00 PT.\n\nWe know this is extra work " +
+        "and we appreciate your partnership! 🙏\n\n— Clinical Operations",
+    },
+    {
+      id: "AUD-2",
+      from: "Harborlight Clinical Research",
+      subject: "Notice of for-cause audit — Site 1047",
+      body:
+        "Investigator: M. A. Okonkwo, MD, FAAD\nProtocol 20210143, Amendment 3 (29-NOV-2023)\n\n" +
+        "Please be advised that a for-cause audit of Site 1047 has been scheduled. Source " +
+        "documents, the investigator site file, and the delegation log should be available " +
+        "for review.\n\nThis notice is issued under Section 8 of the Monitoring Plan.",
+    },
+  ],
+  4: [],
+};
+```
+
+- [ ] **Step 2: Write the failing summary test**
+
+Create `src/game/summary.test.ts`:
+
+```ts
+import { describe, expect, it } from "vitest";
+
+import { FIXTURE_SCRIPT } from "@/game/fixtures";
+import { initialState, reducer, summariseDay } from "@/game/state";
+import type { State } from "@/game/types";
+
+const played = (...actions: Parameters<typeof reducer>[1][]): State =>
+  actions.reduce(
+    (s, a) => reducer(s, a, FIXTURE_SCRIPT),
+    { ...initialState, screen: "desk" } as State,
+  );
+
+describe("summariseDay", () => {
+  it("lists what was worked today, in order", () => {
+    const s = played({ type: "ACCEPT" }, { type: "ACCEPT" });
+    const summary = summariseDay(s, FIXTURE_SCRIPT);
+
+    expect(summary.worked.map((w) => w.situation.id)).toEqual(["FIX-001", "FIX-002"]);
+  });
+
+  it("includes the day's ladder rung", () => {
+    const s = played({ type: "ACCEPT" }, { type: "ACCEPT" });
+    expect(summariseDay(s, FIXTURE_SCRIPT).emails.map((e) => e.id)).toContain("ENR-1");
+  });
+
+  it("includes emails generated by today's decisions", () => {
+    const s = played(
+      { type: "SUBMIT", values: { bp: "wrong", pulse: "wrong" } },
+      { type: "ACCEPT" },
+    );
+    expect(summariseDay(s, FIXTURE_SCRIPT).emails.map((e) => e.id)).toContain("DQ-0111");
+  });
+
+  it("collects roster changes caused by today's decisions", () => {
+    const s = played(
+      { type: "ACCEPT" },
+      { type: "ACCEPT" },
+      { type: "BEGIN_DAY" },
+      { type: "ACCEPT" },
+    );
+    expect(summariseDay(s, FIXTURE_SCRIPT).rosterChanges).toEqual([
+      { subject: "1047-019", status: "Enrolled" },
+    ]);
+  });
+
+  it("does not report yesterday's work as today's", () => {
+    const s = played(
+      { type: "ACCEPT" },
+      { type: "ACCEPT" },
+      { type: "BEGIN_DAY" },
+      { type: "ACCEPT" },
+    );
+    expect(summariseDay(s, FIXTURE_SCRIPT).worked).toHaveLength(1);
+  });
+});
+```
+
+- [ ] **Step 3: Run it to verify it fails**
+
+Run: `npx vitest run src/game/summary.test.ts`
+Expected: FAIL — `summariseDay` is not exported.
+
+- [ ] **Step 4: Add summariseDay and refactor applyConsequences**
+
+In `src/game/state.ts`, add the import `import { LADDER } from "@/game/emails";` and these exports, then rewrite `applyConsequences` to sit on top of the new function:
+
+```ts
+export type DaySummary = {
+  worked: { situation: Situation; resolution: Resolution }[];
+  emails: Email[];
+  rosterChanges: RosterChange[];
+};
+
+export function summariseDay(state: State, script: Situation[]): DaySummary {
+  const worked = state.resolutions
+    .map((resolution) => ({ resolution, situation: situationById(resolution.situationId, script) }))
+    .filter(({ situation }) => situation.day === state.day);
+
+  const emails: Email[] = [];
+  const rosterChanges: RosterChange[] = [];
+
+  for (const { situation, resolution } of worked) {
+    const outcome = situation.outcomes[resolution.outcomeKey];
+    if (outcome.email) emails.push(outcome.email);
+    if (outcome.roster) rosterChanges.push(outcome.roster);
+  }
+
+  return { worked, emails: [...emails, ...LADDER[state.day]], rosterChanges };
+}
+
+function applyConsequences(state: State, script: Situation[]): State {
+  const { emails, rosterChanges } = summariseDay(state, script);
+
+  const roster = rosterChanges.reduce(
+    (acc, change) =>
+      acc.map((s) => (s.id === change.subject ? { ...s, status: change.status } : s)),
+    state.roster,
+  );
+
+  return { ...state, roster, inbox: [...state.inbox, ...emails] };
+}
+```
+
+Update the `BEGIN_DAY` branch to call the new signature:
+
+```ts
+    case "BEGIN_DAY": {
+      const day = (state.day + 1) as Day;
+      return { ...applyConsequences(state, script), screen: "desk", day, clock: 0 };
+    }
+```
+
+Add `Email`, `RosterChange` and `Resolution` to the type imports at the top of the file.
+
+- [ ] **Step 5: Run both state test files**
+
+Run: `npx vitest run src/game/`
+Expected: PASS. The Task 1 test "BEGIN_DAY applies the previous day's roster changes and emails" still passes — it accepts FIX-003 on day 2 and then begins day 3, so the change is applied on the transition out of day 2.
+
+- [ ] **Step 6: Write the failing DayEnd test**
 
 Create `src/components/screens/DayEnd.test.tsx`:
 
@@ -5129,374 +2900,1411 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { SITUATIONS } from "@/game/content/situations";
-import { LATE_CONSENTS, SUBJECTS } from "@/game/content/subjects";
-import { initialState } from "@/game/engine/state";
-import type { GameState } from "@/game/types";
+import { DayEnd } from "@/components/screens/DayEnd";
+import { FIXTURE_SCRIPT } from "@/game/fixtures";
+import { initialState, reducer } from "@/game/state";
+import type { State } from "@/game/types";
 
-import { DayEnd } from "./DayEnd";
+const afterDay1 = (): State =>
+  [{ type: "ACCEPT" } as const, { type: "ACCEPT" } as const].reduce(
+    (s, a) => reducer(s, a, FIXTURE_SCRIPT),
+    { ...initialState, screen: "desk" } as State,
+  );
 
-const state: GameState = {
-  ...initialState(SITUATIONS, SUBJECTS),
-  phase: "dayend",
-  day: 2,
-  lastRosterChanges: [
-    { subjectId: "1047-002", from: "Enrolled", to: "Withdrawn (hospitalized)" },
-  ],
-  lastRolledOver: ["DE-1112"],
-  inbox: [
-    { id: "DQ-0112", from: "Amgen Data Mgmt", subject: "Query DQ-0112, subject 1047-008", body: "Reported weight does not match source.", arrivedDay: 2 },
-  ],
-};
+const noop = () => {};
 
 describe("DayEnd", () => {
-  it("names the day and the date", () => {
-    render(<DayEnd state={state} dispatch={vi.fn()} />);
-
-    expect(screen.getByText(/09-JAN-2024/)).toBeInTheDocument();
+  it("lists what was worked", () => {
+    render(<DayEnd state={afterDay1()} script={FIXTURE_SCRIPT} onBegin={noop} onSkip={noop} />);
+    expect(screen.getByText(/Week 8 vitals/)).toBeInTheDocument();
   });
 
-  it("shows what rolled over", () => {
-    render(<DayEnd state={state} dispatch={vi.fn()} />);
-
-    expect(screen.getByText(/ROLLED OVER/)).toBeInTheDocument();
-    expect(screen.getByText(/DE-1112/)).toBeInTheDocument();
+  it("shows the day's mail", () => {
+    render(<DayEnd state={afterDay1()} script={FIXTURE_SCRIPT} onBegin={noop} onSkip={noop} />);
+    expect(screen.getByText(/we're SO close/)).toBeInTheDocument();
   });
 
-  it("puts the roster last", () => {
-    render(<DayEnd state={state} dispatch={vi.fn()} />);
-    const headings = screen.getAllByRole("heading").map((h) => h.textContent);
-
-    expect(headings.at(-1)).toMatch(/ROSTER CHANGES/);
-  });
-
-  it("states a roster change and nothing else about it", () => {
-    render(<DayEnd state={state} dispatch={vi.fn()} />);
-    const line = screen.getByText(/1047-002 · D\. Achterberg/).closest("li")!;
-
-    expect(line).toHaveTextContent("Enrolled → Withdrawn (hospitalized)");
-    expect(line).not.toHaveTextContent(/you|missed|error|because/i);
-  });
-
-  it("shows no score or accuracy anywhere", () => {
-    render(<DayEnd state={state} dispatch={vi.fn()} />);
-
-    expect(screen.queryByText(/score|accuracy|%|correct|points/i)).not.toBeInTheDocument();
+  it("shows no score, no percentage, and no verdict on the player's accuracy", () => {
+    const { container } = render(
+      <DayEnd state={afterDay1()} script={FIXTURE_SCRIPT} onBegin={noop} onSkip={noop} />,
+    );
+    expect(container.textContent).not.toMatch(/%|score|accuracy|correct|wrong|missed/i);
   });
 
   it("begins the next day", async () => {
-    const dispatch = vi.fn();
-    render(<DayEnd state={state} dispatch={dispatch} />);
+    const onBegin = vi.fn();
+    render(<DayEnd state={afterDay1()} script={FIXTURE_SCRIPT} onBegin={onBegin} onSkip={noop} />);
 
-    await userEvent.click(screen.getByRole("button", { name: /begin day 3/i }));
-
-    expect(dispatch).toHaveBeenCalledWith({ type: "BEGIN_NEXT_DAY" });
+    await userEvent.click(screen.getByRole("button", { name: /Begin day 2/ }));
+    expect(onBegin).toHaveBeenCalled();
   });
 
-  it("skips the day by accepting whatever is left", async () => {
-    const dispatch = vi.fn();
-    render(<DayEnd state={state} dispatch={dispatch} />);
+  it("offers to skip the next day", async () => {
+    const onSkip = vi.fn();
+    render(<DayEnd state={afterDay1()} script={FIXTURE_SCRIPT} onBegin={noop} onSkip={onSkip} />);
 
-    await userEvent.click(screen.getByRole("button", { name: /skip day/i }));
-
-    expect(dispatch).toHaveBeenCalledWith({ type: "SKIP_DAY" });
-  });
-
-  it("offers to end the run rather than begin a fifth day", () => {
-    render(<DayEnd state={{ ...state, day: 4 }} dispatch={vi.fn()} />);
-
-    expect(screen.queryByRole("button", { name: /begin day 5/i })).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /finish|end of run/i })).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: /Skip day/ }));
+    expect(onSkip).toHaveBeenCalled();
   });
 });
 ```
 
-- [ ] **Step 4: Run it and watch it pass**
+- [ ] **Step 7: Run it to verify it fails**
 
 Run: `npx vitest run src/components/screens/DayEnd.test.tsx`
-Expected: PASS, 8 tests
+Expected: FAIL — module not found.
 
-- [ ] **Step 5: Typecheck, lint, and commit**
+- [ ] **Step 8: Implement DayEnd**
 
-```bash
-npm run typecheck && npm run lint
-git add src/components/screens/DayEnd.tsx src/components/screens/DayEnd.test.tsx src/game/engine/state.ts src/game/engine/state.test.ts src/game/types.ts
-git commit -m "feat(ui): the day-end summary, roster last"
-```
-
----
-
-### Task 24: The ending — three beats, in order
-
-**Files:**
-- Create: `src/components/screens/Answer.tsx`
-- Create: `src/components/screens/AuditFinding.tsx`
-- Create: `src/components/screens/ThePoint.tsx`
-- Test: `src/components/screens/ending.test.tsx`
-
-**Interfaces:**
-- Consumes: `answerRows`, `calibration`, `auditFindingSlots` from `engine/scoring`
-
-- [ ] **Step 1: Write the three screens**
-
-**`Answer.tsx`** — nineteen rows from `answerRows`, grouped under three headings in this order. Nothing else on screen.
-
-1. `WHAT GOT THROUGH` — every row where `correct` is false and `impossible` is false. Each shows the item, the subject, the error type in plain words, and its `debrief.line`.
-2. `WHAT NOBODY COULD HAVE CAUGHT` — the `impossible` rows, under their own heading, followed verbatim by:
-
-   > The blood filed under 1047-005 was drawn from 1047-010, and the other way round. Nothing on your desk disagreed with anything else on your desk. The requisition form has a field for participant initials — field 5 — and it is pre-printed "not collected for this study." Had it been filled in, the mismatch would have been caught before the results ever reached you. That was decided by whoever designed the form, not by you.
-
-3. `WHAT HAPPENED ANYWAY` — the `category: 1` row. Stated without blame: the drug caused a serious adverse event, VERA was correct, the report went out on time, and a person was hospitalized. This is what clinical research is.
-
-**Headings 2 and 3 must never merge.** "Research is inherently risky" is true of heading 3 and is an alibi under heading 2.
-
-**`AuditFinding.tsx`** — flat regulatory register, no satire, no commentary, rendered as a document rather than a screen. Slots from `auditFindingSlots`. If `dataExcluded`, that observation is stated first. If `siteClosed`, it follows. Both are stated as things that are now going to happen, not as things that have happened.
-
-**`ThePoint.tsx`** — a few sentences and three numbers from `calibration`, then stop:
-
-```
-You verified 7 items. 2 of them contained an error.
-5 errors reached the database unverified.
-
-Some of what went wrong here was not yours to catch. The
-requisition had a field for a second identifier and it was
-switched off, for a defensible reason, by someone who was not
-in the room when it mattered.
-
-If you build these tools, that decision is yours.
-```
-
-No call to action. No thanks for playing.
-
-- [ ] **Step 2: Write the failing test**
-
-Create `src/components/screens/ending.test.tsx`:
+Create `src/components/screens/DayEnd.tsx`. The roster is last on the screen, and nothing on it is labelled as feedback:
 
 ```tsx
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+"use client";
 
-import { SITUATIONS } from "@/game/content/situations";
-import { LATE_CONSENTS, SUBJECTS } from "@/game/content/subjects";
-import { initialState } from "@/game/engine/state";
-import type { GameState, WorkRecord } from "@/game/types";
+import { summariseDay } from "@/game/state";
+import type { Situation, State } from "@/game/types";
 
-import { Answer } from "./Answer";
-import { ThePoint } from "./ThePoint";
-
-function accepted(id: string): WorkRecord {
-  return { situationId: id, day: 2, action: "accept", correct: false, outcomeKey: "acceptedWrong" };
-}
-
-const state: GameState = {
-  ...initialState(SITUATIONS, SUBJECTS),
-  phase: "answer",
-  worked: { "DE-1111": accepted("DE-1111"), "DE-1113": accepted("DE-1113") },
+const DAY_LABEL: Record<number, string> = {
+  1: "MONDAY 08-JAN-2024",
+  2: "TUESDAY 09-JAN-2024",
+  3: "WEDNESDAY 10-JAN-2024",
+  4: "THURSDAY 11-JAN-2024",
 };
 
-describe("Answer", () => {
-  it("separates what got through from what nobody could have caught", () => {
-    render(<Answer state={state} dispatch={vi.fn()} />);
+type Props = {
+  state: State;
+  script: Situation[];
+  onBegin: () => void;
+  onSkip: () => void;
+};
 
-    expect(screen.getByText(/WHAT GOT THROUGH/)).toBeInTheDocument();
-    expect(screen.getByText(/WHAT NOBODY COULD HAVE CAUGHT/)).toBeInTheDocument();
-  });
+export function DayEnd({ state, script, onBegin, onSkip }: Props) {
+  const { worked, emails, rosterChanges } = summariseDay(state, script);
+  const changedIds = rosterChanges.map((c) => c.subject);
 
-  it("names field 5 and why it was switched off", () => {
-    render(<Answer state={state} dispatch={vi.fn()} />);
+  return (
+    <div className="flex h-screen items-center justify-center p-8">
+      <div className="bevel-out max-h-full w-[720px] overflow-auto shadow-2xl">
+        <div className="titlebar px-1.5 py-1">
+          Veriscribe EDC 9.2 — End of session
+        </div>
 
-    expect(screen.getByText(/field 5/)).toBeInTheDocument();
-    expect(screen.getByText(/not collected for this study/)).toBeInTheDocument();
-    expect(screen.getByText(/not by you/)).toBeInTheDocument();
-  });
+        <div className="bevel-in m-0.5 p-6 font-mono text-[11px] leading-[1.7]">
+          <div className="tracking-widest text-neutral-600">
+            {DAY_LABEL[state.day]} · 4:00 PM
+          </div>
 
-  it("never files the uncatchable harm under background risk", () => {
-    render(<Answer state={state} dispatch={vi.fn()} />);
+          <h2 className="mt-4 tracking-widest">WORKED TODAY</h2>
+          {worked.map(({ situation, resolution }) => (
+            <div key={situation.id} className="ml-2">
+              {situation.id} — {situation.subject} · {situation.title}
+              <span className="text-neutral-500">
+                {" "}
+                ({resolution.action === "accepted" ? "accepted as drafted" : "reviewed"})
+              </span>
+            </div>
+          ))}
 
-    const uncatchable = screen.getByText(/WHAT NOBODY COULD HAVE CAUGHT/).closest("section")!;
-    expect(uncatchable).not.toHaveTextContent(/inherently risky|inherent to research/i);
-  });
+          {emails.length > 0 && (
+            <>
+              <h2 className="mt-6 tracking-widest">TODAY&apos;S MAIL</h2>
+              {emails.map((e) => (
+                <div key={e.id} className="ml-2">
+                  {e.from} — {e.subject}
+                </div>
+              ))}
+            </>
+          )}
 
-  it("shows no score", () => {
-    render(<Answer state={state} dispatch={vi.fn()} />);
+          {rosterChanges.length > 0 && (
+            <>
+              <h2 className="mt-6 tracking-widest">ROSTER CHANGES</h2>
+              {state.roster
+                .filter((s) => changedIds.includes(s.id))
+                .map((s) => {
+                  const next = rosterChanges.find((c) => c.subject === s.id);
+                  return (
+                    <div key={s.id} className="ml-2">
+                      {s.id} &nbsp;{s.name} &nbsp;{s.status} → {next?.status}
+                    </div>
+                  );
+                })}
+            </>
+          )}
 
-    expect(screen.queryByText(/score|grade|out of|%/i)).not.toBeInTheDocument();
-  });
-});
-
-describe("ThePoint", () => {
-  it("gives the three calibration numbers", () => {
-    render(<ThePoint state={state} />);
-
-    expect(screen.getByText(/verified 0 items/i)).toBeInTheDocument();
-    expect(screen.getByText(/2 errors reached the database unverified/i)).toBeInTheDocument();
-  });
-
-  it("addresses the person who builds the tool", () => {
-    render(<ThePoint state={state} />);
-
-    expect(screen.getByText(/If you build these tools/)).toBeInTheDocument();
-  });
-
-  it("does not thank the player for playing", () => {
-    render(<ThePoint state={state} />);
-
-    expect(screen.queryByText(/thanks for playing|play again|try again/i)).not.toBeInTheDocument();
-  });
-});
+          <div className="mt-8 flex justify-end gap-2">
+            <button type="button" className="bevel-out px-4 py-1.5" onClick={onSkip}>
+              Skip day {state.day + 1} ▸
+            </button>
+            <button type="button" className="bevel-out px-4 py-1.5" onClick={onBegin}>
+              Begin day {state.day + 1}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 ```
 
-- [ ] **Step 3: Run it and watch it pass**
+- [ ] **Step 9: Route it**
 
-Run: `npx vitest run src/components/screens/ending.test.tsx`
-Expected: PASS, 7 tests
+In `src/app/page.tsx`, add before the `default` branch:
 
-- [ ] **Step 4: Typecheck, lint, and commit**
+```tsx
+    case "dayend":
+      return (
+        <DayEnd
+          state={state}
+          script={SCRIPT}
+          onBegin={() => dispatch({ type: "BEGIN_DAY" })}
+          onSkip={() => {
+            dispatch({ type: "BEGIN_DAY" });
+            dispatch({ type: "SKIP_DAY" });
+          }}
+        />
+      );
+```
+
+with `import { DayEnd } from "@/components/screens/DayEnd";`.
+
+- [ ] **Step 10: Run the full suite**
+
+Run: `npm test` then `npm run typecheck`
+Expected: all pass.
+
+- [ ] **Step 11: Commit**
 
 ```bash
-npm run typecheck && npm run lint
-git add src/components/screens/
-git commit -m "feat(ui): the ending — the answer, the audit finding, and the point"
+git add src/
+git commit -m "feat(screens): the day-end summary and the scripted ladder rungs"
 ```
 
 ---
 
-### Task 25: The whole run, end to end
-
-One test that plays all four days through the engine, plus a manual pass in the browser.
+### Task 10: The ending — three beats
 
 **Files:**
-- Create: `src/game/run.test.ts`
+- Create: `src/game/ending.ts`
+- Create: `src/components/screens/Ending.tsx`
+- Modify: `src/app/page.tsx` (route `ending`)
+- Test: `src/game/ending.test.ts`
+- Test: `src/components/screens/Ending.test.tsx`
 
-- [ ] **Step 1: Write the test**
+**Interfaces:**
+- Consumes: `State`, `Situation`, `Resolution`, `Tally` (Task 1).
+- Produces:
+  - `type AnswerRow = { id: string; subject: string; title: string; action: string; truth: string; consequence: string; category?: 1 | 2 | 3 }`
+  - `buildAnswer(state: State, script: Situation[]): AnswerRow[]`
+  - `type Calibration = { verified: number; verifiedContainingError: number; errorsThroughUnverified: number }`
+  - `calibrate(state: State, script: Situation[]): Calibration`
+  - `<Ending state={state} script={script} />`
+
+- [ ] **Step 1: Write the failing ending test**
+
+Create `src/game/ending.test.ts`:
 
 ```ts
 import { describe, expect, it } from "vitest";
 
-import { EMAILS } from "./content/emails";
-import { SITUATIONS } from "./content/situations";
-import { LATE_CONSENTS, SUBJECTS } from "./content/subjects";
-import { initialState, reduce, type GameEvent } from "./engine/state";
-import type { GameState } from "./types";
+import { buildAnswer, calibrate } from "@/game/ending";
+import { FIXTURE_SCRIPT } from "@/game/fixtures";
+import { initialState, reducer } from "@/game/state";
+import type { State } from "@/game/types";
 
-const DEPS = { situations: SITUATIONS, emails: EMAILS, lateConsents: LATE_CONSENTS };
-const play = (state: GameState, ...events: GameEvent[]) =>
-  events.reduce((s, e) => reduce(s, e, DEPS), state);
+const play = (...actions: Parameters<typeof reducer>[1][]): State =>
+  actions.reduce(
+    (s, a) => reducer(s, a, FIXTURE_SCRIPT),
+    { ...initialState, screen: "desk" } as State,
+  );
 
-/** Accepts everything, every day. The fastest possible run. */
-function acceptEverything(): GameState {
-  let state = play(initialState(SITUATIONS, SUBJECTS), { type: "SIGN_IN" });
+const acceptAll = () =>
+  play({ type: "ACCEPT" }, { type: "ACCEPT" }, { type: "BEGIN_DAY" }, { type: "ACCEPT" });
 
-  for (let day = 1; day <= 4; day += 1) {
-    state = play(state, { type: "SKIP_DAY" });
-    if (state.phase === "dayend") state = play(state, { type: "BEGIN_NEXT_DAY" });
-  }
-  return state;
-}
-
-/** Verifies everything affordable, in queue order, every day. */
-function verifyEverything(): GameState {
-  let state = play(initialState(SITUATIONS, SUBJECTS), { type: "SIGN_IN" });
-
-  for (let day = 1; day <= 4; day += 1) {
-    while (state.phase === "desk" && state.queue.length > 0) {
-      const id = state.queue[0];
-      const situation = SITUATIONS.find((s) => s.id === id)!;
-      const before = state;
-      state = play(state, {
-        type: "WORK",
-        situationId: id,
-        action: "manual",
-        submission: { values: situation.truth.values, verdict: situation.truth.verdict },
-      });
-      if (state === before) break; // cannot afford it; the day is over
-    }
-    if (state.phase === "desk") state = play(state, { type: "SKIP_DAY" });
-    if (state.phase === "dayend") state = play(state, { type: "BEGIN_NEXT_DAY" });
-  }
-  return state;
-}
-
-describe("a full run", () => {
-  it("reaches the answer screen after four days however it is played", () => {
-    expect(acceptEverything().phase).toBe("answer");
-    expect(verifyEverything().phase).toBe("answer");
+describe("buildAnswer", () => {
+  it("returns one row per situation the player worked", () => {
+    expect(buildAnswer(acceptAll(), FIXTURE_SCRIPT)).toHaveLength(3);
   });
 
-  it("works every situation exactly once", () => {
-    expect(Object.keys(acceptEverything().worked)).toHaveLength(19);
+  it("says what the player did", () => {
+    expect(buildAnswer(acceptAll(), FIXTURE_SCRIPT)[1].action).toBe("Accepted as drafted");
   });
 
-  it("still hospitalizes R. Jones on a perfect run — nobody erred", () => {
-    expect(verifyEverything().roster["1047-001"].status).toBe("Withdrawn (hospitalized)");
+  it("carries the debrief line and its category", () => {
+    const row = buildAnswer(acceptAll(), FIXTURE_SCRIPT)[2];
+    expect(row.truth).toBe("EASI 15.8 is below the threshold of 16.");
+    expect(row.category).toBe(3);
+  });
+});
+
+describe("calibrate", () => {
+  it("counts nothing verified when everything was accepted", () => {
+    expect(calibrate(acceptAll(), FIXTURE_SCRIPT)).toMatchObject({
+      verified: 0,
+      verifiedContainingError: 0,
+      errorsThroughUnverified: 1,
+    });
   });
 
-  it("still loses T. Channing on a perfect run — nothing on the desk disagreed", () => {
-    expect(verifyEverything().roster["1047-005"].status).toBe("Withdrawn (hospitalized)");
-  });
-
-  it("reaches fourteen randomized when every eligibility call is right", () => {
-    expect(verifyEverything().randomized).toBe(14);
-  });
-
-  it("cannot verify everything on day 4 — something is always left", () => {
-    let state = play(initialState(SITUATIONS, SUBJECTS), { type: "SIGN_IN" });
-    for (let day = 1; day <= 3; day += 1) {
-      state = play(state, { type: "SKIP_DAY" }, { type: "BEGIN_NEXT_DAY" });
-    }
-
-    const available = state.blocksAvailable;
-    const cost = SITUATIONS.filter((s) => s.day === 4).reduce(
-      (t, s) => t + (s.manualCost as number),
-      0,
+  it("counts a verified item that turned out to contain an error", () => {
+    const s = play(
+      { type: "ACCEPT" },
+      { type: "ACCEPT" },
+      { type: "BEGIN_DAY" },
+      { type: "SUBMIT", values: { easi: "15.8" }, verdict: "screen-fail" },
     );
 
-    expect(cost).toBeGreaterThan(available);
+    expect(calibrate(s, FIXTURE_SCRIPT)).toMatchObject({
+      verified: 1,
+      verifiedContainingError: 1,
+      errorsThroughUnverified: 0,
+    });
+  });
+
+  it("does not count the day-1 manual items as verification of VERA", () => {
+    const s = play({ type: "SUBMIT", values: { bp: "128/82", pulse: "72" } });
+    expect(calibrate(s, FIXTURE_SCRIPT).verified).toBe(0);
   });
 });
 ```
 
-- [ ] **Step 2: Run the whole suite**
+That last test matters: day 1's manual items have no `vera` block, so reviewing them is not a decision about her and must not inflate the calibration.
 
-Run: `npx vitest run`
-Expected: PASS across every file. Then `npm run typecheck && npm run lint && npm run build`.
+- [ ] **Step 2: Run it to verify it fails**
 
-- [ ] **Step 3: Play it in the browser**
+Run: `npx vitest run src/game/ending.test.ts`
+Expected: FAIL — module not found.
+
+- [ ] **Step 3: Implement the ending derivations**
+
+Create `src/game/ending.ts`:
+
+```ts
+import { situationById } from "@/game/state";
+import type { Situation, State } from "@/game/types";
+
+export type AnswerRow = {
+  id: string;
+  subject: string;
+  title: string;
+  action: string;
+  truth: string;
+  consequence: string;
+  category?: 1 | 2 | 3;
+};
+
+export type Calibration = {
+  verified: number;
+  verifiedContainingError: number;
+  errorsThroughUnverified: number;
+};
+
+const carriesError = (s: Situation) => s.truth.error !== "NONE";
+
+export function buildAnswer(state: State, script: Situation[]): AnswerRow[] {
+  return state.resolutions.map((r) => {
+    const s = situationById(r.situationId, script);
+    return {
+      id: s.id,
+      subject: s.subject,
+      title: s.title,
+      action: r.action === "accepted" ? "Accepted as drafted" : "Reviewed by hand",
+      truth: s.debrief.line,
+      consequence: s.outcomes[r.outcomeKey].email?.subject ?? "",
+      category: s.debrief.category,
+    };
+  });
+}
+
+export function calibrate(state: State, script: Situation[]): Calibration {
+  let verified = 0;
+  let verifiedContainingError = 0;
+  let errorsThroughUnverified = 0;
+
+  for (const r of state.resolutions) {
+    const s = situationById(r.situationId, script);
+    if (!s.vera) continue; // day 1's manual items are not decisions about VERA
+
+    if (r.action === "reviewed") {
+      verified += 1;
+      if (carriesError(s)) verifiedContainingError += 1;
+    } else if (carriesError(s)) {
+      errorsThroughUnverified += 1;
+    }
+  }
+
+  return { verified, verifiedContainingError, errorsThroughUnverified };
+}
+```
+
+- [ ] **Step 4: Run it to verify it passes**
+
+Run: `npx vitest run src/game/ending.test.ts`
+Expected: PASS, 6 tests.
+
+- [ ] **Step 5: Write the failing Ending screen test**
+
+Create `src/components/screens/Ending.test.tsx`:
+
+```tsx
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, it } from "vitest";
+
+import { Ending } from "@/components/screens/Ending";
+import { FIXTURE_SCRIPT } from "@/game/fixtures";
+import { initialState, reducer } from "@/game/state";
+import type { State } from "@/game/types";
+
+const finished = (): State =>
+  (
+    [
+      { type: "ACCEPT" },
+      { type: "ACCEPT" },
+      { type: "BEGIN_DAY" },
+      { type: "ACCEPT" },
+    ] as Parameters<typeof reducer>[1][]
+  ).reduce((s, a) => reducer(s, a, FIXTURE_SCRIPT), {
+    ...initialState,
+    screen: "desk",
+  } as State);
+
+describe("Ending", () => {
+  it("opens on the answer", () => {
+    render(<Ending state={finished()} script={FIXTURE_SCRIPT} />);
+    expect(screen.getByText(/EASI 15.8 is below the threshold/)).toBeInTheDocument();
+  });
+
+  it("moves through the audit finding to the point", async () => {
+    render(<Ending state={finished()} script={FIXTURE_SCRIPT} />);
+
+    await userEvent.click(screen.getByRole("button", { name: /Continue/ }));
+    expect(screen.getByText(/AUDIT FINDING/)).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: /Continue/ }));
+    expect(screen.getByText(/you verified/i)).toBeInTheDocument();
+  });
+
+  it("states the uncatchable item as impossible rather than as a mistake", () => {
+    render(<Ending state={finished()} script={FIXTURE_SCRIPT} />);
+    expect(screen.queryByText(/you should have caught/i)).toBeNull();
+  });
+});
+```
+
+- [ ] **Step 6: Run it to verify it fails**
+
+Run: `npx vitest run src/components/screens/Ending.test.tsx`
+Expected: FAIL — module not found.
+
+- [ ] **Step 7: Implement the Ending**
+
+Create `src/components/screens/Ending.tsx`. The three beats are separate screens in a fixed order. Category 1 and category 2 get separate headings and different language — never merged:
+
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import { buildAnswer, calibrate } from "@/game/ending";
+import type { Situation, State } from "@/game/types";
+
+const UNCATCHABLE_WORDING =
+  "The blood filed under 1047-005 was drawn from 1047-010, and the other way round. " +
+  "Nothing on your desk disagreed with anything else on your desk. The requisition form " +
+  "has a field for participant initials — field 5 — and it is pre-printed “not " +
+  "collected for this study.” Had it been filled in, the mismatch would have been " +
+  "caught before the results ever reached you. That was decided by whoever designed the " +
+  "form, not by you.";
+
+type Props = { state: State; script: Situation[] };
+
+export function Ending({ state, script }: Props) {
+  const [beat, setBeat] = useState(0);
+  const rows = buildAnswer(state, script);
+  const cal = calibrate(state, script);
+
+  const uncatchable = rows.filter((r) => r.category === 2);
+  const background = rows.filter((r) => r.category === 1);
+  const preventable = rows.filter((r) => r.category === 3);
+
+  return (
+    <div className="flex h-screen items-center justify-center p-8">
+      <div className="bevel-out max-h-full w-[760px] overflow-auto shadow-2xl">
+        <div className="bevel-in m-0.5 p-8 font-mono text-[11px] leading-[1.8]">
+          {beat === 0 && (
+            <>
+              <h2 className="tracking-widest">WHAT ACTUALLY HAPPENED</h2>
+              <table className="mt-4 w-full border-collapse text-left">
+                <tbody>
+                  {rows.map((r) => (
+                    <tr key={r.id} className="align-top">
+                      <td className="py-1 pr-3">{r.id}</td>
+                      <td className="py-1 pr-3">{r.subject}</td>
+                      <td className="py-1 pr-3">{r.action}</td>
+                      <td className="py-1">{r.truth}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              {background.length > 0 && (
+                <>
+                  <h2 className="mt-8 tracking-widest">
+                    WHAT THE DRUG DID
+                  </h2>
+                  <p className="mt-2 max-w-[70ch]">
+                    A subject was hospitalized. VERA was correct, you were careful, and the
+                    event is on the drug&apos;s known safety profile. Nobody erred. A trial is
+                    an experiment on people who volunteered for something unproven, and this
+                    is what that means.
+                  </p>
+                </>
+              )}
+
+              {uncatchable.length > 0 && (
+                <>
+                  <h2 className="mt-8 tracking-widest">
+                    WHAT YOU COULD NOT HAVE CAUGHT
+                  </h2>
+                  <p className="mt-2 max-w-[70ch]">{UNCATCHABLE_WORDING}</p>
+                </>
+              )}
+
+              {preventable.length > 0 && (
+                <>
+                  <h2 className="mt-8 tracking-widest">WHAT GOT PAST YOU</h2>
+                  {preventable.map((r) => (
+                    <p key={r.id} className="mt-2 max-w-[70ch]">
+                      {r.id} · {r.subject} — {r.truth}
+                    </p>
+                  ))}
+                </>
+              )}
+            </>
+          )}
+
+          {beat === 1 && (
+            <>
+              <h2 className="tracking-widest">FINAL AUDIT FINDING</h2>
+              <p className="mt-4 max-w-[70ch]">
+                Site 1047 — Cascade Dermatology &amp; Clinical Research, LLC, Portland, Oregon.
+                Protocol 20210143, Amendment 3 (29-NOV-2023). Investigator: M. A. Okonkwo, MD,
+                FAAD.
+              </p>
+              <p className="mt-4 max-w-[70ch]">
+                Review of the period 08-JAN-2024 through 11-JAN-2024 identified{" "}
+                {cal.errorsThroughUnverified} data point(s) entered into the study database
+                that are not supported by source documentation. Source data verification was
+                performed by the coordinator on {cal.verified} of{" "}
+                {script.filter((s) => s.vera).length} assisted records.
+              </p>
+              <p className="mt-4 max-w-[70ch]">
+                Randomized at close: {state.tally.randomized + 11} against a contracted 12.
+              </p>
+            </>
+          )}
+
+          {beat === 2 && (
+            <>
+              <h2 className="tracking-widest">THE POINT</h2>
+              <p className="mt-4 max-w-[70ch]">
+                Over four days you verified {cal.verified} of{" "}
+                {script.filter((s) => s.vera).length} things the assistant told you.{" "}
+                {cal.verifiedContainingError} of those turned out to contain an error.{" "}
+                {cal.errorsThroughUnverified} errors went into the database unverified.
+              </p>
+              <p className="mt-4 max-w-[70ch]">
+                Some of what went wrong here was not yours to catch. The mislabelled specimen
+                was consistent with itself at every point it touched your desk, and no amount
+                of checking would have found it. It was preventable — one field, on one form,
+                switched off for a defensible reason by someone who never met the patient.
+              </p>
+              <p className="mt-4 max-w-[70ch]">
+                That person builds tools. So do you.
+              </p>
+            </>
+          )}
+
+          {beat < 2 && (
+            <button
+              type="button"
+              className="bevel-out mt-10 px-6 py-1.5"
+              onClick={() => setBeat((b) => b + 1)}
+            >
+              Continue
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+- [ ] **Step 8: Route it**
+
+In `src/app/page.tsx`, add before `default`:
+
+```tsx
+    case "ending":
+      return <Ending state={state} script={SCRIPT} />;
+```
+
+with `import { Ending } from "@/components/screens/Ending";`.
+
+- [ ] **Step 9: Run the full suite**
+
+Run: `npm test` then `npm run typecheck`
+Expected: all pass.
+
+- [ ] **Step 10: Commit**
+
+```bash
+git add src/
+git commit -m "feat(screens): the answer, the audit finding, and the point"
+```
+
+---
+
+### Task 11: Persistence
+
+**Files:**
+- Create: `src/game/persist.ts`
+- Modify: `src/app/page.tsx` (load on mount, save on change)
+- Test: `src/game/persist.test.ts`
+
+**Interfaces:**
+- Consumes: `State` (Task 1).
+- Produces: `SAVE_KEY`, `SAVE_VERSION`, `save(state: State): void`, `load(): State | null`, `clear(): void`.
+
+- [ ] **Step 1: Write the failing persistence test**
+
+Create `src/game/persist.test.ts`:
+
+```ts
+import { beforeEach, describe, expect, it } from "vitest";
+
+import { clear, load, SAVE_KEY, save } from "@/game/persist";
+import { initialState } from "@/game/state";
+
+beforeEach(() => localStorage.clear());
+
+describe("persistence", () => {
+  it("returns null when there is nothing saved", () => {
+    expect(load()).toBeNull();
+  });
+
+  it("round-trips a run", () => {
+    save({ ...initialState, day: 3, clock: 120 });
+    expect(load()).toMatchObject({ day: 3, clock: 120 });
+  });
+
+  it("discards a save written by an older version", () => {
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ version: 0, state: initialState }));
+    expect(load()).toBeNull();
+  });
+
+  it("discards a corrupt save rather than throwing", () => {
+    localStorage.setItem(SAVE_KEY, "{{{not json");
+    expect(load()).toBeNull();
+  });
+
+  it("clears a save", () => {
+    save(initialState);
+    clear();
+    expect(load()).toBeNull();
+  });
+});
+```
+
+- [ ] **Step 2: Run it to verify it fails**
+
+Run: `npx vitest run src/game/persist.test.ts`
+Expected: FAIL — module not found.
+
+- [ ] **Step 3: Implement persistence**
+
+Create `src/game/persist.ts`:
+
+```ts
+import type { State } from "@/game/types";
+
+export const SAVE_KEY = "icf-please:run";
+export const SAVE_VERSION = 1;
+
+export function save(state: State): void {
+  try {
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ version: SAVE_VERSION, state }));
+  } catch {
+    // A full or unavailable localStorage must never interrupt a run.
+  }
+}
+
+export function load(): State | null {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return null;
+
+    const parsed = JSON.parse(raw) as { version?: number; state?: State };
+    if (parsed.version !== SAVE_VERSION || !parsed.state) return null;
+
+    return parsed.state;
+  } catch {
+    return null;
+  }
+}
+
+export function clear(): void {
+  try {
+    localStorage.removeItem(SAVE_KEY);
+  } catch {
+    // ignored
+  }
+}
+```
+
+- [ ] **Step 4: Run it to verify it passes**
+
+Run: `npx vitest run src/game/persist.test.ts`
+Expected: PASS, 5 tests.
+
+- [ ] **Step 5: Wire it into the page**
+
+In `src/app/page.tsx`, add:
+
+```tsx
+import { useEffect, useState } from "react";
+import { load, save } from "@/game/persist";
+```
+
+and inside `Home`, after the `useReducer`:
+
+```tsx
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    const saved = load();
+    if (saved) rawDispatch({ type: "RESTORE", state: saved });
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (hydrated) save(state);
+  }, [state, hydrated]);
+
+  if (!hydrated) return null;
+```
+
+Add the action to `src/game/types.ts`:
+
+```ts
+  | { type: "RESTORE"; state: State }
+```
+
+and the branch to the reducer in `src/game/state.ts`, as the first case:
+
+```ts
+    case "RESTORE":
+      return action.state;
+```
+
+Loading must happen in an effect rather than in `useReducer`'s initializer, because `localStorage` does not exist during the server render and the markup would not match.
+
+- [ ] **Step 6: Run the full suite**
+
+Run: `npm test` then `npm run typecheck` then `npm run build`
+Expected: all pass. `npm run build` catches hydration and server-component mistakes the test suite cannot.
+
+- [ ] **Step 7: Commit**
+
+```bash
+git add src/
+git commit -m "feat(game): autosave and restore"
+```
+
+---
+
+## Authoring rules for Tasks 12–15
+
+**These rules apply to every situation authored in Tasks 12, 13, 14 and 15. Read them before writing any content.** They are restated here rather than referenced from each task because the tasks may be worked out of order by different people.
+
+**1. VERA's register never leaks.** Her summary reads identically whether she is right or wrong. No hedging, no confidence scores, no "I'm not certain about this one". Write the wrong one, then read it beside a correct one — if you can tell which is which without checking `truth`, rewrite it. Wrong outputs must not run longer than correct ones.
+
+**2. VERA never acts.** "I have drafted", "the entry is ready for your review". Never "I have submitted", "I have filed", "I have sent".
+
+**3. VERA teaches vocabulary in passing, and is always correct when she does.** When a term is unavoidable she defines it inside her normal output — "This is a serious adverse event, meaning the patient was admitted to hospital, so the sponsor has to be told within 24 hours." Never a glossary, never a tooltip.
+
+**4. The check is always mechanical.** Two numbers that should match and don't; two dates in an impossible order; a value that appears nowhere in the source; a name or ID in one document and not the other. **If resolving a situation needs clinical knowledge, the situation is broken.** Where a unit conversion is involved, the source document must print both units so the comparison stays a comparison.
+
+**5. Source documents keep their real register** — dense, abbreviated, institutional. Do not simplify a lab report. They run 1–3 pages.
+
+**6. Satire lives only in sponsor email.** Source documents and the roster are plain. Subjects are never the target of a joke.
+
+**7. Every fact must agree with canon.** `docs/STUDY_FACTS.md` and `docs/RESEARCH_SITE.md` decide every dose, visit, window, threshold, contact and identifier. Dates are `DD-MMM-YYYY`.
+
+**8. Each source document opens with the simulation banner** used throughout the corpus, so nothing in `public/content/source/` can be mistaken for a genuine document:
+
+```
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+```
+
+### Outcome conventions
+
+The fact tables in Tasks 12–15 give each situation's source values, truth, and VERA behaviour. Its `outcomes` follow from this table — apply it unless a task says otherwise:
+
+| Situation | `accepted` | `reviewedCorrect` | `reviewedWrong` |
+|---|---|---|---|
+| **Data entry, `NONE`** | `{ score: {} }` | `{ score: {} }` | query email · `errorsAccepted: 1` |
+| **Data entry, carries an error** | query email · `errorsAccepted: 1` | `{ score: { errorsCaught: 1 } }` | query email · `errorsAccepted: 1` |
+| **Screening, truth `eligible`** | roster → `Enrolled` · `randomized: 1` | roster → `Enrolled` · `randomized: 1` | roster → `Screen failed` · query email |
+| **Screening, truth `screen-fail`** | roster → `Enrolled` · `randomized: 1` · deviation email · `errorsAccepted: 1` | roster → `Screen failed (<criterion>)` · `errorsCaught: 1` | roster → `Enrolled` · `randomized: 1` · deviation email · `errorsAccepted: 1` |
+| **Safety, `NONE`** | `{ score: {} }` | `{ score: {} }` | safety query email · `errorsAccepted: 1` |
+| **Safety, carries an error** | safety query email · `errorsAccepted: 1` | `{ score: { errorsCaught: 1 } }` | safety query email · `errorsAccepted: 1` |
+
+Query ids run `DQ-01NN` ascending across the run and never repeat. Query bodies state that a value does not match source and ask the site to verify and respond — they **never** say the player accepted something in error.
+
+Two situations deliberately break this table and say so in their own tasks: **DE-1111** (Task 13) and **SAF-0033** (Task 14), where `accepted` and `reviewedCorrect` are identical and both carry harm.
+
+---
+
+### Task 12: Day 1 — five situations
+
+**Files:**
+- Create: `public/content/source/scr-0217.md`, `de-1109.md`, `saf-0031.md`, `de-1110.md`, `de-1114.md`
+- Modify: `src/game/script.ts` (replace the fixture re-export with day 1)
+- Test: `src/game/script.test.ts`
+
+**Interfaces:**
+- Consumes: `Situation`, `FormValues` (Task 1); `FORMS` field names (Task 7).
+- Produces: `SCRIPT: Situation[]` containing days 1 through 4. This task adds day 1 only; Tasks 13–15 append.
+
+**Day 1 facts.** Day 1's first three items are manual — `manual: true`, no `vera` block. The morning runs 8:00 to 11:30.
+
+| Item | Subject | Form | Source says | Truth | VERA |
+|---|---|---|---|---|---|
+| SCR-0217 | 1047-017 C. Hughes | eligibility | EASI 22.4 · vIGA-AD 4 · BSA 31% · NRS 7 · TCS last applied 28-DEC-2023, Day 1 planned 09-JAN-2024 (12 days, washout is 1 week) | `eligible` — every criterion met with room to spare | none (manual) |
+| DE-1109 | 1047-009 S. Nakashima | vitals | BP 128/82 mmHg · pulse 72 bpm · temp 36.8 °C · weight 81.4 kg | those four values | none (manual) |
+| SAF-0031 | 1047-006 M. Vasquez | safety | Phone note: fever 38.4 °C six hours after the Week 12 dose, resolved within 24 h, no hospitalization, no medical intervention | `not-serious` — the note matches none of the seriousness criteria in the safety reporting manual | none (manual) |
+| DE-1110 | 1047-003 P. Sunderland | labs | ALT 24 · AST 21 · creatinine 0.9 · eosinophils 0.38 ×10⁹/L (380 cells/µL) | those four values, `NONE` | states exactly those values |
+| DE-1114 | 1047-008 H. Brenner | labs | ALT 31 · AST 27 · creatinine 1.0 · **eosinophils 0.42 ×10⁹/L (420 cells/µL)** | eos is `0.42` | **states eosinophils as 4.2 ×10⁹/L** — a factor-of-ten slip. The source prints both units, so the check is reading one number off the page. |
+
+- [ ] **Step 1: Write the five source documents**
+
+Create each file under `public/content/source/`. Each opens with the banner from authoring rule 8. Model — `public/content/source/de-1110.md`:
+
+```markdown
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+
+MERIDIAN CENTRAL LABORATORIES                    Indianapolis, IN
+================================================================
+CENTRAL SAFETY LABORATORY REPORT
+
+  Protocol .............. 20210143 (ROCKET-Horizon)
+  Site .................. 1047  Cascade Dermatology, Portland OR
+  Participant ID ........ 1047-003
+  Visit ................. Week 12 (Day 85)
+  Collection date ....... 03-JAN-2024  09:14 PT
+  Received .............. 04-JAN-2024  06:02 ET
+  Reported .............. 05-JAN-2024  11:40 ET
+  Requisition ........... MCL-3318827
+  Field 5 (participant initials) .... not collected for this study
+
+----------------------------------------------------------------
+CHEMISTRY                          RESULT     UNITS      REF RANGE
+----------------------------------------------------------------
+  Alanine aminotransferase (ALT)      24      U/L         7 -  56
+  Aspartate aminotransferase (AST)    21      U/L        10 -  40
+  Creatinine                         0.9      mg/dL     0.6 - 1.3
+  eGFR                                94      mL/min/1.73m²   >60
+  Glucose                             88      mg/dL      70 - 99
+  Total bilirubin                    0.6      mg/dL     0.2 - 1.2
+
+----------------------------------------------------------------
+HEMATOLOGY                         RESULT     UNITS      REF RANGE
+----------------------------------------------------------------
+  Eosinophils, absolute             0.38      x10^9/L  0.00 - 0.50
+                                   (380)      cells/uL
+  Platelets                          241      x10^9/L   150 - 400
+
+  No alert (panic) values. Reviewed by MCL clinical pathology.
+```
+
+Note field 5 on the requisition block. It appears on every lab report in the run, always reading `not collected for this study`, and it is the thing the ending names. Do not omit it and do not draw attention to it.
+
+- [ ] **Step 2: Write the failing script test**
+
+Create `src/game/script.test.ts`:
+
+```ts
+import { describe, expect, it } from "vitest";
+
+import { FORMS } from "@/game/forms";
+import { SCRIPT } from "@/game/script";
+
+describe("SCRIPT — day 1", () => {
+  const day1 = SCRIPT.filter((s) => s.day === 1);
+
+  it("has five situations", () => {
+    expect(day1).toHaveLength(5);
+  });
+
+  it("opens with three manual items totalling 3.5 hours", () => {
+    const manual = day1.slice(0, 3);
+    expect(manual.every((s) => s.manual === true)).toBe(true);
+    expect(manual.every((s) => s.vera === undefined)).toBe(true);
+    expect(manual.reduce((t, s) => t + s.cost, 0)).toBe(210);
+  });
+
+  it("gives the manual morning one item of each type", () => {
+    expect(day1.slice(0, 3).map((s) => s.type).sort()).toEqual([
+      "data-entry",
+      "safety",
+      "screening",
+    ]);
+  });
+
+  it("gives every assisted item a VERA block", () => {
+    expect(day1.slice(3).every((s) => s.vera !== undefined)).toBe(true);
+  });
+
+  it("only uses field names its form defines", () => {
+    for (const s of day1) {
+      const allowed = FORMS[s.form].fields.map((f) => f.name);
+      expect(Object.keys(s.truth.entry).every((k) => allowed.includes(k))).toBe(true);
+    }
+  });
+
+  it("gives every situation a source document", () => {
+    expect(day1.every((s) => s.source.length > 0)).toBe(true);
+  });
+
+  it("gives verdict-bearing forms a truth verdict", () => {
+    for (const s of day1) {
+      if (FORMS[s.form].verdict) expect(s.truth.verdict).toBeDefined();
+    }
+  });
+});
+```
+
+- [ ] **Step 3: Run it to verify it fails**
+
+Run: `npx vitest run src/game/script.test.ts`
+Expected: FAIL — `SCRIPT` still re-exports the three fixtures.
+
+- [ ] **Step 4: Write day 1**
+
+Replace `src/game/script.ts`. Two situations are given in full as models — one manual, one assisted. Author the other three from the fact table above, following the same shape:
+
+```ts
+import type { Situation } from "@/game/types";
+
+const DAY_1: Situation[] = [
+  {
+    id: "SCR-0217",
+    day: 1,
+    type: "screening",
+    subject: "1047-017",
+    title: "Eligibility review",
+    blurb:
+      "Screening packet, eleven pages. No assistant provisioned. Read it and complete " +
+      "the eligibility form.",
+    cost: 90,
+    manual: true,
+    source: ["scr-0217.md"],
+    form: "eligibility",
+    truth: {
+      error: "NONE",
+      entry: { easi: "22.4", viga: "4", bsa: "31", nrs: "7" },
+      verdict: "eligible",
+    },
+    outcomes: {
+      accepted: { score: {} },
+      reviewedCorrect: {
+        score: { randomized: 1 },
+        roster: { subject: "1047-017", status: "Enrolled" },
+      },
+      reviewedWrong: {
+        score: {},
+        roster: { subject: "1047-017", status: "Screen failed" },
+        email: {
+          id: "DQ-0109",
+          from: "Amgen Data Management",
+          subject: "Query DQ-0109 — subject 1047-017",
+          body:
+            "Eligibility determination recorded as screen failure. Source documents " +
+            "indicate all inclusion criteria were met. Please verify and respond.",
+        },
+      },
+    },
+    debrief: {
+      line: "Eligible on every criterion. EASI 22.4 against a threshold of 16.",
+    },
+  },
+
+  // DE-1109 — manual vitals. See the fact table.
+  // SAF-0031 — manual safety. See the fact table.
+
+  {
+    id: "DE-1110",
+    day: 1,
+    type: "data-entry",
+    subject: "1047-003",
+    title: "Week 12 central labs",
+    blurb: "Chemistry and haematology panel returned from the central laboratory.",
+    cost: 60,
+    source: ["de-1110.md"],
+    form: "labs",
+    vera: {
+      summary:
+        "The Week 12 panel for 1047-003 is complete and within reference range on every " +
+        "analyte. ALT 24 U/L, AST 21 U/L, creatinine 0.9 mg/dL, absolute eosinophils " +
+        "0.38 ×10⁹/L. No alert values were flagged by the laboratory. The entry is " +
+        "drafted and ready for your review.",
+      entry: { alt: "24", ast: "21", creatinine: "0.9", eos: "0.38" },
+    },
+    truth: {
+      error: "NONE",
+      entry: { alt: "24", ast: "21", creatinine: "0.9", eos: "0.38" },
+    },
+    outcomes: {
+      accepted: { score: {} },
+      reviewedCorrect: { score: {} },
+      reviewedWrong: {
+        score: { errorsAccepted: 1 },
+        email: {
+          id: "DQ-0110",
+          from: "Amgen Data Management",
+          subject: "Query DQ-0110 — subject 1047-003",
+          body: "Reported chemistry values do not match source. Please verify and respond.",
+        },
+      },
+    },
+    debrief: { line: "She was right. Reading it cost an hour and changed nothing." },
+  },
+
+  // DE-1114 — assisted labs carrying the normalization error. See the fact table.
+];
+
+export const SCRIPT: Situation[] = [...DAY_1];
+```
+
+The three commented lines are the situations to author from the fact table — every value they need is specified there. Delete each comment as you replace it.
+
+- [ ] **Step 5: Run the tests to verify they pass**
+
+Run: `npx vitest run src/game/script.test.ts`
+Expected: PASS, 7 tests.
+
+Then `npm test` — the fixture-based tests still pass because they import `FIXTURE_SCRIPT` directly, not `SCRIPT`.
+
+- [ ] **Step 6: Play day 1 in the browser**
 
 ```bash
 npm run dev
 ```
 
-Walk the checklist at `http://localhost:3000`:
+Open `http://localhost:3000`, sign in, and work all five items. Confirm: the rail reads "No assistant provisioned" for the first three, VERA appears for the last two, the clock reads 11:30 after the third item, and the day-end summary lists five worked items and the cheerful sponsor nudge.
 
-- Sign in lands on the desk at 8:00 AM with only the Work Queue open and the rail reading "No assistant provisioned for this site."
-- The first three items offer manual review only. Working all three puts the clock at 11:30.
-- The rail becomes VERA and the sponsor email is in the Inbox. Nothing interrupted play.
-- Windows drag by their title bars, overlap, come to the front on click, and appear in the taskbar. They cannot be dragged fully off screen. The rail cannot be moved.
-- Opening a document from the Documents window costs nothing. `Ctrl-F`-style find highlights matches and steps through them.
-- The eCRF opens empty. Submitting gives no feedback of any kind.
-- 4:00 PM ends the day whatever is left. The day-end shows the roster last.
-- `Skip day` accepts the remainder and runs the normal summary.
-- Day 4 begins visibly late, and cannot be finished by hand.
-- The ending runs answer → audit finding → the point, in that order.
-
-- [ ] **Step 4: Commit**
+- [ ] **Step 7: Commit**
 
 ```bash
-git add src/game/run.test.ts
-git commit -m "test: play the full four-day run end to end"
+git add public/content/source src/game/
+git commit -m "content: day 1 — the manual morning and VERA's arrival"
 ```
 
 ---
 
-## Notes for whoever executes this
+### Task 13: Day 2 — the slack day and the uncatchable lab
 
-**The invariants suite is the design.** If `src/game/invariants.test.ts` fails after a content edit, the content is wrong. Do not relax the test to make it pass — that is the failure mode it exists to prevent.
+**Files:**
+- Create: `public/content/source/de-1111.md`, `saf-0034.md`, `de-1112.md`, `saf-0032.md`
+- Modify: `src/game/script.ts` (append `DAY_2`)
+- Modify: `src/game/script.test.ts` (add day-2 assertions)
 
-**Two constraints are easy to break by accident and have no automated guard:**
+**Interfaces:**
+- Consumes: `Situation` (Task 1); `SCRIPT` (Task 12).
+- Produces: `SCRIPT` extended with day 2.
 
-1. **VERA's register must not vary with correctness.** The word-count and hedging checks catch the two commonest leaks, but nothing can check tone. When authoring her output, write the wrong one, then read it beside a correct one. If you can tell which is which without checking `truth`, rewrite it.
-2. **The roster never jokes.** Satire belongs in sponsor email. Any line naming a subject is written flat.
+**This task carries the run's most important situation.** Read the whole table before writing anything.
 
-**The player knows nothing about clinical research.** Every check must be a comparison a layperson can make: two numbers that should match, two dates in an impossible order, a value that appears nowhere in the source. If resolving a situation needs domain knowledge, the situation is broken — not the player.
+| Item | Subject | Form | Source says | Truth | VERA |
+|---|---|---|---|---|---|
+| DE-1111 | 1047-005 T. Channing | labs | Week 16 panel headed `1047-005`: ALT 19 · AST 22 · creatinine 0.8 · eos 0.31 ×10⁹/L (310 cells/µL). Requisition MCL-3319104. Field 5 reads `not collected for this study`. | `UNCATCHABLE`. Truth entry equals exactly what is printed — **a player who verifies is marked correct** | states exactly those values, correctly |
+| SAF-0034 | 1047-010 E. Fontaine | safety | Nurse note dated 05-JAN-2024 describing a mild injection-site reaction at the **Week 16** visit (Day 113, 04-JAN-2024) | `not-serious` | **attributes the event to the Week 12 visit (Day 85, 06-DEC-2023)**. Right event, wrong visit — catchable by comparing the note's date to the visit schedule |
+| DE-1112 | 1047-007 K. Oyelowo | vitals | BP 118/76 · pulse 68 · temp 36.6 · weight 74.2 | those values, `NONE` | states exactly those values |
+| SAF-0032 | 1047-002 D. Achterberg | safety | Two-page nurse note. Page 1: mild headache, resolved. **Final paragraph of page 2: "pt also reports two days of worsening eczema on both forearms since 04-JAN; declined topical rx."** | `not-serious`, but the entry must record **both** events | **reports only the headache.** The second event is in the last paragraph and nothing on screen looks wrong |
+
+**DE-1111 — how the uncatchable item must be built.** The specimen drawn from 1047-005 was reported by the laboratory under 1047-010's identifier, and 1047-010's under 1047-005's. Everything downstream of that identifier agrees with everything else, so:
+
+- `truth.entry` is **identical** to `vera.entry`. Verifying finds nothing wrong, because nothing on the desk is wrong.
+- `outcomes.accepted` and `outcomes.reviewedCorrect` must be **identical objects** — same roster change, same score, same harm. This is the mechanic: the item punishes the player the same whether or not they read the source.
+- `truth.error` is `"UNCATCHABLE"`, which is what keeps it out of the calibration's catchable count and routes it to its own heading in the ending.
+- `debrief.category` is `2`.
+- The roster change lands on **1047-005 T. Channing → `Withdrawn (hospitalized)`**.
+
+Do not add a tell. Do not make the collection time slightly wrong, do not make the requisition number look odd, do not have VERA phrase it differently. If a careful player can find it, the situation is broken and the ending's central claim becomes a lie.
+
+- [ ] **Step 1: Write the four source documents**
+
+Under `public/content/source/`, each opening with the simulation banner. `de-1111.md` uses the same lab-report layout as `de-1110.md` from Task 12 — same headings, same field-5 line, same reference-range column — because a specimen mix-up upstream produces a report that looks exactly like every other report.
+
+- [ ] **Step 2: Add the failing day-2 assertions**
+
+Append to `src/game/script.test.ts`:
+
+```ts
+describe("SCRIPT — day 2", () => {
+  const day2 = SCRIPT.filter((s) => s.day === 2);
+  const uncatchable = day2.find((s) => s.truth.error === "UNCATCHABLE");
+
+  it("has four situations, none of them deep", () => {
+    expect(day2).toHaveLength(4);
+    expect(day2.every((s) => s.cost === 60)).toBe(true);
+  });
+
+  it("carries exactly one uncatchable situation", () => {
+    expect(uncatchable).toBeDefined();
+  });
+
+  it("makes the uncatchable item agree with itself", () => {
+    expect(uncatchable!.truth.entry).toEqual(uncatchable!.vera!.entry);
+  });
+
+  it("punishes the uncatchable item identically whether or not it was verified", () => {
+    expect(uncatchable!.outcomes.accepted).toEqual(uncatchable!.outcomes.reviewedCorrect);
+  });
+
+  it("files the uncatchable item under category 2", () => {
+    expect(uncatchable!.debrief.category).toBe(2);
+  });
+
+  it("puts the catchable misattribution on the same day", () => {
+    expect(day2.some((s) => s.truth.error === "misattribution")).toBe(true);
+  });
+
+  it("still lets her be right once", () => {
+    expect(day2.filter((s) => s.truth.error === "NONE")).toHaveLength(1);
+  });
+});
+```
+
+- [ ] **Step 3: Run it to verify it fails**
+
+Run: `npx vitest run src/game/script.test.ts`
+Expected: FAIL — day 2 has no situations.
+
+- [ ] **Step 4: Write day 2**
+
+Add a `DAY_2: Situation[]` array to `src/game/script.ts` from the fact table above, and extend the export:
+
+```ts
+export const SCRIPT: Situation[] = [...DAY_1, ...DAY_2];
+```
+
+- [ ] **Step 5: Run the tests to verify they pass**
+
+Run: `npm test` then `npm run typecheck`
+Expected: all pass.
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add public/content/source src/game/
+git commit -m "content: day 2 — the mislabelled specimen and the item that teaches its shape"
+```
+
+---
+
+### Task 14: Day 3 — the enrolment push
+
+**Files:**
+- Create: `public/content/source/scr-0219.md`, `scr-0220.md`, `de-1113.md`, `saf-0033.md`, `de-1115.md`
+- Modify: `src/game/script.ts` (append `DAY_3`)
+- Modify: `src/game/script.test.ts` (add day-3 assertions)
+
+**Interfaces:**
+- Consumes: `Situation` (Task 1); `SCRIPT` (Task 13).
+- Produces: `SCRIPT` extended with day 3.
+
+| Item | Subject | Form | Source says | Truth | VERA |
+|---|---|---|---|---|---|
+| SCR-0219 | 1047-019 R. Amaya | eligibility | EASI **15.8** · vIGA-AD 3 · BSA 14% · NRS 6 | `screen-fail`, failed criterion EASI ≥16 | **"meets all inclusion criteria"** and drafts `eligible`. She states 15.8 accurately and calls it eligible anyway |
+| SCR-0220 | 1047-020 J. Whitlock | eligibility | EASI 19.2 · vIGA-AD 4 · BSA 22% · NRS 8 · **TCS last applied 01-JAN-2024, Day 1 planned 09-JAN-2024 — 8 days** | `eligible`. Amendment 3 §5.3 sets the TCS washout at **1 week**; 8 days clears it | **screen-fail on washout**, citing a two-week TCS washout. That was Amendment 2's rule. The protocol header reads `Amendment 3 (29-NOV-2023)` |
+| DE-1113 | 1047-011 W. Dorsey | labs | Week 20 panel: AST 26 · creatinine 1.1 · eos 0.29 ×10⁹/L (290 cells/µL). **The chemistry panel has no ALT row — the analyte was not reported** | `alt` is empty string `""`; the other three as printed | **states "ALT 68 U/L, mildly elevated"**. There is no ALT anywhere in the source |
+| SAF-0033 | 1047-001 R. Jones | safety | Discharge summary: admitted 09-JAN-2024 with cellulitis of the left lower leg, IV antibiotics, discharged 11-JAN-2024 | `serious` — hospitalization | correct, and defines the term in passing. **Category 1** |
+| DE-1115 | 1047-002 D. Achterberg | labs | Week 24 panel: ALT 22 · AST 25 · creatinine 0.9 · **eos 0.71 ×10⁹/L (710 cells/µL), flagged `H` against a range of 0.00–0.50** | those four values | **reports the panel as within range and does not mention the flagged eosinophil count.** Omission |
+
+**SAF-0033 is category 1 and must never read as the player's fault.** VERA is correct. Both `accepted` and `reviewedCorrect` produce the same roster change — **1047-001 R. Jones → `Withdrawn (hospitalized)`** — and both set `harmed: 1`. `debrief.category` is `1`. Its debrief line states what happened and assigns no blame. Cellulitis appears twice on the real rocatinlimab SAE list in `STUDY_FACTS.md` §13; this is the drug doing what the drug does.
+
+- [ ] **Step 1: Write the five source documents**
+
+Under `public/content/source/`, each with the simulation banner. `de-1113.md` must simply **not have an ALT row** — no "not reported" annotation, no gap where one obviously belongs. A panel that omits an analyte looks unremarkable; that is what makes the fabrication cheap to catch only if you actually look.
+
+- [ ] **Step 2: Add the failing day-3 assertions**
+
+Append to `src/game/script.test.ts`:
+
+```ts
+describe("SCRIPT — day 3", () => {
+  const day3 = SCRIPT.filter((s) => s.day === 3);
+  const cat1 = day3.find((s) => s.debrief.category === 1);
+
+  it("has five situations, two of them screening packets", () => {
+    expect(day3).toHaveLength(5);
+    expect(day3.filter((s) => s.cost === 90)).toHaveLength(2);
+  });
+
+  it("carries the background-risk harm", () => {
+    expect(cat1).toBeDefined();
+    expect(cat1!.truth.error).toBe("NONE");
+  });
+
+  it("harms the subject whether or not the player verified", () => {
+    expect(cat1!.outcomes.accepted).toEqual(cat1!.outcomes.reviewedCorrect);
+  });
+
+  it("blames nobody for the background-risk harm", () => {
+    expect(cat1!.debrief.line).not.toMatch(/should have|missed|failed to|error/i);
+  });
+
+  it("carries the stale-context and threshold situations", () => {
+    const errors = day3.map((s) => s.truth.error);
+    expect(errors).toContain("stale-context");
+    expect(errors).toContain("threshold");
+  });
+
+  it("fabricates a value that appears nowhere in truth", () => {
+    const fab = day3.find((s) => s.truth.error === "fabrication")!;
+    const stated = Object.values(fab.vera!.entry);
+    const real = Object.values(fab.truth.entry);
+    expect(stated.some((v) => !real.includes(v))).toBe(true);
+  });
+});
+```
+
+- [ ] **Step 3: Run it to verify it fails**
+
+Run: `npx vitest run src/game/script.test.ts`
+Expected: FAIL — day 3 has no situations.
+
+- [ ] **Step 4: Write day 3, then run and commit**
+
+Add `DAY_3: Situation[]` from the fact table and extend the export to `[...DAY_1, ...DAY_2, ...DAY_3]`.
+
+Run: `npm test` then `npm run typecheck`. Expected: all pass.
+
+```bash
+git add public/content/source src/game/
+git commit -m "content: day 3 — the enrolment push and the hospitalization nobody caused"
+```
+
+---
+
+### Task 15: Day 4 — the last decisions
+
+**Files:**
+- Create: `public/content/source/scr-0221.md`, `de-1116.md`, `scr-0222.md`, `saf-0035.md`, `scr-0218.md`
+- Modify: `src/game/script.ts` (append `DAY_4`)
+- Modify: `src/game/script.test.ts` (add day-4 assertions)
+
+**Interfaces:**
+- Consumes: `Situation` (Task 1); `SCRIPT` (Task 14).
+- Produces: the complete nineteen-situation `SCRIPT`.
+
+| Item | Subject | Form | Source says | Truth | VERA |
+|---|---|---|---|---|---|
+| SCR-0221 | 1047-021 B. Ferreira | eligibility | EASI 18.6 · vIGA-AD 4 · BSA 19% · NRS 7. **The concomitant medication log records no washout date for the subject's topical tacrolimus** — the row is blank | `screen-fail`, because the washout cannot be established from source | **states "TCI discontinued 22-DEC-2023, washout satisfied"** and drafts `eligible`. That date is nowhere in the packet |
+| DE-1116 | 1047-006 M. Vasquez | vitals | BP 124/78 · pulse 70 · **temp 37.2 °C (98.9 °F)** · **weight 78.9 kg (173.9 lb)** | those values in metric | **records weight as 173.9** — the imperial figure in the metric field. Both units are printed on the worksheet |
+| SCR-0222 | 1047-022 | eligibility | EASI 24.1 · vIGA-AD 4 · BSA 28% · NRS 8 · TCS last applied 20-DEC-2023 | `eligible`, `NONE` | correct |
+| SAF-0035 | 1047-005 T. Channing | safety | Phone note: mild transient nausea, no intervention, resolved same day | `not-serious`, `NONE` | correct |
+| SCR-0218 | 1047-018 L. Lit | eligibility | EASI 26.8 · vIGA-AD 4 · BSA 35% · NRS 9 · TCS last applied 15-DEC-2023 | `eligible`, `NONE`. Plainly eligible on every criterion | correct |
+
+**SCR-0218 is last in the script and stays last.** It carries no error and nothing to catch. It is the final decision of the run, and a player reaching it has already spent four days learning when to look.
+
+- [ ] **Step 1: Write the five source documents**
+
+Under `public/content/source/`, each with the simulation banner. For `scr-0221.md`, the concomitant medication log's washout column must be genuinely **blank** for the tacrolimus row — not "unknown", not "TBC". A blank cell is what a real incomplete log looks like, and it is what makes VERA's confident date a fabrication rather than a misreading.
+
+- [ ] **Step 2: Add the failing day-4 assertions**
+
+Append to `src/game/script.test.ts`:
+
+```ts
+describe("SCRIPT — day 4", () => {
+  const day4 = SCRIPT.filter((s) => s.day === 4);
+
+  it("has five situations, three of them screening packets", () => {
+    expect(day4).toHaveLength(5);
+    expect(day4.filter((s) => s.cost === 90)).toHaveLength(3);
+  });
+
+  it("ends the run on L. Lit", () => {
+    expect(SCRIPT.at(-1)!.id).toBe("SCR-0218");
+    expect(SCRIPT.at(-1)!.subject).toBe("1047-018");
+  });
+
+  it("lets her be right on the last decision of the run", () => {
+    expect(SCRIPT.at(-1)!.truth.error).toBe("NONE");
+  });
+});
+```
+
+- [ ] **Step 3: Run it to verify it fails, then write day 4**
+
+Run: `npx vitest run src/game/script.test.ts` — expected FAIL. Add `DAY_4: Situation[]` and extend the export to all four days.
+
+- [ ] **Step 4: Play the whole run**
+
+```bash
+npm run dev
+```
+
+Play all four days end to end without skipping. Confirm the ending reaches all three beats and that the calibration numbers match what you actually did.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add public/content/source src/game/
+git commit -m "content: day 4 — the last decisions of the run"
+```
+
+---
+
+### Task 16: Design invariants
+
+**Files:**
+- Create: `src/game/invariants.test.ts`
+
+**Interfaces:**
+- Consumes: `SCRIPT` (Task 15).
+- Produces: nothing. This task is entirely tests.
+
+These encode the spec's §4 so that editing the script cannot silently break the game's argument.
+
+- [ ] **Step 1: Write the invariants**
+
+Create `src/game/invariants.test.ts`:
+
+```ts
+import { describe, expect, it } from "vitest";
+
+import { SCRIPT } from "@/game/script";
+import type { ItemType } from "@/game/types";
+
+const assisted = SCRIPT.filter((s) => s.vera !== undefined);
+const wrong = assisted.filter((s) => s.truth.error !== "NONE");
+const right = assisted.filter((s) => s.truth.error === "NONE");
+
+describe("the run's shape", () => {
+  it("is nineteen situations across four days", () => {
+    expect(SCRIPT).toHaveLength(19);
+    expect([1, 2, 3, 4].map((d) => SCRIPT.filter((s) => s.day === d).length)).toEqual([
+      5, 4, 5, 5,
+    ]);
+  });
+
+  it("has sixteen assisted situations", () => {
+    expect(assisted).toHaveLength(16);
+  });
+
+  it("has six situations where she is simply right", () => {
+    expect(right).toHaveLength(6);
+  });
+
+  it("uses every error type in the taxonomy", () => {
+    const used = new Set(wrong.map((s) => s.truth.error));
+    expect([...used].sort()).toEqual([
+      "UNCATCHABLE",
+      "fabrication",
+      "misattribution",
+      "normalization",
+      "omission",
+      "stale-context",
+      "threshold",
+    ]);
+  });
+
+  it("has exactly one uncatchable situation", () => {
+    expect(wrong.filter((s) => s.truth.error === "UNCATCHABLE")).toHaveLength(1);
+  });
+
+  it("has one category-1 harm and one category-2 harm", () => {
+    expect(SCRIPT.filter((s) => s.debrief.category === 1)).toHaveLength(1);
+    expect(SCRIPT.filter((s) => s.debrief.category === 2)).toHaveLength(1);
+  });
+
+  it("gives every situation a unique id", () => {
+    expect(new Set(SCRIPT.map((s) => s.id)).size).toBe(19);
+  });
+});
+
+describe("leak guards", () => {
+  it("lets her be right at least once in every item type", () => {
+    for (const type of ["screening", "data-entry", "safety"] as ItemType[]) {
+      const ofType = assisted.filter((s) => s.type === type);
+      expect(ofType.filter((s) => s.truth.error === "NONE").length).toBeGreaterThan(0);
+    }
+  });
+
+  it("never makes a whole day wrong", () => {
+    for (const day of [1, 2, 3, 4]) {
+      const ofDay = assisted.filter((s) => s.day === day);
+      if (ofDay.length === 0) continue;
+      expect(ofDay.some((s) => s.truth.error === "NONE")).toBe(true);
+    }
+  });
+
+  it("does not make her wrong outputs longer than her right ones", () => {
+    const mean = (xs: number[]) => xs.reduce((a, b) => a + b, 0) / xs.length;
+    const words = (s: string) => s.split(/\s+/).filter(Boolean).length;
+
+    const wrongLen = mean(wrong.map((s) => words(s.vera!.summary)));
+    const rightLen = mean(right.map((s) => words(s.vera!.summary)));
+
+    // Within 25% either way. A systematic difference teaches players to count words.
+    expect(Math.abs(wrongLen - rightLen) / rightLen).toBeLessThan(0.25);
+  });
+
+  it("never lets her hedge", () => {
+    const hedges =
+      /\b(?:I think|I believe|probably|possibly|might be|may be|not certain|unsure|appears to|seems to|I'm not sure|please double[- ]check|worth checking)\b/i;
+
+    for (const s of assisted) {
+      expect(s.vera!.summary, `${s.id} hedges`).not.toMatch(hedges);
+    }
+  });
+
+  it("never lets her claim to have acted", () => {
+    const acted = /\bI have (?:submitted|filed|sent|signed|entered|saved|reported)\b/i;
+
+    for (const s of assisted) {
+      expect(s.vera!.summary, `${s.id} claims to have acted`).not.toMatch(acted);
+    }
+  });
+});
+```
+
+- [ ] **Step 2: Run them**
+
+Run: `npx vitest run src/game/invariants.test.ts`
+Expected: PASS, 13 tests. **Any failure here is a content bug, not a test bug** — fix the script, do not relax the assertion. The one exception is the word-length tolerance: if it fails, rewrite the offending summary rather than widening the margin.
+
+- [ ] **Step 3: Run everything and build**
+
+Run: `npm test`, `npm run typecheck`, `npm run lint`, `npm run build`
+Expected: all pass.
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add src/game/invariants.test.ts
+git commit -m "test(game): lock the design invariants and VERA's register"
+```
+
+---
+
+## Done
+
+After Task 16 the run is complete: sign in, four days, nineteen situations, three ending beats, autosave, and a skip control for anyone who will not play it end to end.
 

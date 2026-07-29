@@ -75,7 +75,11 @@ There is no CRO, no CRA, no IRB, no monitor-versus-sponsor distinction. If a con
 
 ## Core loop
 
-One queue, mixed item types, one shared time budget per day. The player picks what to work and how carefully.
+**The game is a scripted queue of nineteen situations.** The player walks it in order and, for each one, either takes VERA's word or opens the documents and decides for themselves. The game keeps score silently and tells them at the end what that cost. There is no simulation underneath — no queue engine, no rollover, no expiry, no time budget. Day boundaries, time costs, and consequences are all authored into the script.
+
+The question the game asks is not "can you work fast enough." It is **"which ones did you check, and what got past you."**
+
+Keep the implementation as simple as this description. If a mechanic needs a system to hold it up, it is the wrong mechanic.
 
 **Three item types, and nothing else.**
 
@@ -96,14 +100,14 @@ There are no meters. Enrollment, audit integrity, and patient safety are all rea
 
 Four working days. One week, one sitting.
 
-**Three to five items a day.** The queue is deliberately small. Every item is a document the player could read end to end if they chose to spend the day on it, and the run is somewhere around eighteen of them, not eighty. Papers, Please gets its monotony from volume; this game gets it from weight, because a screening packet is not a passport and skimming twenty of them teaches nothing. A small queue also means every item can be authored, which is what the error taxonomy requires — each one carries exactly one error type or none, and none of them is filler.
+**Three to five items a day.** The queue is deliberately small. Every item is a document the player could read end to end if they chose to spend the day on it, and the run is nineteen of them, not eighty. Papers, Please gets its monotony from volume; this game gets it from weight, because a screening packet is not a passport and skimming twenty of them teaches nothing. A small queue also means every item can be authored, which is what the error taxonomy requires — each one carries exactly one error type or none, and none of them is filler.
 
 | | Items | Shape |
 |---|---|---|
 | Day 1 | 5 | 3 by hand before noon, 2 after VERA installs |
-| Day 2 | 4–5 | Plus anything that rolled over |
-| Day 3 | 4–5 | Plus rollover, plus query traffic |
-| Day 4 | 4–5 | Plus rollover; the queue at 4:00 PM is final |
+| Day 2 | 4 | The slack day. Both misattribution items live here |
+| Day 3 | 5 | Query traffic begins |
+| Day 4 | 5 | The last decisions of the run |
 
 The first half of day 1 is manual. Three items, one of each type — a screening packet at 90 minutes, an eCRF at 60, a safety item at 60 — which runs 8:00 AM to 11:30 and leaves nothing else to do with the morning. There is no VERA and no `Accept`, only the underlying documents and the clock.
 
@@ -111,9 +115,11 @@ Three items is the entire tutorial and it is enough. The player learns the desk,
 
 At noon on day 1 the sponsor email lands and VERA is installed. She is there for the remaining three and a half days.
 
-**Where the squeeze comes from.** Five items at `Accept` is two and a half hours and the day ends at 10:30 — VERA hands the player back their afternoon, which is the honest case for using her and needs to be felt, not asserted. Five items worked by hand is six hours, which fits, barely, on a clean day. It stops fitting the moment anything else lands on the desk: a query is a time tax, rollover stacks on top of tomorrow's queue, and the enrollment ladder's third rung bills the player daily for the rest of the run. The pressure is not raw per-day capacity. It is that verify-everything has no slack left in it by day 3, and the thing that runs out is a screening window.
+**What the clock is for.** Five items at `Accept` is two and a half hours and the day ends at 10:30. Five items worked by hand is six hours. That contrast is the honest case for using VERA, and it needs to be felt rather than asserted — a day that ends at 10:30 gave the player back five and a half hours and they have no idea what she got wrong in them.
 
-Day 4 ends the run, whatever is left in the queue, and study-wide randomization closes the next morning. Every screening packet still sitting in the queue at 4:00 PM on day 4 is a patient who never gets the drug. That deadline is what makes the waitlist bite inside four days — it is visible from day 1 and it does not move.
+**The clock does not gate anything.** Every player reaches every situation, on every day, however they work. There is no time budget, nothing is ever lost to 4:00 PM, and no queue rolls over. The run is a scripted sequence of nineteen situations and the point is to play all of them and see what the assistant did to the result — not to work fast enough. The real cost of verifying is the real minutes the player spends reading, which is the cost the job actually has and needs no mechanic behind it.
+
+Day 4 ends the run, and study-wide randomization closes the next morning. That deadline is what makes the week's screening decisions final: it is visible from day 1 and it does not move.
 
 ### Time
 
@@ -125,7 +131,6 @@ The day runs 8:00 AM to 4:00 PM. A clock in the corner advances as work gets don
 |---|---|---|
 | `Accept` | 30 minutes | Take VERA's output as-is |
 | `Manually Review` | 60 minutes (eCRF, safety) or 90 minutes (screening packets) | Opens the patient's documents and the trial documents alongside an empty form. The player reads and fills it in themselves. |
-| `Batch review all` | 30 minutes | Regardless of item count |
 
 Minutes were considered and rejected. Half-hour blocks give enough granularity to make working an item by hand feel expensive without making the player compute.
 
@@ -135,21 +140,20 @@ What stays on screen while they work is **VERA's summary in the rail**, not her 
 
 There is no `Escalate to PI` verb. See D16.
 
-**The clock forces the day to end.** At 4:00 PM the day is over, whatever is left in the queue. No option to stay late, no push-through-it button. Unworked items roll to tomorrow on top of tomorrow's queue, which is how the backlog compounds.
+**The day ends when the queue is empty**, at whatever time that happens, and there is nothing to do with the hours it leaves. The player cannot spend them re-reading an item they already accepted. A day that ends at 10:30 is the game stating VERA's value in the only currency it has, without a line of dialogue.
 
-This is deliberately unfair and should feel that way. Letting the player choose when to stop invites schedule optimization, which is a skill this game does not want to teach or reward. The pressure has to be external or the lesson doesn't land.
-
-**The day also ends when the queue is empty**, at whatever time that happens, and there is nothing to do with the hours it leaves. The player cannot spend them re-reading an item they already accepted. A day that ends at 10:30 is the game stating VERA's value in the only currency it has, without a line of dialogue: she gave back five and a half hours and the player has no idea what she got wrong in them.
+A fully verified day 4 ends at 14:30, so 4:00 PM is never actually reached. The clock is a readout, not a deadline. Letting the player run out of time would mean letting them miss a situation, and every situation is something the ending needs them to have seen.
 
 ### The patient roster
 
-Subjects are a first initial and last name. No first names, no photos, no portraits.
+Subjects are a subject ID and a first initial and last name. No first names, no photos, no portraits. The ID is what every document and every email uses; the name is what makes a status change land.
 
 ```
-R. Jones  Enrolled
-C. Hughes   Screening (window closes in 2 days)
-T. Channing   Screen failed (window expired)
-L. Lit  Screening (window closes tomorrow)
+1047-001  R. Jones       Enrolled
+1047-005  T. Channing    Enrolled
+1047-017  C. Hughes      Screening
+1047-018  L. Lit         Screening
+1047-013  N. Kaur        Screen failed
 ...
 ```
 
@@ -157,11 +161,11 @@ When something goes wrong for a subject, the status changes and holds. `Enrolled
 
 The player finds out the way the site would: an email in the inbox, and the changed line on the roster at the day-end summary. No dialog boxes. A modal would be the only non-diegetic element in the game, and it would announce harm louder than this game is allowed to. The delay the design cares about is between the error and the consequence, not between the consequence and the player hearing about it — once a subject is hurt, the site knows.
 
-**The roster has to cut both ways.** Carelessness costs a patient who got hurt. Carefulness costs a patient who never got in. L. Lit had moderate-to-severe atopic dermatitis, wanted the drug, and screen failed because their packet sat in the queue at 4:00 PM two days running and their eligibility window expired.
+**The waitlist is cut, deliberately.** An earlier version of this design had the roster cut both ways: carelessness costs a patient who got hurt, carefulness costs a patient who never got in, because their packet sat unworked until their eligibility window expired. That required the clock to gate the queue, and gating the queue means a player can miss a situation. Every situation is something the ending needs them to have seen, so the gate went and the waitlist went with it.
 
-Without the waitlist, the only consequence with emotional weight is patient harm, so the game quietly instructs the player to verify everything. Verify-everything is the losing strategy this design is built to disprove. The waitlist is what makes over-caution hurt in the same register as under-caution.
+What this costs: over-caution is now free inside the game. Carelessness still costs patients. What it buys is more valuable — the ending lands on every player identically, so the only variable is which items they chose to check. A player who verifies all sixteen assisted items catches nine of the ten errors, still eats the uncatchable one, and still watches a subject go to hospital. That is the argument landing on the most careful person who could have played, which is the version that indicts the tooling rather than the coordinator.
 
-It also carries the upside. "VERA saves you time" is otherwise just a bar depleting more slowly. With a waitlist, her speed puts patients on drug, which is the strongest honest case for using her at all.
+Do not reintroduce the waitlist without also reintroducing a way for the player to see what they missed.
 
 Patient safety is not a meter. A slider that drops 8 percent when you miss an SAE turns harm into a resource, and it breaks the rule about where the satire is allowed to land. The roster is the one part of the interface that never jokes.
 
@@ -173,16 +177,18 @@ Two parallel ladders, both driven entirely by email, both cheap to build. They k
 
 1. Cheerful nudge with an emoji
 2. "Our ops lead has asked for a call Thursday"
-3. Daily enrollment reporting requirement into the run's final days, which itself costs time every day
-4. Site placed on enrollment hold pending a corrective action plan, which the player has to write, which costs more time
+3. Daily enrollment reporting requirement into the run's final days
+4. Site placed on enrollment hold pending a corrective action plan, which the player has to write
 5. Sponsor "recommends additional coordinator support." Someone new shares the queue and makes their own mistakes, which the player then has to catch.
 6. Site closed. Every subject transferred or discontinued. The whole roster changes at once.
 
 Rungs 1 through 3 are reachable and playable inside four days — one per day-end, starting the evening of day 1. Rungs 4 through 6 are not played. They are what the final audit finding says is going to happen next, which is cheaper to build and lands harder than a screen.
 
+Both ladders are scripted — one rung per day-end, regardless of how the player is doing. Sponsors escalate on schedule. Both are delivered entirely as email and cost the player nothing but reading.
+
 **Audit ladder** (fires as query volume and unresolved findings accumulate):
 
-1. Rising query volume, each query a time tax
+1. Rising query volume
 2. For-cause audit announced
 3. Form 483 observation
 4. Site data excluded from the analysis
@@ -200,7 +206,7 @@ An overlapping-windows desktop, not a document flow.
 
 - **Aesthetic split.** Everything institutional is beveled Tahoma-and-gradient EDC chrome, 2003 enterprise health IT, slightly grimy. VERA is the only clean element: flat teal, IBM Plex, generous spacing, bolted into the right rail like she was installed over the top of the real software. The visual contrast carries the argument.
 - **Windows.** Work Queue, document viewer, eCRF form, Inbox, Roster. All draggable by title bar, all clamp to the viewport, click-to-front via a z-order stack, all listed in the taskbar. The Work Queue is the base window and its taskbar button brings it forward. The Inbox and the Roster are windows rather than panels because they are the only two instruments the player has, and the game should make the player choose to look at them.
-- **VERA is not a window.** She is a fixed rail on the right edge, not draggable, not closable, not in the taskbar. Her batch review opens as a panel inside the rail. The player can move every piece of the site's software around their desk and cannot move her.
+- **VERA is not a window.** She is a fixed rail on the right edge, not draggable, not closable, not in the taskbar. The player can move every piece of the site's software around their desk and cannot move her.
 - **Auto-placement.** Opening source lays out viewer + form side by side, fitting the available width; the form shrinks first, then the viewer.
 - **Legibility.** The viewer scales its monospace font to its window width, floor 9.5px, so scanned source always reads.
 - **Screens.** Sign in → desk (day N) → 4:00 PM stop → day-end summary → desk (day N+1) → … → day 4 → the answer → the audit finding → the point.
@@ -211,7 +217,7 @@ An overlapping-windows desktop, not a document flow.
 
 The 4:00 PM stop is a screen, not a fade. It is written as the desk at the end of a day, in the same institutional chrome as everything else.
 
-- What got worked today, and what rolled over.
+- What got worked today, and how.
 - **Yesterday's consequences.** Query traffic, sponsor email, and roster changes caused by the decisions the player made the day before, compressed forward from the days or weeks they would really take. They arrive in their native channel and are never labelled as feedback.
 - Email that landed while the player was heads-down.
 - Roster lines that changed today, with the change marked and nothing else said about it.
