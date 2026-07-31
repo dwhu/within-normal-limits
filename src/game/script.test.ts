@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { assert, describe, expect, it } from "vitest";
 
 import { FORMS } from "@/game/forms";
 import { SCRIPT } from "@/game/script";
@@ -62,15 +62,18 @@ describe("SCRIPT — day 2", () => {
   });
 
   it("makes the uncatchable item agree with itself", () => {
-    expect(uncatchable!.truth.entry).toEqual(uncatchable!.vera!.entry);
+    assert(uncatchable?.vera, "day 2 carries an assisted uncatchable situation");
+    expect(uncatchable.truth.entry).toEqual(uncatchable.vera.entry);
   });
 
   it("punishes the uncatchable item identically whether or not it was verified", () => {
-    expect(uncatchable!.outcomes.accepted).toEqual(uncatchable!.outcomes.reviewedCorrect);
+    assert(uncatchable, "day 2 carries an uncatchable situation");
+    expect(uncatchable.outcomes.accepted).toEqual(uncatchable.outcomes.reviewedCorrect);
   });
 
   it("files the uncatchable item under category 2", () => {
-    expect(uncatchable!.debrief.category).toBe(2);
+    assert(uncatchable, "day 2 carries an uncatchable situation");
+    expect(uncatchable.debrief.category).toBe(2);
   });
 
   it("puts the catchable misattribution on the same day", () => {
@@ -92,16 +95,18 @@ describe("SCRIPT — day 3", () => {
   });
 
   it("carries the background-risk harm", () => {
-    expect(cat1).toBeDefined();
-    expect(cat1!.truth.error).toBe("NONE");
+    assert(cat1, "day 3 carries a category-1 harm");
+    expect(cat1.truth.error).toBe("NONE");
   });
 
   it("harms the subject whether or not the player verified", () => {
-    expect(cat1!.outcomes.accepted).toEqual(cat1!.outcomes.reviewedCorrect);
+    assert(cat1, "day 3 carries a category-1 harm");
+    expect(cat1.outcomes.accepted).toEqual(cat1.outcomes.reviewedCorrect);
   });
 
   it("blames nobody for the background-risk harm", () => {
-    expect(cat1!.debrief.line).not.toMatch(/should have|missed|failed to|error/i);
+    assert(cat1, "day 3 carries a category-1 harm");
+    expect(cat1.debrief.line).not.toMatch(/should have|missed|failed to|error/i);
   });
 
   it("carries the stale-context and threshold situations", () => {
@@ -111,8 +116,9 @@ describe("SCRIPT — day 3", () => {
   });
 
   it("fabricates a value that appears nowhere in truth", () => {
-    const fab = day3.find((s) => s.truth.error === "fabrication")!;
-    const stated = Object.values(fab.vera!.entry);
+    const fab = day3.find((s) => s.truth.error === "fabrication");
+    assert(fab?.vera, "day 3 carries an assisted fabrication");
+    const stated = Object.values(fab.vera.entry);
     const real = Object.values(fab.truth.entry);
     expect(stated.some((v) => !real.includes(v))).toBe(true);
   });
@@ -120,6 +126,7 @@ describe("SCRIPT — day 3", () => {
 
 describe("SCRIPT — day 4", () => {
   const day4 = SCRIPT.filter((s) => s.day === 4);
+  const last = SCRIPT.at(-1);
 
   it("has five situations, three of them screening packets", () => {
     expect(day4).toHaveLength(5);
@@ -127,11 +134,13 @@ describe("SCRIPT — day 4", () => {
   });
 
   it("ends the run on L. Lit", () => {
-    expect(SCRIPT.at(-1)!.id).toBe("SCR-0218");
-    expect(SCRIPT.at(-1)!.subject).toBe("1047-018");
+    assert(last, "SCRIPT has a last situation");
+    expect(last.id).toBe("SCR-0218");
+    expect(last.subject).toBe("1047-018");
   });
 
   it("lets her be right on the last decision of the run", () => {
-    expect(SCRIPT.at(-1)!.truth.error).toBe("NONE");
+    assert(last, "SCRIPT has a last situation");
+    expect(last.truth.error).toBe("NONE");
   });
 });
