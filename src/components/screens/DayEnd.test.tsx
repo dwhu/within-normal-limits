@@ -27,18 +27,18 @@ const noop = () => {};
 
 describe("DayEnd", () => {
   it("lists what was worked", () => {
-    render(<DayEnd state={afterDay1()} script={FIXTURE_SCRIPT} onBegin={noop} onSkip={noop} />);
+    render(<DayEnd state={afterDay1()} script={FIXTURE_SCRIPT} onBegin={noop} />);
     expect(screen.getByText(/Week 8 vitals/)).toBeInTheDocument();
   });
 
   it("shows the day's mail", () => {
-    render(<DayEnd state={afterDay1()} script={FIXTURE_SCRIPT} onBegin={noop} onSkip={noop} />);
+    render(<DayEnd state={afterDay1()} script={FIXTURE_SCRIPT} onBegin={noop} />);
     expect(screen.getByText(/we're SO close/)).toBeInTheDocument();
   });
 
   it("shows no score, no percentage, and no verdict on the player's accuracy", () => {
     const { container } = render(
-      <DayEnd state={afterDay1()} script={FIXTURE_SCRIPT} onBegin={noop} onSkip={noop} />,
+      <DayEnd state={afterDay1()} script={FIXTURE_SCRIPT} onBegin={noop} />,
     );
     const banned = /%|score|accuracy|correct|wrong|missed/i;
     // Visible text — the obvious leak.
@@ -50,22 +50,19 @@ describe("DayEnd", () => {
 
   it("begins the next day", async () => {
     const onBegin = vi.fn();
-    render(<DayEnd state={afterDay1()} script={FIXTURE_SCRIPT} onBegin={onBegin} onSkip={noop} />);
+    render(<DayEnd state={afterDay1()} script={FIXTURE_SCRIPT} onBegin={onBegin} />);
 
     await userEvent.click(screen.getByRole("button", { name: /Begin day 2/ }));
     expect(onBegin).toHaveBeenCalled();
   });
 
-  it("offers to skip the next day", async () => {
-    const onSkip = vi.fn();
-    render(<DayEnd state={afterDay1()} script={FIXTURE_SCRIPT} onBegin={noop} onSkip={onSkip} />);
-
-    await userEvent.click(screen.getByRole("button", { name: /Skip day/ }));
-    expect(onSkip).toHaveBeenCalled();
+  it("offers beginning the next day as the only way forward", () => {
+    render(<DayEnd state={afterDay1()} script={FIXTURE_SCRIPT} onBegin={noop} />);
+    expect(screen.getAllByRole("button")).toHaveLength(1);
   });
 
   it("shows the roster line's true prior status, not the post-change status", () => {
-    render(<DayEnd state={afterDay2()} script={FIXTURE_SCRIPT} onBegin={noop} onSkip={noop} />);
+    render(<DayEnd state={afterDay2()} script={FIXTURE_SCRIPT} onBegin={noop} />);
     expect(screen.getByText(/Screening → Enrolled/)).toBeInTheDocument();
   });
 });

@@ -6,13 +6,21 @@ export function SignIn({ onSignIn }: { onSignIn: () => void }) {
       <div className="bevel-out w-[560px] shadow-2xl">
         <div className="titlebar px-1.5 py-1">Veriscribe EDC 9.2 — Sign in</div>
         <div className="bevel-in m-0.5 p-6">
+          <p className="-mx-6 -mt-6 mb-6 flex items-start gap-2 border-b border-neutral-400 bg-amber-100/70 px-3 py-2 text-[11px] leading-relaxed text-neutral-800">
+            <span aria-hidden="true" className="text-[13px] leading-none">
+              ⚠
+            </span>
+            <span>
+              This is a validated system. Entries made under your credentials are attributable to
+              you and retained permanently in the audit trail.
+            </span>
+          </p>
           <p className="font-mono text-[10px] tracking-widest text-neutral-600">
             AMGEN INC. · PROTOCOL 20210143 · ROCKET-HORIZON
           </p>
-          <h1 className="mt-2 text-2xl font-normal">Site 1047 · Coordinator</h1>
-          <p className="mt-4 max-w-[46ch] leading-relaxed">
-            An eight-hour day, in half-hour blocks. A queue that does not care. An assistant who
-            sounds exactly the same whether she is right or wrong.
+          <h1 className="mt-2 text-2xl font-normal">Site 1047 · Coordinator Login</h1>
+          <p className="mt-4 max-w-[60ch] leading-relaxed">
+            A phase 3 study of adalixumab in moderate-to-severe atopic dermatitis
           </p>
           <dl className="mt-6 grid grid-cols-[80px_1fr] gap-2 items-center">
             <dt>User</dt>
