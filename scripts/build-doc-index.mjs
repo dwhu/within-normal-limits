@@ -56,5 +56,5 @@ for (const file of files) {
   });
 }
 
-await writeFile(join(DIR, "index.json"), JSON.stringify(index, null, 2) + "\n");
+await writeFile(join(DIR, "index.json"), `${JSON.stringify(index, null, 2)}\n`);
 console.log(`Indexed ${index.length} documents.`);

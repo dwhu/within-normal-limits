@@ -15,7 +15,7 @@ describe("Home", () => {
   it("opens on the sign-in screen", () => {
     render(<Home />);
     expect(
-      screen.getByRole("heading", { level: 1, name: "Site 1047 · Coordinator" }),
+      screen.getByRole("heading", { level: 1, name: "Site 1047 · Coordinator Login" }),
     ).toBeInTheDocument();
   });
 
@@ -31,7 +31,7 @@ describe("Home", () => {
 
     render(<Home />);
     expect(
-      screen.getByRole("heading", { level: 1, name: "Site 1047 · Coordinator" }),
+      screen.getByRole("heading", { level: 1, name: "Site 1047 · Coordinator Login" }),
     ).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole("button", { name: "Sign in" }));
