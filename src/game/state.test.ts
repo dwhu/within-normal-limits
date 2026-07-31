@@ -13,6 +13,45 @@ describe("reducer", () => {
     expect(reducer(initialState, { type: "SIGN_IN" }, FIXTURE_SCRIPT).screen).toBe("desk");
   });
 
+  it("RESTORE lands on the sign-in screen whatever screen the run was saved on", () => {
+    const saved: State = { ...initialState, screen: "desk", index: 1 };
+    const s = reducer(initialState, { type: "RESTORE", state: saved }, FIXTURE_SCRIPT);
+
+    expect(s.screen).toBe("signin");
+    expect(s.index).toBe(1);
+  });
+
+  it("SIGN_IN resumes a restored run mid-day, at the situation it was left on", () => {
+    const saved: State = { ...initialState, screen: "desk", index: 1, clock: 30 };
+    const s = run(saved, { type: "RESTORE", state: saved }, { type: "SIGN_IN" });
+
+    expect(s.screen).toBe("desk");
+    expect(s.index).toBe(1);
+    expect(s.clock).toBe(30);
+  });
+
+  it("SIGN_IN resumes a run saved at a day boundary on the day-end summary", () => {
+    const saved = run(start(), { type: "ACCEPT" }, { type: "ACCEPT" });
+    expect(saved.screen).toBe("dayend");
+
+    const s = run(saved, { type: "RESTORE", state: saved }, { type: "SIGN_IN" });
+    expect(s.screen).toBe("dayend");
+  });
+
+  it("SIGN_IN resumes a finished run on the ending", () => {
+    const saved = run(
+      start(),
+      { type: "ACCEPT" },
+      { type: "ACCEPT" },
+      { type: "BEGIN_DAY" },
+      { type: "ACCEPT" },
+    );
+    expect(saved.screen).toBe("ending");
+
+    const s = run(saved, { type: "RESTORE", state: saved }, { type: "SIGN_IN" });
+    expect(s.screen).toBe("ending");
+  });
+
   it("ACCEPT advances the clock 30 minutes and the index by one", () => {
     const s = run(start(), { type: "ACCEPT" });
     expect(s.clock).toBe(30);
