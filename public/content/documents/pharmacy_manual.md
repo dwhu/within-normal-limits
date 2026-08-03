@@ -1,1 +1,0 @@
-../../../docs/trial_documents/pharmacy_manual.md
