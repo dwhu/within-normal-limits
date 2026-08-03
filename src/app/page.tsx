@@ -6,7 +6,7 @@ import { Desk } from "@/components/desk/Desk";
 import { DayEnd } from "@/components/screens/DayEnd";
 import { Ending } from "@/components/screens/Ending";
 import { SignIn } from "@/components/screens/SignIn";
-import { load, save } from "@/game/persist";
+import { clear, load, save } from "@/game/persist";
 import { SCRIPT } from "@/game/script";
 import { initialState, reducer } from "@/game/state";
 import type { Action, State } from "@/game/types";
@@ -21,6 +21,17 @@ export default function Home() {
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
+    const url = new URL(window.location.href);
+
+    if (url.searchParams.get("reset") === "1") {
+      clear();
+      // Drop the param so a later refresh resumes the fresh run instead of wiping it again.
+      url.searchParams.delete("reset");
+      window.history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
+      setHydrated(true);
+      return;
+    }
+
     const saved = load();
     if (saved) rawDispatch({ type: "RESTORE", state: saved });
     setHydrated(true);

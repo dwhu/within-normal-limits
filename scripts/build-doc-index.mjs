@@ -1,6 +1,12 @@
-import { readdir, stat, writeFile } from "node:fs/promises";
+// Copies the trial corpus out of docs/ into public/ and writes the index the Documents window
+// fetches. `docs/trial_documents/` stays the one authored copy; everything under
+// public/content/documents/*.md is generated and gitignored. These were symlinks once, which
+// `next dev` and `next start` served fine — but a Vercel build copies public/ into the output
+// bundle, and fs.cp refuses a relative symlink that points outside the tree it is copying.
+import { copyFile, mkdir, rm, stat, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
+const SRC = "docs/trial_documents";
 const DIR = "public/content/documents";
 
 const TITLES = {
@@ -43,11 +49,21 @@ const MODIFIED = {
   "study_reference_manual.md": "2023-07-20",
 };
 
-const files = (await readdir(DIR)).filter((f) => f.endsWith(".md")).sort();
+// TITLES is the manifest, not the directory listing: ASSUMPTIONS.md and index.md live in
+// docs/trial_documents/ too and are authoring metadata a trial site would never receive.
+const files = Object.keys(TITLES).sort();
 const index = [];
 
+await mkdir(DIR, { recursive: true });
+
 for (const file of files) {
-  const { size } = await stat(join(DIR, file));
+  const dest = join(DIR, file);
+  // Unlink first: if this checkout predates the change, dest is still a symlink into docs/ and
+  // copyFile would write straight through it, back onto the source.
+  await rm(dest, { force: true });
+  await copyFile(join(SRC, file), dest);
+
+  const { size } = await stat(dest);
   index.push({
     file,
     title: TITLES[file] ?? file,
@@ -56,5 +72,5 @@ for (const file of files) {
   });
 }
 
-await writeFile(join(DIR, "index.json"), JSON.stringify(index, null, 2) + "\n");
+await writeFile(join(DIR, "index.json"), `${JSON.stringify(index, null, 2)}\n`);
 console.log(`Indexed ${index.length} documents.`);
