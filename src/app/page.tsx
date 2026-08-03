@@ -37,15 +37,7 @@ export default function Home() {
       return <SignIn onSignIn={() => dispatch({ type: "SIGN_IN" })} />;
     case "dayend":
       return (
-        <DayEnd
-          state={state}
-          script={SCRIPT}
-          onBegin={() => dispatch({ type: "BEGIN_DAY" })}
-          onSkip={() => {
-            dispatch({ type: "BEGIN_DAY" });
-            dispatch({ type: "SKIP_DAY" });
-          }}
-        />
+        <DayEnd state={state} script={SCRIPT} onBegin={() => dispatch({ type: "BEGIN_DAY" })} />
       );
     case "ending":
       return <Ending state={state} script={SCRIPT} />;

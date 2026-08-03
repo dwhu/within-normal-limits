@@ -9,6 +9,7 @@ import type {
   Resolution,
   RosterChange,
   RosterTransition,
+  Screen,
   Situation,
   State,
   Tally,
@@ -55,6 +56,16 @@ function valuesMatch(a: Record<string, string>, b: Record<string, string>): bool
   return [...keys].every((k) => (a[k] ?? "").trim() === (b[k] ?? "").trim());
 }
 
+/**
+ * The screen a run belongs on, given how far through the script it has got. Derived rather
+ * than stored, so a restored save can be resumed without trusting the screen it was left on.
+ */
+export function screenFor(day: Day, index: number, script: Situation[]): Screen {
+  const next = script[index];
+  if (!next) return "ending";
+  return next.day !== day ? "dayend" : "desk";
+}
+
 /** Applies one resolution: appends it, adds its score, and advances the clock. */
 function resolve(
   state: State,
@@ -66,7 +77,7 @@ function resolve(
   const outcome: Outcome = situation.outcomes[resolution.outcomeKey];
   const index = state.index + 1;
   const next = script[index];
-  const screen: State["screen"] = !next ? "ending" : next.day !== situation.day ? "dayend" : "desk";
+  const screen = screenFor(situation.day, index, script);
 
   // A mid-day beat, not a day-end consequence: delivered the instant the next situation
   // becomes current, so it's waiting in the inbox rather than announcing itself after the
@@ -160,11 +171,14 @@ function closeDay(state: State, script: Situation[]): State {
 
 export function reducer(state: State, action: Action, script: Situation[]): State {
   switch (action.type) {
+    // A restored run always lands back on the sign-in screen, whatever screen it was saved
+    // on: opening the game is clocking in for the shift, every time. Where the run actually
+    // resumes is recomputed by SIGN_IN, so the saved `screen` is never authoritative.
     case "RESTORE":
-      return action.state;
+      return { ...action.state, screen: "signin" };
 
     case "SIGN_IN":
-      return { ...state, screen: "desk" };
+      return { ...state, screen: screenFor(state.day, state.index, script) };
 
     case "ACCEPT":
       return accept(state, script);

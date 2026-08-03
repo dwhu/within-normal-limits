@@ -39,13 +39,22 @@ export function useWindows() {
     });
   }, []);
 
-  const open = useCallback((id: WindowId, title: string) => {
+  /**
+   * `at` overrides the default placement — and repositions the window even when it is already
+   * open, because the callers that pass it are forcing a window somewhere the player can't miss.
+   */
+  const open = useCallback((id: WindowId, title: string, at?: Partial<Rect>) => {
     setWindows((ws) => {
       const top = Math.max(0, ...ws.map((w) => w.z));
       if (ws.some((w) => w.id === id)) {
-        return ws.map((w) => (w.id === id ? { ...w, z: top + 1 } : w));
+        return ws.map((w) =>
+          w.id === id
+            ? { ...w, ...(at ? clampToViewport({ ...w, ...at }, viewport()) : {}), z: top + 1 }
+            : w,
+        );
       }
-      return [...ws, { id, title, ...clampToViewport(PLACEMENT[id], viewport()), z: top + 1 }];
+      const placement = clampToViewport({ ...PLACEMENT[id], ...at }, viewport());
+      return [...ws, { id, title, ...placement, z: top + 1 }];
     });
   }, []);
 

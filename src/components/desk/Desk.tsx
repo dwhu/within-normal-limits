@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Taskbar } from "@/components/desk/Taskbar";
 import { useWindows } from "@/components/desk/useWindows";
@@ -28,6 +28,15 @@ export function Desk({ state, dispatch, script }: Props) {
   const today = script.filter((s) => s.day === state.day);
   const current = script[state.index];
   const doneIds = state.resolutions.map((r) => r.situationId);
+
+  // VERA turns up mid-day-1 as an email from Clinical Operations, delivered the moment the
+  // situation carrying it becomes current. She appears in the rail at the same instant, so the
+  // announcement is forced to the top of the screen rather than left to be found in the taskbar.
+  const arrivalId = current?.arrivalEmail?.id;
+  useEffect(() => {
+    if (!arrivalId) return;
+    open("inbox", "Inbox", { y: 16 });
+  }, [arrivalId, open]);
 
   const beginReview = () => {
     if (!current) return;

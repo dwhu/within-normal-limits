@@ -36,6 +36,23 @@ describe("useWindows", () => {
     expect(result.current.topmost()).toBe("inbox");
   });
 
+  it("opens a window at a forced placement instead of its default", () => {
+    const { result } = renderHook(() => useWindows());
+    act(() => result.current.open("inbox", "Inbox", { y: 16 }));
+
+    expect(result.current.windows.find((w) => w.id === "inbox")).toMatchObject({ x: 200, y: 16 });
+  });
+
+  it("moves an already-open window when it is reopened at a forced placement", () => {
+    const { result } = renderHook(() => useWindows());
+    act(() => result.current.open("inbox", "Inbox"));
+    act(() => result.current.move("inbox", 300, 300));
+    act(() => result.current.open("inbox", "Inbox", { y: 16 }));
+
+    expect(result.current.windows.find((w) => w.id === "inbox")).toMatchObject({ x: 300, y: 16 });
+    expect(result.current.topmost()).toBe("inbox");
+  });
+
   it("closes a window", () => {
     const { result } = renderHook(() => useWindows());
     act(() => result.current.open("inbox", "Inbox"));

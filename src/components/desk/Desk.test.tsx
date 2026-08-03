@@ -21,10 +21,10 @@ describe("Desk", () => {
     expect(screen.getByText(/Paper source only/)).toBeInTheDocument();
   });
 
-  it("tells the player no assistant is provisioned before VERA arrives", () => {
+  it("announces VERA's rollout before she arrives", () => {
     render(<Desk state={desk()} dispatch={vi.fn()} script={FIXTURE_SCRIPT} />);
 
-    expect(screen.getByText(/No assistant provisioned/)).toBeInTheDocument();
+    expect(screen.getByText(/Coming soon to Site 1047: VERA/)).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /Accept as drafted/ })).toBeNull();
   });
 
@@ -33,6 +33,30 @@ describe("Desk", () => {
 
     expect(screen.getByText("The panel is within range.")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Accept as drafted/ })).toBeInTheDocument();
+  });
+
+  it("forces the inbox open at the top of the screen when VERA arrives", () => {
+    const arrivalEmail = {
+      id: "OPS-1",
+      from: "Amgen Clinical Operations",
+      subject: "Meet VERA",
+      body: "She's live in your queue.",
+    };
+    const script: Situation[] = [FIXTURE_SCRIPT[0], { ...FIXTURE_SCRIPT[1], arrivalEmail }];
+
+    render(
+      <Desk state={desk({ index: 1, inbox: [arrivalEmail] })} dispatch={vi.fn()} script={script} />,
+    );
+
+    expect(screen.getByText("She's live in your queue.")).toBeInTheDocument();
+    expect(screen.getByText("She's live in your queue.").closest("div.absolute")).toHaveStyle({
+      top: "16px",
+    });
+  });
+
+  it("leaves the inbox shut on an item that does not carry an arrival email", () => {
+    render(<Desk state={desk({ index: 1 })} dispatch={vi.fn()} script={FIXTURE_SCRIPT} />);
+    expect(screen.queryByText("Inbox")).toBeNull();
   });
 
   it("dispatches ACCEPT when the player takes her word", async () => {

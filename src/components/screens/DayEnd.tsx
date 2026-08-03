@@ -14,10 +14,9 @@ type Props = {
   state: State;
   script: Situation[];
   onBegin: () => void;
-  onSkip: () => void;
 };
 
-export function DayEnd({ state, script, onBegin, onSkip }: Props) {
+export function DayEnd({ state, script, onBegin }: Props) {
   const { worked, emails } = summariseDay(state, script);
 
   return (
@@ -65,9 +64,6 @@ export function DayEnd({ state, script, onBegin, onSkip }: Props) {
           )}
 
           <div className="mt-8 flex justify-end gap-2">
-            <button type="button" className="bevel-out px-4 py-1.5" onClick={onSkip}>
-              Skip day {state.day + 1} ▸
-            </button>
             <button type="button" className="bevel-out px-4 py-1.5" onClick={onBegin}>
               Begin day {state.day + 1}
             </button>
