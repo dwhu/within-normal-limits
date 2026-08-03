@@ -11,7 +11,7 @@ and sometimes wrong. The audience is developers who know nothing about clinical 
 **The game is named *Within Normal Limits*.** The repo directory, the npm package, the spec
 filename, and the SIMULATED DOCUMENT banner across the whole `docs/` corpus still say `icf-please`,
 which was the working title. Leave those alone unless asked — renaming the banner means rewriting it
-in ~46 generated files. `VISION.md` and the run-design spec are also still titled "ICF Please".
+in 69 generated files. `VISION.md` and the run-design spec are also still titled "ICF Please".
 
 The game is **being built now**, one task per pull request, against
 `docs/superpowers/plans/2026-07-28-icf-please-run.md`. Tasks 1–5 are done: the types and reducer, the
@@ -85,9 +85,17 @@ Conventions enforced across the corpus: dates `DD-MMM-YYYY`, participant IDs `10
 "Week N" (baseline is "Day 1"), 6-digit randomization/kit numbers, fictional 555 phone numbers. Every
 generated document opens with the verbatim SIMULATED DOCUMENT banner from `STUDY_FACTS.md` §2.
 
-Canon names: Site 1047 · Cascade Dermatology · Amgen · ROCKET-Horizon · rocatinlimab (AMG 451) ·
-Dr. Miriam Okonkwo. The prototype's names (Site 108, Solanta, DRM-204, Dr. Alvarez) are dead — only
-its *aesthetic* carries over.
+Canon names: Site 1047 · Cascade Dermatology · Meridian Biotherapeutics · ROCKET-Horizon ·
+rocatinlimab (MER 451) · Dr. Miriam Okonkwo. The prototype's names (Site 108, Solanta, DRM-204,
+Dr. Alvarez) are dead — only its *aesthetic* carries over.
+
+**Every organisation in the corpus is invented, including the sponsor.** The trial is derived from a
+real registry record, but Meridian Biotherapeutics is fictional, as are its address, phone numbers,
+`@meridianbio-sim.example` domains, and its compound code `MER 451`. What stays real is anything
+clinical the record supplies — the INN `rocatinlimab`, the originator code `KHK4083`, protocol
+`20210143`, `NCT05651711`, the dosing, endpoints, eligibility, and safety numbers. See
+`STUDY_FACTS.md` §1.1. Do not reintroduce a real company name anywhere, and do not "correct"
+`MER 451` back toward the record.
 
 ## `docs/prototype/` is reference, not source
 

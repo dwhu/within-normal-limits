@@ -57,7 +57,7 @@ describe("Desk", () => {
   it("forces the inbox open at the top of the screen when VERA arrives", () => {
     const arrivalEmail = {
       id: "OPS-1",
-      from: "Amgen Clinical Operations",
+      from: "Meridian Clinical Operations",
       subject: "Meet VERA",
       body: "She's live in your queue.",
     };

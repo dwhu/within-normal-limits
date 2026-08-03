@@ -22,7 +22,7 @@ export const FIXTURE_SCRIPT: Situation[] = [
         score: { verified: 1, errorsAccepted: 1 },
         email: {
           id: "DQ-0111",
-          from: "Amgen Data Mgmt",
+          from: "Meridian Data Mgmt",
           subject: "Query DQ-0111",
           body: "Reported value does not match source.",
         },
@@ -142,7 +142,7 @@ export const ENDING_FIXTURE: Situation[] = [
         score: { errorsAccepted: 1 },
         email: {
           id: "DQ-0205",
-          from: "Amgen Data Mgmt",
+          from: "Meridian Data Mgmt",
           subject: "Query DQ-0205",
           body: "Specimen 1047-005 / 1047-010 mismatch identified at central lab.",
         },
@@ -153,7 +153,7 @@ export const ENDING_FIXTURE: Situation[] = [
         score: { errorsAccepted: 1 },
         email: {
           id: "DQ-0205",
-          from: "Amgen Data Mgmt",
+          from: "Meridian Data Mgmt",
           subject: "Query DQ-0205",
           body: "Specimen 1047-005 / 1047-010 mismatch identified at central lab.",
         },
@@ -162,7 +162,7 @@ export const ENDING_FIXTURE: Situation[] = [
         score: { verified: 1, errorsAccepted: 1 },
         email: {
           id: "DQ-0205",
-          from: "Amgen Data Mgmt",
+          from: "Meridian Data Mgmt",
           subject: "Query DQ-0205",
           body: "Specimen 1047-005 / 1047-010 mismatch identified at central lab.",
         },

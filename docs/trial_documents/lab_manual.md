@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -7,14 +7,14 @@
 
 ## ROCKET-Horizon — Protocol 20210143
 
-### A Phase 3, Randomized, 24-week, Placebo-controlled, Double-blind Study to Assess the Efficacy, Safety and Tolerability of Rocatinlimab (AMG 451) Monotherapy in Adult Subjects With Moderate-to-severe Atopic Dermatitis (AD)
+### A Phase 3, Randomized, 24-week, Placebo-controlled, Double-blind Study to Assess the Efficacy, Safety and Tolerability of Rocatinlimab (MER 451) Monotherapy in Adult Subjects With Moderate-to-severe Atopic Dermatitis (AD)
 
 | Field | Value |
 |---|---|
 | Manual version | **Version 4.0** |
 | Version date | **28-NOV-2023** |
 | Supersedes | Version 3.0, dated 05-MAY-2023 |
-| Sponsor | Amgen Inc., One Amgen Center Drive, Thousand Oaks, CA 91320-1799, USA |
+| Sponsor | Meridian Biotherapeutics, Inc., 1200 Kestrel Way, Emeryville, CA 94608, USA |
 | Sponsor protocol number | **20210143** |
 | Protocol version in force | Amendment 3, Version 4.0, dated 29-NOV-2023 |
 | ClinicalTrials.gov identifier | **NCT05651711** |
@@ -22,7 +22,7 @@
 | US IND number | **IND 145,882** |
 | Central laboratory | **Meridian Central Laboratories (MCL)** |
 | MCL study code | **MCL-20210143-ROCKET** |
-| Prepared by | MCL Global Study Management, on behalf of Amgen Inc. |
+| Prepared by | MCL Global Study Management, on behalf of Meridian Biotherapeutics, Inc. |
 | Distribution | All activated investigator sites; Harborlight Clinical Research, Inc. (HCR) |
 
 **Effective date:** this version takes effect at each site on the date of the site's documented
@@ -123,7 +123,7 @@ front of you before calling. Never state a participant's name to the help desk.
 | CRA / monitor, Site 1047 | Kevin Ostrander, CCRA | `k.ostrander@harborlightcro.com` · +1 (503) 555-0188 |
 | Medical Monitor (24/7) | Ana Belmonte-Ruiz, MD | +1 (888) 555-0142 · `medicalmonitor.20210143@harborlightcro.com` |
 | Back-up Medical Monitor | Peter Vandermeer, MD | via +1 (888) 555-0142 |
-| Sponsor Study Director | Study Director, Amgen Inc. | `medinfo@amgen.com` · +1 (866) 572-6436 |
+| Sponsor Study Director | Study Director, Meridian Biotherapeutics, Inc. | `medinfo@meridianbio-sim.example` · +1 (866) 555-0190 |
 
 ### 2.4 Site 1047 internal (Cascade Dermatology & Clinical Research, LLC)
 

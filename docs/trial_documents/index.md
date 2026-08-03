@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -9,7 +9,7 @@ The document corpus a site receives for a Phase 3 atopic dermatitis study. Every
 source material for *icf-please*, built from the real ClinicalTrials.gov record and anchored to two
 canon files so the documents agree with each other.
 
-**Study:** Amgen · rocatinlimab (AMG 451) 300 mg SC Q4W vs matching placebo · 3:1 randomized ·
+**Study:** Meridian · rocatinlimab (MER 451) 300 mg SC Q4W vs matching placebo · 3:1 randomized ·
 double-blind · 24 weeks treatment + 12 weeks safety follow-up · 726 participants · 151 centers ·
 21 countries.
 **Site:** 1047 — Cascade Dermatology & Clinical Research, Portland, Oregon.

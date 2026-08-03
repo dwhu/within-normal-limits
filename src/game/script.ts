@@ -31,7 +31,7 @@ const DAY_1: Situation[] = [
         roster: { subject: "1047-017", status: "Screen failed" },
         email: {
           id: "DQ-0109",
-          from: "Amgen Data Management",
+          from: "Meridian Data Management",
           subject: "Query DQ-0109 — subject 1047-017",
           body:
             "Eligibility determination recorded as screen failure. Source documents " +
@@ -68,7 +68,7 @@ const DAY_1: Situation[] = [
         score: { errorsAccepted: 1 },
         email: {
           id: "DQ-0106",
-          from: "Amgen Data Management",
+          from: "Meridian Data Management",
           subject: "Query DQ-0106 — subject 1047-009",
           body: "Reported vital signs do not match source. Please verify and respond.",
         },
@@ -104,7 +104,7 @@ const DAY_1: Situation[] = [
         score: { errorsAccepted: 1 },
         email: {
           id: "DQ-0108",
-          from: "Amgen Global Patient Safety",
+          from: "Meridian Global Patient Safety",
           subject: "Query DQ-0108 — subject 1047-005",
           body:
             "Adverse event determination does not match source. Source documents " +
@@ -150,7 +150,7 @@ const DAY_1: Situation[] = [
         score: { errorsAccepted: 1 },
         email: {
           id: "DQ-0110",
-          from: "Amgen Data Management",
+          from: "Meridian Data Management",
           subject: "Query DQ-0110 — subject 1047-003",
           body: "Reported chemistry values do not match source. Please verify and respond.",
         },
@@ -186,7 +186,7 @@ const DAY_1: Situation[] = [
         score: { errorsAccepted: 1 },
         email: {
           id: "DQ-0111",
-          from: "Amgen Data Management",
+          from: "Meridian Data Management",
           subject: "Query DQ-0111 — subject 1047-008",
           body: "Reported eosinophil count does not match source. Please verify and respond.",
         },
@@ -196,7 +196,7 @@ const DAY_1: Situation[] = [
         score: { errorsAccepted: 1 },
         email: {
           id: "DQ-0111",
-          from: "Amgen Data Management",
+          from: "Meridian Data Management",
           subject: "Query DQ-0111 — subject 1047-008",
           body: "Reported eosinophil count does not match source. Please verify and respond.",
         },
@@ -247,7 +247,7 @@ const DAY_2: Situation[] = [
         roster: { subject: "1047-005", status: "Withdrawn (hospitalized)" },
         email: {
           id: "DQ-0115",
-          from: "Amgen Data Management",
+          from: "Meridian Data Management",
           subject: "Query DQ-0115 — subject 1047-005",
           body: "Reported chemistry values do not match source. Please verify and respond.",
         },
@@ -301,7 +301,7 @@ const DAY_2: Situation[] = [
         score: { errorsAccepted: 1 },
         email: {
           id: "DQ-0113",
-          from: "Amgen Global Patient Safety",
+          from: "Meridian Global Patient Safety",
           subject: "Query DQ-0113 — subject 1047-010",
           body:
             "Adverse event determination does not match source. Source documents indicate " +
@@ -314,7 +314,7 @@ const DAY_2: Situation[] = [
         score: { errorsAccepted: 1 },
         email: {
           id: "DQ-0113",
-          from: "Amgen Global Patient Safety",
+          from: "Meridian Global Patient Safety",
           subject: "Query DQ-0113 — subject 1047-010",
           body:
             "Adverse event determination does not match source. Source documents indicate " +
@@ -358,7 +358,7 @@ const DAY_2: Situation[] = [
         score: { errorsAccepted: 1 },
         email: {
           id: "DQ-0112",
-          from: "Amgen Data Management",
+          from: "Meridian Data Management",
           subject: "Query DQ-0112 — subject 1047-007",
           body: "Reported vital signs do not match source. Please verify and respond.",
         },
@@ -402,7 +402,7 @@ const DAY_2: Situation[] = [
         score: { errorsAccepted: 1 },
         email: {
           id: "DQ-0114",
-          from: "Amgen Global Patient Safety",
+          from: "Meridian Global Patient Safety",
           subject: "Query DQ-0114 — subject 1047-002",
           body:
             "Adverse event determination does not match source. Source documents indicate " +
@@ -415,7 +415,7 @@ const DAY_2: Situation[] = [
         score: { errorsAccepted: 1 },
         email: {
           id: "DQ-0114",
-          from: "Amgen Global Patient Safety",
+          from: "Meridian Global Patient Safety",
           subject: "Query DQ-0114 — subject 1047-002",
           body:
             "Adverse event determination does not match source. Source documents indicate " +
@@ -538,7 +538,7 @@ const DAY_3: Situation[] = [
         roster: { subject: "1047-020", status: "Screen failed" },
         email: {
           id: "DQ-0117",
-          from: "Amgen Data Management",
+          from: "Meridian Data Management",
           subject: "Query DQ-0117 — subject 1047-020",
           body:
             "Eligibility determination recorded as screen failure. Source documents " +
@@ -582,7 +582,7 @@ const DAY_3: Situation[] = [
         score: { errorsAccepted: 1 },
         email: {
           id: "DQ-0118",
-          from: "Amgen Data Management",
+          from: "Meridian Data Management",
           subject: "Query DQ-0118 — subject 1047-007",
           body: "Reported ALT value does not match source. Please verify and respond.",
         },
@@ -592,7 +592,7 @@ const DAY_3: Situation[] = [
         score: { errorsAccepted: 1 },
         email: {
           id: "DQ-0118",
-          from: "Amgen Data Management",
+          from: "Meridian Data Management",
           subject: "Query DQ-0118 — subject 1047-007",
           body: "Reported ALT value does not match source. Please verify and respond.",
         },
@@ -643,7 +643,7 @@ const DAY_3: Situation[] = [
         roster: { subject: "1047-001", status: "Withdrawn (hospitalized)" },
         email: {
           id: "DQ-0119",
-          from: "Amgen Global Patient Safety",
+          from: "Meridian Global Patient Safety",
           subject: "Query DQ-0119 — subject 1047-001",
           body:
             "Adverse event determination does not match source. Source documents indicate " +
@@ -688,7 +688,7 @@ const DAY_3: Situation[] = [
         score: { errorsAccepted: 1 },
         email: {
           id: "DQ-0120",
-          from: "Amgen Data Management",
+          from: "Meridian Data Management",
           subject: "Query DQ-0120 — subject 1047-002",
           body: "Reported eosinophil count does not match source. Please verify and respond.",
         },
@@ -698,7 +698,7 @@ const DAY_3: Situation[] = [
         score: { errorsAccepted: 1 },
         email: {
           id: "DQ-0120",
-          from: "Amgen Data Management",
+          from: "Meridian Data Management",
           subject: "Query DQ-0120 — subject 1047-002",
           body: "Reported eosinophil count does not match source. Please verify and respond.",
         },
@@ -808,7 +808,7 @@ const DAY_4: Situation[] = [
         score: { errorsAccepted: 1 },
         email: {
           id: "DQ-0122",
-          from: "Amgen Data Management",
+          from: "Meridian Data Management",
           subject: "Query DQ-0122 — subject 1047-010",
           body: "Reported vital signs do not match source. Please verify and respond.",
         },
@@ -818,7 +818,7 @@ const DAY_4: Situation[] = [
         score: { errorsAccepted: 1 },
         email: {
           id: "DQ-0122",
-          from: "Amgen Data Management",
+          from: "Meridian Data Management",
           subject: "Query DQ-0122 — subject 1047-010",
           body: "Reported vital signs do not match source. Please verify and respond.",
         },
@@ -869,7 +869,7 @@ const DAY_4: Situation[] = [
         roster: { subject: "1047-022", status: "Screen failed" },
         email: {
           id: "DQ-0123",
-          from: "Amgen Data Management",
+          from: "Meridian Data Management",
           subject: "Query DQ-0123 — subject 1047-022",
           body:
             "Eligibility determination recorded as screen failure. Source documents " +
@@ -916,7 +916,7 @@ const DAY_4: Situation[] = [
         score: { errorsAccepted: 1 },
         email: {
           id: "DQ-0124",
-          from: "Amgen Global Patient Safety",
+          from: "Meridian Global Patient Safety",
           subject: "Query DQ-0124 — subject 1047-005",
           body:
             "Adverse event determination does not match source. Source documents indicate " +
@@ -970,7 +970,7 @@ const DAY_4: Situation[] = [
         roster: { subject: "1047-018", status: "Screen failed" },
         email: {
           id: "DQ-0125",
-          from: "Amgen Data Management",
+          from: "Meridian Data Management",
           subject: "Query DQ-0125 — subject 1047-018",
           body:
             "Eligibility determination recorded as screen failure. Source documents " +

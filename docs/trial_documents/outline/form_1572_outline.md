@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -133,7 +133,7 @@ convention is to check "curriculum vitae" and attach it.
 **Site 1047:** CV attached. The substance to be summarised in the authored document: ABD board
 certification (recertified 2021), Oregon licence MD-118472 active through 31-DEC-2026, MD Michigan
 2006, dermatology residency OHSU 2010, clinical immunodermatology fellowship Northwestern 2011, PI on
-62 dermatology trials since 2014 including 9 atopic dermatitis studies, 3 prior Amgen studies, one
+62 dermatology trials since 2014 including 9 atopic dermatitis studies, 3 prior Meridian studies, one
 prior BIMO inspection in 2019 closed **NAI**.
 
 **The CV currency rule.** The CV itself is not governed by 21 CFR 312 in any detail — the regulation
@@ -183,7 +183,7 @@ that the site understood the rule rather than merely got lucky:
 - Omitting a satellite clinic used for overflow visits. If one Week 4 visit happened at a second
   office because the main office was closed, that office needed to be on the 1572 *before* the visit.
 - Adding a facility mid-study without producing a revised 1572.
-- Listing the *sponsor's* or *CRO's* address. Harborlight Clinical Research and Amgen do not appear
+- Listing the *sponsor's* or *CRO's* address. Harborlight Clinical Research and Meridian do not appear
   anywhere on this form except in Block 7's protocol identification.
 
 ### Block 4 — Name and address of any clinical laboratory facilities to be used in the study
@@ -291,7 +291,7 @@ title. The IND number is not a printed field on the form but is universally reco
 this block, and sponsors commonly pre-print it.
 
 **Site 1047:** Protocol **20210143** — *A Phase 3, Randomized, 24-week, Placebo-controlled,
-Double-blind Study to Assess the Efficacy, Safety and Tolerability of Rocatinlimab (AMG 451)
+Double-blind Study to Assess the Efficacy, Safety and Tolerability of Rocatinlimab (MER 451)
 Monotherapy in Adult Subjects With Moderate-to-severe Atopic Dermatitis (AD)* — **IND 145,882**,
 Phase 3. Study acronym ROCKET-Horizon; NCT05651711.
 
@@ -491,7 +491,7 @@ The rendered 3455 must show all four with their thresholds:
 
 The threshold arithmetic is the part sites get wrong. Site 1047's per-participant payments under the
 CTA are payments **for conducting the study** and are therefore outside category 2 no matter how large
-they become. An unrelated $30,000 consulting retainer from Amgen would be inside it. The authored
+they become. An unrelated $30,000 consulting retainer from Meridian would be inside it. The authored
 document should include a worked line to this effect, because the natural intuition — "we were paid a
 lot, so we must disclose" — is backwards.
 
@@ -499,7 +499,7 @@ lot, so we must disclose" — is backwards.
 
 The obligation to update runs for **one year following completion of the study**. For ROCKET-Horizon,
 last participant last visit is 27-AUG-2024, so the tail runs to approximately **27-AUG-2025**. If Dr
-Okonkwo acquires Amgen equity above threshold in March 2025, she must tell the sponsor. This is the
+Okonkwo acquires Meridian equity above threshold in March 2025, she must tell the sponsor. This is the
 obligation most reliably forgotten, because by then the site has closed out, the binders are in
 storage, and nobody thinks of the study as ongoing. It belongs in the maintenance checklist with a
 date attached.

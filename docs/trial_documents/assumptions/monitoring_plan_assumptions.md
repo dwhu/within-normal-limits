@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -7,7 +7,7 @@
 
 **Document covered:** `/Users/dave/code/icf-please/docs/trial_documents/monitoring_plan.md` —
 *Clinical Monitoring Plan, Protocol 20210143 (ROCKET-Horizon)*, Version 4.0, 15-DEC-2023, issued by
-Harborlight Clinical Research, Inc. on behalf of Amgen Inc.
+Harborlight Clinical Research, Inc. on behalf of Meridian Biotherapeutics, Inc.
 **Outline:** `/Users/dave/code/icf-please/docs/outline/monitoring_plan_outline.md`.
 
 ---
@@ -69,13 +69,13 @@ this log.
 | Location in doc | Assumption | Rationale | Confidence |
 |---|---|---|---|
 | Cover | Plan is **Version 4.0, dated 15-DEC-2023** | Specified by the assignment. Placed two weeks after Protocol Amendment 3 (29-NOV-2023) and one week after SRM v5.0 (08-DEC-2023), so the document sits in a plausible cascade of amendment-driven re-issues | High |
-| Cover | Issued by HCR Clinical Operations on behalf of Amgen | HCR is the canonical CRO (`STUDY_FACTS.md` §9) with monitoring in scope | High |
-| Cover | Distribution list includes Amgen R&D Quality Assurance and states the plan is provided to sites "on request or at sponsor discretion" | Reflects real practice — the CMP is a sponsor/CRO document, and site access varies. This is the sentence that establishes the document's asymmetric position, which is its point for the game | High |
+| Cover | Issued by HCR Clinical Operations on behalf of Meridian | HCR is the canonical CRO (`STUDY_FACTS.md` §9) with monitoring in scope | High |
+| Cover | Distribution list includes Meridian R&D Quality Assurance and states the plan is provided to sites "on request or at sponsor discretion" | Reflects real practice — the CMP is a sponsor/CRO document, and site access varies. This is the sentence that establishes the document's asymmetric position, which is its point for the game | High |
 | Version history | v1.0 12-SEP-2022; v2.0 24-FEB-2023; v3.0 09-JUN-2023; v3.1 18-SEP-2023 | Invented. Spaced to precede site activation (v1.0), follow first-wave activation (v2.0), follow a mid-study rater variance review (v3.0), and provide one administrative point release (v3.1) | Med |
 | Version history | v2.0 driver: "recalibrated KRI thresholds against the first 50 activated centers" | Invented. 50 of 151 is a plausible point at which real threshold calibration becomes possible | Med |
 | Version history | v3.0 driver: sponsor inter-rater variance review; cross-referenced to SRM v3.0 (11-MAY-2023), which canonically added rater-blinding requirements after an inter-rater variance review | Deliberate cross-document consistency with `study_reference_manual.md` version history | High |
 | Version history | v4.0 changes include "full RACT refresh, new risk R-11, post-enrollment taper, QTL-04, expanded close-out" | Invented, but chosen so each is visibly present in the document | High |
-| Approvals | **Yusuf Adeyemi-Clarke, PharmD** — Global Clinical Program Lead, Amgen | Invented. The registry lists only an anonymous "Study Director, Amgen Inc." A named sponsor approver is required for a signature block | Med |
+| Approvals | **Yusuf Adeyemi-Clarke, PharmD** — Global Clinical Program Lead, Meridian | Invented. The registry lists only an anonymous "Study Director, Meridian Biotherapeutics, Inc." A named sponsor approver is required for a signature block | Med |
 | Approvals | **Deirdre Lamontagne, RN, CCRA** — Regional Monitoring Manager, North America, HCR | Invented. Kevin Ostrander needs a line manager for the QC step in §12.2 | Med |
 | Approvals | **Hyun-Woo Baek, MS** — Central Monitoring Lead, HCR | Invented. A named, functionally independent central monitor is required by the plan's own logic (§5.6) | Med |
 | Approvals | **Tomás Ferreira-Lund** — Data Management Lead, HCR | Invented. No DM contact exists in canon | Med |
@@ -103,7 +103,7 @@ this log.
 
 | Location in doc | Assumption | Rationale | Confidence |
 |---|---|---|---|
-| §5.1 | An "Amgen–HCR transfer of obligations schedule" | Invented document reference. Real sponsor–CRO arrangements document delegated obligations this way (and 21 CFR 312.52 requires it for transferred obligations) | High |
+| §5.1 | An "Meridian–HCR transfer of obligations schedule" | Invented document reference. Real sponsor–CRO arrangements document delegated obligations this way (and 21 CFR 312.52 requires it for transferred obligations) | High |
 | §5.3 | Rosalind Achebe's specific authorities — approving interval extensions, chairing IQRM, determining risk band, authorising Tier 2 for-cause visits | Invented allocation of authority. Achebe's role as Clinical Trial Manager is canon (`STUDY_FACTS.md` §10) | Med |
 | §5.3, §11.6 | **Integrated Quality Risk Management (IQRM)** review, monthly, with named attendees | Invented governance forum and name. Real studies use a variety of names (RBQM committee, risk review board, quality management team) | Med |
 | §5.4 | Kevin Ostrander's duties and the statement that "the CRA has no discretion to withhold escalation of a Tier 1 trigger" | Invented. Ostrander as the assigned CRA for Site 1047 is canon | High |
@@ -282,7 +282,7 @@ this log.
 | §18.2 | IP close-out: return to GlobalRx Logistics as the default, on-site destruction under SOP-007 only with separate written authorisation | Invented arrangement. GlobalRx as the depot/courier and SOP-007 as the site's IP SOP are canon | High |
 | §18.3 | PI casebook signature may not be delegated | Invented statement of a genuine requirement | High |
 | §18.6 | Financial close-out — screen failures reimbursed at actual procedures capped at 2 per randomized participant; 10% holdback released within 60 days of database lock and close-out | **Canon**, `RESEARCH_SITE.md` §6 | High |
-| §18.7 | **Record retention 25 years**, no destruction without written Amgen authorisation, notification of custodian/location change, survival of the obligation after termination | The 25-year period was specified by the assignment and matches EU CTR Article 58 (25 years from end of trial). It is longer than the US minimum under 21 CFR 312.62(c) and reflects a sponsor applying the strictest applicable standard globally. The ancillary obligations are invented | High |
+| §18.7 | **Record retention 25 years**, no destruction without written Meridian authorisation, notification of custodian/location change, survival of the obligation after termination | The 25-year period was specified by the assignment and matches EU CTR Article 58 (25 years from end of trial). It is longer than the US minimum under 21 CFR 312.62(c) and reflects a sponsor applying the strictest applicable standard globally. The ancillary obligations are invented | High |
 | §18.8 | Participant notification of results via a sponsor-supplied lay summary and results letter, distributed by the site and documented | Invented mechanism. The EU CTR lay summary obligation and ClinicalTrials.gov results posting are real. The publication restriction referenced is canon (`STUDY_FACTS.md` §14) | High |
 | §18.9 | Close-out letter within 10 business days and its contents | **Invented** | Med |
 | §19.1–19.3 | Remote monitoring provisions and limits, including redacted consent images, site-controlled read-only audit-trailed access, no PHI over unvalidated email, no wholesale off-site copying, and the **26-week** cap without on-site monitoring | Substance reflects the real 2020–2022 regulatory position (FDA and EMA COVID-19 guidances). All specific limits, and the 26-week cap, are invented | Med |

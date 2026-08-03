@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -6,19 +6,19 @@
 # PHARMACY MANUAL — Site-Side Handling of Investigational Product
 
 **Study:** ROCKET-Horizon — A Phase 3, Randomized, 24-week, Placebo-controlled, Double-blind Study to
-Assess the Efficacy, Safety and Tolerability of Rocatinlimab (AMG 451) Monotherapy in Adult Subjects
+Assess the Efficacy, Safety and Tolerability of Rocatinlimab (MER 451) Monotherapy in Adult Subjects
 With Moderate-to-severe Atopic Dermatitis (AD)
 
 | Field | Value |
 |---|---|
-| Sponsor | Amgen Inc., One Amgen Center Drive, Thousand Oaks, CA 91320-1799, USA |
+| Sponsor | Meridian Biotherapeutics, Inc., 1200 Kestrel Way, Emeryville, CA 94608, USA |
 | Sponsor protocol number | 20210143 |
 | ClinicalTrials.gov / EU CT / US IND | NCT05651711 · 2022-501538-44 · IND 145,882 |
 | Protocol in force | Protocol 20210143, Amendment 3 (29-NOV-2023) |
 | **Manual version** | **Version 4.0** |
 | **Effective date** | **01-DEC-2023** |
 | Supersedes | Version 3.0 (12-JUL-2023) |
-| Document owner | Amgen Global Clinical Supply Chain |
+| Document owner | Meridian Global Clinical Supply Chain |
 | Operational contact | Harborlight Clinical Research, Inc. (HCR) |
 | Distribution | Investigator, site investigational pharmacist, all staff delegated for IP tasks |
 | Confidentiality | Confidential. For sites participating in Protocol 20210143 only. |
@@ -100,7 +100,7 @@ Post the quick-reference card (Appendix F) on the IP refrigerator and inside the
 | Medical Monitor (24/7) | **Ana Belmonte-Ruiz, MD** (HCR) | +1 (888) 555-0142 · `medicalmonitor.20210143@harborlightcro.com` |
 | SAE / safety intake | Global Patient Safety intake, HCR | `rocket.safety@harborlightcro.com` · fax +1 (888) 555-0177 · +1 (888) 555-0143 |
 | **Drug depot & courier** | **GlobalRx Logistics** | +1 (800) 555-0171 · `siteservices@globalrxlogistics-sim.example` · Mon–Fri 08:00–18:00 local |
-| **Sponsor clinical supply** (excursions, dispositions) | Amgen Global Clinical Supply Chain | `clinicalsupply.20210143@amgen-sim.example` · +1 (805) 555-0150 |
+| **Sponsor clinical supply** (excursions, dispositions) | Meridian Global Clinical Supply Chain | `clinicalsupply.20210143@meridianbio-sim.example` · +1 (510) 555-0150 |
 | IRT helpdesk (24/7) | **Axion IRT** | +1 (800) 555-0164 · `helpdesk@axionirt.com` |
 | Emergency unblinding | Axion IRT (primary) → +1 (800) 555-0164 (backup) | 24/7 |
 | Temperature monitoring (TempTrak) | via site facilities | +1 (503) 555-0121 |
@@ -117,7 +117,7 @@ sponsor clinical supply within 24 hours.
 
 | Attribute | Rocatinlimab | Matching placebo |
 |---|---|---|
-| Active | Rocatinlimab (AMG 451; also KHK4083), fully human anti-OX40 (CD134) IgG1 monoclonal antibody | None |
+| Active | Rocatinlimab (MER 451; also KHK4083), fully human anti-OX40 (CD134) IgG1 monoclonal antibody | None |
 | Presentation | Single-use prefilled syringe (PFS), **150 mg / 1.0 mL** | Single-use PFS, **1.0 mL** buffer |
 | Formulation | Sterile, preservative-free aqueous solution, acetate/sucrose/polysorbate-80 buffer | Identical buffer, no active |
 | Syringe | 1 mL long glass barrel, staked 27-gauge ½-inch needle, rigid needle shield, passive spring needle guard | Identical in every respect |
@@ -560,7 +560,7 @@ never try to assess one by looking at the solution.
 
 ### 10.3 Notify the sponsor within 24 hours
 
-Send completed **Appendix B** to `clinicalsupply.20210143@amgen-sim.example`, copying the CRA and — for
+Send completed **Appendix B** to `clinicalsupply.20210143@meridianbio-sim.example`, copying the CRA and — for
 transit events — GlobalRx, **within 24 hours of discovery**, with the graph and logger file attached.
 The clock runs from **discovery**, not from the excursion: an excursion found a week later during a log
 review is reported within 24 hours of the review, and the report says so.
@@ -931,7 +931,7 @@ Reproduced at **Appendix A**.
 
 ### 15.4 Worked example
 
-Drug Accountability Record · Site 1047 · Protocol 20210143 · page 7 of 14 · form AMG-20210143-DAR-v3.0
+Drug Accountability Record · Site 1047 · Protocol 20210143 · page 7 of 14 · form MER-20210143-DAR-v3.0
 
 | Date | Transaction | Participant | Visit | Kit no. | Batch | Expiry | Recd | Disp | Ret'd/QT | **Balance** | Init. | 2nd | Comments |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -1250,7 +1250,7 @@ answer, say so and find the person who does.
 
 ## Appendix A — Drug Accountability Record (blank)
 
-Form AMG-20210143-DAR-v3.0 · Protocol 20210143 · Site ______ · Investigator ____________________ ·
+Form MER-20210143-DAR-v3.0 · Protocol 20210143 · Site ______ · Investigator ____________________ ·
 Page ____ of ____
 
 | Date | Transaction (receipt / dispense / QT / release / return / destroy) | Participant ID | Visit | Kit no. (6 digits) | Blinded batch | Expiry (MMM-YYYY) | Syringes received | Syringes dispensed | Syringes returned / QT | **Balance (syringes)** | Initials | 2nd check initials | Tear-off affixed ✓ | Comments |
@@ -1271,7 +1271,7 @@ Monthly review — Pharmacist: ____________________ Signature: ____________ Date
 
 ## Appendix B — Temperature Excursion Report (blank)
 
-Form CS-014 · Protocol 20210143 · Submit to `clinicalsupply.20210143@amgen-sim.example`, copy the CRA,
+Form CS-014 · Protocol 20210143 · Submit to `clinicalsupply.20210143@meridianbio-sim.example`, copy the CRA,
 **within 24 hours of discovery**
 
 **Section 1 — Site and event**
@@ -1442,7 +1442,7 @@ Verified by: ____________ Initials: ____ Date: __________
 │  CRA         Kevin Ostrander      +1 (503) 555-0188           │
 │  Med Monitor 24/7                 +1 (888) 555-0142           │
 │  Safety intake                    +1 (888) 555-0143           │
-│  Sponsor clinical supply          +1 (805) 555-0150           │
+│  Sponsor clinical supply          +1 (510) 555-0150           │
 │  GlobalRx Logistics               +1 (800) 555-0171           │
 │  Axion IRT helpdesk 24/7          +1 (800) 555-0164           │
 │                                                               │
@@ -1455,5 +1455,5 @@ Verified by: ____________ Initials: ____ Date: __________
 ---
 
 **End of Pharmacy Manual, Version 4.0, 01-DEC-2023.**
-Questions: Kevin Ostrander, CCRA (`k.ostrander@harborlightcro.com`) or Amgen Global Clinical Supply
-Chain (`clinicalsupply.20210143@amgen-sim.example`).
+Questions: Kevin Ostrander, CCRA (`k.ostrander@harborlightcro.com`) or Meridian Global Clinical Supply
+Chain (`clinicalsupply.20210143@meridianbio-sim.example`).

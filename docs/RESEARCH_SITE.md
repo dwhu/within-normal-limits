@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -51,7 +51,7 @@ Dangerous Goods (Category 6.2 / UN3373) certification.
 - NPI 1730294856 · DEA BO4471928
 - MD, University of Michigan (2006); Dermatology residency, Oregon Health & Science University (2010); Clinical Immunodermatology fellowship, Northwestern (2011)
 - Research experience: PI on **62** dermatology trials since 2014, including **9** atopic dermatitis studies (2 Phase 2, 7 Phase 3) covering dupilumab-class, JAK-inhibitor, and OX40-pathway agents
-- Prior Amgen studies: 3
+- Prior Meridian studies: 3
 - FDA inspection history: **one** BIMO inspection, 2019 — **NAI (No Action Indicated)**
 - Study commitment: 15% FTE
 - **Rater certified** for vIGA-AD/rIGA and EASI (DATG, certification 12-OCT-2022)

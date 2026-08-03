@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -10,7 +10,7 @@
 **Canon sources:** `STUDY_FACTS.md`, `RESEARCH_SITE.md`, `NCT05651711.json`
 (`protocolSection.outcomesModule`, `eligibilityModule`, `designModule`)
 
-Every detail below is **invented for the simulation**. Nothing here is drawn from a real Amgen
+Every detail below is **invented for the simulation**. Nothing here is drawn from a real Meridian
 document, a real ROCKET-Horizon operations manual, or any real vendor. Where the registry record or
 STUDY_FACTS.md supplied a fact, it is not listed here.
 
@@ -25,7 +25,7 @@ differ.
 
 | Location in doc | Assumption | Rationale | Confidence |
 |---|---|---|---|
-| Cover | Manual authored by Harborlight Clinical Research, Inc. (HCR) Clinical Operations on behalf of Amgen | HCR is the canon CRO (STUDY_FACTS.md §9); operations manuals are typically CRO-authored under sponsor approval | High |
+| Cover | Manual authored by Harborlight Clinical Research, Inc. (HCR) Clinical Operations on behalf of Meridian | HCR is the canon CRO (STUDY_FACTS.md §9); operations manuals are typically CRO-authored under sponsor approval | High |
 | Version history | Five prior/current versions with dates 21-SEP-2022, 19-JAN-2023, 11-MAY-2023, 02-AUG-2023, 08-DEC-2023 | Manual v5.0 / 08-DEC-2023 was specified by the assignment; a plausible revision history was back-filled. v1.0 predates first-participant-first-visit (14-DEC-2022); v5.0 follows Amendment 3 (29-NOV-2023) by nine days | Med |
 | Version history, drivers | Each revision attributed to a specific driver (early-enrolment findings, sponsor data review, IB Edition 6.0 preparation, Amendment 3) | Makes the change history internally causal and consistent with canon dates | Med |
 | §1.3 | "must / should / may" convention defined explicitly | Common but not universal in real SRMs; included because the outline calls for deliberate modal usage | Med |

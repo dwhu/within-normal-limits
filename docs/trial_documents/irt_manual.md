@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -13,7 +13,7 @@
 | **Study** | ROCKET-Horizon |
 | **Protocol** | 20210143, Amendment 3 (29-NOV-2023) |
 | **Registrations** | NCT05651711 · EU CT 2022-501538-44 · IND 145,882 |
-| **Sponsor** | Amgen Inc., One Amgen Center Drive, Thousand Oaks, CA 91320-1799, USA |
+| **Sponsor** | Meridian Biotherapeutics, Inc., 1200 Kestrel Way, Emeryville, CA 94608, USA |
 | **Guide version** | **Version 2.1** |
 | **Effective date** | **12-DEC-2023** |
 | **Supersedes** | Version 2.0, 14-JUN-2023 |
@@ -1484,7 +1484,7 @@ and role · callback number · transaction ID or error code.
 | **0** | Help desk — unblinding queue | Emergency unblinding, any hour | **Immediate** |
 | **1** | Help desk agent | Access, passwords, MFA, error messages, how-to, transactions on behalf of the site during outage | Phone: immediate · Email: 4 hours |
 | **2** | Axion Study System Manager | Data corrections, configuration questions, inventory investigations, unresolved Tier 1 issues | 1 business day |
-| **3** | Sponsor System Owner (Amgen) via the CRO | Correction requests requiring sponsor approval, protocol-level configuration changes, disputes | 3 business days |
+| **3** | Sponsor System Owner (Meridian) via the CRO | Correction requests requiring sponsor approval, protocol-level configuration changes, disputes | 3 business days |
 
 Escalate to Tier 2 by asking the agent directly — "please escalate this to the study system manager."
 Escalate to your CRA in parallel for anything affecting a visit happening today. For anything

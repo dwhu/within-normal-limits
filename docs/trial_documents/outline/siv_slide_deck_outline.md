@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -357,7 +357,7 @@ activation.
   the sponsor.
 - **Participant-identifiable information**, including in worked examples. The EASI worked example uses
   a fictional composite.
-- **Budget detail.** Payments are a contract matter between Amgen Clinical Contracts and Gregory
+- **Budget detail.** Payments are a contract matter between Meridian Clinical Contracts and Gregory
   Tarrant; a CRA discussing per-visit payments in a training session next to eligibility criteria is
   a governance error even when the numbers are correct.
 

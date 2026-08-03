@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -661,7 +661,7 @@ threshold table; escalation matrix; sample confirmation letter; sample follow-up
 ## 10. Consistency constraints (must not violate)
 
 - CRO is **Harborlight Clinical Research, Inc. (HCR)**; monitoring is performed by HCR on behalf of
-  Amgen.
+  Meridian.
 - CRA for Site 1047 is **Kevin Ostrander, CCRA**; CTM is **Rosalind Achebe**; Medical Monitor is
   **Ana Belmonte-Ruiz, MD**.
 - Site 1047 = Cascade Dermatology & Clinical Research, LLC, Portland OR; PI **Miriam A. Okonkwo, MD,

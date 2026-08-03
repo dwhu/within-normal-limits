@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -9,13 +9,13 @@
 
 | Field | Value |
 |---|---|
-| **Study title (brief)** | A Study Assessing Rocatinlimab (AMG 451) Monotherapy in Moderate-to-severe Atopic Dermatitis (AD) |
+| **Study title (brief)** | A Study Assessing Rocatinlimab (MER 451) Monotherapy in Moderate-to-severe Atopic Dermatitis (AD) |
 | **Study acronym** | ROCKET-Horizon |
 | **Sponsor protocol number** | 20210143 |
 | **ClinicalTrials.gov identifier** | NCT05651711 |
 | **EU CT number** | 2022-501538-44 |
 | **US IND** | IND 145,882 |
-| **Sponsor** | Amgen Inc., One Amgen Center Drive, Thousand Oaks, CA 91320-1799, USA |
+| **Sponsor** | Meridian Biotherapeutics, Inc., 1200 Kestrel Way, Emeryville, CA 94608, USA |
 | **Institution** | Cascade Dermatology & Clinical Research, LLC, 4820 SW Barbur Boulevard, Suite 300, Portland, OR 97239, USA |
 | **Site number** | 1047 |
 | **Principal Investigator** | Miriam A. Okonkwo, MD, FAAD |
@@ -29,11 +29,11 @@
 
 ### Fair market value statement
 
-The compensation set out in this Exhibit B has been negotiated at arm's length between Amgen Inc. and
+The compensation set out in this Exhibit B has been negotiated at arm's length between Meridian Biotherapeutics, Inc. and
 Cascade Dermatology & Clinical Research, LLC, and **represents the fair market value of the services
 actually rendered**. Compensation was **set in advance** of the performance of services and does **not**
 take into account, directly or indirectly, the volume or value of any referrals or other business
-generated between the parties, nor the prescribing or purchasing of any Amgen product. Line items
+generated between the parties, nor the prescribing or purchasing of any Meridian product. Line items
 having a clinical analogue with a CPT code are benchmarked against the geographically adjusted
 Medicare Physician Fee Schedule and Clinical Laboratory Fee Schedule for the Portland, Oregon
 locality; line items without a clinical analogue are built from role-specific, salary-survey-benchmarked
@@ -400,8 +400,8 @@ items are invoiceable on completion of the site initiation visit.
 
 **6.4 Invoicing requirements.** Every invoice must state: Sponsor protocol number **20210143**; study
 acronym ROCKET-Horizon; site number **1047**; Institution name and EIN **84-3319027**; invoice number
-and date; the reconciliation period; and a line-level detail schedule. Invoices are submitted to Amgen
-Clinical Contracts at `ctagreements@amgen-sim.example`. Pass-through items require the underlying
+and date; the reconciliation period; and a line-level detail schedule. Invoices are submitted to Meridian
+Clinical Contracts at `ctagreements@meridianbio-sim.example`. Pass-through items require the underlying
 third-party invoice or receipt.
 
 **6.5 Remittance.** Payment is made by **ACH to Columbia Bank**, account on file. Remittance advice is
@@ -712,7 +712,7 @@ of compensation payable for the conduct of Protocol 20210143 at Site 1047, and c
 compensation represents fair market value for services actually rendered, negotiated at arm's length
 and set in advance.
 
-**FOR THE SPONSOR — AMGEN INC.**
+**FOR THE SPONSOR — MERIDIAN BIOTHERAPEUTICS, INC.**
 
 | | |
 |---|---|
@@ -747,4 +747,4 @@ clinical judgement or my treatment decisions for any participant.
 
 *Exhibit B, Version 2.0, effective 12-DEC-2022. Supersedes Version 1.0 (budget proposal dated
 14-OCT-2022) in its entirety. Incorporated by reference into the Clinical Trial Agreement between
-Amgen Inc. and Cascade Dermatology & Clinical Research, LLC executed 12-DEC-2022.*
+Meridian Biotherapeutics, Inc. and Cascade Dermatology & Clinical Research, LLC executed 12-DEC-2022.*

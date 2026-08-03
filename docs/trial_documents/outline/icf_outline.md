@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -7,7 +7,7 @@
 
 **Target document:** `/Users/dave/code/icf-please/docs/trial_documents/icf.md`
 **Artifact:** Site-specific Informed Consent Form and HIPAA Authorization, **Version 4.0.1, dated 29-NOV-2023**, Keystone Independent Review Board approved **19-DEC-2023**, for **Site 1047 — Cascade Dermatology & Clinical Research, LLC**, Portland, Oregon.
-**Parent document:** Master ICF v4.0 (Amgen), 29-NOV-2023, issued with Protocol 20210143 Amendment 3.
+**Parent document:** Master ICF v4.0 (Meridian), 29-NOV-2023, issued with Protocol 20210143 Amendment 3.
 **Study:** ROCKET-Horizon · NCT05651711 · EU CT 2022-501538-44 · IND 145,882.
 
 ---
@@ -140,14 +140,14 @@ The practical consequence for a US site-specific ICF: **do not** import EU langu
 
 ### 5.1 Why it is separate
 
-HIPAA is not a human-subjects protection. It is a **use-and-disclosure rule binding on covered entities** — here, Cascade Dermatology as a treating provider that holds protected health information (PHI). The sponsor is *not* a covered entity. The legal question HIPAA answers ("may this clinic release your medical record to Amgen and its CRO?") is different from the question consent answers ("do you agree to be injected with an experimental antibody?").
+HIPAA is not a human-subjects protection. It is a **use-and-disclosure rule binding on covered entities** — here, Cascade Dermatology as a treating provider that holds protected health information (PHI). The sponsor is *not* a covered entity. The legal question HIPAA answers ("may this clinic release your medical record to Meridian and its CRO?") is different from the question consent answers ("do you agree to be injected with an experimental antibody?").
 
 Consequences that the document design must reflect:
 
 - **A person may consent to the study and refuse the HIPAA authorization — but then cannot enroll**, because the study cannot be conducted without disclosing PHI. 45 CFR 164.508(b)(4)(i) expressly permits conditioning **research-related treatment** on the authorization. This is the *only* place where conditioning is permitted, and the form must say so accurately: your ordinary clinical care at this clinic is not conditioned on it; your participation in this study is.
 - **Revocation has a different shape from withdrawal.** Revoking the authorization stops *future* uses and disclosures but does not reach anything already used or disclosed in reliance on it, and the sponsor may continue to use data already collected to preserve the integrity of the research (164.508(b)(5)(i) reliance exception). This is the point participants most often misunderstand: "I quit and they still have my data" is legally correct and must be stated before signature, not discovered after.
 - **Revocation must be in writing.** The form must give the address to write to.
-- **Redisclosure warning.** Once PHI goes to Amgen, Harborlight Clinical Research, or Meridian Central Laboratories, it is out of HIPAA's reach and may be redisclosed. This must be stated.
+- **Redisclosure warning.** Once PHI goes to Meridian, Harborlight Clinical Research, or Meridian Central Laboratories, it is out of HIPAA's reach and may be redisclosed. This must be stated.
 - Combined ("compound") authorizations: 164.508(b)(3)(i) permits combining the research authorization with the consent document, and 164.508(b)(3)(iii) permits combining a conditioned and an unconditioned research authorization (i.e. main study + optional banking) **only if** the form clearly differentiates them and allows the individual to opt in to the unconditioned one separately. That rule is the direct reason the optional sub-studies get their own initials boxes.
 
 ### 5.2 Element-by-element map
@@ -158,7 +158,7 @@ Core elements — 164.508(c)(1):
 |---|---|---|
 | (c)(1)(i) | Specific and meaningful description of the **information** to be used or disclosed | §15.1 — enumerated: medical history, skin assessments, photographs if taken, labs, ECGs, eDiary entries, medications, AEs, and identifiers |
 | (c)(1)(ii) | **Who may disclose** — name or specific identification | §15.2 — Cascade Dermatology & Clinical Research, LLC and Dr. Okonkwo's study team |
-| (c)(1)(iii) | **Who may receive** | §15.3 — Amgen; Harborlight Clinical Research; Meridian Central Laboratories; Axion IRT; Veriscribe EDC; DayLog ePRO; Keystone IRB; FDA and foreign regulators; the DMC |
+| (c)(1)(iii) | **Who may receive** | §15.3 — Meridian; Harborlight Clinical Research; Meridian Central Laboratories; Axion IRT; Veriscribe EDC; DayLog ePRO; Keystone IRB; FDA and foreign regulators; the DMC |
 | (c)(1)(iv) | **Purpose** of each use/disclosure | §15.4 — to conduct, monitor, and analyse ROCKET-Horizon; to meet reporting duties; to seek marketing approval |
 | (c)(1)(v) | **Expiration date or event** | §15.5 — "This authorization does not expire" (permitted for research; the alternative "end of the research study" would strand long-tail regulatory retention) |
 | (c)(1)(vi) | **Signature and date**; authority if signed by a personal representative | §15.8 signature line + the LAR line in the main signature block |

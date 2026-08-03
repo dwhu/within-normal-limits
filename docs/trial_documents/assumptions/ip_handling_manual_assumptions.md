@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -50,7 +50,7 @@ Handling Manual (Clinical Supply Manual), Protocol 20210143 / ROCKET-Horizon, **
 |---|---|---|---|
 | Cover | Document titled "Investigational Product Handling Manual (Clinical Supply Manual)" | Assignment brief; both names are in common industry use for this artefact | High |
 | Cover | Version 3.0, effective 20-NOV-2023, superseding v2.1 (07-JUL-2023) | Version and date specified in the assignment brief; supersession chain invented | High (date) / Low (chain) |
-| Cover | Document owner: Amgen Global Clinical Supply Chain with Amgen Clinical Supply Quality | Plausible dual ownership; the record names no Amgen internal function | Med |
+| Cover | Document owner: Meridian Global Clinical Supply Chain with Meridian Clinical Supply Quality | Plausible dual ownership; the record names no Meridian internal function | Med |
 | Cover | Effective date sits 9 days ahead of Protocol Amendment 3 (29-NOV-2023) | Deliberate: supply documents lead protocol amendments because supply has lead time. Consistent with STUDY_FACTS §1 | Med |
 | Document history | Five-row history: v1.0 15-SEP-2022, v2.0 10-MAR-2023, v2.1 07-JUL-2023, v3.0 20-NOV-2023 | Entirely invented. Dates chosen to bracket study start (FPFV 14-DEC-2022) and site activation (06-JAN-2023) sensibly | Low |
 | Document history | v3.0 changes: migration to ColdTrace ST-4 loggers, addition of §7.4 expiry extension, IRT re-parameterisation, revised destruction template, rewritten recall §15.5 | Invented to give the version a reason to exist and to explain why the expiry-extension example (Appendix B) is dated MAR-2024 | Low |
@@ -60,12 +60,12 @@ Handling Manual (Clinical Supply Manual), Protocol 20210143 / ROCKET-Horizon, **
 
 | Location in doc | Assumption | Rationale | Confidence |
 |---|---|---|---|
-| §3 | Amgen Global Clinical Supply Chain: `clinicalsupply.20210143@amgen-sim.example`, +1 (866) 555-0180, Mon–Fri 07:00–18:00 PT | Invented. Follows the STUDY_FACTS §11 fictional 555 convention and the `-sim.example` domain used elsewhere | High (as convention) / Low (as fact) |
-| §3 | Amgen Clinical Supply Quality (CSQ): `csq.excursions@amgen-sim.example`, +1 (866) 555-0182 | Invented. A distinct quality function is needed so that excursions do not route through the supply-planning team | Med |
-| §3 | Amgen Product Quality Complaints: `productquality@amgen-sim.example`, +1 (866) 555-0181, 24/7 intake | Invented. Large sponsors do run 24/7 complaint intake | Med |
+| §3 | Meridian Global Clinical Supply Chain: `clinicalsupply.20210143@meridianbio-sim.example`, +1 (866) 555-0180, Mon–Fri 07:00–18:00 PT | Invented. Follows the STUDY_FACTS §11 fictional 555 convention and the `-sim.example` domain used elsewhere | High (as convention) / Low (as fact) |
+| §3 | Meridian Clinical Supply Quality (CSQ): `csq.excursions@meridianbio-sim.example`, +1 (866) 555-0182 | Invented. A distinct quality function is needed so that excursions do not route through the supply-planning team | Med |
+| §3 | Meridian Product Quality Complaints: `productquality@meridianbio-sim.example`, +1 (866) 555-0181, 24/7 intake | Invented. Large sponsors do run 24/7 complaint intake | Med |
 | §3 | GlobalRx Logistics Control Tower +1 (800) 555-0172, 24/7 | Invented. STUDY_FACTS §9 gives GlobalRx only a business-hours number (+1 (800) 555-0171), which cannot support a 24/7 cold chain — the Control Tower line is added rather than contradicting canon | Med |
 | §3, App. E | GRX-MEM-01 depot line +1 (901) 555-0173 (Memphis area code) | Invented; area code chosen for realism | Med |
-| §3 | Amgen GCP QA: `gcpqa.20210143@amgen-sim.example` | Invented | Low |
+| §3 | Meridian GCP QA: `gcpqa.20210143@meridianbio-sim.example` | Invented | Low |
 | §3 | Kevin Ostrander, CCRA and Rosalind Achebe, CTM contacts | Taken verbatim from STUDY_FACTS §10 | Inherited |
 | App. B, C | "A. Ferreira-Lund, Associate Director, Global Clinical Supply Chain" as the sponsor signatory | Invented name for a signature block; needed to make the sample forms look real | Low |
 
@@ -73,15 +73,15 @@ Handling Manual (Clinical Supply Manual), Protocol 20210143 / ROCKET-Horizon, **
 
 | Location in doc | Assumption | Rationale | Confidence |
 |---|---|---|---|
-| §5, §6.1 | Drug substance manufactured at Amgen Thousand Oaks, CA | Directed by the assignment brief; Thousand Oaks is Amgen's real HQ and a real manufacturing location, so the choice is plausible | High (per brief) |
-| §5, §6.1 | Drug product fill-finish and PFS assembly at Amgen Manufacturing Limited, Juncos, Puerto Rico | Directed by the assignment brief; Juncos is a real Amgen manufacturing site | High (per brief) |
-| §5, §6.2 | Blinded clinical packaging at "Amgen Clinical Supply Operations, Juncos, PR" | Invented. Co-locating clinical packaging with fill-finish is common | Med |
+| §5, §6.1 | Drug substance manufactured at Meridian Emeryville, CA | Directed by the assignment brief; the sponsor and all its sites are invented, and siting drug-substance manufacture at the sponsor's own Emeryville HQ (STUDY_FACTS §1) is plausible for a large biologics sponsor | High (per brief) |
+| §5, §6.1 | Drug product fill-finish and PFS assembly at Meridian Manufacturing Limited, Juncos, Puerto Rico | Directed by the assignment brief; Juncos is a real Meridian manufacturing site | High (per brief) |
+| §5, §6.2 | Blinded clinical packaging at "Meridian Clinical Supply Operations, Juncos, PR" | Invented. Co-locating clinical packaging with fill-finish is common | Med |
 | §6.1 | Placebo is the identical formulation buffer without antibody, viscosity-matched so injection force and duration are indistinguishable | Invented mechanism. Consistent with STUDY_FACTS §4 ("identical PFS, identical carton, identical volume") | Med |
 | §6.1 | Syringes held unlabelled in quarantine at 2–8 °C pending QC release | Standard practice; invented as stated | High (as practice) |
 | §6.2 | Active and placebo never packaged simultaneously; documented line clearance and component reconciliation; sampled QC over-check by personnel not told which campaign | Invented specifics implementing a real Annex 13 principle | Med |
-| §6.3 | Randomisation generated by an independent unblinded Amgen biostatistician, permuted blocks, stratified by region and baseline vIGA-AD (3 vs 4), 3:1 | Ratio and stratification factors from STUDY_FACTS §3 (stratification itself flagged ASSUMED there). Permuted blocks and the "independent unblinded biostatistician" are invented | Med |
+| §6.3 | Randomisation generated by an independent unblinded Meridian biostatistician, permuted blocks, stratified by region and baseline vIGA-AD (3 vs 4), 3:1 | Ratio and stratification factors from STUDY_FACTS §3 (stratification itself flagged ASSUMED there). Permuted blocks and the "independent unblinded biostatistician" are invented | Med |
 | §6.3 | A "medication list" maps 6-digit kit number → medication type A/B; kit numbers drawn from one interleaved sequence, not blocked by treatment | Invented but is the standard blinding-safe design. Directly supports the STUDY_FACTS §4 requirement that product and placebo be indistinguishable | High (as design) / Low (as fact) |
-| §6.3 | Code held by: Amgen secure code repository, unblinded biostatistics, and the Axion IRT production database only | Invented distribution list | Med |
+| §6.3 | Code held by: Meridian secure code repository, unblinded biostatistics, and the Axion IRT production database only | Invented distribution list | Med |
 | §6.3, §7.1 | **The clinical label carries the packaging batch number, not the drug product lot number**, because active and placebo lot numbers differ and would unblind on sight | Invented, but a real and non-obvious blinding control. This is the manual's signature technical detail | Med |
 | §6.3 | Packaging batch identifiers of the form `PKG-2309-04`, `PKG-2211-02` | Invented format (YYMM-sequence) | Low |
 
@@ -103,7 +103,7 @@ Handling Manual (Clinical Supply Manual), Protocol 20210143 / ROCKET-Horizon, **
 
 | Location in doc | Assumption | Rationale | Confidence |
 |---|---|---|---|
-| §5, §8.1 | QP certification performed at **Amgen Europe B.V., Breda, Netherlands** | Directed by the assignment brief (Breda depot). Amgen Europe B.V. is genuinely Breda-based, so the choice is plausible | High (per brief) |
+| §5, §8.1 | QP certification performed at **Meridian Europe B.V., Breda, Netherlands** | Directed by the assignment brief (Breda depot). Meridian Europe B.V. is genuinely Breda-based, so the choice is plausible | High (per brief) |
 | §8.1 | MIA(IMP) number **NL/MIA-IMP/2019/0087** | Wholly invented; format modelled on real Dutch authorisation numbering | Low |
 | §8.1 | Named QP: **Marieke van der Zanden, PharmD** | Invented person | Low |
 | §8.1 | A single EU certification record supports supply to all 21 countries, EU and non-EU | Invented operating model. Real sponsors often certify centrally and release regionally; not universal | Med |
@@ -157,20 +157,20 @@ Handling Manual (Clinical Supply Manual), Protocol 20210143 / ROCKET-Horizon, **
 | §12.1 | Excursions raised via an IRT **Temperature Excursion transaction** within 24 hours, which auto-quarantines the kits | The 24-hour reporting obligation is canon (STUDY_FACTS §4). The IRT transaction as the route, and auto-quarantine, are invented | High (24 h) / Med (route) |
 | §12.2 | Case reference format **TE-2024-00417**; triage for completeness within **1 business day**; incomplete packages returned same day | Invented | Low |
 | §12.2, §12.5 | **The turnaround clock starts when the data package is complete** | Invented rule; realistic and a useful game mechanic | Med |
-| §12.3 | Assessment performed by Amgen stability sciences in Product Quality, considering MKT, duration per band, cumulative history, batch stability dataset and remaining shelf life | Invented allocation of responsibility. MKT and the listed stability-indicating attributes (aggregation, charge heterogeneity, potency, sub-visible particulates, container-closure integrity) are real for an IgG1 mAb | Med |
+| §12.3 | Assessment performed by Meridian stability sciences in Product Quality, considering MKT, duration per band, cumulative history, batch stability dataset and remaining shelf life | Invented allocation of responsibility. MKT and the listed stability-indicating attributes (aggregation, charge heterogeneity, potency, sub-visible particulates, container-closure integrity) are real for an IgG1 mAb | Med |
 | §12.3 | **The excursion budget is cumulative and does not reset**; **no freezing allowance — any freeze is an automatic Destroy** | The 30-day cumulative allowance is canon (STUDY_FACTS §4); "does not reset" and the absolute freeze rule are invented interpretations, though scientifically standard for proteins | High (canon) / Med (interpretation) |
 | §12.4 | Three disposition categories — Release for use / Quarantine pending further data / Destroy — with defined IRT effects | Categories specified in the assignment brief; the IRT effects are invented | High (per brief) |
 | §12.5 | **Target 3 business days**; **24 hours** on an urgent flag | 3 business days specified in the brief; the 24-hour urgent tier is invented | High / Med |
 | §12.6 | Disposition notice reference **CSQ-DN-NNNNN**; **IRT status, not the email, is the operative record** | Invented format and invented precedence rule (a deliberate trap for the game) | Med |
 | §12.7 | Excursion history held at kit level and follows the kit across depot, transit and site | Invented but necessary for the cumulative budget to mean anything | Med |
-| §13 | Dual physical + IRT quarantine, both mandatory; quarantined product **stays at 2–8 °C**; only Amgen CSQ can release | Invented rules; the "quarantine is not permission to let it warm up" point is an invented emphasis | Med |
+| §13 | Dual physical + IRT quarantine, both mandatory; quarantined product **stays at 2–8 °C**; only Meridian CSQ can release | Invented rules; the "quarantine is not permission to let it warm up" point is an invented emphasis | Med |
 | §14.1 | The reportable-defect list (particulates, discolouration/turbidity, damaged syringe, illegible/detached label, missing components, kit-number mismatch, delivery failure) | Invented enumeration; typical of real complaint taxonomies. The appearance description ("clear to slightly opalescent, colourless to pale yellow") is invented but standard for a mAb | Med |
 | §14.2 | Timelines: 1 business day normally; **24 hours if administered or AE-associated**; immediate by phone for suspected counterfeit/tampering. Acknowledgement within 2 business days | All invented | Low |
 | §14.2 | Complaint reference format **PQC-24-01187** | Invented | Low |
 | §14.3 | Sample return via a qualified GlobalRx return shipment; used syringes retained as sharps and returned only on specific request | Invented procedure | Med |
 | §14.4 | A complaint accompanied by an AE requires **two separate reports on two clocks**, cross-referenced by participant ID and kit number | Invented rule, but the dual-reporting principle is real. Safety intake details inherited from STUDY_FACTS §10 | High (principle) |
 | §15.1 | Recall classes I/II/III (FDA 21 CFR 7.3) and EU Class 1/2/3, with quarantine windows 24 h / 3 bd / 5 bd and response windows 3 bd / 5 bd / 10 bd | Classification framework is real; **all windows are invented** | High (framework) / Low (windows) |
-| §15.2 | The notification cascade Amgen Global Quality → CSQ → GlobalRx/depots + Axion IRT → HCR CTM → CRAs → sites → IRB/EC, with Class I site notification within 24 h | Invented cascade using canonical vendor roles | Med |
+| §15.2 | The notification cascade Meridian Global Quality → CSQ → GlobalRx/depots + Axion IRT → HCR CTM → CRAs → sites → IRB/EC, with Class I site notification within 24 h | Invented cascade using canonical vendor roles | Med |
 | §15.3 | Five required site actions; recalled product returned to depot, never destroyed at site | Invented | Med |
 | §15.4 | Recall closes only at 100% kit accountability; effectiveness check performed | Invented but standard | High (as practice) |
 | §15.5 | Sponsor exposure assessment; medical monitor (Ana Belmonte-Ruiz, MD) decides on participant notification; IRB notified where required; investigator retains the dosing decision; **no participant contacted before sponsor and medical monitor agree the message**; a recall is not of itself an unblinding event | Invented policy. The medical monitor and Keystone IRB are canon (STUDY_FACTS §9–10, RESEARCH_SITE.md §4) | Med |

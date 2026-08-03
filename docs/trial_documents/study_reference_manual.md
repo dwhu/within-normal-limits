@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -8,12 +8,12 @@
 ## ROCKET-Horizon — Protocol 20210143
 
 **A Phase 3, Randomized, 24-week, Placebo-controlled, Double-blind Study to Assess the Efficacy,
-Safety and Tolerability of Rocatinlimab (AMG 451) Monotherapy in Adult Subjects With
+Safety and Tolerability of Rocatinlimab (MER 451) Monotherapy in Adult Subjects With
 Moderate-to-severe Atopic Dermatitis (AD)**
 
 | | |
 |---|---|
-| Sponsor | Amgen Inc., One Amgen Center Drive, Thousand Oaks, CA 91320-1799, USA |
+| Sponsor | Meridian Biotherapeutics, Inc., 1200 Kestrel Way, Emeryville, CA 94608, USA |
 | Sponsor protocol number | 20210143 |
 | ClinicalTrials.gov | NCT05651711 |
 | EU CT number | 2022-501538-44 |
@@ -21,7 +21,7 @@ Moderate-to-severe Atopic Dermatitis (AD)**
 | Protocol version in force | Amendment 3, Version 4.0, dated 29-NOV-2023 |
 | **Manual version** | **Version 5.0** |
 | **Manual date** | **08-DEC-2023** |
-| Prepared by | Harborlight Clinical Research, Inc. (HCR), Clinical Operations, on behalf of Amgen Inc. |
+| Prepared by | Harborlight Clinical Research, Inc. (HCR), Clinical Operations, on behalf of Meridian Biotherapeutics, Inc. |
 | Distribution | All activated investigational sites; CRAs; site monitors; sponsor study team |
 | Confidentiality | Confidential. For use by qualified site personnel in the conduct of Protocol 20210143 only. |
 
@@ -161,8 +161,8 @@ infer a procedure from silence — call your CRA.
 
 | Role | Name | Contact |
 |---|---|---|
-| Sponsor Study Director | Study Director, Amgen Inc. | `medinfo@amgen.com` · +1 (866) 572-6436 |
-| **Medical Monitor (24/7)** | **Ana Belmonte-Ruiz, MD** (HCR, on behalf of Amgen) | **+1 (888) 555-0142** · `medicalmonitor.20210143@harborlightcro.com` |
+| Sponsor Study Director | Study Director, Meridian Biotherapeutics, Inc. | `medinfo@meridianbio-sim.example` · +1 (866) 555-0190 |
+| **Medical Monitor (24/7)** | **Ana Belmonte-Ruiz, MD** (HCR, on behalf of Meridian) | **+1 (888) 555-0142** · `medicalmonitor.20210143@harborlightcro.com` |
 | Back-up Medical Monitor | Peter Vandermeer, MD | via +1 (888) 555-0142 |
 | **SAE / safety intake** | Global Patient Safety intake, HCR | `rocket.safety@harborlightcro.com` · Fax +1 (888) 555-0177 · Phone +1 (888) 555-0143 |
 | Clinical Trial Manager | Rosalind Achebe | `r.achebe@harborlightcro.com` · +1 (888) 555-0145 |
@@ -175,7 +175,7 @@ infer a procedure from silence — call your CRA.
 | Drug depot & courier | GlobalRx Logistics | +1 (800) 555-0171 · Mon–Fri 08:00–18:00 local |
 | Central IRB | Keystone Independent Review Board, Overland Park, KS · IRB00009812 | +1 (913) 555-0110 · `submissions@keystoneirb.org` |
 | Rater certification | Dermatology Assessment Training Group (DATG) | `certify@datg-training.com` |
-| Site contract / budget | Amgen Clinical Contracts | `ctagreements@amgen-sim.example` |
+| Site contract / budget | Meridian Clinical Contracts | `ctagreements@meridianbio-sim.example` |
 | **Emergency unblinding** | **Axion IRT system (primary)** → **+1 (800) 555-0164** (backup) | 24/7 |
 
 **Call the medical monitor** — do not email and wait — for: any SAE, any suspected anaphylaxis, any
@@ -206,7 +206,7 @@ about whether rescue therapy is appropriate.
 
 | | Rocatinlimab arm | Placebo arm |
 |---|---|---|
-| Product | Rocatinlimab (AMG 451), fully human anti-OX40 (CD134) IgG1 monoclonal antibody | Matching placebo |
+| Product | Rocatinlimab (MER 451), fully human anti-OX40 (CD134) IgG1 monoclonal antibody | Matching placebo |
 | Presentation | Single-use prefilled syringe (PFS), 150 mg/1.0 mL | Identical PFS, identical carton, identical volume |
 | Dose | **300 mg = two (2) PFS**, two separate SC injections at the same visit | Two SC injections |
 | Regimen | Day 1 → **Week 2 (loading dose)** → Q4W at Weeks 4, 8, 12, 16, 20. **Seven doses total. No dose at Week 24.** | Same schedule |

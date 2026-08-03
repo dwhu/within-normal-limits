@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -16,8 +16,8 @@
 
 ## 1. ROCKET-Horizon — Site Initiation Visit
 
-- **A Phase 3, Randomized, 24-week, Placebo-controlled, Double-blind Study to Assess the Efficacy, Safety and Tolerability of Rocatinlimab (AMG 451) Monotherapy in Adult Subjects With Moderate-to-severe Atopic Dermatitis (AD)**
-- Sponsor: **Amgen Inc.**, One Amgen Center Drive, Thousand Oaks, CA 91320-1799, USA
+- **A Phase 3, Randomized, 24-week, Placebo-controlled, Double-blind Study to Assess the Efficacy, Safety and Tolerability of Rocatinlimab (MER 451) Monotherapy in Adult Subjects With Moderate-to-severe Atopic Dermatitis (AD)**
+- Sponsor: **Meridian Biotherapeutics, Inc.**, 1200 Kestrel Way, Emeryville, CA 94608, USA
 - Protocol **20210143** · **Amendment 1, Version 2.0, dated 04-NOV-2022**
 - NCT05651711 · EU CT 2022-501538-44 · US IND 145,882
 - Site **1047** — Cascade Dermatology & Clinical Research, LLC, Portland, OR
@@ -104,8 +104,8 @@
 
 | Role | Name / entity | Contact |
 |---|---|---|
-| Sponsor | Amgen Inc. | `medinfo@amgen.com` · +1 (866) 572-6436 |
-| Sponsor Study Director | Study Director, Amgen Inc. | via Amgen Medical Information |
+| Sponsor | Meridian Biotherapeutics, Inc. | `medinfo@meridianbio-sim.example` · +1 (866) 555-0190 |
+| Sponsor Study Director | Study Director, Meridian Biotherapeutics, Inc. | via Meridian Medical Information |
 | CRO — clinical operations, monitoring, safety intake | Harborlight Clinical Research, Inc. (HCR) | +1 (888) 555-0140 · Mon–Fri 07:00–19:00 ET |
 | Clinical Trial Manager | **Rosalind Achebe** | `r.achebe@harborlightcro.com` · +1 (888) 555-0145 |
 | Assigned CRA / monitor | **Kevin Ostrander, CCRA** | `k.ostrander@harborlightcro.com` · +1 (503) 555-0188 |
@@ -225,7 +225,7 @@
 
 ## 11. Rocatinlimab — Mechanism of Action
 
-- Fully human **anti-OX40 (CD134) IgG1 monoclonal antibody**; also known as AMG 451 / KHK4083
+- Fully human **anti-OX40 (CD134) IgG1 monoclonal antibody**; also known as MER 451 / KHK4083
 - OX40 is a co-stimulatory receptor expressed on **activated** T cells, not resting T cells
 - OX40–OX40L signalling drives expansion and survival of pathogenic effector T cells in AD lesions
 - Rocatinlimab both **blocks** OX40 signalling and **depletes** OX40-expressing activated T cells
@@ -725,7 +725,7 @@ Washouts are calculated **relative to Day 1**, not relative to Screening.
 - Receipt of a **live or live-attenuated vaccine** within the protocol-specified window before Day 1, or planned during the study
 - Participation in another interventional study, or receipt of another investigational product, within the specified window
 - Known or suspected alcohol or substance abuse that would compromise compliance
-- Site staff, or their immediate family, and Amgen or HCR employees
+- Site staff, or their immediate family, and Meridian or HCR employees
 
 > **Speaker notes:** (Ostrander) The live vaccine one is seasonal and it bites in the autumn. The
 > inactivated influenza vaccine is fine; the live attenuated nasal one is not. Please put that in
@@ -878,12 +878,12 @@ Washouts are calculated **relative to Day 1**, not relative to Screening.
 
 | Attribute | Detail |
 |---|---|
-| Active | **Rocatinlimab (AMG 451)** — fully human anti-OX40 (CD134) IgG1 monoclonal antibody |
+| Active | **Rocatinlimab (MER 451)** — fully human anti-OX40 (CD134) IgG1 monoclonal antibody |
 | Presentation | Single-use **prefilled syringe, 150 mg / 1.0 mL** |
 | Dose | **300 mg = two (2) PFS**, as two separate SC injections at the same visit |
 | Comparator | **Matching placebo** — identical PFS, identical carton, identical volume, also 2 injections |
 | Kit format | Carton of **2 PFS** = one dose. Kit numbers **6 digits** (100001–999999), IRT-assigned. |
-| Supply chain | Amgen → **GlobalRx Logistics** → site pharmacy |
+| Supply chain | Meridian → **GlobalRx Logistics** → site pharmacy |
 | Blinding | Visually indistinguishable. **No unblinded pharmacist at site.** Administration by blinded, delegated staff. |
 
 > **Speaker notes:** (Ostrander) One carton, two syringes, one dose. If a carton arrives with one

@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -10,18 +10,18 @@
 ### Protocol 20210143 — ROCKET-Horizon
 
 **A Phase 3, Randomized, 24-week, Placebo-controlled, Double-blind Study to Assess the Efficacy,
-Safety and Tolerability of Rocatinlimab (AMG 451) Monotherapy in Adult Subjects With
+Safety and Tolerability of Rocatinlimab (MER 451) Monotherapy in Adult Subjects With
 Moderate-to-severe Atopic Dermatitis (AD)**
 
 | | |
 |---|---|
-| **Sponsor** | Amgen Inc., One Amgen Center Drive, Thousand Oaks, CA 91320-1799, USA |
+| **Sponsor** | Meridian Biotherapeutics, Inc., 1200 Kestrel Way, Emeryville, CA 94608, USA |
 | **Sponsor protocol number** | 20210143 |
 | **Protocol version in force** | Amendment 3, Version 4.0, dated 29-NOV-2023 |
 | **ClinicalTrials.gov** | NCT05651711 |
 | **EU CT number** | 2022-501538-44 |
 | **US IND** | IND 145,882 |
-| **Investigational product** | Rocatinlimab (AMG 451), anti-OX40 (CD134) IgG1 monoclonal antibody |
+| **Investigational product** | Rocatinlimab (MER 451), anti-OX40 (CD134) IgG1 monoclonal antibody |
 | **Investigator's Brochure in force** | Edition 6.0, dated 15-AUG-2023 |
 | **Safety operations delegated to** | Harborlight Clinical Research, Inc. (HCR) — Global Patient Safety |
 | **Document number** | 20210143-SAF-MAN |
@@ -30,7 +30,7 @@ Moderate-to-severe Atopic Dermatitis (AD)**
 | **Supersedes** | Version 2.0, 22-MAY-2023 |
 | **Distribution** | Principal Investigators, Sub-Investigators, study coordinators, site pharmacists, and delegated site staff at all activated centers. File in Section 3 of the Investigator Site File. |
 
-**Confidential.** This document contains confidential information belonging to Amgen Inc. It is
+**Confidential.** This document contains confidential information belonging to Meridian Biotherapeutics, Inc. It is
 provided to investigators and their delegates solely for the conduct of Protocol 20210143.
 
 ---
@@ -896,7 +896,7 @@ sufficient evidence that you met the clock.** File them and go home.
 ```
 ════════════════════════════════════════════════════════════════════════════════
   SERIOUS ADVERSE EVENT / AESI REPORT FORM
-  Protocol 20210143 (ROCKET-Horizon) · Rocatinlimab (AMG 451) · IND 145,882
+  Protocol 20210143 (ROCKET-Horizon) · Rocatinlimab (MER 451) · IND 145,882
   Form version 3.0 (05-DEC-2023)
   SEND TO: rocket.safety@harborlightcro.com · FAX +1 (888) 555-0177
            PHONE +1 (888) 555-0143 (deaths and life-threatening events)
@@ -1115,7 +1115,7 @@ minutes after awareness.
 ```
 ════════════════════════════════════════════════════════════════════════════════
   SERIOUS ADVERSE EVENT / AESI REPORT FORM
-  Protocol 20210143 (ROCKET-Horizon) · Rocatinlimab (AMG 451) · IND 145,882
+  Protocol 20210143 (ROCKET-Horizon) · Rocatinlimab (MER 451) · IND 145,882
   Form version 3.0 (05-DEC-2023)
 ════════════════════════════════════════════════════════════════════════════════
 
@@ -1678,7 +1678,7 @@ with dates, before closing the case as lost to follow-up.
 ```
 ════════════════════════════════════════════════════════════════════════════════
   PREGNANCY REPORT FORM
-  Protocol 20210143 (ROCKET-Horizon) · Rocatinlimab (AMG 451) · IND 145,882
+  Protocol 20210143 (ROCKET-Horizon) · Rocatinlimab (MER 451) · IND 145,882
   Form version 3.0 (05-DEC-2023)
   SEND WITHIN 24 HOURS OF AWARENESS TO:
     rocket.safety@harborlightcro.com · FAX +1 (888) 555-0177 · +1 (888) 555-0143
@@ -2009,7 +2009,7 @@ must be unblinded, rating responsibilities for that participant transfer to a ra
 
 ### 20.1 What arrives, and what it looks like
 
-Sites receive SUSAR notifications from HCR Global Patient Safety on behalf of Amgen, by email, as
+Sites receive SUSAR notifications from HCR Global Patient Safety on behalf of Meridian, by email, as
 cases occur across all 151 activated centers in 21 countries. A notification typically contains:
 
 - a **cover letter** identifying the protocol, the IND (145,882) or EU CT number (2022-501538-44), the

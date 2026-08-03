@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -16,15 +16,15 @@ that document's assumptions fragment.
 
 | Field | Value | Source |
 |---|---|---|
-| Sponsor | Amgen Inc., One Amgen Center Drive, Thousand Oaks, CA 91320-1799, USA | Record |
+| Sponsor | Meridian Biotherapeutics, Inc., 1200 Kestrel Way, Emeryville, CA 94608, USA | INVENTED — the sponsor is fictional (see §1.1) |
 | Sponsor protocol number | **20210143** | Record |
 | ClinicalTrials.gov | **NCT05651711** | Record |
 | EU CT number | **2022-501538-44** | Record |
 | Study acronym | **ROCKET-Horizon** | Record |
-| Brief title | A Study Assessing Rocatinlimab (AMG 451) Monotherapy in Moderate-to-severe Atopic Dermatitis (AD) | Record |
-| Official title | A Phase 3, Randomized, 24-week, Placebo-controlled, Double-blind Study to Assess the Efficacy, Safety and Tolerability of Rocatinlimab (AMG 451) Monotherapy in Adult Subjects With Moderate-to-severe Atopic Dermatitis (AD) | Record |
+| Brief title | A Study Assessing Rocatinlimab (MER 451) Monotherapy in Moderate-to-severe Atopic Dermatitis (AD) | Record, with the sponsor compound code substituted (§1.1) |
+| Official title | A Phase 3, Randomized, 24-week, Placebo-controlled, Double-blind Study to Assess the Efficacy, Safety and Tolerability of Rocatinlimab (MER 451) Monotherapy in Adult Subjects With Moderate-to-severe Atopic Dermatitis (AD) | Record, with the sponsor compound code substituted (§1.1) |
 | US IND number | **IND 145,882** | ASSUMED |
-| Investigational product | Rocatinlimab (AMG 451; also KHK4083) | Record |
+| Investigational product | Rocatinlimab (MER 451; also KHK4083) | Record, with the sponsor compound code substituted (§1.1) |
 | Protocol version in force | **Amendment 3, Version 4.0, dated 29-NOV-2023** | Date from record's posted protocol; version numbering ASSUMED |
 | Original protocol date | 07-OCT-2022 | ASSUMED |
 | IB edition in force | **Edition 6.0, dated 15-AUG-2023** | ASSUMED |
@@ -32,6 +32,26 @@ that document's assumptions fragment.
 | Study period | First participant first visit 14-DEC-2022; primary completion 05-JUN-2024; last participant last visit 27-AUG-2024 | Record |
 
 **Always write dates as `DD-MMM-YYYY`** (e.g., 14-DEC-2022) in all documents.
+
+### 1.1 The sponsor is fictional
+
+The corpus is derived from a real registry record, but **the sponsor is not the real one.** Every
+organisation in this world is invented — Harborlight CRO, Veriscribe, Axion, GlobalRx Logistics,
+Cascade Dermatology — and the sponsor is no exception:
+
+| Substituted | Reads as | Note |
+|---|---|---|
+| Sponsor company, address, phone, e-mail, web domains | Meridian Biotherapeutics, Inc., Emeryville, CA · `@meridianbio-sim.example` | No real company, address, or telephone number appears anywhere in the corpus |
+| Sponsor compound code | **MER 451** | The code belongs to the sponsor, so it moved with the sponsor |
+
+What did **not** change, and must not be changed, is anything clinical that the registry record
+supplies: the INN **rocatinlimab**, the originator code **KHK4083** (a different company's code —
+the compound is licensed *in*, which is exactly why the sponsor's own code is separate), the
+protocol number **20210143**, **NCT05651711**, the dosing, the SoA, the endpoints (§6), the
+eligibility criteria (§7), and the safety numbers (§13). Those stay verbatim.
+
+So when a row below is sourced `Record`, the clinical fact is real and the sponsor's name attached
+to it is not.
 
 ---
 
@@ -41,7 +61,7 @@ Every generated file — outlines, documents, and the merged assumptions log —
 verbatim, before the title:
 
 ```
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -81,7 +101,7 @@ randomization strata; Mantel-Haenszel common risk difference as the treatment-ef
 
 | Attribute | Value |
 |---|---|
-| Active | Rocatinlimab (AMG 451), a fully human anti-OX40 (CD134) IgG1 monoclonal antibody |
+| Active | Rocatinlimab (MER 451), a fully human anti-OX40 (CD134) IgG1 monoclonal antibody |
 | Presentation | Single-use **prefilled syringe (PFS), 150 mg/1.0 mL** |
 | Dose | **300 mg = two (2) PFS**, administered as two separate subcutaneous injections at the same visit |
 | Route | Subcutaneous (SC) |
@@ -92,7 +112,7 @@ randomization strata; Mantel-Haenszel common risk difference as the treatment-ef
 | Pre-administration | Remove from refrigerator and allow to reach room temperature **30 minutes** before injection; do not warm by other means |
 | Injection sites | Abdomen (avoiding a 5 cm radius around the navel), anterior thigh, or upper outer arm. Rotate sites; the two injections at a given visit go in **different** sites. Never into tender, bruised, red, hard, scarred, tattooed, or actively lesional AD skin. |
 | Post-dose observation | **60 minutes** at Day 1 and Week 2; **30 minutes** at all subsequent dosing visits |
-| Supplied by | Amgen, via GlobalRx Logistics, to the site pharmacy |
+| Supplied by | Meridian, via GlobalRx Logistics, to the site pharmacy |
 | Kit format | Carton of 2 PFS, one carton = one dose. Kit numbers are **6 digits** (range 100001–999999), assigned by IRT. |
 | Blinding | Product and placebo are visually indistinguishable. **No unblinded pharmacist is required at the site.** Administration is performed by blinded, delegated site staff. |
 
@@ -258,13 +278,13 @@ date within 5 business days.
 
 | Role | Name | Contact |
 |---|---|---|
-| Sponsor Study Director | (per registry) Study Director, Amgen Inc. | `medinfo@amgen.com` · +1 (866) 572-6436 |
-| Medical Monitor (24/7) | **Ana Belmonte-Ruiz, MD** (HCR, on behalf of Amgen) | +1 (888) 555-0142 · `medicalmonitor.20210143@harborlightcro.com` |
+| Sponsor Study Director | (per registry) Study Director, Meridian Biotherapeutics, Inc. | `medinfo@meridianbio-sim.example` · +1 (866) 555-0190 |
+| Medical Monitor (24/7) | **Ana Belmonte-Ruiz, MD** (HCR, on behalf of Meridian) | +1 (888) 555-0142 · `medicalmonitor.20210143@harborlightcro.com` |
 | Back-up Medical Monitor | **Peter Vandermeer, MD** | via +1 (888) 555-0142 |
 | **SAE / safety intake** | Global Patient Safety intake, HCR | Email `rocket.safety@harborlightcro.com` · Fax +1 (888) 555-0177 · Phone +1 (888) 555-0143 |
 | Clinical Trial Manager | **Rosalind Achebe** | `r.achebe@harborlightcro.com` · +1 (888) 555-0145 |
 | Assigned CRA / monitor for Site 1047 | **Kevin Ostrander, CCRA** | `k.ostrander@harborlightcro.com` · +1 (503) 555-0188 (mobile) |
-| Site contract / budget | **Amgen Clinical Contracts** | `ctagreements@amgen-sim.example` |
+| Site contract / budget | **Meridian Clinical Contracts** | `ctagreements@meridianbio-sim.example` |
 | Emergency unblinding | Axion IRT system (primary) → +1 (800) 555-0164 (backup) | 24/7 |
 
 ---
@@ -336,9 +356,12 @@ herpeticum, infected cyst, influenza, lower limb fracture, mental status changes
 
 ## 14. Publication terms (real, from the record — reproduce faithfully in the CTA)
 
+The wording below is the record's, verbatim, apart from the sponsor's name (§1.1). Reproduce the
+terms as written; do not paraphrase them.
+
 > The Clinical Trial Agreement generally does not restrict an investigator's discussion of trial
-> results after completion. The Agreement permits Amgen a limited period of time to review material
-> discussing trial results (typically up to 45 days and possible extension). Amgen may remove
+> results after completion. The Agreement permits Meridian a limited period of time to review material
+> discussing trial results (typically up to 45 days and possible extension). Meridian may remove
 > confidential information, but authors have final control and approval of publication content. For
 > multicenter studies, the investigator agrees not to publish any results before the first
 > multi-center publication.

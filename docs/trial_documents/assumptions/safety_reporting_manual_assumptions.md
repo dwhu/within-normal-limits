@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -19,7 +19,7 @@ substrate.
 
 | Location in doc | Assumption | Rationale | Confidence |
 |---|---|---|---|
-| Cover page | Document number **20210143-SAF-MAN** | Sponsor manuals carry a controlled document number; `<protocol>-<function>-<type>` is a common Amgen-style convention. Record supplies none. | High |
+| Cover page | Document number **20210143-SAF-MAN** | Sponsor manuals carry a controlled document number; `<protocol>-<function>-<type>` is a common large-sponsor convention. Record supplies none. | High |
 | Cover page | Version **3.0**, effective **05-DEC-2023**, supersedes v2.0 | Specified by the assignment brief. Placed 6 days after Protocol Amendment 3 (29-NOV-2023), the realistic lag for a study-manual refresh triggered by an amendment. | High |
 | Cover page | Safety operations delegated to **HCR Global Patient Safety** | STUDY_FACTS §9 assigns "safety intake" to Harborlight Clinical Research; "Global Patient Safety" is the conventional department name for that function. | High |
 | Cover page | Filed in **Section 3** of the Investigator Site File | Arbitrary but plausible ISF section numbering. | Low |
@@ -32,7 +32,7 @@ substrate.
 
 | Location in doc | Assumption | Rationale | Confidence |
 |---|---|---|---|
-| §8.1 | Sponsor uses a **two-point causality scale** (Related / Not related) | The brief offered two-point or five-point. Two-point chosen because it maps directly onto the 21 CFR 312.32(a) "reasonable possibility" standard and cannot be evaded by selecting a middle category; it is also Amgen's real-world convention for many programmes. Record specifies nothing. | Med |
+| §8.1 | Sponsor uses a **two-point causality scale** (Related / Not related) | The brief offered two-point or five-point. Two-point chosen because it maps directly onto the 21 CFR 312.32(a) "reasonable possibility" standard and cannot be evaded by selecting a middle category; it is also the real-world convention on many large-sponsor programmes. Record specifies nothing. | Med |
 | §8.2 | **"Not related" requires a stated alternative explanation** in mandatory field 9c, or the case is queried | Invented as a hard rule. Some sponsors enforce this; many only encourage it. Made mandatory here because it is the manual's most useful teaching device and generates good game material. | Low |
 | §7.1 | **Three-point severity scale** (mild/moderate/severe) with activity-limitation anchors; **CTCAE explicitly not used** | Typical for dermatology trials with non-oncology endpoints. The specific wording of the three definitions is invented but follows the widely used DAIDS/industry phrasing. | Med |
 | §6.2, Appendix E | **MedDRA version 26.1** | v26.1 was the version current in September 2023, so it is the plausible version in force on 05-DEC-2023. Record does not state a coding dictionary version. | Med |

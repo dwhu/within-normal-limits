@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -8,7 +8,7 @@
 **Target document:** `/Users/dave/code/icf-please/docs/trial_documents/investigators_brochure.md`
 **Structural authority:** ICH E6(R3) Good Clinical Practice, **Section 7 — Investigator's Brochure**
 (carried forward essentially unchanged in content requirements from E6(R2) §7 and E6(R1) §7).
-**Product:** Rocatinlimab (AMG 451; formerly KHK4083), fully human anti-OX40 (CD134) IgG1 mAb.
+**Product:** Rocatinlimab (MER 451; formerly KHK4083), fully human anti-OX40 (CD134) IgG1 mAb.
 **Edition modelled:** Edition 6.0, 15-AUG-2023 (the edition in force for Protocol 20210143 per
 `STUDY_FACTS.md` §1).
 
@@ -366,7 +366,7 @@ A player who has read the Guidance will not.
 Drawn from `STUDY_FACTS.md`; the IB must not deviate.
 
 - Edition **6.0**, dated **15-AUG-2023**; supersedes Edition 5.0 (12-SEP-2022). (§1)
-- IND **145,882**; sponsor Amgen Inc., One Amgen Center Drive, Thousand Oaks, CA 91320-1799. (§1)
+- IND **145,882**; sponsor Meridian Biotherapeutics, Inc., 1200 Kestrel Way, Emeryville, CA 94608. (§1)
 - Product: fully human anti-OX40 (CD134) IgG1 mAb; **150 mg/1.0 mL single-use PFS**; clinical dose
   **300 mg = two PFS SC**; storage **2–8 °C**; do not freeze, do not shake; 30 minutes to room
   temperature before injection. (§4)

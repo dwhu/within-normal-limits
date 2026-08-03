@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -8,12 +8,12 @@
 ## Protocol 20210143 — ROCKET-Horizon
 
 **A Phase 3, Randomized, 24-week, Placebo-controlled, Double-blind Study to Assess the Efficacy,
-Safety and Tolerability of Rocatinlimab (AMG 451) Monotherapy in Adult Subjects With
+Safety and Tolerability of Rocatinlimab (MER 451) Monotherapy in Adult Subjects With
 Moderate-to-severe Atopic Dermatitis (AD)**
 
 | | |
 |---|---|
-| Sponsor | Amgen Inc. |
+| Sponsor | Meridian Biotherapeutics, Inc. |
 | Institution | Cascade Dermatology & Clinical Research, LLC |
 | Investigator | Miriam A. Okonkwo, MD, FAAD |
 | Site number | 1047 |
@@ -27,7 +27,7 @@ Moderate-to-severe Atopic Dermatitis (AD)**
 | Exhibits | A — Protocol · B — Budget · C — Confidentiality Acknowledgement · D — Financial Disclosure |
 
 > **Confidential.** This Agreement and its Exhibits contain confidential and proprietary information
-> of Amgen Inc. and of Cascade Dermatology & Clinical Research, LLC. Distribution is limited to
+> of Meridian Biotherapeutics, Inc. and of Cascade Dermatology & Clinical Research, LLC. Distribution is limited to
 > persons with a need to know for the performance or administration of the Study.
 
 ---
@@ -67,8 +67,8 @@ Moderate-to-severe Atopic Dermatitis (AD)**
 THIS CLINICAL TRIAL AGREEMENT (this "**Agreement**") is made and entered into as of **12-DEC-2022**
 (the "**Effective Date**") by and among:
 
-**AMGEN INC.**, a Delaware corporation having its principal place of business at One Amgen Center
-Drive, Thousand Oaks, California 91320-1799, United States of America (the "**Sponsor**");
+**MERIDIAN BIOTHERAPEUTICS, INC.**, a Delaware corporation having its principal place of business at
+1200 Kestrel Way, Emeryville, California 94608, United States of America (the "**Sponsor**");
 
 **CASCADE DERMATOLOGY & CLINICAL RESEARCH, LLC**, an Oregon limited liability company having its
 principal place of business at 4820 SW Barbur Boulevard, Suite 300, Portland, Oregon 97239, United
@@ -85,13 +85,13 @@ The Sponsor, the Institution, and the Investigator are referred to herein indivi
 
 **WHEREAS**, the Sponsor is engaged in the research, development, manufacture, and
 commercialisation of pharmaceutical products, and is the sponsor of a clinical investigation of
-rocatinlimab (AMG 451), a fully human anti-OX40 (CD134) monoclonal antibody, conducted under United
+rocatinlimab (MER 451), a fully human anti-OX40 (CD134) monoclonal antibody, conducted under United
 States Investigational New Drug Application IND 145,882 and registered at ClinicalTrials.gov under
 identifier NCT05651711 and in the European Union under EU CT number 2022-501538-44;
 
 **WHEREAS**, the Sponsor has developed a written protocol designated **Protocol 20210143**, entitled
 "A Phase 3, Randomized, 24-week, Placebo-controlled, Double-blind Study to Assess the Efficacy,
-Safety and Tolerability of Rocatinlimab (AMG 451) Monotherapy in Adult Subjects With
+Safety and Tolerability of Rocatinlimab (MER 451) Monotherapy in Adult Subjects With
 Moderate-to-severe Atopic Dermatitis (AD)" and bearing the study acronym **ROCKET-Horizon**, a copy
 of which is attached hereto as **Exhibit A** and incorporated herein by reference;
 
@@ -197,7 +197,7 @@ first made by one or more Institution Personnel, alone or jointly with others, i
 arising from the performance of the Study, the use of the Investigational Product, or the use of the
 Sponsor's Confidential Information.
 
-**1.15 "Investigational Product"** or **"IP"** means rocatinlimab (AMG 451, also designated
+**1.15 "Investigational Product"** or **"IP"** means rocatinlimab (MER 451, also designated
 KHK4083) supplied by or on behalf of the Sponsor for use in the Study, **and the matching placebo
 supplied for use as comparator in the Study**, together in each case with all associated packaging,
 labelling, kits, ancillary supplies, and administration materials supplied by or on behalf of the
@@ -1513,18 +1513,18 @@ Party may specify by notice given in accordance with this Section:
 
 **If to the Sponsor:**
 
-> Amgen Inc.
-> One Amgen Center Drive
-> Thousand Oaks, California 91320-1799
+> Meridian Biotherapeutics, Inc.
+> 1200 Kestrel Way
+> Emeryville, California 94608
 > United States of America
 > **Attention:** Clinical Contracts, Protocol 20210143
-> **Email:** `ctagreements@amgen-sim.example`
+> **Email:** `ctagreements@meridianbio-sim.example`
 >
 > *with a required copy to:*
 >
-> Amgen Inc.
-> One Amgen Center Drive
-> Thousand Oaks, California 91320-1799
+> Meridian Biotherapeutics, Inc.
+> 1200 Kestrel Way
+> Emeryville, California 94608
 > **Attention:** Vice President, Legal Affairs — R&D Legal
 
 **If to the Institution:**
@@ -1650,7 +1650,7 @@ duly authorised representatives as of the Effective Date, **12-DEC-2022**.
 
 ### FOR THE SPONSOR
 
-**AMGEN INC.**
+**MERIDIAN BIOTHERAPEUTICS, INC.**
 
 | | |
 |---|---|
@@ -1712,7 +1712,7 @@ liability in respect of them.
 |---|---|
 | Protocol number | **20210143** |
 | Study acronym | **ROCKET-Horizon** |
-| Title | A Phase 3, Randomized, 24-week, Placebo-controlled, Double-blind Study to Assess the Efficacy, Safety and Tolerability of Rocatinlimab (AMG 451) Monotherapy in Adult Subjects With Moderate-to-severe Atopic Dermatitis (AD) |
+| Title | A Phase 3, Randomized, 24-week, Placebo-controlled, Double-blind Study to Assess the Efficacy, Safety and Tolerability of Rocatinlimab (MER 451) Monotherapy in Adult Subjects With Moderate-to-severe Atopic Dermatitis (AD) |
 | ClinicalTrials.gov | **NCT05651711** |
 | EU CT number | **2022-501538-44** |
 | US IND | **IND 145,882** |
