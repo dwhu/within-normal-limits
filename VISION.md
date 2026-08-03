@@ -126,7 +126,7 @@ The day runs 8:00 AM to 4:00 PM. A clock in the corner advances as work gets don
 | Verb | Cost | Notes |
 |---|---|---|
 | `Accept` | 30 minutes | Take VERA's output as-is |
-| `Manually Review` | 60 minutes (eCRF, safety) or 90 minutes (screening packets) | Opens the patient's documents and the trial documents alongside an empty form. The player reads and fills it in themselves. |
+| `Manually Review` | 60 minutes (eCRF, safety) or 90 minutes (screening packets) | Opens the patient's documents and the trial documents with VERA's prefilled output. The player verifies and fills in corrections in themselves. |
 
 Minutes were considered and rejected. Half-hour blocks give enough granularity to make working an item by hand feel expensive without making the player compute.
 
