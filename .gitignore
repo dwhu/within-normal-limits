@@ -40,3 +40,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# generated from docs/trial_documents by scripts/build-doc-index.mjs
+/public/content/documents/*.md
+/public/content/documents/index.json

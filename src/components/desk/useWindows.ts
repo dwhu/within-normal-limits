@@ -22,15 +22,34 @@ const PLACEMENT: Record<WindowId, Rect> = {
   documents: { x: 320, y: 160, w: 560, h: 440 },
 };
 
+/**
+ * The desk the player signs in to: the work queue at the back, with the three reference windows
+ * cascaded over it so every title bar is reachable and the queue's left columns stay readable.
+ * These are the things VERA gets checked against — none of them should be something the player
+ * has to go find in the taskbar first.
+ */
+const START: { id: WindowId; title: string; at?: Partial<Rect> }[] = [
+  { id: "queue", title: "Work Queue" },
+  { id: "documents", title: "Documents", at: { x: 300, y: 150 } },
+  { id: "roster", title: "Roster", at: { x: 340, y: 190 } },
+  { id: "inbox", title: "Inbox", at: { x: 320, y: 230 } },
+];
+
 function viewport() {
   if (typeof window === "undefined") return { w: 1280, h: 800 };
   return { w: window.innerWidth, h: window.innerHeight };
 }
 
 export function useWindows() {
-  const [windows, setWindows] = useState<WindowState[]>([
-    { id: "queue", title: "Work Queue", ...PLACEMENT.queue, z: 1 },
-  ]);
+  const [windows, setWindows] = useState<WindowState[]>(() =>
+    START.map(({ id, title, at }, i) => ({
+      id,
+      title,
+      ...PLACEMENT[id],
+      ...at,
+      z: i + 1,
+    })),
+  );
 
   const focus = useCallback((id: WindowId) => {
     setWindows((ws) => {

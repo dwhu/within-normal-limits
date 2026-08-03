@@ -6,19 +6,19 @@ Static assets the game fetches at runtime.
 
 The fifteen trial documents the player can open from the in-game Documents window.
 
-**These are symlinks into `docs/trial_documents/`, not copies.** The corpus is ~1.6 MB and
-`docs/trial_documents/` is where it is authored and where the rest of the documentation links to it.
-Duplicating it here would mean two copies drifting apart the first time one is edited.
+**Every `.md` here and `index.json` are generated and gitignored — do not edit them.** They are
+copied out of `docs/trial_documents/`, which is where the corpus is authored and where the rest of
+the documentation links to it. `scripts/build-doc-index.mjs` does the copy and writes the index; it
+runs automatically from `predev` and `prebuild`, so run `npm run dev` (or the script directly) after
+a fresh clone or the Documents window will 404.
 
-`ASSUMPTIONS.md` and `index.md` are deliberately not linked — they are authoring metadata, not
-documents a trial site would ever receive.
+The manifest is the `TITLES` map in that script, not the directory listing: adding or removing a
+document means editing the map. `ASSUMPTIONS.md` and `index.md` are deliberately left out — they are
+authoring metadata, not documents a trial site would ever receive.
 
-Next serves symlinked files out of `public/` in both `next dev` and a production `next build` /
-`next start`; this was verified rather than assumed. If you ever move to an output mode that copies
-`public/` into a bundle rather than serving it from disk, check this still holds before shipping.
-
-`index.json` is generated — run `node scripts/build-doc-index.mjs` after adding or removing a
-document. It is a real file, not a symlink.
+These were symlinks into `docs/` until the first Vercel deploy, which served fine under `next dev`
+and `next start` but failed the build: Vercel copies `public/` into the output bundle, and `fs.cp`
+refuses a relative symlink pointing outside the tree being copied.
 
 ## `source/`
 

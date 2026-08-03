@@ -4,23 +4,47 @@ import { describe, expect, it } from "vitest";
 import { useWindows } from "@/components/desk/useWindows";
 
 describe("useWindows", () => {
-  it("starts with the work queue open and nothing else", () => {
+  it("starts with the queue, documents, roster and inbox open, and nothing else", () => {
     const { result } = renderHook(() => useWindows());
+    expect(result.current.windows.map((w) => w.id)).toEqual([
+      "queue",
+      "documents",
+      "roster",
+      "inbox",
+    ]);
+    expect(result.current.topmost()).toBe("inbox");
+  });
+
+  it("cascades the reference windows it starts with rather than stacking them flush", () => {
+    const { result } = renderHook(() => useWindows());
+    const at = (id: "documents" | "roster" | "inbox") =>
+      result.current.windows.find((w) => w.id === id);
+
+    expect(at("documents")).toMatchObject({ x: 300, y: 150 });
+    expect(at("roster")).toMatchObject({ x: 340, y: 190 });
+    expect(at("inbox")).toMatchObject({ x: 320, y: 230 });
+  });
+
+  it("lets the player close the reference windows it started with", () => {
+    const { result } = renderHook(() => useWindows());
+    act(() => result.current.close("documents"));
+    act(() => result.current.close("roster"));
+    act(() => result.current.close("inbox"));
+
     expect(result.current.windows.map((w) => w.id)).toEqual(["queue"]);
   });
 
   it("opens a window and puts it on top", () => {
     const { result } = renderHook(() => useWindows());
-    act(() => result.current.open("inbox", "Inbox"));
+    act(() => result.current.open("ecrf", "eCRF"));
 
-    expect(result.current.isOpen("inbox")).toBe(true);
-    expect(result.current.topmost()).toBe("inbox");
+    expect(result.current.isOpen("ecrf")).toBe(true);
+    expect(result.current.topmost()).toBe("ecrf");
   });
 
   it("focusing an existing window raises it above the others", () => {
     const { result } = renderHook(() => useWindows());
-    act(() => result.current.open("inbox", "Inbox"));
-    act(() => result.current.open("roster", "Roster"));
+    act(() => result.current.open("ecrf", "eCRF"));
     act(() => result.current.focus("inbox"));
 
     expect(result.current.topmost()).toBe("inbox");
@@ -38,9 +62,9 @@ describe("useWindows", () => {
 
   it("opens a window at a forced placement instead of its default", () => {
     const { result } = renderHook(() => useWindows());
-    act(() => result.current.open("inbox", "Inbox", { y: 16 }));
+    act(() => result.current.open("viewer", "Viewer", { y: 16 }));
 
-    expect(result.current.windows.find((w) => w.id === "inbox")).toMatchObject({ x: 200, y: 16 });
+    expect(result.current.windows.find((w) => w.id === "viewer")).toMatchObject({ x: 60, y: 16 });
   });
 
   it("moves an already-open window when it is reopened at a forced placement", () => {

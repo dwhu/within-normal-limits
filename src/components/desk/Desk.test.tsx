@@ -21,6 +21,25 @@ describe("Desk", () => {
     expect(screen.getByText(/Paper source only/)).toBeInTheDocument();
   });
 
+  it("has the documents, roster and inbox open from the moment the player signs in", async () => {
+    const index = [
+      { file: "protocol.md", title: "Protocol", bytes: 164000, modified: "2023-11-29" },
+    ];
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({ ok: true, json: async () => index, text: async () => "" })),
+    );
+
+    const inbox = [{ id: "E-1", from: "Site", subject: "Welcome", body: "Morning." }];
+    render(<Desk state={desk({ inbox })} dispatch={vi.fn()} script={FIXTURE_SCRIPT} />);
+
+    expect(await screen.findByRole("button", { name: /Protocol/ })).toBeInTheDocument();
+    expect(screen.getByText(initialState.roster[0].name)).toBeInTheDocument();
+    expect(screen.getByText("Morning.")).toBeInTheDocument();
+
+    vi.unstubAllGlobals();
+  });
+
   it("announces VERA's rollout before she arrives", () => {
     render(<Desk state={desk()} dispatch={vi.fn()} script={FIXTURE_SCRIPT} />);
 
@@ -54,9 +73,12 @@ describe("Desk", () => {
     });
   });
 
-  it("leaves the inbox shut on an item that does not carry an arrival email", () => {
-    render(<Desk state={desk({ index: 1 })} dispatch={vi.fn()} script={FIXTURE_SCRIPT} />);
-    expect(screen.queryByText("Inbox")).toBeNull();
+  it("leaves the inbox where it sits on an item that does not carry an arrival email", () => {
+    const inbox = [{ id: "E-1", from: "Site", subject: "Welcome", body: "Morning." }];
+    render(<Desk state={desk({ index: 1, inbox })} dispatch={vi.fn()} script={FIXTURE_SCRIPT} />);
+
+    // Open, as it is from sign-in — but at its resting placement, not forced to the top.
+    expect(screen.getByText("Morning.").closest("div.absolute")).toHaveStyle({ top: "230px" });
   });
 
   it("dispatches ACCEPT when the player takes her word", async () => {
