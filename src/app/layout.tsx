@@ -21,8 +21,15 @@ const veraMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "icf-please",
-  description: "Next.js app",
+  title: "Within Normal Limits",
+  description:
+    "Run a dermatology trial site with an AI assistant you can't turn off. Check everything and fall behind. Trust it and fail the audit.",
+  openGraph: {
+    title: "Within Normal Limits: a game about trusting AI at a trial site",
+    description:
+      "Nine hours, a queue of screening, safety, and data entry work, and an AI assistant named VERA. VERA is usually right. The audit only cares about the times she wasn't.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
