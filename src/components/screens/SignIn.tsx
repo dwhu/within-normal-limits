@@ -20,7 +20,7 @@ export function SignIn({ onSignIn }: { onSignIn: () => void }) {
           </p>
           <h1 className="mt-2 text-2xl font-normal">Site 1047 · Coordinator Login</h1>
           <p className="mt-4 max-w-[60ch] leading-relaxed">
-            A phase 3 study of rocatinlimab (AMG 451) in moderate-to-severe atopic dermatitis
+            A phase 3 study of rocatinlimab (MER 451) in moderate-to-severe atopic dermatitis
           </p>
           <dl className="mt-6 grid grid-cols-[80px_1fr] gap-2 items-center">
             <dt>User</dt>
