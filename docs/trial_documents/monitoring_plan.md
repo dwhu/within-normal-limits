@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -8,12 +8,12 @@
 ## ROCKET-Horizon — Protocol 20210143
 
 **A Phase 3, Randomized, 24-week, Placebo-controlled, Double-blind Study to Assess the Efficacy,
-Safety and Tolerability of Rocatinlimab (AMG 451) Monotherapy in Adult Subjects With
+Safety and Tolerability of Rocatinlimab (MER 451) Monotherapy in Adult Subjects With
 Moderate-to-severe Atopic Dermatitis (AD)**
 
 | | |
 |---|---|
-| Sponsor | Amgen Inc., One Amgen Center Drive, Thousand Oaks, CA 91320-1799, USA |
+| Sponsor | Meridian Biotherapeutics, Inc., 1200 Kestrel Way, Emeryville, CA 94608, USA |
 | Sponsor protocol number | 20210143 |
 | ClinicalTrials.gov | NCT05651711 |
 | EU CT number | 2022-501538-44 |
@@ -22,9 +22,9 @@ Moderate-to-severe Atopic Dermatitis (AD)**
 | **Plan version** | **Version 4.0** |
 | **Plan date** | **15-DEC-2023** |
 | Supersedes | Version 3.1, dated 18-SEP-2023 |
-| Issued by | Harborlight Clinical Research, Inc. (HCR), Clinical Operations, on behalf of Amgen Inc. |
-| Distribution | HCR monitoring staff and line management; HCR Data Management and Central Monitoring; Amgen study team; Amgen R&D Quality Assurance; Trial Master File. Provided to investigational sites on request or at sponsor discretion. |
-| Confidentiality | Confidential. Property of Amgen Inc. Not for distribution outside the study team without written authorisation. |
+| Issued by | Harborlight Clinical Research, Inc. (HCR), Clinical Operations, on behalf of Meridian Biotherapeutics, Inc. |
+| Distribution | HCR monitoring staff and line management; HCR Data Management and Central Monitoring; Meridian study team; Meridian R&D Quality Assurance; Trial Master File. Provided to investigational sites on request or at sponsor discretion. |
+| Confidentiality | Confidential. Property of Meridian Biotherapeutics, Inc. Not for distribution outside the study team without written authorisation. |
 
 ---
 
@@ -51,7 +51,7 @@ This plan is effective on the date of the last approval signature.
 
 | Role | Name | Organisation | Signature | Date |
 |---|---|---|---|---|
-| Global Clinical Program Lead | Yusuf Adeyemi-Clarke, PharmD | Amgen Inc. | ______________________ | ____________ |
+| Global Clinical Program Lead | Yusuf Adeyemi-Clarke, PharmD | Meridian Biotherapeutics, Inc. | ______________________ | ____________ |
 | Clinical Trial Manager | Rosalind Achebe | Harborlight Clinical Research, Inc. | ______________________ | ____________ |
 | Regional Monitoring Manager, North America | Deirdre Lamontagne, RN, CCRA | Harborlight Clinical Research, Inc. | ______________________ | ____________ |
 | Central Monitoring Lead | Hyun-Woo Baek, MS | Harborlight Clinical Research, Inc. | ______________________ | ____________ |
@@ -94,7 +94,7 @@ This plan is effective on the date of the last approval signature.
 
 # 1. Purpose
 
-This Clinical Monitoring Plan describes how Amgen Inc., through Harborlight Clinical Research, Inc.
+This Clinical Monitoring Plan describes how Meridian Biotherapeutics, Inc., through Harborlight Clinical Research, Inc.
 (HCR), discharges its obligation to ensure proper monitoring of Protocol 20210143 (ROCKET-Horizon).
 It defines what is monitored, by whom, how often, by what method, to what depth, and what happens
 when monitoring identifies a problem.
@@ -124,7 +124,7 @@ issue escalation pathway; and the interface with data management, safety, and qu
 | Data cleaning, edit checks, query specification, database lock | Data Management Plan |
 | Statistical analysis, including the primary analysis | Statistical Analysis Plan |
 | Vendor performance oversight (MCL, Axion IRT, Veriscribe, DayLog, GlobalRx) | Vendor Oversight Plan |
-| Independent GCP audits | HCR/Amgen Quality Assurance Audit Programme |
+| Independent GCP audits | HCR/Meridian Quality Assurance Audit Programme |
 | Day-to-day site conduct instructions | Study Reference Manual v5.0 |
 | Data Monitoring Committee activity | DMC Charter |
 
@@ -211,18 +211,18 @@ dates, and the method by which effectiveness will be verified.
 
 # 5. Roles and responsibilities
 
-## 5.1 Sponsor — Amgen Inc.
+## 5.1 Sponsor — Meridian Biotherapeutics, Inc.
 
 Retains overall responsibility for the conduct of the trial and for ensuring proper monitoring
 (21 CFR 312.50). Approves this plan and any change to monitoring intensity, KRI thresholds, or
 QTLs. Owns the decision to suspend enrollment or terminate a site. Owns regulatory notification of
-serious breaches. Conducts independent GCP audits through Amgen R&D Quality Assurance. Delegated
-activities are documented in the Amgen–HCR transfer of obligations schedule; the delegation of
+serious breaches. Conducts independent GCP audits through Meridian R&D Quality Assurance. Delegated
+activities are documented in the Meridian–HCR transfer of obligations schedule; the delegation of
 monitoring does not transfer sponsor accountability.
 
 ## 5.2 Contract Research Organisation — Harborlight Clinical Research, Inc.
 
-Performs monitoring on Amgen's behalf. Employs, qualifies, trains, and supervises the monitoring
+Performs monitoring on Meridian's behalf. Employs, qualifies, trains, and supervises the monitoring
 staff. Maintains monitor training records, protocol- and plan-specific training, and evidence of
 co-monitoring/accompanied visit assessment for each CRA at least annually.
 
@@ -279,7 +279,7 @@ reconciliation (MCL central laboratory, Axion IRT, DayLog ePRO), and database lo
 data feeds on which the KRIs are computed. Performs SAE reconciliation between the clinical database
 and the safety database jointly with the safety function.
 
-## 5.8 Medical Monitor — Ana Belmonte-Ruiz, MD (HCR, on behalf of Amgen)
+## 5.8 Medical Monitor — Ana Belmonte-Ruiz, MD (HCR, on behalf of Meridian)
 
 24/7 · +1 (888) 555-0142 · `medicalmonitor.20210143@harborlightcro.com`
 Back-up: Peter Vandermeer, MD
@@ -330,7 +330,7 @@ and ICH E6(R3) Annex 1. They are restated here because monitoring cannot be perf
    - any breach of participant data confidentiality — within 24 hours;
    - any circumstance that has or may have compromised the blind — immediately.
 7. **Records.** The site maintains records in accordance with §18.7 and does not destroy any study
-   record without written authorisation from Amgen.
+   record without written authorisation from Meridian.
 
 ---
 
@@ -1033,7 +1033,7 @@ CAPA due within **20 business days**.
 **At the site:** the site's risk band changes to Enhanced. SDV returns to 100% across all
 categories. A CAPA plan is required, authored by the site and approved by the sponsor. Visit
 frequency increases. The issue is reported by site number and name in the study-level quality report
-seen by the sponsor. The site's next feasibility assessment for any Amgen study will show it.
+seen by the sponsor. The site's next feasibility assessment for any Meridian study will show it.
 
 ## 13.4 Serious breach
 
@@ -1150,7 +1150,7 @@ misconduct:
    investigation.
 
 Notification list on a confirmed or credible allegation: HCR Director of Clinical Quality Assurance;
-Amgen R&D Quality Assurance; Amgen Global Clinical Program Lead; the Medical Monitor; Amgen
+Meridian R&D Quality Assurance; Meridian Global Clinical Program Lead; the Medical Monitor; Meridian
 regulatory affairs; the IRB/IEC of record where required by its reporting policy; and competent
 authorities within 7 days where the CTR or an equivalent applies.
 
@@ -1264,7 +1264,7 @@ have identified an issue and did not are audit findings against the sponsor and 
 
 ## 17.2 Sponsor audit site selection
 
-Amgen R&D Quality Assurance selects sites using a documented risk model plus a random component:
+Meridian R&D Quality Assurance selects sites using a documented risk model plus a random component:
 
 - high enrollers and sites contributing disproportionately to the primary analysis;
 - sites with outlying data on central analysis, particularly on investigator-rated endpoints;
@@ -1352,8 +1352,8 @@ released within 60 days of final database lock and site close-out per the Clinic
 The site retains all essential documents, source records, and study documentation for **25 years**
 from the end of the clinical trial.
 
-- Records may not be destroyed without **prior written authorisation from Amgen**.
-- The site notifies Amgen in writing of any change in the location, format, or custodian of the
+- Records may not be destroyed without **prior written authorisation from Meridian**.
+- The site notifies Meridian in writing of any change in the location, format, or custodian of the
   records, and of any change of ownership or closure of the practice, in advance where possible.
 - Records must remain retrievable and legible for the whole period; where records are converted to
   another medium, the conversion is validated and certified copies are produced.
@@ -1551,7 +1551,7 @@ Reproduced from §11.2 for field use. Thresholds are set for this study and are 
 ---
 
 **HARBORLIGHT CLINICAL RESEARCH, INC.**
-On behalf of Amgen Inc.
+On behalf of Meridian Biotherapeutics, Inc.
 
 [DATE]
 
@@ -1607,7 +1607,7 @@ cc: Rosalind Achebe, Clinical Trial Manager; Priya Raghunathan, BSN, RN, CCRC
 ---
 
 **HARBORLIGHT CLINICAL RESEARCH, INC.**
-On behalf of Amgen Inc.
+On behalf of Meridian Biotherapeutics, Inc.
 
 10-NOV-2023
 

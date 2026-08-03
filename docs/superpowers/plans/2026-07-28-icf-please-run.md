@@ -229,7 +229,7 @@ export const FIXTURE_SCRIPT: Situation[] = [
         score: { verified: 1, errorsAccepted: 1 },
         email: {
           id: "DQ-0111",
-          from: "Amgen Data Mgmt",
+          from: "Meridian Data Mgmt",
           subject: "Query DQ-0111",
           body: "Reported value does not match source.",
         },
@@ -1384,7 +1384,7 @@ export function SignIn({ onSignIn }: { onSignIn: () => void }) {
         <div className="titlebar px-1.5 py-1">Veriscribe EDC 9.2 — Sign in</div>
         <div className="bevel-in m-0.5 p-6">
           <p className="font-mono text-[10px] tracking-widest text-neutral-600">
-            AMGEN INC. · PROTOCOL 20210143 · ROCKET-HORIZON
+            MERIDIAN BIOTHERAPEUTICS, INC. · PROTOCOL 20210143 · ROCKET-HORIZON
           </p>
           <h1 className="mt-2 text-2xl font-normal">Site 1047 · Coordinator</h1>
           <p className="mt-4 max-w-[46ch] leading-relaxed">
@@ -2732,7 +2732,7 @@ export const LADDER: Record<Day, Email[]> = {
   1: [
     {
       id: "ENR-1",
-      from: "Amgen Clinical Operations",
+      from: "Meridian Clinical Operations",
       subject: "Portland — we're SO close! 🎯",
       body:
         "Hi Site 1047!\n\nJust a friendly nudge — you're sitting at 11 randomized against a " +
@@ -2743,7 +2743,7 @@ export const LADDER: Record<Day, Email[]> = {
   2: [
     {
       id: "ENR-2",
-      from: "Amgen Clinical Operations",
+      from: "Meridian Clinical Operations",
       subject: "Enrolment check-in — Thursday",
       body:
         "Site 1047,\n\nOur operations lead has asked for a call on Thursday to walk through " +
@@ -2752,7 +2752,7 @@ export const LADDER: Record<Day, Email[]> = {
     },
     {
       id: "AUD-1",
-      from: "Amgen Data Management",
+      from: "Meridian Data Management",
       subject: "Query volume — Site 1047",
       body:
         "Site 1047,\n\nQuery volume at your site has risen relative to the study average " +
@@ -2763,7 +2763,7 @@ export const LADDER: Record<Day, Email[]> = {
   3: [
     {
       id: "ENR-3",
-      from: "Amgen Clinical Operations",
+      from: "Meridian Clinical Operations",
       subject: "Daily enrolment reporting — effective immediately",
       body:
         "Site 1047,\n\nEffective immediately and through randomization close, please submit " +
@@ -3664,7 +3664,7 @@ git commit -m "feat(game): autosave and restore"
 **8. Each source document opens with the simulation banner** used throughout the corpus, so nothing in `public/content/source/` can be mistaken for a genuine document:
 
 ```
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 ```
 
 ### Outcome conventions
@@ -3712,7 +3712,7 @@ Two situations deliberately break this table and say so in their own tasks: **DE
 Create each file under `public/content/source/`. Each opens with the banner from authoring rule 8. Model — `public/content/source/de-1110.md`:
 
 ```markdown
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 
 MERIDIAN CENTRAL LABORATORIES                    Indianapolis, IN
 ================================================================
@@ -3847,7 +3847,7 @@ const DAY_1: Situation[] = [
         roster: { subject: "1047-017", status: "Screen failed" },
         email: {
           id: "DQ-0109",
-          from: "Amgen Data Management",
+          from: "Meridian Data Management",
           subject: "Query DQ-0109 — subject 1047-017",
           body:
             "Eligibility determination recorded as screen failure. Source documents " +
@@ -3892,7 +3892,7 @@ const DAY_1: Situation[] = [
         score: { errorsAccepted: 1 },
         email: {
           id: "DQ-0110",
-          from: "Amgen Data Management",
+          from: "Meridian Data Management",
           subject: "Query DQ-0110 — subject 1047-003",
           body: "Reported chemistry values do not match source. Please verify and respond.",
         },

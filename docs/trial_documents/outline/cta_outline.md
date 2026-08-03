@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -7,7 +7,7 @@
 
 **Target document:** `/Users/dave/code/icf-please/docs/trial_documents/cta.md`
 **Study:** ROCKET-Horizon · Protocol 20210143, Amendment 3 (29-NOV-2023) · NCT05651711 · EU CT 2022-501538-44
-**Parties:** Amgen Inc. (Sponsor) · Cascade Dermatology & Clinical Research, LLC (Institution) ·
+**Parties:** Meridian Biotherapeutics, Inc. (Sponsor) · Cascade Dermatology & Clinical Research, LLC (Institution) ·
 Miriam A. Okonkwo, MD, FAAD (Investigator)
 **Effective Date to be authored:** 12-DEC-2022
 **Audience of this outline:** the author of `cta.md`, and any designer who needs to know which
@@ -55,7 +55,7 @@ Five negatives worth stating explicitly, because each one is a place where a nai
 4. **It is not a Business Associate Agreement**, though it does the work of one for this
    configuration. See §2.4 below.
 5. **It is not employment.** Article 16 (Independent Contractor) exists specifically to prevent a
-   reading in which the Investigator is Amgen's agent — a reading that would import respondeat
+   reading in which the Investigator is Meridian's agent — a reading that would import respondeat
    superior liability onto the Sponsor and, more practically, would compromise the Investigator's
    independent medical judgement over her own patients.
 
@@ -91,8 +91,8 @@ Investigator's Brochure, to ensure all associates are informed of their obligati
 adequate records under 312.62 and make them available for inspection under 312.68, to ensure IRB
 review under 21 CFR 56, and to comply with all other requirements of Part 312.
 
-**Why this matters for the CTA's structure:** the 1572 is a commitment to *FDA*, not to Amgen. If
-the Investigator breaches the protocol, FDA can act — but Amgen has no contractual remedy against
+**Why this matters for the CTA's structure:** the 1572 is a commitment to *FDA*, not to Meridian. If
+the Investigator breaches the protocol, FDA can act — but Meridian has no contractual remedy against
 her from the 1572 alone. So the CTA does two things: (a) it makes execution and maintenance of the
 1572 a contractual obligation, so that a 1572 breach is *also* a contract breach the Sponsor can
 enforce; and (b) it restates the substance of the 1572 commitments as covenants running to the
@@ -152,7 +152,7 @@ different clocks per region. See §4.14 below on why a site's attorney will push
 
 ### 2.4 HIPAA and the business-associate question
 
-Cascade is a covered entity: it is a dermatology practice that bills electronically. Amgen is not.
+Cascade is a covered entity: it is a dermatology practice that bills electronically. Meridian is not.
 The instinct is therefore to demand a Business Associate Agreement. That instinct is usually wrong
 for a sponsored trial, and the CTA should say why in its own terms:
 
@@ -194,8 +194,8 @@ mainstream industry position rather than pretend it is settled:
   the defining test of processor status. Most EU regulators and the EFPIA position treat sponsor and
   site as **independent (or, less commonly, joint) controllers**, not controller-and-processor.
 - Therefore **Article 28 does not squarely apply** to the sponsor–site relationship. Article 28
-  applies downstream: Amgen → Harborlight CRO, Amgen → Veriscribe EDC, Amgen → Meridian Central
-  Labs, Amgen → Axion IRT, Amgen → DayLog ePRO. The CTA nonetheless commonly carries Article
+  applies downstream: Meridian → Harborlight CRO, Meridian → Veriscribe EDC, Meridian → Meridian Central
+  Labs, Meridian → Axion IRT, Meridian → DayLog ePRO. The CTA nonetheless commonly carries Article
   28-style covenants — documented instructions, confidentiality of personnel, security measures
   under Article 32, sub-processor controls, assistance with data subject rights, deletion/return at
   end, audit rights — because sponsors want them flowed down regardless of the controller
@@ -203,7 +203,7 @@ mainstream industry position rather than pretend it is settled:
   ambiguity here is a real negotiation risk.
 - **Transfer mechanism.** Post-*Schrems II*, EU→US transfers need Chapter V cover. The realistic 2022
   drafting is **Standard Contractual Clauses** (the 2021 modules) plus a transfer impact assessment,
-  with the option to rely on the **EU–US Data Privacy Framework** once Amgen self-certifies. For a
+  with the option to rely on the **EU–US Data Privacy Framework** once Meridian self-certifies. For a
   US site sending data to a US sponsor, no Chapter V mechanism is engaged at all — which the CTA can
   say without weakening the global template.
 - **EU CTR (Reg. 536/2014)** contributes the 25-year retention rule (Art. 58), the CTIS transparency
@@ -248,14 +248,14 @@ tort claims by third parties.
 ### 3.1 Why there are three signatures on a two-party contract
 
 The CTA is nominally between Sponsor and Institution — those are the two entities exchanging
-consideration. Money flows Amgen → Cascade. Services flow Cascade → Amgen. Dr. Okonkwo is paid by
-Cascade, not by Amgen, and receives no separate consideration under this Agreement.
+consideration. Money flows Meridian → Cascade. Services flow Cascade → Meridian. Dr. Okonkwo is paid by
+Cascade, not by Meridian, and receives no separate consideration under this Agreement.
 
 She signs anyway, for four reasons:
 
 1. **Regulatory necessity.** The commitments that 21 CFR 312.53(c) requires the Sponsor to obtain
    are *personal* to the investigator. FDA holds the named investigator on the 1572 responsible.
-   Amgen needs those commitments to run to it directly, from her, not filtered through her employer.
+   Meridian needs those commitments to run to it directly, from her, not filtered through her employer.
 2. **Non-delegable duty.** "Personally conduct or supervise" cannot be discharged by an LLC. If
    Cascade were the only signatory and Dr. Okonkwo left the practice, Cascade would still be
    contractually bound to conduct the study while having no one able to perform the non-delegable
@@ -321,7 +321,7 @@ definition:
   confirmation duty for oral disclosure. This study's SIV was 21-DEC-2022; the SIV deck is
   Confidential Information under this definition.
 - **"Study Data"** — the boundary between Study Data (Sponsor's) and the **medical record**
-  (Institution's) is the single most important line in the document. Get it wrong and Amgen
+  (Institution's) is the single most important line in the document. Get it wrong and Meridian
   nominally owns Dr. Okonkwo's patient charts. The definition must expressly exclude the medical
   record and the site's own source documents *as records*, while granting the Sponsor the data
   content recorded in them.
@@ -332,7 +332,7 @@ definition:
   fails to cover a participant injured by a placebo injection procedure.
 - **"Personal Data"** — must be defined to bridge HIPAA's "PHI" and GDPR's "personal data," because
   the two do not have the same scope and the Article 13 obligations attach to both.
-- **"Affiliate"** — controls who on the Amgen side may receive Confidential Information and Study
+- **"Affiliate"** — controls who on the Meridian side may receive Confidential Information and Study
   Data without a further agreement, and who may take an assignment under Article 17.1.
 
 ### 4.3 Article 2, Scope and order of precedence — heat: 2
@@ -464,8 +464,8 @@ The negotiated points, honestly stated:
   makes it a felony to knowingly offer or receive remuneration to induce referrals for items or
   services reimbursable by a Federal health care program. Research payments are not exempt merely
   because they are research payments. Hence the representation that no payment is intended to induce
-  prescribing, purchasing, or recommending any Amgen product. Coupled with **§6002 of the ACA, the
-  Physician Payments Sunshine Act (42 U.S.C. §1320a-7h)**: Amgen must report payments to covered
+  prescribing, purchasing, or recommending any Meridian product. Coupled with **§6002 of the ACA, the
+  Physician Payments Sunshine Act (42 U.S.C. §1320a-7h)**: Meridian must report payments to covered
   recipients — physicians and teaching hospitals — to CMS **Open Payments**. Research payments made
   to the *institution* and named to the PI are reportable under the research category. The CTA must
   therefore (a) tell the Investigator she will be named, (b) require the site to supply NPI and
@@ -510,7 +510,7 @@ Second-hottest clause after indemnity and money. The structure:
   Term by Institution Personnel." A site attorney strikes that and insists on a nexus: *arising from
   the conduct of the Study or the use of the Investigational Product or Confidential Information*.
   Without the nexus, an unrelated device Dr. Okonkwo invents in her clinic on a Saturday becomes
-  Amgen's. This is a real and frequent fight, and the draft should land on the nexus formulation.
+  Meridian's. This is a real and frequent fight, and the draft should land on the nexus formulation.
 - **Improvements.** The named-in-the-brief hardest sub-issue. If Dr. Okonkwo devises a better
   injection technique, a new dosing schedule, or a biomarker method while using rocatinlimab, is
   that an "improvement to the Investigational Product" (Sponsor's) or an independent invention
@@ -628,7 +628,7 @@ Structure:
   counsel; the Indemnified Party cooperates at the Indemnifying Party's expense; **no settlement
   that imposes a non-indemnified obligation, admits fault, or fails to include a full release,
   without the Indemnified Party's consent**. That last limb is the one sites forget and the one that
-  matters most: without it, Amgen could settle a case in terms that publicly attribute fault to Dr.
+  matters most: without it, Meridian could settle a case in terms that publicly attribute fault to Dr.
   Okonkwo. She should also have the right to retain her own counsel at her own expense, and at the
   Sponsor's expense where a conflict of interest exists between her defence and the Sponsor's.
 - **11.5 Survival**, without time limit or with a long tail. Personal-injury claims from a 2023
@@ -735,7 +735,7 @@ or agent of the Sponsor for any purpose including tax and benefits.
 ### 4.18 Article 17, General — heat: 2, except governing law (4)
 
 - **Assignment.** Sponsor may assign to an Affiliate or to a successor to the rocatinlimab
-  programme; Institution may not assign at all. Standard and correctly asymmetric — Amgen bought the
+  programme; Institution may not assign at all. Standard and correctly asymmetric — Meridian bought the
   asset from Kyowa Kirin (whence "KHK4083") and needs assignability; Cascade's identity is the whole
   point of the contract.
 - **Notices.** Full addresses for both parties, with a separate copy to Legal. Practical detail:
@@ -757,7 +757,7 @@ or agent of the Sponsor for any purpose including tax and benefits.
 ### 4.19 Signature page
 
 Three blocks, each with printed name, title, signature, date. The Investigator's block must carry
-the limiting language from §3.2. Sponsor signatory is an Amgen contracts officer (invented — Amgen's
+the limiting language from §3.2. Sponsor signatory is an Meridian contracts officer (invented — Meridian's
 authorised signatories are not public), not the Study Director.
 
 ### 4.20 Exhibits

@@ -62,7 +62,7 @@ Four entities and a signature block. Players will not know clinical research voc
 | Entity | Role | Voice |
 |---|---|---|
 | You | The coordinator. Every decision in the game is yours. | Silent |
-| Amgen | The sponsor. Pays for the trial, monitors the data, sends the nagging emails. | Chipper, deadline-driven, passive-aggressive. All satire lives here. |
+| Meridian | The sponsor. Pays for the trial, monitors the data, sends the nagging emails. | Chipper, deadline-driven, passive-aggressive. All satire lives here. |
 | Miriam A. Okonkwo, MD, FAAD | The PI. Signs off on the trial and appears throughout its documents. Always in clinic; sends the occasional two-line email and is never something the player can do. | Terse, busy, decent |
 | Your manager | Site research director. Never appears, never has a scene. Exists only as an email signature and as the second half of the answer to "can I stop using VERA." | Brisk, two lines maximum |
 | Subjects | Enrolled patients, referred to by ID. | Plain and human. Never the target of a joke. |
@@ -224,7 +224,7 @@ The 4:00 PM stop is a screen, not a fade. It is written as the desk at the end o
 
 ```
 YESTERDAY'S MAIL
-  Amgen Data Mgmt — Query DQ-0114, subject 1047-008
+  Meridian Data Mgmt — Query DQ-0114, subject 1047-008
   "Reported ALT (42) does not match source (24). Please
    verify and respond."
 

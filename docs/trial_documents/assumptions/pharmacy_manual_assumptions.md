@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -13,7 +13,7 @@ Everything traceable to `STUDY_FACTS.md` or `RESEARCH_SITE.md` is **not** listed
 Everything below is invented by the author of this document because the canon and the
 ClinicalTrials.gov record are silent on it. Confidence reflects how likely the invented detail is to
 match real-world practice for a Phase 3 SC biologic prefilled-syringe study, not how likely it is to
-match anything Amgen actually did.
+match anything Meridian actually did.
 
 ---
 
@@ -21,7 +21,7 @@ match anything Amgen actually did.
 
 | Location in doc | Assumption | Rationale | Confidence |
 |---|---|---|---|
-| Cover block | Document owner is "Amgen Global Clinical Supply Chain"; operational contact is HCR | Canon names Amgen as sponsor and HCR as CRO but assigns no owner to a pharmacy manual; clinical supply is the conventional owner | High |
+| Cover block | Document owner is "Meridian Global Clinical Supply Chain"; operational contact is HCR | Canon names Meridian as sponsor and HCR as CRO but assigns no owner to a pharmacy manual; clinical supply is the conventional owner | High |
 | Cover block | Manual is a sponsor-controlled, study-level document distributed to all sites, used at Site 1047 | Standard industry structure; keeps the document reusable across the 151 activated centers in canon | High |
 | §1 Version history | v1.0 15-OCT-2022; v2.0 20-MAR-2023; v3.0 12-JUL-2023; v4.0 01-DEC-2023 (v4.0 date given in the brief) | v1.0 precedes first participant first visit (14-DEC-2022) and site activation (06-JAN-2023); intermediate versions spaced plausibly across enrollment | Med |
 | §1 Version history | The v2.0 change was driven by "a cross-site kit-assignment error"; v3.0 by excursion-tracking confusion | Invented change drivers give the version history a narrative and seed gameplay hooks; no such events exist in the record | Low |
@@ -33,7 +33,7 @@ match anything Amgen actually did.
 
 | Location in doc | Assumption | Rationale | Confidence |
 |---|---|---|---|
-| §4 Contacts | Sponsor clinical supply mailbox `clinicalsupply.20210143@amgen-sim.example`, phone +1 (805) 555-0150 | Canon gives no clinical-supply contact; 805 is the Thousand Oaks area code, matching the sponsor address in canon; fictional 555 number per §11 conventions | Med |
+| §4 Contacts | Sponsor clinical supply mailbox `clinicalsupply.20210143@meridianbio-sim.example`, phone +1 (510) 555-0150 | Canon gives no clinical-supply contact; 510 is the Emeryville area code, matching the sponsor address in canon; fictional 555 number per §11 conventions | Med |
 | §4 Contacts | GlobalRx Logistics site-services mailbox `siteservices@globalrxlogistics-sim.example` | Canon gives GlobalRx a phone number only; an email is needed for the 24-hour excursion notification | High |
 | §4 Contacts | TempTrak support reached "via site facilities, +1 (503) 555-0121" | RESEARCH_SITE names TempTrak but gives no vendor contact; routing through the site main line is realistic for a private practice | Med |
 | §4 | "Escalation rule of thumb" (kit → GlobalRx/CRA; participant → PI/MM; temperature → quarantine then sponsor supply) | Invented mnemonic; no canon source | High |
@@ -154,7 +154,7 @@ match anything Amgen actually did.
 
 | Location in doc | Assumption | Rationale | Confidence |
 |---|---|---|---|
-| §15.2, Appendix A | Form identifier **AMG-20210143-DAR-v3.0**; the column set; the balance formula; unit-level (syringe) rather than kit-level tracking | Form number invented. Unit-level tracking is an authorial choice justified by the 2-syringe dose and by the need to represent partial events | High |
+| §15.2, Appendix A | Form identifier **MER-20210143-DAR-v3.0**; the column set; the balance formula; unit-level (syringe) rather than kit-level tracking | Form number invented. Unit-level tracking is an authorial choice justified by the 2-syringe dose and by the need to represent partial events | High |
 | §15.2 | Shadow accountability records are prohibited; IRT is not the accountability record | Invented statement of a widely held expectation | High |
 | §15.4 | The entire worked example — participants 1047-030, 1047-034, 1047-031, 1047-011, 1047-012 (the first three retargeted from 1047-003, 1047-007 and 1047-009 on 29-JUL-2026: all three are worked by the script during the run, and this log dates their visits in Oct 2023 incompatibly with it); kit numbers 214744–214776, 214801–214803, 306115–306116; shipment reference GRX-1047-0019; deviations PD-2023-014 and PD-2023-015; page 7 of 14; pharmacy binder section 6 | Wholly fabricated. Participant IDs follow the canon SSSS-NNN convention and stay within the site's 14 randomized participants; kit numbers stay in the canon 6-digit range; dates sit inside the site's enrollment window. The retargeted IDs are placeholders past the site's 22 issued screening numbers | Low |
 | §15.4 | Initials WLC / PR / BK / AV map to the four named staff | Derived from RESEARCH_SITE names | High |

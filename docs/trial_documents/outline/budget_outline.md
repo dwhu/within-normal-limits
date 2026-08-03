@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -7,11 +7,11 @@
 
 **Target document:** `/Users/dave/code/icf-please/docs/trial_documents/budget.md`
 **Study:** ROCKET-Horizon · Protocol 20210143, Amendment 3 (29-NOV-2023) · NCT05651711
-**Sponsor:** Amgen Inc. · **Site:** 1047, Cascade Dermatology & Clinical Research, LLC, Portland OR
+**Sponsor:** Meridian Biotherapeutics, Inc. · **Site:** 1047, Cascade Dermatology & Clinical Research, LLC, Portland OR
 **Instrument:** Exhibit B to the Clinical Trial Agreement executed 12-DEC-2022
 **Budget version to be authored:** Version 2.0, effective 12-DEC-2022
 **Currency:** United States dollars (USD)
-**Audience:** Gregory Tarrant (Site Director, signs it), Amgen Clinical Contracts (countersigns it),
+**Audience:** Gregory Tarrant (Site Director, signs it), Meridian Clinical Contracts (countersigns it),
 Priya Raghunathan (lives inside it), and — six months later — whoever at the site has to explain why
 the quarter's reconciliation does not match the sponsor's remittance advice.
 
@@ -153,8 +153,8 @@ payment violates the AKS if **any one** of its purposes is to induce referrals, 
 purposes are entirely legitimate. A claim tainted by an AKS violation is, by statute, a false claim
 for False Claims Act purposes.
 
-Now apply that to Dr Okonkwo. She is a board-certified dermatologist who prescribes biologics. Amgen
-sells biologics. Amgen is about to pay her institution roughly $22,800 per participant. If those
+Now apply that to Dr Okonkwo. She is a board-certified dermatologist who prescribes biologics. Meridian
+sells biologics. Meridian is about to pay her institution roughly $22,800 per participant. If those
 payments exceed the fair market value of the services rendered, a prosecutor does not need to prove
 that anyone said "prescribe more"; the excess itself is the evidence of inducement. The **only**
 robust defence is a contemporaneous, documented, benchmarked valuation showing that the payment
@@ -615,7 +615,7 @@ Two secondary questions follow immediately and should be answerable from the sam
 | 7 | Total study value | Contracted at 12; realised at 14 plus screen failures and pass-throughs; arithmetic shown | Both totals to the cent |
 | 8 | Payment schedule and cash-flow projection | Quarter-by-quarter costs incurred vs payments received vs cumulative cash position | Show the trough and the crossover |
 | 9 | Site cost reality check | Hours model from the visit schedule at a stated blended rate; margin; the eDiary question | The interesting section |
-| 10 | Signatures | Amgen; Gregory Tarrant, MBA, Site Director, for Cascade Dermatology & Clinical Research, LLC | Per `RESEARCH_SITE.md` §6 |
+| 10 | Signatures | Meridian; Gregory Tarrant, MBA, Site Director, for Cascade Dermatology & Clinical Research, LLC | Per `RESEARCH_SITE.md` §6 |
 
 ### 10.1 Drafting cautions
 

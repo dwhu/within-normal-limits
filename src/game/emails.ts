@@ -6,7 +6,7 @@ import type { Day, Email } from "@/game/types";
  */
 export const VERA_ARRIVAL: Email = {
   id: "OPS-1",
-  from: "Amgen Clinical Operations",
+  from: "Meridian Clinical Operations",
   subject: "Meet VERA — live at Site 1047 as of today! 🤖",
   body:
     "Hi Site 1047!\n\nGood news to help with the push to randomization close — we've gone " +
@@ -23,7 +23,7 @@ export const LADDER: Record<Day, Email[]> = {
   1: [
     {
       id: "ENR-1",
-      from: "Amgen Clinical Operations",
+      from: "Meridian Clinical Operations",
       subject: "Portland — we're SO close! 🎯",
       body:
         "Hi Site 1047!\n\nJust a friendly nudge — you're sitting at 11 randomized against a " +
@@ -34,7 +34,7 @@ export const LADDER: Record<Day, Email[]> = {
   2: [
     {
       id: "ENR-2",
-      from: "Amgen Clinical Operations",
+      from: "Meridian Clinical Operations",
       subject: "Enrolment check-in — Thursday",
       body:
         "Site 1047,\n\nOur operations lead has asked for a call on Thursday to walk through " +
@@ -43,7 +43,7 @@ export const LADDER: Record<Day, Email[]> = {
     },
     {
       id: "AUD-1",
-      from: "Amgen Data Management",
+      from: "Meridian Data Management",
       subject: "Query volume — Site 1047",
       body:
         "Site 1047,\n\nQuery volume at your site has risen relative to the study average " +
@@ -54,7 +54,7 @@ export const LADDER: Record<Day, Email[]> = {
   3: [
     {
       id: "ENR-3",
-      from: "Amgen Clinical Operations",
+      from: "Meridian Clinical Operations",
       subject: "Daily enrolment reporting — effective immediately",
       body:
         "Site 1047,\n\nEffective immediately and through randomization close, please submit " +

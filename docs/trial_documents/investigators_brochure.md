@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -7,7 +7,7 @@
 
 # INVESTIGATOR'S BROCHURE
 
-## Rocatinlimab (AMG 451)
+## Rocatinlimab (MER 451)
 
 ### Fully human anti-OX40 (CD134) IgG1 monoclonal antibody
 
@@ -15,38 +15,38 @@
 
 | | |
 |---|---|
-| **Sponsor** | Amgen Inc., One Amgen Center Drive, Thousand Oaks, CA 91320-1799, USA |
+| **Sponsor** | Meridian Biotherapeutics, Inc., 1200 Kestrel Way, Emeryville, CA 94608, USA |
 | **Investigational product** | Rocatinlimab |
-| **Sponsor research number** | AMG 451 |
+| **Sponsor research number** | MER 451 |
 | **Former designation** | KHK4083 |
 | **Chemical/biological class** | Recombinant fully human immunoglobulin G1 kappa monoclonal antibody directed against human OX40 (CD134, TNFRSF4) |
 | **US IND number** | **IND 145,882** |
-| **EU CT / EudraVigilance product** | Rocatinlimab (AMG 451) — Amgen Europe B.V. |
+| **EU CT / EudraVigilance product** | Rocatinlimab (MER 451) — Meridian Europe B.V. |
 | **Anticipated indication** | Moderate-to-severe atopic dermatitis in adults and adolescents; additional T-cell–mediated inflammatory indications under evaluation |
 | **Edition** | **Edition 6.0** |
 | **Date of issue** | **15-AUG-2023** |
 | **Supersedes** | **Edition 5.0, dated 12-SEP-2022** |
 | **Reference Safety Information** | **RSI Version 4.0**, effective **15-AUG-2023** (Section 6 of this brochure) |
-| **Prepared by** | Amgen Global Development and Global Patient Safety |
-| **Approved by** | Amgen Development Safety Review Board, 09-AUG-2023 |
+| **Prepared by** | Meridian Global Development and Global Patient Safety |
+| **Approved by** | Meridian Development Safety Review Board, 09-AUG-2023 |
 
 ---
 
 ## CONFIDENTIALITY STATEMENT
 
 The information contained in this Investigator's Brochure is the confidential and proprietary
-property of Amgen Inc. It is provided to you as an investigator, potential investigator, consultant,
+property of Meridian Biotherapeutics, Inc. It is provided to you as an investigator, potential investigator, consultant,
 or member of an Institutional Review Board or Independent Ethics Committee solely for the purpose of
-evaluating or conducting a clinical investigation of rocatinlimab (AMG 451).
+evaluating or conducting a clinical investigation of rocatinlimab (MER 451).
 
 By accepting this document you agree that the information contained herein will not be disclosed to
-any third party without the prior written consent of Amgen Inc., except that it may be disclosed to
+any third party without the prior written consent of Meridian Biotherapeutics, Inc., except that it may be disclosed to
 (a) members of your study team who have a need to know in order to conduct the study and who are
 bound by equivalent obligations of confidentiality; (b) the reviewing Institutional Review Board or
 Independent Ethics Committee; and (c) regulatory authorities, upon request, in accordance with
 applicable law. Disclosure to a study participant or their legally authorised representative of
 information necessary for informed consent, and disclosure necessary for the emergency medical
-treatment of a participant, are permitted without prior consent of Amgen Inc.
+treatment of a participant, are permitted without prior consent of Meridian Biotherapeutics, Inc.
 
 Retain this document and all superseded editions in the Investigator Site File in accordance with
 ICH E6(R3) essential-document requirements and applicable national law.
@@ -60,7 +60,7 @@ ICH E6(R3) essential-document requirements and applicable national law.
 | 1.0 | 04-FEB-2016 | Original edition (KHK4083). Nonclinical package and first-in-human Study KHK4083-101 protocol-enabling data. |
 | 2.0 | 21-JUN-2017 | Addition of Study KHK4083-101 (single ascending dose, healthy volunteers) final results; 4-week cynomolgus monkey GLP toxicology final report. |
 | 3.0 | 30-MAY-2019 | Addition of Study KHK4083-102 (multiple ascending dose, adults with atopic dermatitis) results; 26-week cynomolgus monkey GLP toxicology final report; first tissue cross-reactivity update. |
-| 4.0 | 17-MAR-2021 | Transfer of development to Amgen Inc.; product renamed AMG 451 (rocatinlimab). Addition of Study 20200168 (Phase 2b dose-ranging) interim Week 20 results. Introduction of formal Reference Safety Information (RSI Version 1.0). |
+| 4.0 | 17-MAR-2021 | Transfer of development to Meridian Biotherapeutics, Inc.; product renamed MER 451 (rocatinlimab). Addition of Study 20200168 (Phase 2b dose-ranging) interim Week 20 results. Introduction of formal Reference Safety Information (RSI Version 1.0). |
 | 5.0 | 12-SEP-2022 | Addition of Study 20200168 final Week 36 results including off-treatment follow-up. Population PK model update. Enhanced pre- and postnatal development study in cynomolgus monkeys added. RSI Version 3.0. Commercial-presentation 150 mg/1.0 mL prefilled syringe added. |
 | **6.0** | **15-AUG-2023** | **Current edition.** See Summary of Changes below. **RSI Version 4.0.** |
 
@@ -92,10 +92,10 @@ document training on Edition 6.0 before continuing to enrol or treat participant
    at the 300 mg Q4W regimen (Section 5.6). All frequencies in Section 6 have been re-derived from
    the updated pooled dataset.
 3. **Section 5.1 (Pharmacokinetics)** updated with the final population pharmacokinetic model
-   (Model AMG451-popPK-v4), incorporating 4,118 serum concentration records from 1,062 participants.
+   (Model MER451-popPK-v4), incorporating 4,118 serum concentration records from 1,062 participants.
    Body weight is retained as the only covariate with clinically relevant effect on clearance; no
    dose adjustment by body weight, age, sex, race, renal function, or hepatic function is required.
-4. **Section 5.3 (Immunogenicity)** updated with the validated assay (Assay AMG451-ADA-v3, tiered
+4. **Section 5.3 (Immunogenicity)** updated with the validated assay (Assay MER451-ADA-v3, tiered
    screening/confirmatory/titre with neutralising antibody reflex) and pooled treatment-emergent ADA
    incidence.
 5. **Section 4.5 (Reproductive and developmental toxicology)** updated with the completed enhanced
@@ -172,7 +172,7 @@ document training on Edition 6.0 before continuing to enrol or treat participant
 
 ## 1.1 Product and mechanism of action
 
-Rocatinlimab (AMG 451; formerly KHK4083) is a **fully human immunoglobulin G1 kappa (IgG1κ)
+Rocatinlimab (MER 451; formerly KHK4083) is a **fully human immunoglobulin G1 kappa (IgG1κ)
 monoclonal antibody** directed against human **OX40 (CD134, TNFRSF4)**, a costimulatory receptor of
 the tumour necrosis factor receptor superfamily. The molecule has an approximate molecular mass of
 148 kDa and is expressed in a Chinese hamster ovary (CHO) cell line engineered for
@@ -427,9 +427,9 @@ through 16 weeks off treatment.
 
 ## 2.5 Development programme overview
 
-Rocatinlimab was originated as KHK4083 by Kyowa Kirin Co., Ltd. Amgen Inc. assumed responsibility for
-global development in 2021 under a collaboration agreement, and the molecule was renamed AMG 451
-(International Nonproprietary Name: rocatinlimab). Amgen Inc. is the sponsor of all studies listed
+Rocatinlimab was originated as KHK4083 by Kyowa Kirin Co., Ltd. Meridian Biotherapeutics, Inc. assumed responsibility for
+global development in 2021 under a collaboration agreement, and the molecule was renamed MER 451
+(International Nonproprietary Name: rocatinlimab). Meridian Biotherapeutics, Inc. is the sponsor of all studies listed
 below and the holder of **IND 145,882**.
 
 ### 2.5.1 Completed early-phase studies
@@ -476,7 +476,7 @@ be referred to the medical monitor before acting.
 | Property | Value |
 |---|---|
 | International Nonproprietary Name | Rocatinlimab |
-| Sponsor research number | AMG 451 (formerly KHK4083) |
+| Sponsor research number | MER 451 (formerly KHK4083) |
 | Molecular class | Recombinant fully human monoclonal antibody |
 | Immunoglobulin isotype | IgG1, kappa light chain |
 | Target antigen | Human OX40 (CD134; TNFRSF4), cysteine-rich domain 1 epitope |
@@ -564,7 +564,7 @@ Rocatinlimab must not be mixed with, or administered through the same syringe or
 medicinal product. No compatibility data with intravenous administration sets or diluents exist for
 the subcutaneous presentation and none is required.
 
-Investigational product is supplied by Amgen via **GlobalRx Logistics** to the site pharmacy under
+Investigational product is supplied by Meridian via **GlobalRx Logistics** to the site pharmacy under
 temperature-monitored conditions. Kit numbers are six digits and are assigned by the interactive
 response technology system. Receipt, storage, temperature monitoring, accountability, and return or
 destruction are governed by the study Pharmacy Manual and the site's own investigational product
@@ -969,7 +969,7 @@ ADA-negative participants.
 
 ### 5.1.5 Population pharmacokinetics and intrinsic factors
 
-The current model (**AMG451-popPK-v4**) is a two-compartment model with first-order absorption and
+The current model (**MER451-popPK-v4**) is a two-compartment model with first-order absorption and
 linear elimination, fitted to 4,118 serum concentration records from 1,062 participants.
 
 | Covariate | Effect on exposure | Dose adjustment |
@@ -1050,7 +1050,7 @@ consistent with the depletion mechanism and with the observed durability of clin
 
 ## 5.3 Immunogenicity
 
-Immunogenicity is assessed with a validated tiered assay (**Assay AMG451-ADA-v3**): a bridging
+Immunogenicity is assessed with a validated tiered assay (**Assay MER451-ADA-v3**): a bridging
 electrochemiluminescent screening assay, a confirmatory competition step, titration of confirmed
 positives, and a cell-based neutralising antibody assay applied to all confirmed-positive samples.
 Drug tolerance of the screening assay is 30 µg/mL at the low positive control, sufficient to detect
@@ -1351,7 +1351,7 @@ cardiovascular events.
 
 > ## ⬛ REFERENCE SAFETY INFORMATION — RSI VERSION 4.0
 > ## Effective date: 15-AUG-2023
-> ### This section, and only this section, constitutes the Reference Safety Information (RSI) for rocatinlimab (AMG 451) for the purpose of expedited safety reporting.
+> ### This section, and only this section, constitutes the Reference Safety Information (RSI) for rocatinlimab (MER 451) for the purpose of expedited safety reporting.
 
 ## 6.1 Purpose and scope of this section
 
@@ -1386,7 +1386,7 @@ Frequency categories follow the CIOMS/EU convention:
 
 ## 6.3 Table of expected adverse reactions
 
-**Table 6-1. Expected adverse reactions to rocatinlimab (AMG 451), by MedDRA System Organ Class and
+**Table 6-1. Expected adverse reactions to rocatinlimab (MER 451), by MedDRA System Organ Class and
 Preferred Term, with frequency category. MedDRA Version 26.0.**
 
 | MedDRA System Organ Class | MedDRA Preferred Term | Frequency category |
@@ -1455,7 +1455,7 @@ following are satisfied:
 **The investigator does not assess expectedness.** The investigator's obligations on the serious
 adverse event form are to record the event term and seriousness criteria accurately and to provide a
 causality assessment. Expectedness determination, SUSAR classification, and expedited submission are
-sponsor functions performed by Amgen Global Patient Safety through the study's safety intake vendor.
+sponsor functions performed by Meridian Global Patient Safety through the study's safety intake vendor.
 
 Where a SUSAR is identified, the sponsor submits an expedited report to the competent authorities and
 ethics committees of all concerned Member States and countries within **7 calendar days** for fatal
@@ -2027,27 +2027,27 @@ only and should not be relied upon as verified bibliographic records.*
 
 **Sponsor internal reports** [internal]
 
-19. Amgen Inc. *Study KHK4083-101: A Phase 1 Randomised, Double-blind, Placebo-controlled Single
+19. Meridian Biotherapeutics, Inc. *Study KHK4083-101: A Phase 1 Randomised, Double-blind, Placebo-controlled Single
     Ascending Dose Study in Healthy Volunteers. Clinical Study Report.* 2017. [internal]
-20. Amgen Inc. *Study KHK4083-102: A Phase 1b Open-label Multiple Ascending Dose Study in Adults with
+20. Meridian Biotherapeutics, Inc. *Study KHK4083-102: A Phase 1b Open-label Multiple Ascending Dose Study in Adults with
     Moderate-to-severe Atopic Dermatitis. Clinical Study Report.* 2019. [internal]
-21. Amgen Inc. *Study 20200168: A Phase 2b Randomised, Double-blind, Placebo-controlled Dose-ranging
+21. Meridian Biotherapeutics, Inc. *Study 20200168: A Phase 2b Randomised, Double-blind, Placebo-controlled Dose-ranging
     Study. Clinical Study Report.* 2022. [internal]
-22. Amgen Inc. *Study 20210143 (ROCKET-Horizon): Clinical Study Report.* [internal]
-23. Amgen Inc. *AMG 451: 26-Week Repeat-Dose Subcutaneous Toxicity Study in Cynomolgus Monkeys with a
-    12-Week Recovery Period.* Study Report No. AMG451-TOX-026. [internal]
-24. Amgen Inc. *AMG 451: Enhanced Pre- and Postnatal Development Study in Cynomolgus Monkeys.* Study
-    Report No. AMG451-ePPND-001. [internal]
-25. Amgen Inc. *AMG 451: Tissue Cross-Reactivity Study in Normal Human and Cynomolgus Monkey
-    Tissues.* Study Report No. AMG451-TCR-002. [internal]
-26. Amgen Inc. *AMG 451 Population Pharmacokinetic Analysis Report, Model AMG451-popPK-v4.*
+22. Meridian Biotherapeutics, Inc. *Study 20210143 (ROCKET-Horizon): Clinical Study Report.* [internal]
+23. Meridian Biotherapeutics, Inc. *MER 451: 26-Week Repeat-Dose Subcutaneous Toxicity Study in Cynomolgus Monkeys with a
+    12-Week Recovery Period.* Study Report No. MER451-TOX-026. [internal]
+24. Meridian Biotherapeutics, Inc. *MER 451: Enhanced Pre- and Postnatal Development Study in Cynomolgus Monkeys.* Study
+    Report No. MER451-ePPND-001. [internal]
+25. Meridian Biotherapeutics, Inc. *MER 451: Tissue Cross-Reactivity Study in Normal Human and Cynomolgus Monkey
+    Tissues.* Study Report No. MER451-TCR-002. [internal]
+26. Meridian Biotherapeutics, Inc. *MER 451 Population Pharmacokinetic Analysis Report, Model MER451-popPK-v4.*
     [internal]
 
 ---
 
-**END OF INVESTIGATOR'S BROCHURE — ROCATINLIMAB (AMG 451) — EDITION 6.0, 15-AUG-2023**
+**END OF INVESTIGATOR'S BROCHURE — ROCATINLIMAB (MER 451) — EDITION 6.0, 15-AUG-2023**
 
-*Confidential property of Amgen Inc. Retain in the Investigator Site File. Supersedes Edition 5.0
+*Confidential property of Meridian Biotherapeutics, Inc. Retain in the Investigator Site File. Supersedes Edition 5.0
 (12-SEP-2022). Reference Safety Information: RSI Version 4.0, effective 15-AUG-2023.*
 
 

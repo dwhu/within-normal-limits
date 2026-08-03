@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -9,7 +9,7 @@
 
 | File | Description |
 |---|---|
-| `/Users/dave/code/icf-please/docs/trial_documents/investigators_brochure.md` | The Investigator's Brochure for rocatinlimab (AMG 451), Edition 6.0, 15-AUG-2023 |
+| `/Users/dave/code/icf-please/docs/trial_documents/investigators_brochure.md` | The Investigator's Brochure for rocatinlimab (MER 451), Edition 6.0, 15-AUG-2023 |
 | `/Users/dave/code/icf-please/docs/outline/investigators_brochure_outline.md` | Structural/regulatory analysis supporting the above (contains no fabricated clinical data of its own beyond what is logged here) |
 
 **Canon source:** `/Users/dave/code/icf-please/docs/STUDY_FACTS.md`.
@@ -49,12 +49,12 @@ Do not cite this document for any factual purpose.
 | Title page — Edition 6.0, 15-AUG-2023 | Taken as given | **Canon** (STUDY_FACTS §1). Not an assumption of this document. | — |
 | Title page — supersedes Edition 5.0 (12-SEP-2022) | Taken as given | **Canon** (assignment brief). | — |
 | Title page — IND 145,882 | Taken as given | **Canon** (STUDY_FACTS §1, itself flagged ASSUMED). | — |
-| Title page — "EU CT / EudraVigilance product: Amgen Europe B.V." | Invented as the EU legal entity | Amgen's real EU entity is Amgen Europe B.V.; used as a plausible regulatory holder. Not verified against the record. | Med |
-| Title page — "Prepared by Amgen Global Development and Global Patient Safety" | Invented | Generic, realistic internal ownership statement for an IB. | High (as plausible fiction) |
-| Title page — "Approved by Amgen Development Safety Review Board, 09-AUG-2023" | Invented body and date | IBs carry an internal approval; date set 6 days before issue. | High (as plausible fiction) |
+| Title page — "EU CT / EudraVigilance product: Meridian Europe B.V." | Invented as the EU legal entity | The sponsor is invented, so its EU affiliate is too; a Netherlands B.V. is the conventional shape for a US sponsor's EU regulatory holder. Not verified against the record. | Med |
+| Title page — "Prepared by Meridian Global Development and Global Patient Safety" | Invented | Generic, realistic internal ownership statement for an IB. | High (as plausible fiction) |
+| Title page — "Approved by Meridian Development Safety Review Board, 09-AUG-2023" | Invented body and date | IBs carry an internal approval; date set 6 days before issue. | High (as plausible fiction) |
 | Title page — RSI Version 4.0, effective 15-AUG-2023 | Invented version numbering | The RSI needs its own version and date per EU CTR Annex III. Version 4.0 chosen to align with Edition 6.0 having had RSI 1.0 introduced at Edition 4.0 and RSI 3.0 at Edition 5.0. | High (as plausible fiction) |
 | Confidentiality statement (full text) | Invented | Standard IB confidentiality wording, including the IRB/IEC and regulatory-authority carve-outs and the emergency-treatment exception. | High |
-| Document history table — all six editions with dates 04-FEB-2016 through 15-AUG-2023 and their stated bases for revision | **Entirely invented** | Constructs a plausible development history: original as KHK4083 (2016), Phase 1 results (2017), MAD + 26-week tox (2019), Amgen transfer and rename (2021), Phase 2b final (2022), Phase 3 (2023). The 2021 transfer approximates the real Amgen–Kyowa Kirin collaboration timing. | Med |
+| Document history table — all six editions with dates 04-FEB-2016 through 15-AUG-2023 and their stated bases for revision | **Entirely invented** | Constructs a plausible development history: original as KHK4083 (2016), Phase 1 results (2017), MAD + 26-week tox (2019), Meridian transfer and rename (2021), Phase 2b final (2022), Phase 3 (2023). The 2021 transfer approximates the real Meridian–Kyowa Kirin collaboration timing. | Med |
 | "Summary of changes since Edition 5.0" — all 7 numbered changes | **Entirely invented** | Needed so the game can reason about *what changed* and therefore about re-consent, IRB submission, and retraining obligations. Item 1 (RSI changes) is the load-bearing one. | High (as plausible fiction) |
 | Change 1 — chills upgraded from *common* (RSI v3.0) to *very common* (RSI v4.0); anaphylaxis newly added; exfoliative dermatitis/erythroderma newly added; lymphocyte count decreased newly added; injection site bruising subsumed into a grouped term | **Invented RSI change history** | Deliberately constructed to give the game a usable dramatic hook: *anaphylaxis was NOT in the RSI before 15-AUG-2023*. An anaphylaxis SAE with onset before that date would therefore have been a **SUSAR**; one after that date is an expected serious adverse reaction. This is the single most game-relevant fabricated fact in the document. | High (as designed fiction) |
 | Data cut-off 30-JUN-2023 | Invented | Conventional ~6-week lag between cut-off and issue. See §0.1 for why it does not reconcile with Section 5.6. | Med |
@@ -83,7 +83,7 @@ Do not cite this document for any factual purpose.
 | §2.5.2 — all study statuses ("Enrolling", "Enrolment complete") | Invented | Set relative to the stated 15-AUG-2023 issue date. | Med |
 | §2.5.2 — "Additional studies in other T-cell–mediated inflammatory conditions are in preparation" | Invented, deliberately vague | Realistic pipeline language; avoids committing to specifics. | High |
 | §2.5.3 — "where the protocol and this brochure differ, the protocol governs" | Invented but standard | Normal IB boilerplate and useful game logic. | High |
-| §2.5 — "Amgen assumed global development in 2021 under a collaboration agreement" | Approximates real history | Kyowa Kirin originated KHK4083; Amgen licensed it. Year is approximate and not verified against a source. | Med |
+| §2.5 — "Meridian assumed global development in 2021 under a collaboration agreement" | Approximates real history | Kyowa Kirin originated KHK4083; Meridian licensed it. Year is approximate and not verified against a source. | Med |
 
 ---
 
@@ -151,14 +151,14 @@ Do not cite this document for any factual purpose.
 | §5.1.3 — **rationale for the Week 2 loading dose** (raises Week 4 trough ~55%; brings steady state forward to Week 16) | **Invented quantification** of a canonical design feature | The loading dose is canon (STUDY_FACTS §4/§5); the pharmacokinetic justification is constructed here. Useful for the game: it makes a missed Week 2 dose meaningful. | Med |
 | §5.1.3 — links the half-life to the canonical 12-week biologic washout and 12-week safety follow-up | Reasoned inference from canon | Both facts are canon; the causal link is written here. | High (reasoning) |
 | §5.1.4 — dose proportionality power exponent 0.97 (90% CI 0.89–1.05) over 150–600 mg; non-linearity below ~50 mg | **Invented** | Standard presentation. TMDD at low doses is expected for a target-binding antibody. | High (invented) |
-| §5.1.5 — **popPK model AMG451-popPK-v4**, 2-compartment, first-order absorption, 4,118 records / 1,062 participants; allometric exponents 0.72 (CL) and 0.91 (V); ±42% / −33% AUC at weight extremes; no dose adjustment for any covariate | **All invented** | Model name, record count, and covariate effects fabricated. The conclusion (weight matters but not enough to require adjustment) is the usual finding for SC mAbs. | High (invented) |
+| §5.1.5 — **popPK model MER451-popPK-v4**, 2-compartment, first-order absorption, 4,118 records / 1,062 participants; allometric exponents 0.72 (CL) and 0.91 (V); ±42% / −33% AUC at weight extremes; no dose adjustment for any covariate | **All invented** | Model name, record count, and covariate effects fabricated. The conclusion (weight matters but not enough to require adjustment) is the usual finding for SC mAbs. | High (invented) |
 | §5.1.6 — no DDI studies; theoretical inflammation–CYP interaction; caution with warfarin/ciclosporin/theophylline; live vaccines prohibited during treatment and for **12 weeks** after the last dose | Regulatory reasoning is genuine; the **12-week** vaccine interval is **invented** | The inflammation–CYP argument is a real and standard IB statement for biologics. **Flag:** confirm the 12-week live-vaccine interval against the protocol/ICF if those documents state one. | Med |
 | §5.2.1 — receptor occupancy **> 95% within 48 h**, **> 90% sustained through the dosing interval including trough**, > 90% for ~6 weeks after the final dose | **All invented** | Supports the Q4W interval and the durability narrative. | High (invented) |
 | §5.2.2 — T-cell subset table: OX40⁺ CD4 memory −68% (W4), −79% (W16), still −40% at W36; lesional OX40⁺ density −74% (n = 34 biopsy sub-study); Treg transient −20%; no change in naive/CD8/B/NK/monocytes/immunoglobulins | **All invented, including the biopsy sub-study** | Constructed to demonstrate selectivity — the central safety argument of the molecule. The Treg finding is included deliberately as a realistic loose end. | High (invented) |
 | §5.2.2 — **transient total lymphocyte decline**: nadir Day 3–10 after first dose, median −18% (5th percentile −34%), recovery by ~Week 4 despite continued dosing; Grade 3 lymphopenia in < 1%, all asymptomatic | **Entirely invented** | The assignment explicitly requires a "suspected transient lymphocyte decline" to manage. This is the dataset that makes the §7.6 guidance coherent, and it drives the RSI listing of *lymphocyte count decreased* as **common**. | High (invented, by design) |
 | §5.2.3 — biomarker table: **TARC/CCL17 −55%** at W16; total IgE −28% (W16) / −41% (W24); eosinophils −22%; IL-22/IL-13/IL-31 −35% to −52%; lesional transcriptome 71% improvement | **All invented** | TARC/CCL17, total IgE, and eosinophils are the canonical biomarker panel (STUDY_FACTS §8); the magnitudes are fabricated. | High (invented) |
 | §5.2.3 — claim that biomarker suppression **persisted off treatment** in Study 20200168 | **Invented** | Reinforces the durability hypothesis; consistent with the invented Phase 2b efficacy result. | High (invented) |
-| §5.3 — **Assay AMG451-ADA-v3**, tiered bridging ECL with NAb reflex, drug tolerance 30 µg/mL | **Invented** | The tiered design and NAb reflex are canon-adjacent (STUDY_FACTS §8 specifies "ADA with neutralising-antibody reflex"); the assay name and tolerance are fabricated. | High (invented) |
+| §5.3 — **Assay MER451-ADA-v3**, tiered bridging ECL with NAb reflex, drug tolerance 30 µg/mL | **Invented** | The tiered design and NAb reflex are canon-adjacent (STUDY_FACTS §8 specifies "ADA with neutralising-antibody reflex"); the assay name and tolerance are fabricated. | High (invented) |
 | §5.3 — ADA results: pre-existing 2.1%; **treatment-emergent 12.6%**; persistent 4.2%; transient 8.4%; median peak titre 1:80; **NAb 3.1%**; median onset Week 12 | **All invented** | Low immunogenicity is appropriate for a fully human SC antibody. | High (invented) |
 | §5.3 — impact: no effect except in n = 14 with persistent high titre (−45% trough); **no association with hypersensitivity**; the anaphylaxis case was ADA-negative at the preceding visit | **Invented** | The "ADA-negative anaphylaxis case" detail is deliberate: it forecloses an easy explanation and keeps hypersensitivity risk live. | High (invented, by design) |
 
@@ -254,7 +254,7 @@ Do not cite this document for any factual purpose.
 | §8.2 refs 1–8 — regulatory guidances (ICH E6(R3) §7, ICH E2A, EU CTR Annex III §2(8), CTFG RSI Q&A, 21 CFR 312.32, ICH S6(R1), S5(R3), S7A) | **Real documents**, correctly identified | These are genuine and correctly characterised. Version years are approximate. | High |
 | §8.2 refs 9–16 — published literature on OX40 biology and Fc afucosylation | **Real papers as far as author/journal/topic**, but **volume, page, and year details are not verified** | Included for realism. **Do not rely on the bibliographic details.** | Low (bibliographic precision) |
 | §8.2 refs 17–18 — rocatinlimab clinical literature (Guttman-Yassky *Lancet* 2023 Phase 2b; Nakagawa *J Dermatol Sci* 2020) | **Real publications**, details not verified | The Phase 2b *Lancet* citation is the real-world basis for the Study 20200168 design used here. | Med |
-| §8.2 refs 19–26 — sponsor internal study reports, each marked `[internal]` | **Entirely invented**, including report numbers (AMG451-TOX-026, AMG451-ePPND-001, AMG451-TCR-002, AMG451-popPK-v4) | Marked so they cannot be mistaken for retrievable documents. | High (invented) |
+| §8.2 refs 19–26 — sponsor internal study reports, each marked `[internal]` | **Entirely invented**, including report numbers (MER451-TOX-026, MER451-ePPND-001, MER451-TCR-002, MER451-popPK-v4) | Marked so they cannot be mistaken for retrievable documents. | High (invented) |
 | Closing block ("END OF INVESTIGATOR'S BROCHURE…") | Invented but standard | Restates edition, supersession, and RSI version for the reader who arrives at the back of the document. | High |
 
 ---

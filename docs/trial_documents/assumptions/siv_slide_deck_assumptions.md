@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -127,7 +127,7 @@ in §1.
 |---|---|
 | No site enrolment outcomes (14 randomized, 9 screen failures, 39% screen-fail rate, 11 deviations, monitoring visit history) | All post-date the SIV. `RESEARCH_SITE.md` §5 records them as history; a 21-DEC-2022 deck cannot know them |
 | No reference to the 726 actual enrolment figure, or to the observed safety table by arm | Canon `STUDY_FACTS.md` §3 and §13 are study *results*. The deck uses only what would have been known in DEC-2022 — planned enrolment ~700, and programme-level rates quoted informally by the CRA at slide 66 |
-| No budget or per-visit payment detail beyond the participant stipend | Governance: a CRA discussing site payments in the same session as eligibility criteria is a conflict-of-interest problem. Contracting is Tarrant's and Amgen Clinical Contracts' business (outline §6) |
+| No budget or per-visit payment detail beyond the participant stipend | Governance: a CRA discussing site payments in the same session as eligibility criteria is a conflict-of-interest problem. Contracting is Tarrant's and Meridian Clinical Contracts' business (outline §6) |
 | No treatment-arm-identifying information anywhere in the deck | The deck is presented to a fully blinded site by two blinded HCR staff |
 | No participant-identifiable information, including in the EASI worked example | Standard; the example is labelled a fictional composite |
 | Slide 12 does not name the sister studies in the ROCKET programme | Avoids inventing named studies that would then need to be canon for the rest of the corpus |

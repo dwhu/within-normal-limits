@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -60,7 +60,7 @@ and the identifier formats (§11). Everything built on top of those anchors is l
 | §2.2 | Scheduled maintenance: **second Sunday of each month, 02:00–06:00 UTC** (Sat 18:00–22:00 PT), 7 days' email notice, in-app banner from 72 h | The brief required "24/7 with a stated maintenance window." Window placed on a weekend night in UTC, which is a weekend evening in Pacific time — deliberately awkward-but-tolerable for a US site. | Low |
 | §2.2 | **Emergency unblinding remains available by telephone throughout maintenance and any outage** | Invented as stated, but treated as a non-negotiable design requirement: a manual that states a maintenance window without this carve-out would describe a period in which unblinding appears impossible. | High (design necessity) |
 | §2.2 | Outages announced by email to active users and on the login page | Invented. | Med |
-| Appendix E | Escalation tiers 0–3 with named target response times (immediate / 4 h / 1 business day / 3 business days) and a Sponsor System Owner tier at Amgen via the CRO | Entirely invented service-level structure. Tier 0 (unblinding) separated deliberately. | Low |
+| Appendix E | Escalation tiers 0–3 with named target response times (immediate / 4 h / 1 business day / 3 business days) and a Sponsor System Owner tier at Meridian via the CRO | Entirely invented service-level structure. Tier 0 (unblinding) separated deliberately. | Low |
 
 ## 3. Getting started — access, credentials, session
 
@@ -219,4 +219,4 @@ explicitly attributed to the protocol.
 | The re-screen linkage design (new ID + previous-ID field) is one of two plausible conventions | The alternative — re-using the original ID with a suffix — would change §7.2, §7.1's registration screen, and error `AX-5001`. Flagged in case another document in the corpus adopts the other convention. |
 | No shipment or transaction ID convention exists in canon | `SHP-1047-NNNN` and `TX-1047-NNNNN` are introduced here. Any other document referring to shipments or IRT transactions should adopt them or a conflict will result. |
 | Axion fax number `+1 (800) 555-0165` is introduced here | Canon lists only the voice number for Axion. Should be promoted to `STUDY_FACTS.md` §9 if other documents need it. |
-| The Amgen/CRO escalation tier 3 in Appendix E is unnamed | Deliberate: naming a sponsor system owner would invent a person not in the canon contact directory. |
+| The Meridian/CRO escalation tier 3 in Appendix E is unnamed | Deliberate: naming a sponsor system owner would invent a person not in the canon contact directory. |

@@ -1,11 +1,11 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
 
 # CLINICAL STUDY PROTOCOL
 
-## A Phase 3, Randomized, 24-week, Placebo-controlled, Double-blind Study to Assess the Efficacy, Safety and Tolerability of Rocatinlimab (AMG 451) Monotherapy in Adult Subjects With Moderate-to-severe Atopic Dermatitis (AD)
+## A Phase 3, Randomized, 24-week, Placebo-controlled, Double-blind Study to Assess the Efficacy, Safety and Tolerability of Rocatinlimab (MER 451) Monotherapy in Adult Subjects With Moderate-to-severe Atopic Dermatitis (AD)
 
 **Short title:** ROCKET-Horizon
 
@@ -19,7 +19,7 @@
 | ClinicalTrials.gov identifier | **NCT05651711** |
 | EU CT number | **2022-501538-44** |
 | US IND number | **IND 145,882** |
-| Investigational product | Rocatinlimab (AMG 451; also known as KHK4083) |
+| Investigational product | Rocatinlimab (MER 451; also known as KHK4083) |
 | Investigator's Brochure | Edition 6.0, dated 15-AUG-2023 |
 | Phase | 3 |
 | Indication | Moderate-to-severe atopic dermatitis in adults |
@@ -28,18 +28,18 @@
 
 ### Sponsor
 
-**Amgen Inc.**
-One Amgen Center Drive
-Thousand Oaks, CA 91320-1799
+**Meridian Biotherapeutics, Inc.**
+1200 Kestrel Way
+Emeryville, CA 94608
 United States of America
 
-Sponsor Study Director: Study Director, Amgen Inc. · `medinfo@amgen.com` · +1 (866) 572-6436
+Sponsor Study Director: Study Director, Meridian Biotherapeutics, Inc. · `medinfo@meridianbio-sim.example` · +1 (866) 555-0190
 
 ### Medical Monitor — available 24 hours per day, 7 days per week
 
 | Role | Name | Contact |
 |---|---|---|
-| Medical Monitor | **Ana Belmonte-Ruiz, MD** — Harborlight Clinical Research, Inc. (HCR), on behalf of Amgen Inc. | **+1 (888) 555-0142** · `medicalmonitor.20210143@harborlightcro.com` |
+| Medical Monitor | **Ana Belmonte-Ruiz, MD** — Harborlight Clinical Research, Inc. (HCR), on behalf of Meridian Biotherapeutics, Inc. | **+1 (888) 555-0142** · `medicalmonitor.20210143@harborlightcro.com` |
 | Back-up Medical Monitor | **Peter Vandermeer, MD** | via +1 (888) 555-0142 |
 | SAE / safety intake | Global Patient Safety intake, HCR | `rocket.safety@harborlightcro.com` · Fax +1 (888) 555-0177 · Phone +1 (888) 555-0143 |
 | Emergency unblinding | Axion IRT (primary) → +1 (800) 555-0164 (backup) | 24/7 |
@@ -59,10 +59,10 @@ competent national authority.
 
 ### Confidentiality statement
 
-The information contained in this document is the confidential and proprietary property of Amgen Inc.
+The information contained in this document is the confidential and proprietary property of Meridian Biotherapeutics, Inc.
 It is provided to the investigator, the investigator's staff, and the reviewing IRB/IEC solely for
 the purpose of evaluating and conducting this clinical study. It may not be disclosed to any other
-party without the prior written consent of Amgen Inc., except to the extent that disclosure is
+party without the prior written consent of Meridian Biotherapeutics, Inc., except to the extent that disclosure is
 required by applicable law or regulation, in which case the sponsor must be notified in advance.
 
 ---
@@ -142,12 +142,12 @@ visit do not require re-consent.
 ## 1.1 Synopsis
 
 **Title.** A Phase 3, Randomized, 24-week, Placebo-controlled, Double-blind Study to Assess the
-Efficacy, Safety and Tolerability of Rocatinlimab (AMG 451) Monotherapy in Adult Subjects With
+Efficacy, Safety and Tolerability of Rocatinlimab (MER 451) Monotherapy in Adult Subjects With
 Moderate-to-severe Atopic Dermatitis (AD).
 
 **Short title / acronym.** ROCKET-Horizon.
 
-**Sponsor.** Amgen Inc. **Protocol number.** 20210143. **Phase.** 3.
+**Sponsor.** Meridian Biotherapeutics, Inc. **Protocol number.** 20210143. **Phase.** 3.
 
 **Rationale.** Moderate-to-severe atopic dermatitis is a chronic, relapsing, intensely pruritic
 inflammatory skin disease with substantial impact on sleep, mental health, and quality of life. A
@@ -394,7 +394,7 @@ Despite these advances, an unmet need persists on three axes.
 
 ### 2.2.3 Rocatinlimab
 
-Rocatinlimab (AMG 451; also known as KHK4083) is a fully human, non-fucosylated immunoglobulin G1
+Rocatinlimab (MER 451; also known as KHK4083) is a fully human, non-fucosylated immunoglobulin G1
 monoclonal antibody directed against **OX40 (CD134)**.
 
 OX40 is a costimulatory receptor of the tumor necrosis factor receptor superfamily. It is not
@@ -943,7 +943,7 @@ A participant may not be screened for this study more than twice in total.
 
 | Attribute | Rocatinlimab | Placebo |
 |---|---|---|
-| Name | Rocatinlimab (AMG 451; KHK4083) | Matching placebo |
+| Name | Rocatinlimab (MER 451; KHK4083) | Matching placebo |
 | Type | Fully human anti-OX40 (CD134) IgG1 monoclonal antibody | Formulation buffer without active ingredient |
 | Presentation | Single-use **prefilled syringe (PFS)**, **150 mg/1.0 mL** | Single-use PFS, 1.0 mL, visually identical |
 | Dose per administration | **300 mg = two (2) PFS** | Two (2) PFS |
@@ -951,7 +951,7 @@ A participant may not be screened for this study more than twice in total.
 | Number of injections per visit | **2**, in different sites | **2**, in different sites |
 | Kit format | Carton of 2 PFS; **one carton = one dose** | Identical carton |
 | Labeling | Blinded, dual-panel clinical label; identical text on both cartons except the kit number | Identical |
-| Manufacturer | Amgen Inc. | Amgen Inc. |
+| Manufacturer | Meridian Biotherapeutics, Inc. | Meridian Biotherapeutics, Inc. |
 
 Rocatinlimab and placebo are **visually indistinguishable** in syringe, carton, label, and injection
 volume. No unblinded pharmacist is required at the site, and administration is performed by blinded
@@ -2209,8 +2209,8 @@ Part 11**, EU CTR Article 37(4), and applicable national requirements.
 The clinical trial agreement provisions on publication apply. In summary:
 
 > The Clinical Trial Agreement generally does not restrict an investigator's discussion of trial
-> results after completion. The Agreement permits Amgen a limited period of time to review material
-> discussing trial results (typically up to 45 days and possible extension). Amgen may remove
+> results after completion. The Agreement permits Meridian a limited period of time to review material
+> discussing trial results (typically up to 45 days and possible extension). Meridian may remove
 > confidential information, but authors have final control and approval of publication content. For
 > multicenter studies, the investigator agrees not to publish any results before the first
 > multi-center publication.
@@ -2223,7 +2223,7 @@ under an approved data-sharing request, beginning 18 months after the study has 
 product and indication have been granted marketing authorization in both the US and Europe, or
 clinical development for the product and/or indication has been discontinued. Requests are reviewed
 by a committee of internal advisors, with arbitration by an independent review panel where a request
-is not approved. Further information is available at `http://www.amgen.com/datasharing`.
+is not approved. Further information is available at `https://meridianbio-sim.example/datasharing`.
 
 ---
 
@@ -2264,7 +2264,7 @@ is not approved. Further information is available at `http://www.amgen.com/datas
     2022.
 20. Clinical Trial Facilitation Group. *Recommendations related to contraception and pregnancy
     testing in clinical trials.*
-21. Amgen Inc. *Rocatinlimab (AMG 451) Investigator's Brochure, Edition 6.0.* 15-AUG-2023.
+21. Meridian Biotherapeutics, Inc. *Rocatinlimab (MER 451) Investigator's Brochure, Edition 6.0.* 15-AUG-2023.
 
 ---
 
@@ -2504,7 +2504,7 @@ regulatory authorities with the amendment submission. A summary is given in Sect
 
 I have read Protocol 20210143, Amendment 3, Version 4.0, dated 29-NOV-2023, entitled *"A Phase 3,
 Randomized, 24-week, Placebo-controlled, Double-blind Study to Assess the Efficacy, Safety and
-Tolerability of Rocatinlimab (AMG 451) Monotherapy in Adult Subjects With Moderate-to-severe Atopic
+Tolerability of Rocatinlimab (MER 451) Monotherapy in Adult Subjects With Moderate-to-severe Atopic
 Dermatitis (AD)"*, and the current Investigator's Brochure for rocatinlimab, Edition 6.0, dated
 15-AUG-2023.
 

@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -351,7 +351,7 @@ The section a site never sees and should. Concepts:
 
 The firewall. Roles that **are** unblinded by necessity: the randomisation statistician who
 generates the list; the packaging operations that apply kit numbers; the IRT technical team holding
-the code; the Amgen Clinical Supply Chain analysts who see per-type inventory; the depot systems
+the code; the Meridian Clinical Supply Chain analysts who see per-type inventory; the depot systems
 (which see type-coded kits without knowing the semantics); and the sponsor's unblinded
 pharmacovigilance staff who action SUSAR unblinding. Roles that are **not**: everyone at the site,
 the CRA, the Clinical Trial Manager, the medical monitor, the sponsor clinical team, and the site's
@@ -390,7 +390,7 @@ it opened first. Name Cascade SOP-007 and SOP-009 as the site's own layer.
 ### §3 Contacts and escalation
 
 Four organisations, each with a specific competence, and sites route to the wrong one by default.
-Amgen Clinical Supply Chain (supply, orders, forecasts). Amgen Clinical Supply Quality (excursions,
+Meridian Clinical Supply Chain (supply, orders, forecasts). Meridian Clinical Supply Quality (excursions,
 dispositions, complaints, recalls). GlobalRx Logistics (shipments in transit, delivery problems,
 returns pickup). Axion IRT (system transactions, kit status, unblinding). Plus sponsor GCP QA and
 the CRA. Failure mode prevented: a 3-hour delay while an excursion report bounces between the CRA
@@ -405,7 +405,7 @@ decision depends on and nothing else.
 
 ### §5 Supply chain overview and flow diagram
 
-The centrepiece. An ASCII/markdown diagram showing: DS manufacture (Thousand Oaks) → DP fill-finish
+The centrepiece. An ASCII/markdown diagram showing: DS manufacture (Emeryville) → DP fill-finish
 (Juncos, PR) → blinded clinical packaging and labelling → **QP certification (Breda MIA(IMP))** →
 **country release** → regional depots (Memphis / Breda / Singapore) + in-country depots → GlobalRx
 courier → site. Name the depot serving Site 1047 explicitly and early: **Memphis, TN**.
@@ -488,7 +488,7 @@ The section the site cares about most and understands least. Structure:
    dispense them by accident) and opens a case. Clinical Supply Quality triages within 1 business
    day for completeness: logger file, kit numbers, duration, min/max, and what the product was doing
    at the time.
-3. **Stability assessment.** Performed by Amgen Product Quality / stability sciences — *not* by the
+3. **Stability assessment.** Performed by Meridian Product Quality / stability sciences — *not* by the
    CRA, not by the supply chain, not by the depot. Assessed against the kit's **cumulative excursion
    budget** (≤30 days at ≤25 °C), the MKT of the event, and the product's stability dataset.
 4. **Disposition categories** — **Release for use / Quarantine pending further data / Destroy** —
@@ -547,7 +547,7 @@ The order of operations is the whole content of this section, and it is the thin
 - What must reconcile: shipped = received + dispensed + returned + destroyed + on hand, at kit level,
   with no unexplained variance.
 - **The written destruction authorisation** — reproduced as an appendix, batch/kit-enumerated,
-  signed by Amgen Clinical Supply and countersigned by the CRA, valid for a defined period.
+  signed by Meridian Clinical Supply and countersigned by the CRA, valid for a defined period.
 - On-site destruction vs return to depot: the criteria (site has a documented, validated destruction
   process and written approval; otherwise return). Note the specific case of **used/partially used
   syringes**, which are sharps and are destroyed at site per local law regardless.
@@ -606,7 +606,7 @@ Where these are touched, the manual writes one sentence and a cross-reference. N
 - **Register:** sponsor-corporate, declarative, mandatory verbs ("must", "shall"). Not chatty. No
   second-person exhortation except in the site-action boxes, where "you" is appropriate and useful.
 - **Every requirement gets an owner and a clock.** "Report to the sponsor" is useless; "report to
-  Amgen Clinical Supply Quality within 24 hours of discovery, via the IRT Temperature Excursion
+  Meridian Clinical Supply Quality within 24 hours of discovery, via the IRT Temperature Excursion
   transaction" is a procedure.
 - **Numbers are stated once, authoritatively**, and repeated in the appendices only.
 - **Target 5,000–6,000 words.** The IRT algorithm and excursion sections should be the longest; the
@@ -623,10 +623,10 @@ logged in the assumptions fragment, and must match between the manual and the ap
 
 | Item | Value fixed for this document set |
 |---|---|
-| DS manufacture | Amgen Thousand Oaks, CA |
-| DP fill-finish, PFS assembly | Amgen Manufacturing Limited, Juncos, Puerto Rico |
-| Blinded clinical packaging (global) | Amgen Clinical Supply Operations, Juncos, PR |
-| EU secondary packaging + QP certification | Amgen Europe B.V., Breda, Netherlands; MIA(IMP) NL/MIA-IMP/2019/0087 |
+| DS manufacture | Meridian Emeryville, CA |
+| DP fill-finish, PFS assembly | Meridian Manufacturing Limited, Juncos, Puerto Rico |
+| Blinded clinical packaging (global) | Meridian Clinical Supply Operations, Juncos, PR |
+| EU secondary packaging + QP certification | Meridian Europe B.V., Breda, Netherlands; MIA(IMP) NL/MIA-IMP/2019/0087 |
 | Named QP | Marieke van der Zanden, PharmD (EU QP) |
 | Regional depots | GRX-MEM-01 Memphis TN · GRX-BRE-01 Breda NL · GRX-SIN-01 Singapore |
 | Depot for Site 1047 | **GRX-MEM-01, Memphis, TN** |

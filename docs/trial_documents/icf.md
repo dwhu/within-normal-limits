@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -9,12 +9,12 @@
 
 | | |
 |---|---|
-| **Study name (short)** | A Study Assessing Rocatinlimab (AMG 451) Monotherapy in Moderate-to-severe Atopic Dermatitis (AD) |
+| **Study name (short)** | A Study Assessing Rocatinlimab (MER 451) Monotherapy in Moderate-to-severe Atopic Dermatitis (AD) |
 | **Study nickname** | ROCKET-Horizon |
-| **Study name (official)** | A Phase 3, Randomized, 24-week, Placebo-controlled, Double-blind Study to Assess the Efficacy, Safety and Tolerability of Rocatinlimab (AMG 451) Monotherapy in Adult Subjects With Moderate-to-severe Atopic Dermatitis (AD) |
+| **Study name (official)** | A Phase 3, Randomized, 24-week, Placebo-controlled, Double-blind Study to Assess the Efficacy, Safety and Tolerability of Rocatinlimab (MER 451) Monotherapy in Adult Subjects With Moderate-to-severe Atopic Dermatitis (AD) |
 | **Protocol number** | 20210143 (Amendment 3, dated 29-NOV-2023) |
 | **ClinicalTrials.gov number** | NCT05651711 |
-| **Sponsor** (the company paying for and running the study) | Amgen Inc., One Amgen Center Drive, Thousand Oaks, CA 91320-1799, USA |
+| **Sponsor** (the company paying for and running the study) | Meridian Biotherapeutics, Inc., 1200 Kestrel Way, Emeryville, CA 94608, USA |
 | **Study doctor** (Principal Investigator) | Miriam A. Okonkwo, MD, FAAD |
 | **Study site** | Cascade Dermatology & Clinical Research, LLC — Site 1047<br>4820 SW Barbur Boulevard, Suite 300, Portland, OR 97239 |
 | **Site phone** | +1 (503) 555-0121 · Research line +1 (503) 555-0124 |
@@ -79,7 +79,7 @@ You have **atopic dermatitis** — most people call it eczema. It makes skin itc
 
 Creams help many people, but not everyone. Some people need something stronger.
 
-This study is testing **rocatinlimab**. Amgen wants to answer three questions:
+This study is testing **rocatinlimab**. Meridian wants to answer three questions:
 
 1. **Does it work?** Does it clear the skin and reduce itch better than a placebo?
 2. **Is it safe?** What side effects does it cause, and how often?
@@ -105,7 +105,7 @@ Rocatinlimab is an **antibody** — a protein made in a lab, designed to stick t
 
 That target is called **OX40**. OX40 sits on the surface of certain immune cells: the ones that cause the swelling, redness, and itch of eczema. In people with eczema, some of these cells become overactive and stay that way. Rocatinlimab sticks to OX40 on those cells. In laboratory studies this reduces their number and calms the immune activity that drives eczema.
 
-Rocatinlimab is also called **AMG 451** and **KHK4083**. Same drug.
+Rocatinlimab is also called **MER 451** and **KHK4083**. Same drug.
 
 > **Rocatinlimab is experimental.** The FDA has **not approved** it for eczema or for anything else. No health authority anywhere has approved it. It can only be given in research studies. It has been given to people in earlier studies — that is where the side effects in Section 7 come from — but there is still much we do not know.
 
@@ -287,7 +287,7 @@ The numbers below come from this study's own results, in **544 people who receiv
 
 > ### **IF THIS HAPPENS, CALL 911 IMMEDIATELY.**
 > **Do not drive yourself. Do not wait to see if it improves.**
-> Tell the paramedics you are in a clinical trial and may have received an experimental drug called **rocatinlimab (AMG 451)**.
+> Tell the paramedics you are in a clinical trial and may have received an experimental drug called **rocatinlimab (MER 451)**.
 > Once you are safe — or have someone call for you — contact the study team at **+1 (503) 555-0129**, 24 hours a day.
 > **Carry the study wallet card we give you.** It has this information on it.
 
@@ -442,16 +442,16 @@ If you leave early you keep everything already paid, and you are paid for every 
 
 Dr. Okonkwo and this clinic will provide or arrange emergency medical treatment for an injury that happens as a result of the study.
 
-**Who pays.** **Amgen will pay the reasonable and necessary costs of medical treatment for an injury directly caused by rocatinlimab or by a procedure required by this study**, to the extent those costs are not covered by your health insurance or by another party responsible for paying them.
+**Who pays.** **Meridian will pay the reasonable and necessary costs of medical treatment for an injury directly caused by rocatinlimab or by a procedure required by this study**, to the extent those costs are not covered by your health insurance or by another party responsible for paying them.
 
 That means:
 
-- Amgen pays for treatment of an injury **caused by the study**.
-- Amgen does **not** pay for treatment of your eczema itself, for conditions you already had, for the normal course of your eczema, or for an injury caused by someone not following the study plan or by your own failure to follow instructions.
-- Amgen will **not** pay you money for lost wages, time off work, childcare, pain and suffering, or other losses. **No money is set aside to compensate you for an injury beyond medical costs.**
-- Your health insurance may be billed first. You may face co-pays and deductibles, and Amgen may reimburse those if the injury is study-related. Ask us — do not just pay it.
+- Meridian pays for treatment of an injury **caused by the study**.
+- Meridian does **not** pay for treatment of your eczema itself, for conditions you already had, for the normal course of your eczema, or for an injury caused by someone not following the study plan or by your own failure to follow instructions.
+- Meridian will **not** pay you money for lost wages, time off work, childcare, pain and suffering, or other losses. **No money is set aside to compensate you for an injury beyond medical costs.**
+- Your health insurance may be billed first. You may face co-pays and deductibles, and Meridian may reimburse those if the injury is study-related. Ask us — do not just pay it.
 
-**Your legal rights.** **By signing this form you are not giving up any of your legal rights.** You are not releasing Amgen, Cascade Dermatology & Clinical Research, Dr. Okonkwo, or anyone else from responsibility for negligence. Nothing here limits your right to seek payment through the courts.
+**Your legal rights.** **By signing this form you are not giving up any of your legal rights.** You are not releasing Meridian, Cascade Dermatology & Clinical Research, Dr. Okonkwo, or anyone else from responsibility for negligence. Nothing here limits your right to seek payment through the courts.
 
 Questions about compensation? Call the study team, or Keystone IRB at **+1 (913) 555-0110**.
 
@@ -486,7 +486,7 @@ You can be taken out of the study even if you want to stay in. Reasons include:
 - **You start a medicine that is not allowed** during the study
 - **You no longer meet the study's rules**, for example because of a test result
 - **You miss visits, or cannot keep up with the eDiary**, to the point where your information is no longer usable — we will always talk to you and try to fix the problem first
-- **The study is stopped** by Amgen, by the FDA, by Keystone IRB, or by the independent Data Monitoring Committee that reviews the safety results four times a year
+- **The study is stopped** by Meridian, by the FDA, by Keystone IRB, or by the independent Data Monitoring Committee that reviews the safety results four times a year
 
 If you are taken out, we will tell you why and help you get back onto a treatment for your eczema.
 
@@ -502,7 +502,7 @@ If we learn something new during the study — about rocatinlimab's safety, or a
 
 | Who | Why |
 |---|---|
-| **Amgen Inc.** (the sponsor) and companies working for Amgen | To run and analyse the study and apply for approval of the drug |
+| **Meridian Biotherapeutics, Inc.** (the sponsor) and companies working for Meridian | To run and analyse the study and apply for approval of the drug |
 | **Harborlight Clinical Research, Inc.** and its monitors | To check the study is being done correctly at this site |
 | **Meridian Central Laboratories** | To test your blood and urine samples |
 | **Axion IRT, Veriscribe EDC, and DayLog ePRO** | The systems that assign your group, hold the study data, and run the eDiary |
@@ -512,7 +512,7 @@ If we learn something new during the study — about rocatinlimab's safety, or a
 | **The independent Data Monitoring Committee** | Doctors and statisticians outside the study who review safety data |
 | **Anyone required by law** | For example, if a law requires reporting of certain infections |
 
-Information sent to Amgen and the others may be transferred to and stored in **other countries**, including countries whose privacy laws differ from those in the United States. Once your information leaves this clinic, U.S. health privacy law may no longer protect it.
+Information sent to Meridian and the others may be transferred to and stored in **other countries**, including countries whose privacy laws differ from those in the United States. Once your information leaves this clinic, U.S. health privacy law may no longer protect it.
 
 Results of this study may be published, presented at medical meetings, and posted publicly. **You will never be identified by name.**
 
@@ -553,7 +553,7 @@ U.S. law — the Health Insurance Portability and Accountability Act, or HIPAA �
 
 ### 15.3 Who may receive your information
 
-- **Amgen Inc.**, its affiliates, and companies working on its behalf
+- **Meridian Biotherapeutics, Inc.**, its affiliates, and companies working on its behalf
 - **Harborlight Clinical Research, Inc.** and its monitors and safety staff
 - **Meridian Central Laboratories**
 - **Axion IRT**, **Veriscribe Data Systems**, and **DayLog ePRO**
@@ -587,7 +587,7 @@ You can also hand it to any member of the study team, or fax it to +1 (503) 555-
 
 **What cancelling does.** We stop collecting and sharing new health information about you for this study. You will be withdrawn from the study. We will still ask you to come in for a final safety check-up, and we may still contact you about a serious side effect if we must for your safety or to meet a legal reporting duty.
 
-**What cancelling does not do.** **It does not take back information already shared.** Amgen and the others already have it and may keep using it. This is necessary so the study's results stay complete and accurate and so safety information already reported to regulators stays valid. It also does not undo tests already run on your samples.
+**What cancelling does not do.** **It does not take back information already shared.** Meridian and the others already have it and may keep using it. This is necessary so the study's results stay complete and accurate and so safety information already reported to regulators stays valid. It also does not undo tests already run on your samples.
 
 **Once your information has been shared with the people listed in Section 15.3, they may share it again, and at that point it may no longer be protected by federal health privacy law.**
 
@@ -646,7 +646,7 @@ Mark your choice by writing your **initials** in the box, then sign at the end o
 - **You will not be given any results.** Neither will your doctor, and nothing goes into your medical record. This research is not done to a standard that allows results to be used for medical decisions, and results may take years to produce.
 - We will **not** use your DNA for paternity testing, ancestry testing, or any purpose other than the research described here.
 
-**How it is stored.** Labeled with your study number, not your name. This is called **coded** — not fully anonymous, because this clinic keeps the key linking the number to you. **Amgen does not get the key.** Samples are stored securely and destroyed no later than **20 years** after the end of the study.
+**How it is stored.** Labeled with your study number, not your name. This is called **coded** — not fully anonymous, because this clinic keeps the key linking the number to you. **Meridian does not get the key.** Samples are stored securely and destroyed no later than **20 years** after the end of the study.
 
 **Taking it back.** You can withdraw this permission at any time in writing, using the address in Section 15.6. Unused samples will be destroyed; results already produced cannot be withdrawn.
 
@@ -727,7 +727,7 @@ I have read Section 16. I understand these parts are optional, and that saying n
 
 > # **CALL 911**
 > Then call the study team at **+1 (503) 555-0129**.
-> Tell the paramedics or the emergency department that you are in a clinical research study and may have received an experimental drug called **rocatinlimab (AMG 451)**. Show them your study wallet card.
+> Tell the paramedics or the emergency department that you are in a clinical research study and may have received an experimental drug called **rocatinlimab (MER 451)**. Show them your study wallet card.
 
 ### If you have questions about the study, a side effect, or your health
 

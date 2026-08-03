@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -10,12 +10,12 @@
 ### ROCKET-Horizon — Protocol 20210143
 
 **A Phase 3, Randomized, 24-week, Placebo-controlled, Double-blind Study to Assess the Efficacy,
-Safety and Tolerability of Rocatinlimab (AMG 451) Monotherapy in Adult Subjects With
+Safety and Tolerability of Rocatinlimab (MER 451) Monotherapy in Adult Subjects With
 Moderate-to-severe Atopic Dermatitis (AD)**
 
 | | |
 |---|---|
-| Sponsor | Amgen Inc., One Amgen Center Drive, Thousand Oaks, CA 91320-1799, USA |
+| Sponsor | Meridian Biotherapeutics, Inc., 1200 Kestrel Way, Emeryville, CA 94608, USA |
 | Sponsor protocol number | 20210143 |
 | ClinicalTrials.gov | NCT05651711 |
 | EU CT number | 2022-501538-44 |
@@ -25,7 +25,7 @@ Moderate-to-severe Atopic Dermatitis (AD)**
 | Study database build | **20210143_PROD build 9.2.14**, released 08-DEC-2023 |
 | **Manual version** | **Version 3.0** |
 | **Manual date** | **11-DEC-2023** |
-| Prepared by | Veriscribe Data Systems, with Clinical Data Management, Harborlight Clinical Research, Inc. (HCR), on behalf of Amgen Inc. |
+| Prepared by | Veriscribe Data Systems, with Clinical Data Management, Harborlight Clinical Research, Inc. (HCR), on behalf of Meridian Biotherapeutics, Inc. |
 | Distribution | All activated investigational sites; CRAs; sponsor data management |
 | Confidentiality | Confidential. For use by qualified site personnel in the conduct of Protocol 20210143 only. |
 
@@ -1419,7 +1419,7 @@ Available under **Reports** on the dashboard; all export to PDF and CSV.
 
 ### 12.2 The metrics the sponsor watches
 
-These are the site-level key risk indicators reviewed monthly by HCR and reported to Amgen.
+These are the site-level key risk indicators reviewed monthly by HCR and reported to Meridian.
 
 | KRI | Target | Escalation |
 |---|---|---|

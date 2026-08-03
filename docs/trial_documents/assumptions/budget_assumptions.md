@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -154,7 +154,7 @@ are invented.
 |---|---|---|---|
 | §6.1 | Reconciliation submitted within **20 days** of quarter end; "clean" defined as agreeing with the Veriscribe EDC record and the Axion IRT transaction log | Canon says "net 45 days from receipt of a clean quarterly reconciliation" but does not define "clean" or the submission deadline. Both are needed to model cash flow. | Med |
 | §6.2 | Holdback base = per-visit clinical procedures **and their overhead only**; not startup, not pass-throughs, not §4 service fees | Canon fixes 10% and the release condition but not the base. Excluding pass-throughs is the only defensible reading — withholding 10% of a participant's stipend reimbursement would be indefensible. | Med |
-| §6.4 | Invoicing content requirements and the `ctagreements@amgen-sim.example` submission address | The address is canon (`STUDY_FACTS.md` §10). The content list is invented boilerplate. | Med |
+| §6.4 | Invoicing content requirements and the `ctagreements@meridianbio-sim.example` submission address | The address is canon (`STUDY_FACTS.md` §10). The content list is invented boilerplate. | Med |
 | §6.6 | Tax treatment: amounts exclusive of applicable taxes; Institution responsible for its own income taxes; Form 1099 issued | Invented standard language. | Med |
 | §6.7 | Early termination: pay for completed visits and incurred items, non-cancellable commitments, and orderly close-out; startup fee never refundable; holdback released within 60 days of close-out completion | Invented, but the non-refundability of the startup fee is canon. | Med |
 
@@ -218,7 +218,7 @@ are invented.
 | Header | Budget **Version 2.0**, superseding a Version 1.0 budget proposal dated 14-OCT-2022 | Version 2.0 is required by the assignment; the superseded Version 1.0 and its date are invented to make the version number meaningful. | Med |
 | Header | Grid priced against Protocol 20210143 **Amendment 3 (29-NOV-2023)** while the budget is effective 12-DEC-2022 | Apparent tension is deliberate and reflects reality: the SoA in `STUDY_FACTS.md` §5 is the Amendment 3 schedule, but the budget was executed with the CTA in DEC-2022. The document handles this by pricing amendment implementation and re-consenting as invoiceable items in §4 and §7.2. | Med |
 | §2 | Grid split into three tables by visit group (Screening–W8, W12–W24, W28–W36) with reconciling group subtotals | Required by the assignment; the reconciliation row is added so the split cannot hide an error. | High |
-| §10 | Signature block: Amgen "Director, Clinical Contracts"; Gregory Tarrant, MBA, Site Director; plus a **Principal Investigator acknowledgement** for Miriam A. Okonkwo, MD, FAAD | Tarrant as signatory is canon. The Amgen title and the PI acknowledgement block are invented; the PI acknowledgement is included because an investigator attestation that compensation does not influence clinical judgement is good practice and thematically relevant to the game. | Med |
+| §10 | Signature block: Meridian "Director, Clinical Contracts"; Gregory Tarrant, MBA, Site Director; plus a **Principal Investigator acknowledgement** for Miriam A. Okonkwo, MD, FAAD | Tarrant as signatory is canon. The Meridian title and the PI acknowledgement block are invented; the PI acknowledgement is included because an investigator attestation that compensation does not influence clinical judgement is good practice and thematically relevant to the game. | Med |
 | Throughout | All arithmetic stated to the cent; every subtotal reconciles in at least two directions; the single $0.01 rounding artefact in the holdback release is disclosed rather than silently absorbed | Assignment requirement, and a deliberate design choice — a budget whose totals do not tie is worthless as a game artefact. | High |
 
 ---

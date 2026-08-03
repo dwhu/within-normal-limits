@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -56,7 +56,7 @@ ClinicalTrials.gov record is listed below. Nothing in the document contradicts e
 | §4 notes | Dr Feist's **$1,800 speaker honoraria in 2022 from an unrelated manufacturer** | Invented entirely, to give the disclosure summary a worked example of a payment that is collected, recorded, and correctly judged non-disclosable. | Low |
 | §4 | Sub-investigator disclosure signature dates: Feist and Vega **05-DEC-2022**, Nakamura **09-MAR-2023** | Invented, aligned to the 1572 execution and revision dates respectively. | Med |
 | §3 | Form 3455 rendered as an **investigator-signed, site-level** form with a pending sponsor-representative block | Deliberate. Strictly, 3454/3455 are applicant-level submissions signed by the sponsor's representative at the time of the marketing application. The brief asks for a completed 3455 for the PI, so the document renders it in the site-collection form that sponsors commonly use and **names the discrepancy explicitly** in the "Note on Form FDA 3454". | Med |
-| §3 | Sponsor signatory title **"Senior Director, Global Regulatory Affairs, Amgen Inc."**, unsigned/pending | Invented placeholder title. No individual named, to avoid attributing a signature to a real Amgen employee. | Low |
+| §3 | Sponsor signatory title **"Senior Director, Global Regulatory Affairs, Meridian Biotherapeutics, Inc."**, unsigned/pending | Invented placeholder title. No individual named, to avoid attributing a signature to a real Meridian employee. | Low |
 | §3 | Financial disclosure update tail running to approximately **27-AUG-2025** | Arithmetic, not invention: one year after the canon last-participant-last-visit date of 27-AUG-2024, per 21 CFR 312.53(c)(4). | High |
 | §3 | The 21 CFR 54.2 thresholds ($25,000 for significant payments of other sorts; $50,000 equity in a publicly held company) | Reproduced from the regulation for structural fidelity, not invented. | High |
 
@@ -73,7 +73,7 @@ ClinicalTrials.gov record is listed below. Nothing in the document contradicts e
 | Location in doc | Assumption | Rationale | Confidence |
 |---|---|---|---|
 | Cover | Package assembled by **Sam Oyelaran**; filed at **ISF Section 2 (Regulatory), tab 2.1**; mirrored in the Veriscribe eISF | Ownership follows RESEARCH_SITE.md §2 ("maintains … 1572/3455 currency") and §3 (eISF). The section/tab numbering is invented. | Med |
-| Cover | Original transmitted to Amgen **via Harborlight Clinical Research, Inc.** on the day of signature; wet-ink originals retained at site, certified scans to the sponsor | Invented operational detail. Consistent with HCR's canon role as the CRO handling clinical operations. | Med |
+| Cover | Original transmitted to Meridian **via Harborlight Clinical Research, Inc.** on the day of signature; wet-ink originals retained at site, certified scans to the sponsor | Invented operational detail. Consistent with HCR's canon role as the CRO handling clinical operations. | Med |
 | Block 2 / Block 8 | Attachment numbering (Attachment 1 CV, Attachment 2 protocol, Attachment 3 eCRF specification) | Invented convention. | Low |
 | §5.1 | The 12-item ISF companion list, and the **CV signed and dated within 2 years** currency rule | The 2-year CV convention is an industry/ICH E6 essential-document expectation rather than a 21 CFR 312 requirement; stated as required by the brief. The rest of the list is standard essential-document practice, assembled for this site. | High |
 | §5.1 row 4 | GCP training refreshed **every 3 years** | Common sponsor requirement; not stated in canon. Canon confirms only that all research staff hold current ICH E6(R3) CITI certification. | Med |
@@ -83,7 +83,7 @@ ClinicalTrials.gov record is listed below. Nothing in the document contradicts e
 ## 7. Deliberate non-inventions
 
 - No participant identifiers, randomisation numbers, or kit numbers appear in this document.
-- No real Amgen or FDA employee is named. The only named individuals are the fictional Site 1047
+- No real Meridian or FDA employee is named. The only named individuals are the fictional Site 1047
   personnel from RESEARCH_SITE.md.
 - No expiry date was invented for CLIA certificate 38D2178456, and no NPI or DEA number was invented
   beyond those canon supplies.

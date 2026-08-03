@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -8,7 +8,7 @@
 **Document covered:** `/Users/dave/code/icf-please/docs/trial_documents/cta.md`
 **Outline:** `/Users/dave/code/icf-please/docs/outline/cta_outline.md`
 **Document:** Clinical Trial Agreement CTA-20210143-1047, executed 12-DEC-2022
-**Parties:** Amgen Inc. · Cascade Dermatology & Clinical Research, LLC · Miriam A. Okonkwo, MD, FAAD
+**Parties:** Meridian Biotherapeutics, Inc. · Cascade Dermatology & Clinical Research, LLC · Miriam A. Okonkwo, MD, FAAD
 
 ---
 
@@ -42,7 +42,7 @@ drafting choice made for this document.
 | Location in doc | Assumption | Rationale | Confidence |
 |---|---|---|---|
 | Cover block | Agreement reference **CTA-20210143-1047** | No reference number exists in canon. Constructed from protocol number + site number so it is self-explaining and cross-referenceable from `budget.md` and any invoice prop. | High |
-| Preamble | Amgen Inc. described as **"a Delaware corporation"** | Consistent with the choice of Delaware governing law and with a large US-listed pharmaceutical sponsor. Not stated in canon. | Med |
+| Preamble | Meridian Biotherapeutics, Inc. described as **"a Delaware corporation"** | Consistent with the choice of Delaware governing law and with a large US-listed pharmaceutical sponsor. Not stated in canon. | Med |
 | Preamble | Cascade described as **"an Oregon limited liability company"** | Canon (RESEARCH_SITE.md §1). Not an assumption; recorded for completeness. | Canon |
 | Preamble | Investigator identified by Oregon licence **MD-118472** | Canon (RESEARCH_SITE.md §2). | Canon |
 | Recitals | Study described as conducted at **"approximately 151 investigational centres in 21 countries"** | Canon (STUDY_FACTS.md §3). Used in the recitals to make the multicentre publication restriction in Article 9.6 self-justifying on the face of the document. | Canon |
@@ -63,7 +63,7 @@ drafting choice made for this document.
 | §1.15 "Investigational Product" | Expressly **includes the matching placebo** | Without this, Article 10 would not cover a participant injured by a placebo injection or by the injection procedure itself. A real and consequential drafting point. Invented. | High |
 | §1.18 "Personal Data" | Defined to bridge **HIPAA "PHI" and GDPR "personal data"** | The two terms have different scope; a single defined term avoids Article 13 having to be written twice. Invented. | High |
 | §1.19 "Protocol" | States original protocol **07-OCT-2022** in force at the Effective Date, with Amendment 3 (29-NOV-2023) as the current version | Both dates are canon (STUDY_FACTS.md §1). The two-date construction reflects that the CTA was signed before Amendment 3 existed and that Section 2.3 auto-incorporates amendments. | Canon / High |
-| §1.23 "Study Data" | Expressly **excludes the Study Subject medical record as a record**, while granting the Sponsor the Protocol-required data content recorded in it | This is the single most important definitional boundary in the document. Without it, Section 8.1 would purport to transfer Dr. Okonkwo's patient charts to Amgen, which is unlawful under Oregon medical-record law and would be struck by any competent site attorney. Invented, but standard. | High |
+| §1.23 "Study Data" | Expressly **excludes the Study Subject medical record as a record**, while granting the Sponsor the Protocol-required data content recorded in it | This is the single most important definitional boundary in the document. Without it, Section 8.1 would purport to transfer Dr. Okonkwo's patient charts to Meridian, which is unlawful under Oregon medical-record law and would be struck by any competent site attorney. Invented, but standard. | High |
 | §1.24 "Study Subject" | Includes an individual who **consents but screen-fails** | Necessary for Section 6.7 (screen-failure reimbursement) and Article 10 (a screen failure injured by a screening blood draw) to work. Invented. | High |
 | §1.17 "IRB" | Keystone Independent Review Board, IRB00009812, with reliance agreement | Canon (RESEARCH_SITE.md §4). | Canon |
 
@@ -180,7 +180,7 @@ drafting choice made for this document.
 |---|---|---|---|
 | §8.1 | Sponsor owns Study Data and results outright, with assignment from Institution and Investigator | Standard and effectively non-negotiable. Invented drafting. | High |
 | §8.1 | Express preservation of the **medical record as a record** | The counterpart to §1.23. Invented; essential. | High |
-| §8.2 | Invention ownership triggered by a **nexus** — "arises from" the Study, the IP, or the Confidential Information — with express rejection of a bare "conceived during the Term" trigger | Invented, and the single most negotiated point in a real Article 8. Without the nexus, an unrelated invention made by Dr. Okonkwo on a Saturday would vest in Amgen. Sponsor templates routinely propose the broader trigger. | High |
+| §8.2 | Invention ownership triggered by a **nexus** — "arises from" the Study, the IP, or the Confidential Information — with express rejection of a bare "conceived during the Term" trigger | Invented, and the single most negotiated point in a real Article 8. Without the nexus, an unrelated invention made by Dr. Okonkwo on a Saturday would vest in Meridian. Sponsor templates routinely propose the broader trigger. | High |
 | §8.3 | **Improvements split**: inventions *specific to the Investigational Product* are the Sponsor's; inventions of *general applicability* are the Institution's, subject to a Sponsor licence where the Sponsor's Confidential Information was used | Invented. This is the hardest sub-issue in the article and the split is the workable compromise. A small private practice like Cascade would realistically have accepted a broader Sponsor-side clause; the draft is modestly site-favourable here. | Med |
 | §8.4 | Institution Pre-Existing IP retained, with a necessity licence to the Sponsor | Invented. | High |
 | §8.5 | **Licence-back** for internal non-commercial research, teaching, and patient care; no commercialisation, no sublicensing, no third-party use, no support of third-party regulatory filings | Directed by the brief. Invented drafting. | High |
@@ -197,7 +197,7 @@ drafting choice made for this document.
 | §9.1 | Express statement that the Sponsor may not suppress unfavourable results | Invented gloss, but faithful to the intent of the registry language. | High |
 | §9.2 | **45-day** Sponsor review period | **REAL** — STUDY_FACTS.md §14 ("typically up to 45 days"). | Real |
 | §9.3 | Extension of **up to 30 additional days for patent filing**; aggregate cap of **75 days** | The *existence* of an extension is real ("and possible extension"); the **30-day length**, the patent-filing trigger, and the 75-day aggregate cap are **invented**, directed by the brief. 30 days is the conventional figure in real CTAs. | Med |
-| §9.4 | Sponsor may require removal of **Confidential Information**, expressly **not** of Study Data, results, analyses, conclusions, or interpretations | **REAL in substance** — STUDY_FACTS.md §14 ("Amgen may remove confidential information"). The express negative limb is an invented clarification, and it is the sentence that carries the article's ethical content. | Real / High |
+| §9.4 | Sponsor may require removal of **Confidential Information**, expressly **not** of Study Data, results, analyses, conclusions, or interpretations | **REAL in substance** — STUDY_FACTS.md §14 ("Meridian may remove confidential information"). The express negative limb is an invented clarification, and it is the sentence that carries the article's ethical content. | Real / High |
 | §9.5 | "**the authors shall retain final control of and approval over the content of any publication**" | **REAL** — STUDY_FACTS.md §14 ("authors have final control and approval of publication content"). | Real |
 | §9.5 | Sponsor's silence within the review period deemed to be no comment | Invented. | High |
 | §9.6(a) | No site publication before the **first multicentre publication** | **REAL** — STUDY_FACTS.md §14. | Real |
@@ -234,7 +234,7 @@ drafting choice made for this document.
 | §11.3 | Institution reciprocal indemnity, narrower, with a symmetric "except to the extent" carve-back | Directed by the brief. Invented. Not capped — noted as a real exposure for a 31-person practice whose practical ceiling is its §12.2 insurance limits. | High |
 | §11.4 | **The Investigator assumes no personal indemnity obligation** | **Invented.** Directed by the requirement that she sign only to acknowledge her own obligations. A site attorney who lets an individual physician become jointly liable for a corporate indemnity has erred; this clause and the signature-block limitation are the two places the document prevents it. | High |
 | §11.5 | Notice within **30 days**, materiality-of-prejudice saving, Indemnifying Party controls the defence with counsel reasonably acceptable, cooperation at Indemnifying Party's expense | Numbers invented. | High |
-| §11.5 | **No settlement** that imposes an unindemnified obligation, admits the Indemnified Party's fault, or omits a full release, without consent | Invented, and the limb sites most often forget. Without it, Amgen could settle a case in terms that publicly attribute fault to Dr. Okonkwo. | High |
+| §11.5 | **No settlement** that imposes an unindemnified obligation, admits the Indemnified Party's fault, or omits a full release, without consent | Invented, and the limb sites most often forget. Without it, Meridian could settle a case in terms that publicly attribute fault to Dr. Okonkwo. | High |
 | §11.5 | Separate counsel **at the Indemnifying Party's expense where a conflict of interest exists**; Indemnified Party may defend if the Indemnifying Party fails to assume within 30 days | Invented; both are site-protective additions. | Med |
 | §11.6 | Survival **without limit of time** | Invented. Personal-injury claims from a 2023 exposure can surface years later; an indemnity that expires with the Term is worthless. | High |
 | §11.7 | Indemnity not limited by insurance | Invented. Guards against the "we carry $10M, isn't that enough?" argument. | High |
@@ -305,15 +305,15 @@ small private-practice site.
 |---|---|---|---|
 | §15.1 | Mutual restriction on use of name, marks, and employee names in publicity | Directed by the brief. Invented. | High |
 | §15.2(a) | Carve-out for **ClinicalTrials.gov** and **CTIS** registration | Directed by the brief. Real: the registry record lists 197 locations, of which Site 1047 is one in-world. | High |
-| §15.2(b)–(e) | Carve-outs for legally required disclosure, securities-exchange rules, transparency reporting, regulatory submissions, ICF and recruitment materials, Sponsor internal materials and investigator lists, and the site's factual experience listing | Invented. The last one matters commercially — a site's ability to say "we have run Amgen studies" when pitching for new work. | High |
+| §15.2(b)–(e) | Carve-outs for legally required disclosure, securities-exchange rules, transparency reporting, regulatory submissions, ICF and recruitment materials, Sponsor internal materials and investigator lists, and the site's factual experience listing | Invented. The last one matters commercially — a site's ability to say "we have run Meridian studies" when pitching for new work. | High |
 | §15.3 | Consent response within **10 business days** | Invented. | Med |
 | §16.1–16.3 | Independent contractor; no authority to bind; no employment benefits | Directed by the brief. Standard. Invented. | High |
 | §16.4 | Express preservation of **independent professional judgement** | Invented; the substantive reason Article 16 exists at all, beyond tax and vicarious-liability hygiene. Duplicates §3.10 deliberately. | High |
 | §17.1 | Institution may not assign at all; Sponsor may assign to an Affiliate or a successor to the Investigational Product | Invented, and correctly asymmetric — rocatinlimab is also designated **KHK4083** (STUDY_FACTS.md §4), reflecting an in-licensing history, so assignability of the programme matters to the Sponsor. | High |
 | §17.2 | No subcontracting without consent; flow-down of Articles 3, 7, 8, 13, 14 | Invented. | High |
 | §17.3 | No third-party beneficiaries except the named Indemnified Parties | Invented. | High |
-| §17.4 | Notice addresses and methods; e-mail effective with confirmation, followed by hard copy for breach, termination, and indemnity notices | Amgen's address and `ctagreements@amgen-sim.example` are canon (STUDY_FACTS.md §1, §10). Cascade's address, `g.tarrant@cascadederm-sim.example`, +1 (503) 555-0126, and the fax +1 (503) 555-0122 are canon (RESEARCH_SITE.md §1, §6). | Canon |
-| §17.4 | Sponsor copy-to addressee **"Vice President, Legal Affairs — R&D Legal"** | **Invented.** Amgen's internal legal titles are not public. Kept generic and title-only, with no named individual. | Med |
+| §17.4 | Notice addresses and methods; e-mail effective with confirmation, followed by hard copy for breach, termination, and indemnity notices | Meridian's address and `ctagreements@meridianbio-sim.example` are canon (STUDY_FACTS.md §1, §10). Cascade's address, `g.tarrant@cascadederm-sim.example`, +1 (503) 555-0126, and the fax +1 (503) 555-0122 are canon (RESEARCH_SITE.md §1, §6). | Canon |
+| §17.4 | Sponsor copy-to addressee **"Vice President, Legal Affairs — R&D Legal"** | **Invented.** Meridian's internal legal titles are not public. Kept generic and title-only, with no named individual. | Med |
 | §17.5 | Governing law: **State of Delaware**, without regard to conflicts principles, CISG excluded | **Invented**, directed by the brief's instruction to choose Delaware or Oregon and to note the negotiation. | High |
 | §17.5 (note) | Express **negotiation note** recording that the Institution proposed Oregon, the Sponsor proposed California, and the Parties settled on Delaware; and that Oregon law still governs licensure, medical-record retention, the practice of medicine, and third-party tort claims | **Wholly invented**, and an unusual thing to find on the face of a real contract — included deliberately because the brief asked that the negotiated character of the choice be noted, and because it gives a player-facing artefact a visible seam. Treat as a game-design flourish rather than realistic drafting. | Low |
 | §17.6 | Escalation: **15 business days** to confer, **30 days** at project level, **60 days** before litigation; exclusive jurisdiction in Delaware state and federal courts; injunctive relief carve-out for Articles 7, 8, 13; nothing delays Study Subject safety obligations | All numbers invented. Litigation rather than arbitration was chosen so the clause is legible; arbitration would be equally realistic. | Med |
@@ -328,7 +328,7 @@ small private-practice site.
 
 | Location in doc | Assumption | Rationale | Confidence |
 |---|---|---|---|
-| Sponsor block | **Helena K. Draycott, Executive Director, Clinical Contracts and Outsourcing** | **Wholly invented.** Amgen's authorised contract signatories are not public, and attributing a fabricated signature to a real named person would be inappropriate. A fictional name and a plausible generic title were used. Consistent with STUDY_FACTS.md §9's rationale for inventing vendors rather than naming real companies. | High |
+| Sponsor block | **Helena K. Draycott, Executive Director, Clinical Contracts and Outsourcing** | **Wholly invented.** Meridian's authorised contract signatories are not public, and attributing a fabricated signature to a real named person would be inappropriate. A fictional name and a plausible generic title were used. Consistent with STUDY_FACTS.md §9's rationale for inventing vendors rather than naming real companies. | High |
 | Institution block | **Gregory Tarrant, MBA, Site Director**, with an authority representation | Canon (RESEARCH_SITE.md §2, §6: "Signs contracts on behalf of the institution"). The authority representation is invented. | Canon |
 | Investigator block | **Miriam A. Okonkwo, MD, FAAD**, licence MD-118472, NPI 1730294856 | Canon (RESEARCH_SITE.md §2). | Canon |
 | Investigator block | Limiting language: signs **solely in her personal capacity** to be bound by Articles 3, 7, 8, 9, 13, 14, 16, and to take the benefit of Article 10 and §§11.1 and 11.4; expressly **does not** assume Articles 6, 12, or §11.3 | **Invented**, and the most important drafting decision on the page. Prevents an individual physician becoming jointly liable for a corporate indemnity, payment, or insurance obligation. | High |

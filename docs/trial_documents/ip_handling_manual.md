@@ -1,4 +1,4 @@
-> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE AMGEN DOCUMENT.**
+> ⚠️ **SIMULATED DOCUMENT — GENERATED FOR TRAINING/GAME USE — NOT A GENUINE CLINICAL TRIAL DOCUMENT.**
 > This file is fabricated source material for *icf-please*, a simulation game. It is based on the
 > public ClinicalTrials.gov record for NCT05651711 but its operational content is invented. It must
 > not be used for any clinical, regulatory, or medical purpose.
@@ -7,7 +7,7 @@
 
 # INVESTIGATIONAL PRODUCT HANDLING MANUAL
 
-## Clinical Supply Manual — Rocatinlimab (AMG 451) and Matching Placebo
+## Clinical Supply Manual — Rocatinlimab (MER 451) and Matching Placebo
 
 ### Protocol 20210143 — ROCKET-Horizon
 
@@ -15,20 +15,20 @@
 
 | | |
 |---|---|
-| **Sponsor** | Amgen Inc., One Amgen Center Drive, Thousand Oaks, CA 91320-1799, USA |
+| **Sponsor** | Meridian Biotherapeutics, Inc., 1200 Kestrel Way, Emeryville, CA 94608, USA |
 | **Protocol number** | **20210143** |
 | **ClinicalTrials.gov** | NCT05651711 |
 | **EU CT number** | 2022-501538-44 |
-| **Study title** | A Phase 3, Randomized, 24-week, Placebo-controlled, Double-blind Study to Assess the Efficacy, Safety and Tolerability of Rocatinlimab (AMG 451) Monotherapy in Adult Subjects With Moderate-to-severe Atopic Dermatitis (AD) |
-| **Investigational product** | Rocatinlimab (AMG 451) 150 mg/1.0 mL prefilled syringe, and matching placebo |
+| **Study title** | A Phase 3, Randomized, 24-week, Placebo-controlled, Double-blind Study to Assess the Efficacy, Safety and Tolerability of Rocatinlimab (MER 451) Monotherapy in Adult Subjects With Moderate-to-severe Atopic Dermatitis (AD) |
+| **Investigational product** | Rocatinlimab (MER 451) 150 mg/1.0 mL prefilled syringe, and matching placebo |
 | **Document** | Investigational Product Handling Manual (Clinical Supply Manual) |
 | **Version** | **Version 3.0** |
 | **Effective date** | **20-NOV-2023** |
 | **Supersedes** | Version 2.1, dated 07-JUL-2023 |
-| **Document owner** | Amgen Global Clinical Supply Chain, with Amgen Clinical Supply Quality |
+| **Document owner** | Meridian Global Clinical Supply Chain, with Meridian Clinical Supply Quality |
 | **Applies to** | All investigational sites, all regional and in-country depots, GlobalRx Logistics, Axion Clinical Systems, and Harborlight Clinical Research, Inc. |
 
-**Confidentiality.** This manual is the confidential property of Amgen Inc. It is provided to
+**Confidentiality.** This manual is the confidential property of Meridian Biotherapeutics, Inc. It is provided to
 investigators, site staff, contracted vendors, and reviewing ethics committees solely for the conduct
 or oversight of Protocol 20210143. Retain this version and all superseded versions in the
 Investigator Site File.
@@ -97,14 +97,14 @@ operations; then this manual.
 
 | Function | Organisation | Contact | Hours |
 |---|---|---|---|
-| **Supply, orders, forecasts, shipment scheduling** | Amgen Global Clinical Supply Chain | `clinicalsupply.20210143@amgen-sim.example` · +1 (866) 555-0180 | Mon–Fri 07:00–18:00 PT |
-| **Temperature excursions, dispositions, quarantine release** | Amgen Clinical Supply Quality (CSQ) | `csq.excursions@amgen-sim.example` · +1 (866) 555-0182 | Mon–Fri 06:00–18:00 PT; on-call for urgent flags |
-| **Product complaints and quality defects** | Amgen Product Quality Complaints | `productquality@amgen-sim.example` · +1 (866) 555-0181 | 24/7 intake |
+| **Supply, orders, forecasts, shipment scheduling** | Meridian Global Clinical Supply Chain | `clinicalsupply.20210143@meridianbio-sim.example` · +1 (866) 555-0180 | Mon–Fri 07:00–18:00 PT |
+| **Temperature excursions, dispositions, quarantine release** | Meridian Clinical Supply Quality (CSQ) | `csq.excursions@meridianbio-sim.example` · +1 (866) 555-0182 | Mon–Fri 06:00–18:00 PT; on-call for urgent flags |
+| **Product complaints and quality defects** | Meridian Product Quality Complaints | `productquality@meridianbio-sim.example` · +1 (866) 555-0181 | 24/7 intake |
 | **Shipments in transit, delivery failures, returns pickup** | GlobalRx Logistics — Control Tower | +1 (800) 555-0172 | 24/7 |
 | **Depot enquiries (Americas)** | GlobalRx Logistics, Memphis TN (GRX-MEM-01) | +1 (901) 555-0173 | Mon–Fri 08:00–18:00 CT |
 | **General courier line** | GlobalRx Logistics | +1 (800) 555-0171 | Mon–Fri 08:00–18:00 local |
 | **IRT transactions, kit status, unblinding** | Axion IRT (Axion Clinical Systems) | `helpdesk@axionirt.com` · +1 (800) 555-0164 | 24/7 |
-| **Sponsor GCP Quality Assurance** | Amgen GCP QA | `gcpqa.20210143@amgen-sim.example` | Mon–Fri |
+| **Sponsor GCP Quality Assurance** | Meridian GCP QA | `gcpqa.20210143@meridianbio-sim.example` | Mon–Fri |
 | **Site 1047 monitor** | Kevin Ostrander, CCRA (HCR) | `k.ostrander@harborlightcro.com` · +1 (503) 555-0188 | Business hours |
 | **Clinical Trial Manager** | Rosalind Achebe (HCR) | `r.achebe@harborlightcro.com` · +1 (888) 555-0145 | Business hours |
 
@@ -118,7 +118,7 @@ adds a full business day.
 
 | Attribute | Value |
 |---|---|
-| Active | Rocatinlimab (AMG 451), fully human anti-OX40 (CD134) IgG1 monoclonal antibody |
+| Active | Rocatinlimab (MER 451), fully human anti-OX40 (CD134) IgG1 monoclonal antibody |
 | Presentation | Single-use prefilled syringe (PFS), **150 mg/1.0 mL** |
 | Kit | Carton of **2 PFS**. **One carton = one dose = 300 mg**, given as two separate subcutaneous injections at the same visit |
 | Comparator | **Matching placebo** — identical PFS, identical fill volume, identical carton, identical label text; also 2 injections |
@@ -138,33 +138,33 @@ Scientific characterisation of the product is in the **Investigator's Brochure, 
 
 ```
  ┌──────────────────────────────────┐
- │  DRUG SUBSTANCE MANUFACTURE      │   Amgen Thousand Oaks, CA, USA
+ │  DRUG SUBSTANCE MANUFACTURE      │   Meridian Emeryville, CA, USA
  │  Cell culture, purification      │
  └───────────────┬──────────────────┘
                  │  bulk DS, frozen, intra-company shipment
                  ▼
  ┌──────────────────────────────────┐
- │  DRUG PRODUCT FILL-FINISH        │   Amgen Manufacturing Limited,
+ │  DRUG PRODUCT FILL-FINISH        │   Meridian Manufacturing Limited,
  │  Formulation, sterile fill into  │   Juncos, Puerto Rico
  │  1 mL PFS, needle-shield assembly│
  └───────────────┬──────────────────┘
                  │  unlabelled bulk PFS, quarantined
                  ▼
  ┌──────────────────────────────────┐
- │  BLINDED CLINICAL PACKAGING      │   Amgen Clinical Supply Operations,
+ │  BLINDED CLINICAL PACKAGING      │   Meridian Clinical Supply Operations,
  │  Primary label · carton assembly │   Juncos, Puerto Rico
  │  (2 PFS) · booklet label · kit   │
  │  numbering · blinded bulk        │
  └───────────────┬──────────────────┘
                  │
         ╔════════▼═════════════════════════════╗
-        ║  GATE 1 — QP CERTIFICATION           ║  Amgen Europe B.V., Breda, NL
+        ║  GATE 1 — QP CERTIFICATION           ║  Meridian Europe B.V., Breda, NL
         ║  Batch certified against the         ║  MIA(IMP) NL/MIA-IMP/2019/0087
         ║  Product Specification File          ║  QP: M. van der Zanden, PharmD
         ╚════════╤═════════════════════════════╝
                  │
         ╔════════▼═════════════════════════════╗
-        ║  GATE 2 — COUNTRY / SITE RELEASE     ║  Amgen Clinical Supply Chain
+        ║  GATE 2 — COUNTRY / SITE RELEASE     ║  Meridian Clinical Supply Chain
         ║  CTA + ethics approval + import      ║  Recorded as available stock
         ║  licence + site green-light in IRT   ║  in Axion IRT
         ╚════════╤═════════════════════════════╝
@@ -198,7 +198,7 @@ GRX-MEM-01, Memphis, Tennessee, over qualified lane NA-07.** Typical transit is 
 
 The most common supply misunderstanding at sites is the belief that product physically present in a
 depot is product a site can order. It is not. **Gate 1** is QP certification, a GMP act (§8.1).
-**Gate 2** is country and site release, a regulatory and operational act performed by Amgen Clinical
+**Gate 2** is country and site release, a regulatory and operational act performed by Meridian Clinical
 Supply Chain (§8.2). Product that has passed Gate 1 but not Gate 2 sits in the depot's warehouse
 management system as **unreleased** and does not exist as far as IRT is concerned. If IRT reports
 zero available inventory for a country in which the depot visibly holds stock, the cause is almost
@@ -210,8 +210,8 @@ always Gate 2.
 
 ### 6.1 From drug substance to drug product
 
-Rocatinlimab drug substance is produced in mammalian cell culture at Amgen Thousand Oaks and shipped
-frozen to Amgen Manufacturing Limited in Juncos, Puerto Rico, where it is thawed, formulated,
+Rocatinlimab drug substance is produced in mammalian cell culture at Meridian Emeryville and shipped
+frozen to Meridian Manufacturing Limited in Juncos, Puerto Rico, where it is thawed, formulated,
 sterile-filtered, and filled into 1 mL long glass syringe barrels at 150 mg/1.0 mL. Assembled
 syringes are held unlabelled in quarantine at 2–8 °C pending quality control release.
 
@@ -222,7 +222,7 @@ force and injection duration are not distinguishable by the participant or the a
 
 ### 6.2 Blinded packaging operations
 
-Clinical packaging is performed at Amgen Clinical Supply Operations, Juncos, under blinded
+Clinical packaging is performed at Meridian Clinical Supply Operations, Juncos, under blinded
 conditions:
 
 - Active and placebo are **never packaged simultaneously**. Each campaign is preceded and followed by
@@ -238,7 +238,7 @@ conditions:
 
 ### 6.3 The randomisation-to-kit-number linkage
 
-The randomisation schedule is generated by an independent, unblinded Amgen biostatistician using a
+The randomisation schedule is generated by an independent, unblinded Meridian biostatistician using a
 validated system, in permuted blocks, stratified by geographic region (North America / Europe /
 Asia-Pacific / Rest of World) and baseline vIGA-AD score (3 vs 4), to a **3:1** allocation.
 
@@ -248,7 +248,7 @@ banded or otherwise patterned by treatment, and no property of a kit number carr
 its contents. The list is generated before packaging and transmitted under controlled conditions to
 the packaging line's labelling system and to Axion IRT.
 
-**Who holds the code.** The randomisation schedule and the medication list are held in the Amgen
+**Who holds the code.** The randomisation schedule and the medication list are held in the Meridian
 secure code repository, by the unblinded biostatistics group, and in the Axion IRT production
 database. No copy is held by the clinical study team, the CRO, the CRA, the depot, the courier or any
 site. Depot systems handle kits by number and by a non-semantic type flag only.
@@ -312,22 +312,22 @@ Investigational product shelf life is frequently extended as real-time stability
 Annex 13 permits the extension to be executed by over-labelling at the site, by trained personnel,
 under sponsor authorisation and with second-person verification. The procedure is:
 
-1. **Stability decision.** Amgen stability sciences supports an extension for a named packaging
+1. **Stability decision.** Meridian stability sciences supports an extension for a named packaging
    batch. The change is approved under sponsor change control and the QP is notified.
-2. **Relabelling authorisation.** Amgen Clinical Supply Chain issues a batch-specific written
+2. **Relabelling authorisation.** Meridian Clinical Supply Chain issues a batch-specific written
    **Relabelling Authorisation** naming the batch, the current and new expiry dates, the effective
    date, and the sites holding affected inventory.
 3. **Expiry-extension notice and label kit.** The site receives an **Expiry Extension Notice**
    (Appendix B) and a sealed set of pre-printed over-labels — one per affected kit plus a controlled
    overage — each bearing the batch and the new expiry date. Over-labels are serialised and must be
    reconciled; unused labels are returned.
-4. **IRT update.** Amgen updates the expiry date held in IRT for the batch, with an effective date
+4. **IRT update.** Meridian updates the expiry date held in IRT for the batch, with an effective date
    and time recorded in the audit trail.
 5. **Site execution.** A delegated person applies one over-label to each affected kit so that it
    covers the printed expiry date and no other mandatory particular. A **second delegated person
    independently verifies** each kit; both sign. The signed notice and label reconciliation are
-   returned to Amgen Clinical Supply Chain within **5 business days**.
-6. **Confirmation.** Amgen confirms receipt and closes the action.
+   returned to Meridian Clinical Supply Chain within **5 business days**.
+6. **Confirmation.** Meridian confirms receipt and closes the action.
 
 Two rules are absolute.
 
@@ -336,7 +336,7 @@ Two rules are absolute.
 >
 > **The physical label and the IRT expiry record must agree before the affected kits are dispensed
 > again.** If IRT shows the extended date and the carton does not, or vice versa, the kit is
-> quarantined and Amgen Clinical Supply Chain is contacted before use.
+> quarantined and Meridian Clinical Supply Chain is contacted before use.
 
 ---
 
@@ -351,7 +351,7 @@ in the European Union, that it has been manufactured and checked in accordance w
 least equivalent standards. The QP records this determination in a register. That act is
 **certification**.
 
-For Protocol 20210143, certification is performed by the QP of **Amgen Europe B.V., Breda,
+For Protocol 20210143, certification is performed by the QP of **Meridian Europe B.V., Breda,
 Netherlands**, holder of MIA(IMP) **NL/MIA-IMP/2019/0087**. Product packaged in Juncos is imported
 under that authorisation, subject to the importation testing and documentation review it requires,
 and certified there. The same certification record supports supply to the non-EU countries in the
@@ -371,11 +371,11 @@ where required; and no open quality hold on the batch.
 
 | Record | Held by |
 |---|---|
-| Batch manufacturing and packaging records | Amgen Manufacturing Limited / Clinical Supply Operations |
-| Certificates of Analysis (drug substance, drug product, packaged batch) | Amgen Quality Control |
-| Product Specification File, including approved label artwork and the randomisation/code-break arrangements | Amgen, maintained for the life of the trial |
-| **QP certification statement** in the certification register | Amgen Europe B.V., Breda |
-| Country release memorandum | Amgen Clinical Supply Chain |
+| Batch manufacturing and packaging records | Meridian Manufacturing Limited / Clinical Supply Operations |
+| Certificates of Analysis (drug substance, drug product, packaged batch) | Meridian Quality Control |
+| Product Specification File, including approved label artwork and the randomisation/code-break arrangements | Meridian, maintained for the life of the trial |
+| **QP certification statement** in the certification register | Meridian Europe B.V., Breda |
+| Country release memorandum | Meridian Clinical Supply Chain |
 | Shipment authorisation and inventory availability record | Axion IRT |
 | Shipping list and proof of delivery | GlobalRx Logistics |
 
@@ -437,7 +437,7 @@ A **lane** is a specific origin–destination–carrier–service-level combinat
 of documented thermal performance of the packout against seasonal ambient profiles derived from ISTA
 7E summer and winter conditions, plus route data on transit time, customs dwell and handover points.
 Thirty-four lanes are qualified for this study. A shipment may only move on a qualified lane; ad hoc
-routing requires a documented risk assessment and Amgen Clinical Supply Quality approval before
+routing requires a documented risk assessment and Meridian Clinical Supply Quality approval before
 dispatch. Lanes are requalified every 24 months, on any change of carrier, service level or shipper
 configuration. A lane with two temperature-related failures in a rolling 12 months is suspended
 pending investigation and its sites are re-routed.
@@ -463,7 +463,7 @@ Australia requires TGA notification. These requirements are the principal reason
 are qualified at 120 hours rather than 96 — customs dwell, not flight time, is the binding
 constraint.
 
-Customs holds are reported by the GlobalRx Control Tower to Amgen Clinical Supply Chain within 4
+Customs holds are reported by the GlobalRx Control Tower to Meridian Clinical Supply Chain within 4
 hours of detection. If a hold puts a shipment at risk of exceeding its qualified duration, the
 shipment is recovered and re-conditioned at the nearest qualified facility, or written off and
 replaced.
@@ -542,7 +542,7 @@ randomisation or force an unblinded intervention. A site holding 14 kits is not 
 displayed to, transmitted to, or discussed with any blinded party.** The site's IRT screen shows a
 single aggregate stock count. Shipment manifests, packing lists, IRT confirmations and CRA monitoring
 reports show totals and kit numbers only. A site sent any document itemising inventory by anything
-other than kit number and expiry must stop reading it and notify Amgen Clinical Supply Chain and the
+other than kit number and expiry must stop reading it and notify Meridian Clinical Supply Chain and the
 CRA immediately as a potential unblinding event.
 
 ### 10.6 Automatic re-order after a dispensing transaction
@@ -565,8 +565,8 @@ calling.
 
 ## 11. DEPOT OPERATIONS
 
-Regional and in-country depots are operated by GlobalRx Logistics under contract to Amgen and are
-subject to Amgen qualification audit before use and at least every three years thereafter.
+Regional and in-country depots are operated by GlobalRx Logistics under contract to Meridian and are
+subject to Meridian qualification audit before use and at least every three years thereafter.
 
 **Receipt.** Incoming batches are received against the shipping list and the QP certification
 reference, quantity- and kit-number-verified, and the shipment's data logger downloaded and assessed
@@ -576,7 +576,7 @@ in IRT only on country release (§5.1).
 **Storage.** Product is held in temperature-mapped 2–8 °C cold rooms. Mapping is performed loaded and
 unloaded, in summer and winter, before first use and after any significant change; probes sit at the
 mapped worst-case locations. Monitoring is continuous with 15-minute logging, audible local alarm and
-automated escalation to on-call depot staff and to Amgen Clinical Supply Quality. All depots have
+automated escalation to on-call depot staff and to Meridian Clinical Supply Quality. All depots have
 emergency power with automatic transfer and a qualified contingency plan for relocating stock.
 
 **Pick and pack.** Picking is IRT-directed to specific kit numbers; the picker scans each kit and the
@@ -614,7 +614,7 @@ and, at Site 1047, in **SOP-009**. Everything below is what happens next, on the
 The IRT transaction does two things instantly: it places the named kit numbers into **IRT
 quarantine**, so no user can dispense them, and it opens a case referenced **TE-2024-00417**.
 
-Amgen Clinical Supply Quality triages within **1 business day** for completeness. A complete package
+Meridian Clinical Supply Quality triages within **1 business day** for completeness. A complete package
 contains: kit numbers affected; date, time and duration; minimum and maximum temperatures; the raw
 monitoring data file; location and circumstances; whether any affected kit was administered; and
 confirmation that affected kits are quarantined. Incomplete packages are returned the same day.
@@ -624,7 +624,7 @@ the single most useful thing a site can know about excursions.
 
 ### 12.3 Stability assessment
 
-Assessment is performed by Amgen stability sciences in Product Quality — not by the CRA, the supply
+Assessment is performed by Meridian stability sciences in Product Quality — not by the CRA, the supply
 chain, the depot or the site. It considers:
 
 - the **mean kinetic temperature** of the event, not merely its peak;
@@ -662,7 +662,7 @@ disposition. Cases flagged **urgent** — a dosing visit within the protocol win
 already administered — are targeted at **24 hours**. Use the urgent flag when it is true and not
 otherwise; a study in which every case is urgent has no urgent cases.
 
-Where a disposition cannot be issued before a scheduled dosing visit, Amgen Clinical Supply Chain
+Where a disposition cannot be issued before a scheduled dosing visit, Meridian Clinical Supply Chain
 arranges an emergency resupply shipment rather than allowing the site to dispense quarantined
 product. Contact the supply line, not the CRA, as soon as a visit is at risk.
 
@@ -674,7 +674,7 @@ consumed and remaining, and any required site action (template at **Appendix D**
 Investigator Site File.
 
 > **The IRT kit status, not the email, is the operative record.** If a notice says "release for use"
-> and the kits are still quarantined in IRT, they may not be dispensed. Contact Axion IRT and Amgen
+> and the kits are still quarantined in IRT, they may not be dispensed. Contact Axion IRT and Meridian
 > Clinical Supply Quality.
 
 ### 12.7 Cumulative tracking across the product's life
@@ -706,7 +706,7 @@ from availability and preventing any user from dispensing them.
 distorts resupply; IRT status without physical segregation leaves them reachable by a coordinator in
 a hurry. A monitoring visit that finds one without the other will raise a finding.
 
-**Return to usable status.** Only Amgen Clinical Supply Quality can release product from quarantine,
+**Return to usable status.** Only Meridian Clinical Supply Quality can release product from quarantine,
 by issuing a disposition and lifting the IRT status. The site must never return quarantined product to
 working stock on its own assessment, on a verbal assurance, or because "the temperature came back
 down."
@@ -737,7 +737,7 @@ Do not open, disassemble, wash, or photograph-and-discard a suspect kit. Retain 
 
 ### 14.2 Reporting route and timeline
 
-Report to **Amgen Product Quality Complaints** (`productquality@amgen-sim.example`, +1 (866)
+Report to **Meridian Product Quality Complaints** (`productquality@meridianbio-sim.example`, +1 (866)
 555-0181), with a copy to the CRA, and quarantine the affected kit under §13.
 
 | Situation | Timeline |
@@ -753,10 +753,10 @@ investigation closes.
 
 ### 14.3 Sample return
 
-Amgen may request return of the affected kit for investigation. GlobalRx Logistics arranges a
+Meridian may request return of the affected kit for investigation. GlobalRx Logistics arranges a
 qualified return shipment with a data logger; the site must not use a general courier account. Unused
 product is returned in its original carton at 2–8 °C. A used syringe is a sharp and a biohazard: it is
-retained in a rigid sharps container in the site's controlled storage and returned only if Amgen
+retained in a rigid sharps container in the site's controlled storage and returned only if Meridian
 specifically requests it and supplies the qualified packaging and documentation. Otherwise,
 photographs of the intact carton and label plus the kit number suffice. Product with an open
 complaint is **not destroyed** until the investigation closes and destruction is authorised (§16).
@@ -770,9 +770,9 @@ separate reports are required, on two separate clocks**:
 1. the **safety report**, per the protocol and the Safety Reporting Manual, to the Harborlight
    Clinical Research safety intake (`rocket.safety@harborlightcro.com`, fax +1 (888) 555-0177),
    within 24 hours for a serious adverse event;
-2. the **product quality complaint**, per §14.2, to Amgen Product Quality Complaints.
+2. the **product quality complaint**, per §14.2, to Meridian Product Quality Complaints.
 
-**Neither report substitutes for the other.** Amgen Product Quality and Global Patient Safety
+**Neither report substitutes for the other.** Meridian Product Quality and Global Patient Safety
 cross-reference the two records by participant identification number and kit number, but they cannot
 do so if only one report exists. Filing only the safety report is the commonest failure in this area.
 
@@ -796,7 +796,7 @@ an internal quality investigation, a stability failure, a labelling error or a c
 ### 15.2 Notification cascade
 
 ```
- Amgen Global Quality / QP  ──►  Amgen Clinical Supply Quality
+ Meridian Global Quality / QP  ──►  Meridian Clinical Supply Quality
             │                              │
             │                              ├─► Competent authorities (as required by law)
             │                              │
@@ -829,7 +829,7 @@ kits appear in quarantine before the written notice arrives.
 
 ### 15.4 Reconciliation and closure
 
-Amgen Clinical Supply Quality reconciles quantities distributed against quantities recovered and
+Meridian Clinical Supply Quality reconciles quantities distributed against quantities recovered and
 accounted for, across every site and depot, and issues a recall effectiveness check. The recall
 closes only when 100% of affected kits are accounted for; unlocated kits are individually
 investigated. Recall records are retained with the study's essential documents.
@@ -839,7 +839,7 @@ investigated. Recall records are retained with the study's essential documents.
 This is handled by the sponsor and the medical monitor, not by the supply chain, and not
 unilaterally by the site.
 
-- Amgen performs an **exposure assessment** identifying every participant who received an affected
+- Meridian performs an **exposure assessment** identifying every participant who received an affected
   kit and characterising the potential clinical consequence of the defect.
 - The **medical monitor** (Ana Belmonte-Ruiz, MD) determines, with the sponsor, whether participant
   notification, additional monitoring or additional assessments are warranted, and drafts the message.
@@ -883,7 +883,7 @@ documented before any destruction is authorised.
 
 ### 16.3 The written destruction authorisation
 
-Amgen Clinical Supply Chain issues a **Destruction Authorisation**, reference
+Meridian Clinical Supply Chain issues a **Destruction Authorisation**, reference
 **DA-20210143-NNNN**, enumerating the specific kit numbers authorised for destruction, the
 destruction route, the authorising signatory, and a validity period (90 days from issue). A template
 is at **Appendix C**. The authorisation is countersigned by the CRA and filed in the Investigator
@@ -910,7 +910,7 @@ request in a complaint investigation (§14.3).
 
 The destruction certificate must record: the Destruction Authorisation reference; the kit numbers and
 quantities destroyed; the date, method and location of destruction; and the printed name, signature
-and date of the person performing the destruction and of the witness. It is returned to Amgen Clinical
+and date of the person performing the destruction and of the witness. It is returned to Meridian Clinical
 Supply Chain within **10 business days**, with a copy filed in the Investigator Site File.
 
 **Records outlive the product.** Accountability records, shipping and receipt records, temperature
@@ -937,12 +937,12 @@ period for Site 1047. **Do not destroy records on the schedule you destroy produ
 
 | Role | Status | Access |
 |---|---|---|
-| Unblinded biostatistician, Amgen | **Unblinded** | Randomisation schedule and medication list |
+| Unblinded biostatistician, Meridian | **Unblinded** | Randomisation schedule and medication list |
 | Clinical packaging labelling systems | **Unblinded (system)** | Kit-to-type mapping, applied mechanically |
 | Axion IRT technical/production team | **Unblinded** | Full database, under controlled access |
-| Amgen Clinical Supply Chain analysts | **Unblinded to inventory type** | Per-type quantities; **no participant-level assignment** |
+| Meridian Clinical Supply Chain analysts | **Unblinded to inventory type** | Per-type quantities; **no participant-level assignment** |
 | Depot systems and staff | **Partially — non-semantic** | Kits carry a type flag with no disclosed meaning |
-| Amgen Global Patient Safety (designated unblinded staff) | **Unblinded on demand** | For expedited regulatory reporting |
+| Meridian Global Patient Safety (designated unblinded staff) | **Unblinded on demand** | For expedited regulatory reporting |
 | Sponsor clinical study team, medical monitor, CTM, CRA | **Blinded** | Aggregate kit counts only |
 | **All site personnel**, including the site investigational pharmacist | **Blinded** | Kit numbers and totals only |
 
@@ -954,7 +954,7 @@ document and must be reported.
 
 - IRT role profiles present different data to different user classes. Site and CRA profiles cannot
   display type-level inventory, enforced server-side rather than by hiding a column.
-- Communications from Amgen Clinical Supply Chain to sites use templated messages containing kit
+- Communications from Meridian Clinical Supply Chain to sites use templated messages containing kit
   numbers, quantities, expiry dates and order references only.
 - Shipment manifests, packing lists, customs paperwork and proofs of delivery carry no type
   information.
@@ -966,13 +966,13 @@ document and must be reported.
 Emergency unblinding is performed by the investigator through Axion IRT, per the protocol and Cascade
 **SOP-024**, and only where knowledge of the assignment is necessary for the participant's medical
 management. IRT immutably records the user, date and time, participant identification number, the
-stated reason, and the fact that the code was revealed. Amgen Global Patient Safety and the Clinical
+stated reason, and the fact that the code was revealed. Meridian Global Patient Safety and the Clinical
 Trial Manager are notified automatically that **a break occurred** — not what it revealed.
 
 The site must not communicate the revealed assignment to the CRA, the CTM, the medical monitor or any
 sponsor representative other than designated unblinded pharmacovigilance staff. The IRT code-break
 record is an essential document. Any accidental unblinding, including one arising from supply
-documentation, is reported to Amgen Clinical Supply Chain and the CRA within 24 hours.
+documentation, is reported to Meridian Clinical Supply Chain and the CRA within 24 hours.
 
 ---
 
@@ -1002,13 +1002,13 @@ documentation, is reported to Amgen Clinical Supply Chain and the CRA within 24 
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────┐
-│ AMGEN INC.  One Amgen Center Drive, Thousand Oaks, CA 91320-1799, USA      │
+│ MERIDIAN BIOTHERAPEUTICS, INC.  1200 Kestrel Way, Emeryville, CA 94608, USA      │
 │ Information / emergency unblinding: +1 (800) 555-0164 (Axion IRT, 24 h)    │
 │                                                                            │
 │ Protocol 20210143 — ROCKET-Horizon                                         │
 │ NCT05651711 · EU CT 2022-501538-44                                         │
 │                                                                            │
-│ Rocatinlimab (AMG 451) 150 mg/1.0 mL solution for injection OR PLACEBO     │
+│ Rocatinlimab (MER 451) 150 mg/1.0 mL solution for injection OR PLACEBO     │
 │ 2 × prefilled syringe · SUBCUTANEOUS USE · Contents = one 300 mg dose      │
 │ Administer as two separate injections. See protocol and Pharmacy Manual.   │
 │                                                                            │
@@ -1036,7 +1036,7 @@ documentation, is reported to Amgen Clinical Supply Chain and the CRA within 24 
 ## Appendix B — Sample expiry extension notice
 
 ```
-AMGEN INC. — GLOBAL CLINICAL SUPPLY CHAIN
+MERIDIAN BIOTHERAPEUTICS, INC. — GLOBAL CLINICAL SUPPLY CHAIN
 EXPIRY EXTENSION NOTICE                       Notice No. EEN-20210143-0006
 
 Protocol:            20210143 (ROCKET-Horizon)
@@ -1049,8 +1049,8 @@ Packaging batch:     PKG-2211-02
 Current expiry:      31-MAR-2024
 NEW EXPIRY:          30-SEP-2024
 Basis:               Extension supported by real-time stability data; approved
-                     under Amgen change control CC-2024-00318 and notified to
-                     the Qualified Person, Amgen Europe B.V., Breda, NL.
+                     under Meridian change control CC-2024-00318 and notified to
+                     the Qualified Person, Meridian Europe B.V., Breda, NL.
 
 Affected kits at this site (4):   318472  318473  318474  318475
 Over-labels enclosed:             6 (serial 0031–0036; 2 controlled overage)
@@ -1063,12 +1063,12 @@ REQUIRED SITE ACTIONS
     over-label to a quarantined kit.
  4. Reconcile all enclosed over-labels. Return unused and damaged labels with
     this notice.
- 5. Sign below and return to clinicalsupply.20210143@amgen-sim.example within
+ 5. Sign below and return to clinicalsupply.20210143@meridianbio-sim.example within
     5 business days. File a copy in the Investigator Site File.
 
 The expiry date held in Axion IRT for batch PKG-2211-02 was updated effective
 04-MAR-2024 14:00 PT. If the IRT record and the physical label do not agree,
-quarantine the kits and contact Amgen Clinical Supply Chain before dispensing.
+quarantine the kits and contact Meridian Clinical Supply Chain before dispensing.
 
 Applied by:  ______________________  Date: __-___-____  Kits relabelled: ____
 Verified by: ______________________  Date: __-___-____  Labels returned:  ____
@@ -1079,7 +1079,7 @@ Authorised by: A. Ferreira-Lund, Associate Director, Global Clinical Supply Chai
 ## Appendix C — Sample destruction authorisation
 
 ```
-AMGEN INC. — GLOBAL CLINICAL SUPPLY CHAIN
+MERIDIAN BIOTHERAPEUTICS, INC. — GLOBAL CLINICAL SUPPLY CHAIN
 INVESTIGATIONAL PRODUCT DESTRUCTION AUTHORISATION
                                               Authorisation No. DA-20210143-0114
 
@@ -1107,7 +1107,7 @@ CONDITIONS
  1. Destroy only the kit numbers listed. Any kit not listed remains under site
     control.
  2. Record destruction in the site accountability log at the time of the act.
- 3. Complete and return the destruction certificate to Amgen Global Clinical
+ 3. Complete and return the destruction certificate to Meridian Global Clinical
     Supply Chain within 10 business days.
  4. This authorisation expires on the date shown. An expired authorisation may
     not be used; request re-issue.
@@ -1143,7 +1143,7 @@ Kits quarantined physically?  □ Yes   Kits quarantined in IRT?  □ Yes (auto)
 URGENT FLAG (dosing visit at risk within 3 business days, or product
 administered)?  □ No  □ Yes — visit date ____________
 
-PART 2 — SPONSOR DISPOSITION (Amgen Clinical Supply Quality)
+PART 2 — SPONSOR DISPOSITION (Meridian Clinical Supply Quality)
                                               Disposition No. CSQ-DN-________
 Case complete on ____________   Target response ____________   Issued ________
 Mean kinetic temperature of event ______ °C
@@ -1183,19 +1183,19 @@ The IRT kit status is the operative record.
 
 | Symptom | Contact first | Target response |
 |---|---|---|
-| Data logger shows an alarm at receipt | IRT Temperature Excursion transaction → Amgen CSQ | Triage 1 business day; disposition 3 business days |
+| Data logger shows an alarm at receipt | IRT Temperature Excursion transaction → Meridian CSQ | Triage 1 business day; disposition 3 business days |
 | Site refrigerator excursion | Same as above, after SOP-009 site response | Same |
 | Shipment late, damaged, or not delivered | GlobalRx Control Tower +1 (800) 555-0172 | 4 hours |
-| Shipment delivered to the wrong address | GlobalRx Control Tower, then Amgen Clinical Supply Chain | 4 hours |
-| Kit damaged, discoloured, particulates, illegible label | Amgen Product Quality Complaints +1 (866) 555-0181 | Acknowledge 2 business days |
-| Product administered from a defective kit | Amgen Product Quality Complaints **and** HCR safety intake | 24 hours, both |
+| Shipment delivered to the wrong address | GlobalRx Control Tower, then Meridian Clinical Supply Chain | 4 hours |
+| Kit damaged, discoloured, particulates, illegible label | Meridian Product Quality Complaints +1 (866) 555-0181 | Acknowledge 2 business days |
+| Product administered from a defective kit | Meridian Product Quality Complaints **and** HCR safety intake | 24 hours, both |
 | IRT will not release a kit / kit shows quarantined | Axion IRT +1 (800) 555-0164 | 1 hour |
-| IRT shows insufficient stock for an upcoming visit | Amgen Clinical Supply Chain +1 (866) 555-0180 | 1 business day |
-| Physical stock does not match IRT | Amgen Clinical Supply Chain, copy CRA | 1 business day |
-| Expiry-extension labels missing or short | Amgen Clinical Supply Chain | 1 business day |
-| Suspected unblinding from supply documentation | Amgen Clinical Supply Chain **and** CRA | 24 hours |
+| IRT shows insufficient stock for an upcoming visit | Meridian Clinical Supply Chain +1 (866) 555-0180 | 1 business day |
+| Physical stock does not match IRT | Meridian Clinical Supply Chain, copy CRA | 1 business day |
+| Expiry-extension labels missing or short | Meridian Clinical Supply Chain | 1 business day |
+| Suspected unblinding from supply documentation | Meridian Clinical Supply Chain **and** CRA | 24 hours |
 | Recall notice received | Follow the notice; confirm in IRT; copy CRA | Per recall class |
-| Site-to-site transfer requested | **Not permitted.** Contact Amgen Clinical Supply Chain | — |
+| Site-to-site transfer requested | **Not permitted.** Contact Meridian Clinical Supply Chain | — |
 
 ---
 

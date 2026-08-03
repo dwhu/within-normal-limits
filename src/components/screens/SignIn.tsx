@@ -16,7 +16,7 @@ export function SignIn({ onSignIn }: { onSignIn: () => void }) {
             </span>
           </p>
           <p className="font-mono text-[10px] tracking-widest text-neutral-600">
-            AMGEN INC. · PROTOCOL 20210143 · ROCKET-HORIZON
+            MERIDIAN BIOTHERAPEUTICS · PROTOCOL 20210143 · ROCKET-HORIZON
           </p>
           <h1 className="mt-2 text-2xl font-normal">Site 1047 · Coordinator Login</h1>
           <p className="mt-4 max-w-[60ch] leading-relaxed">
