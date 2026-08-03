@@ -14,7 +14,10 @@
     "format": "biome format --write .",
     "format:check": "biome format .",
     "typecheck": "tsc --noEmit",
+    "content": "node scripts/build-doc-index.mjs",
+    "pretest": "npm run content",
     "test": "vitest run",
+    "pretest:watch": "npm run content",
     "test:watch": "vitest"
   },
   "engines": {
